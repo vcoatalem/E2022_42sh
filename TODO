@@ -1,0 +1,49 @@
+[ ] : todo
+[-] : pending
+[x] : done
+
+(!): careful this is hard
+
+
+[-] MATH LEXER
+    [-] LEXING FUNCTION
+    [ ] LL PARSER
+    [ ] AST CONSTRUCTION
+    [ ] AST EXECUTION
+    [ ] NO LEAKS CHECK
+
+-----------------------------------------------------------------------------
+
+[ ] 42SH
+    [ ] COMMAND LINE PARSING
+        [ ] command line options
+        [ ] interactive mode
+        [ ] line execution mode
+
+    [ ] LEXER
+        [ ] LEXER STRUCTURE
+        [ ] TOKEN STRUCTURE
+        [ ] TOKEN_LIST STRUCTURE
+        [ ] LEXING FUNCTION
+
+    [ ] PARSER
+        [ ] ...
+
+    [ ] AST
+        [ ] AST structure
+        [ ] init, free
+        [ ] insert child
+        [ ] execute node
+        [ ] build ast from parser (!)
+        [ ] function declaration
+            [ ] function hash_map
+
+    [ ] EXECUTION
+        [ ] command execution
+        [ ] builtin execution
+        [ ] command redirection
+        [ ] command pipelines (!)
+
+    [ ] VARIABLE SUBSTITUTION
+        [ ] variable hash_map
+        [ ] substitution function
