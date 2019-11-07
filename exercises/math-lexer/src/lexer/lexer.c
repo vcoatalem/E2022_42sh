@@ -64,7 +64,7 @@ enum token_type get_type(char c)
     return type;
 }
 
-void token_list_appen(struct lexer *lexer,  struct token *tok)
+void token_list_append(struct lexer *lexer, struct token *tok)
 {
     struct token_list *res = token_list_init(tok);
     if (lexer->size == 0)
@@ -78,7 +78,6 @@ void token_list_appen(struct lexer *lexer,  struct token *tok)
         lexer->tail = res;
     }
     lexer->size++;
-
 }
 
 struct lexer *lexer_alloc(const char *str)
@@ -103,12 +102,12 @@ struct lexer *lexer_alloc(const char *str)
                 int val = atoi(buff);
                 index = 0;
                 struct token *tok = token_init(TOKEN_NUMBER, val);
-                token_list_appen(res, tok);
+                token_list_append(res, tok);
             }
             if (c != ' ')
             {
                 struct token *tok = token_init(type, 0);
-                token_list_appen(res, tok);
+                token_list_append(res, tok);
             }
         }
         else
@@ -121,8 +120,8 @@ struct lexer *lexer_alloc(const char *str)
     int val = atoi(buff);
     index = 0;
     struct token *tok = token_init(TOKEN_NUMBER, val);
-    token_list_appen(res, tok);
-    token_list_appen(res, token_init(TOKEN_EOF, 0));
+    token_list_append(res, tok);
+    token_list_append(res, token_init(TOKEN_EOF, 0));
     return res;
 }
 
