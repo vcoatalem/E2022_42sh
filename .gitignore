@@ -1,0 +1,5 @@
+*.o
+*.swp
+ast_print
+rpn_print
+token_printer
