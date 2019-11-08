@@ -80,6 +80,17 @@ void token_list_append(struct lexer *lexer, struct token *tok)
     lexer->size++;
 }
 
+void add_number_token(char *buff, size_t *index, struct lexer *lexer)
+{
+    if (*index == 0)
+        return;
+    buff[*index] = '\0';
+    int val = atoi(buff);
+    *index = 0;
+    struct token *tok = token_init(TOKEN_NUMBER, val);
+    token_list_append(lexer, tok);
+}
+
 struct lexer *lexer_alloc(const char *str)
 {
     struct lexer *res = calloc(1, sizeof(struct lexer));
@@ -96,14 +107,7 @@ struct lexer *lexer_alloc(const char *str)
         enum token_type type = get_type(c);
         if (type != TOKEN_NUMBER || c == ' ')
         {
-            if (index != 0)
-            {
-                buff[index] = '\0';
-                int val = atoi(buff);
-                index = 0;
-                struct token *tok = token_init(TOKEN_NUMBER, val);
-                token_list_append(res, tok);
-            }
+            add_number_token(buff, &index, res);
             if (c != ' ')
             {
                 struct token *tok = token_init(type, 0);
@@ -116,11 +120,7 @@ struct lexer *lexer_alloc(const char *str)
             index++;
         }
     }
-    buff[index] = '\0';
-    int val = atoi(buff);
-    index = 0;
-    struct token *tok = token_init(TOKEN_NUMBER, val);
-    token_list_append(res, tok);
+    add_number_token(buff, &index, res);
     token_list_append(res, token_init(TOKEN_EOF, 0));
     return res;
 }
