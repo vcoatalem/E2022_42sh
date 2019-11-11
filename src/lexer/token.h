@@ -47,7 +47,9 @@ enum token_type
     TOKEN_FUNCTION,
 };
 
-typedef (int)(*token_handler)(char *str, size_t iterator, char *buffer);
+// retrun 1 if the string has a token that we recognize else return 0
+typedef (int)(*token_handler)(char *str, size_t iterator, char *buffer, enum
+        token_type type);
 
 
 /**
