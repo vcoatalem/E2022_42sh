@@ -52,7 +52,7 @@ enum token_type get_type(char c)
         type = TOKEN_LEFT_PARENTHESIS;
         break;
     case ')':
-        type = TOKEN_LEFT_PARENTHESIS;
+        type = TOKEN_RIGHT_PARENTHESIS;
         break;
     case EOF:
         type = TOKEN_EOF;
