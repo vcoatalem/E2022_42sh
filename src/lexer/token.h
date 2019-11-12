@@ -6,6 +6,7 @@
 */
 enum token_type
 {
+    TOKEN_WORD,
     TOKEN_EOF,
     TOKEN_EOL,
     TOKEN_SEMI_COLON,
