@@ -4,6 +4,9 @@
 /**
 ** \brief Type of a token (operators, value, ...)
 */
+
+#include <stddef.h>
+
 enum token_type
 {
     TOKEN_WORD,
@@ -48,8 +51,9 @@ enum token_type
     TOKEN_FUNCTION,
 };
 
+
 // retrun 1 if the string has a token that we recognize else return 0
-typedef (int)(*token_handler)(char *str, size_t iterator, char *buffer, enum
+typedef int (*token_handler)(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
 
