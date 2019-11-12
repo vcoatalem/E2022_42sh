@@ -1,6 +1,8 @@
 #ifndef AST_H
 #define AST_H
 
+#include <stddef.h>
+
 enum node_type
 {
     NODE_VALUE,
@@ -13,20 +15,22 @@ enum operator_type
     OPERATOR_CMD,
     OPERATOR_AND,
     OPERATOR_OR,
-    OPERATION_PIPE,
+    OPERATOR_PIPE,
     //while, until, ..
-}
+};
+
+union content
+{
+    char *value;
+    enum operator_type op_type;
+};
 
 struct ast
 {
-    enum node_type type;    
-    union content
-    {
-        char *value;
-        enum operator_type type;
-    };
-    struct **ast forest;
-    size_t n_children;
+    enum node_type node_type;
+    union content content;
+    struct ast **forest;
+    size_t nb_children;
 };
 
 struct ast *ast_init(enum node_type type, char *value,
