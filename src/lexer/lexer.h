@@ -1,7 +1,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "lexer/token.h"
+#include "token.h"
 
 /**
 ** \brief This is your struct lexer forward declaration.
@@ -10,6 +10,11 @@
 ** same name in another header file.
 */
 struct lexer;
+
+struct lexer
+{
+    struct token_array *arr;
+};
 
 /**
 ** \brief Lexer allocator and initialiser
@@ -39,5 +44,21 @@ struct token *lexer_peek(struct lexer *lexer);
 ** \param lexer the lexer to lex from
 */
 struct token *lexer_pop(struct lexer *lexer);
+
+struct token_array
+{
+    struct token **tok_array;
+    size_t capacity;
+    size_t size;
+};
+
+struct lexer
+{
+    struct token_array *arr;
+};
+
+struct token_array *token_array_init();
+void token_array_free(struct token_array *arr);
+void token_array_add(struct token_array *arr, struct token *token);
 
 #endif /* ! LEXER_H */
