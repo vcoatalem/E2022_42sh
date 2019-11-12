@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
     int q = argc > 1 ? atoi(*(argv + 1)) : 0;
-    printf("TEST: #%d\n", q);
+    printf("[LOG] TEST: #%d\n", q);
 
     struct pipe *p = pipe_init();
     
@@ -33,7 +33,12 @@ int main(int argc, char **argv)
     struct redirection *redirect_output_to_stderr = redirection_init(STDOUT_TO_STDERR, NULL);
     struct redirection *redirect_stderr_to_output = redirection_init(STDERR_TO_STDOUT, NULL);
     
-    if (q == 0 || q == 1)
+    if (q == 0)
+    {
+        struct command *command = command_init(commands[q], NULL);
+        pipe_add_command(p, command);
+    }
+    else if (q == 1)
     {
         struct command *command = command_init(commands[q], NULL);
         pipe_add_command(p, command);
@@ -42,12 +47,6 @@ int main(int argc, char **argv)
     {
         struct command *command = command_init(commands[q], NULL);
         command_add_redirection(command, redirection_dup(redirect_output));
-        pipe_add_command(p, command);
-    }
-    else if (q == 3)
-    {
-        struct command *command = command_init(commands[q], NULL);
-        command_add_redirection(command, redirection_dup(redirect_input));
         pipe_add_command(p, command);
     }
     int return_value = pipe_execute(p);
@@ -59,6 +58,6 @@ int main(int argc, char **argv)
     redirection_free(redirect_input);
     redirection_free(redirect_output_to_stderr);
     redirection_free(redirect_stderr_to_output);
-    printf("test return value: %d\n", return_value);
+    printf("[LOG] test return value: %d\n", return_value);
     return return_value;
 }
