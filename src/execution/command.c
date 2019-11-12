@@ -106,21 +106,18 @@ int command_execute(struct command *command)
     if (pid == 0)
     {
         ////child
-        
         //apply redirection
         for (size_t i = 0; i < command->n_redirections; i++)
         {
             redirection_execute(command, *(command->redirections + i));
         } 
         //execute command
-        int try_execute = execvp(*(command->args), command->args);
-        if (try_execute == -1)
-        {
-            exit(RETURN_ERROR);
-        }
-        //free any opened fd
+        execvp(*(command->args), command->args);
+        //if execution failed
         command_free_fd(command);
+        exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
+    printf("[LOG] command %s received %d\n", *(command->args), status); 
     return status;
 }
