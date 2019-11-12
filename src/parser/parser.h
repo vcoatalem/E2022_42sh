@@ -70,7 +70,7 @@ void rule_free(struct rule *rule);
 struct test_props
 {
     struct test *sub_test;
-    struct token *token; //to be replaced with token list to handle token union
+    struct token_array *token_union;
     enum rule_id rule_id;
 };
 
@@ -87,7 +87,7 @@ struct test
 
 struct test_runner
 {
-    struct token_list *token_list;
+    struct token_array *token_array;
     size_t pos;
     struct ast *ast;
     //struct test ?
@@ -96,7 +96,7 @@ struct test_runner
 struct test *test_init(enum test_type type, struct test_props props,
         int star, int plus);
 
-struct test_runner_init(struct token_list *list, size_t pos);
+struct test_runner_init(struct token_array *token_array, size_t pos);
 struct test_runner_dup(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
 
