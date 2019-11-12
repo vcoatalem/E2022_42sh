@@ -49,6 +49,19 @@ int main(int argc, char **argv)
         command_add_redirection(command, redirection_dup(redirect_output));
         pipe_add_command(p, command);
     }
+    else if (q == 3)
+    {
+        struct command *command = command_init(commands[q], NULL);
+        command_add_redirection(command, redirection_dup(redirect_input));
+        pipe_add_command(p, command);
+    }
+    else if (q == 4)
+    {
+        struct command *c1 = command_init(commands[q], NULL);
+        struct command *c2 = command_init(commands[q + 1], NULL);
+        pipe_add_command(p, c1);
+        pipe_add_command(p, c2);
+    }
     int return_value = pipe_execute(p);
 
     pipe_free(p);

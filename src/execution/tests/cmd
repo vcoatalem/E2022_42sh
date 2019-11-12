@@ -2,4 +2,4 @@ echo "hello world!"
 cat Makefile
 echo "im i file" > exp_output
 cat < input
-echo fsdf | echo f
+echo A | echo B
