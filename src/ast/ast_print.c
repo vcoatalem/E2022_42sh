@@ -1,5 +1,7 @@
 #include "ast.h"
 #include <stdio.h>
+#include <err.h>
+#include <errno.h>
 
 char *type_character(enum operator_type type)
 {
@@ -26,11 +28,11 @@ char *type_character(enum operator_type type)
 
 void _ast_dot_print(struct ast *ast, int id, FILE *file)
 {
-    if (ast->op_type == NODE_VALUE)
-        fprintf(file, "%s%d", ast->value, id);
+    if (ast->node_type == NODE_VALUE)
+        fprintf(file, "%s%d", ast->content.value, id);
 
     else
-        fprintf(file, "%s%d", type_character(ast->op_type), id);
+        fprintf(file, "%s%d", type_character(ast->content.op_type), id);
 
     if (ast->forest == NULL)
         fprintf(file, "\n");
