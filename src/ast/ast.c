@@ -94,5 +94,8 @@ void ast_free(struct ast *ast)
     for (size_t i = 0; i < ast->nb_children; i++)
         ast_free(ast->forest[i]);
 
+    if (ast->forest != NULL)
+        free(ast->forest);
+
     free(ast);
 }
