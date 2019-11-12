@@ -1,5 +1,5 @@
-echo "hello world"
+echo "hello world!"
 cat Makefile
-echo "im i file" > output
+echo "im i file" > exp_output
 cat < input
 echo fsdf | echo f

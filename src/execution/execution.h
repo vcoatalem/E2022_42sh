@@ -38,7 +38,6 @@ void redirection_free(struct redirection *redirection);
 void redirection_print(struct redirection *redirection);
 struct redirection *redirection_dup(struct redirection *redirection);
 
-
 // COMMAND
 
 struct command
@@ -58,7 +57,7 @@ void command_print(struct command *command);
 void command_add_redirection(struct command *command,
         struct redirection *redir);
 
-int command_execute(struct command *command);
+unsigned char command_execute(struct command *command);
 
 int redirection_execute(struct command *command,
         struct redirection *redirection);
@@ -73,7 +72,7 @@ struct pipe
 
 struct pipe *pipe_init(void);
 void pipe_add_command(struct pipe *pipe, struct command *command);
-int pipe_execute(struct pipe *pipe);
+unsigned char pipe_execute(struct pipe *pipe);
 void pipe_free(struct pipe *p);
 
 #endif /* EXECUTION_H */

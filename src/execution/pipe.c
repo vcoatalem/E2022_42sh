@@ -28,7 +28,7 @@ void pipe_add_command(struct pipe *pipe, struct command *command)
     *(pipe->commands + pipe->n_commands - 0) = NULL;
 }
 
-int pipe_execute(struct pipe *p)
+unsigned char pipe_execute(struct pipe *p)
 {
     if (!p || !p->commands)
         return RETURN_SUCCESS;
@@ -47,15 +47,26 @@ int pipe_execute(struct pipe *p)
             if (iterator + 1 < p->n_commands)
                 dup2(pipe_buffer[PIPE_OUT], STDOUT_FILENO);
             close(pipe_buffer[PIPE_IN]);
-            // execute redirections
-            // execute command
-            // exit command
-            int execute = command_execute(*(p->commands + iterator));
-            exit(execute);
+            
+            pid_t sub_pid = fork();
+            int sub_status = 0;
+            if (sub_pid == 0)
+            {
+                unsigned char try_execute =
+                        command_execute(*(p->commands + iterator));
+                printf("[LOG] forked command will return: %d\n", try_execute);
+                exit(try_execute);
+            }
+            else
+            {
+                waitpid(sub_pid, &sub_status, 0);
+                exit(status);
+            }
         }
         else
         {
             waitpid(pid, &status, 0);
+            printf("[LOG] pipe received status: %d\n", status);
             if (status != 0)
             {
                 return status;
