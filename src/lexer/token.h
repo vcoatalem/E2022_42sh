@@ -67,6 +67,8 @@ struct token
     char *value;
 };
 
+char *token_to_string(enum token_type type);
+
 /**
 ** \brief String representation of a token (used for debugging and errors)
 **
