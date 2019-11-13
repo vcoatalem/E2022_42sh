@@ -1,37 +1,4 @@
-#include "token.h"
 #include "lexer.h"
-
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-/*
-const char *token_str(struct token *token)
-{
-    static const char *token_strs[] = { "+", "-", "*", "/", "(", ")", "EOF" };
-    static char number_str[11];
-
-    if (token->type != F_NUMBER)
-        return token_strs[token->type];
-
-    sprintf(number_str, "%d", token->value);
-    return number_str;
-}
-
-struct token *token_alloc(void)
-{
-    struct token *res = xmalloc(sizeof(*res));
-    res->type = F_EOF;
-    res->value = 0;
-
-    return res;
-}
-
-void token_free(struct token *token)
-{
-    free(token);
-}
-*/
 
 //Function which verify if buffer has the same type of argument type
 int token_compare(char *str, size_t iterator, char *buffer, enum
@@ -59,7 +26,7 @@ int token_single_char(char *str, size_t iterator, char *buffer, enum
     return 0;
 }
 
-//FUnction for token which is doubled (&& || ;; << >>)
+//Function for token which is doubled (&& || ;; << >>)
 int token_double_char(char *str, size_t iterator, char *buffer, enum
         token_type type)
 {
@@ -117,7 +84,7 @@ int token_terminal_char(char *str, size_t iterator, char *buffer,
 }
 
 //return token_type in buffer else return TOKEN_WORD if it's not a token
-enum token_type checktoken(char *str, size_t iterator, char *buffer)
+enum token_type token_check(char *str, size_t iterator, char *buffer)
 {
     for (enum token_type i = TOKEN_EOL; i <= TOKEN_FUNCTION; ++i)
     {
@@ -128,42 +95,4 @@ enum token_type checktoken(char *str, size_t iterator, char *buffer)
         }
     }
     return TOKEN_WORD;
-}
-
-struct token_array *create_token_array(char *str, size_t iterator, char *buffer)
-{
-    struct token_array *arr = token_array_init(); 
-    size_t index = 0;
-    while (str[iterator] != 0)
-    {
-        //TODO case where tokens are like this "toto>lol or toto(foo)"
-        buffer[index] = str[iterator];
-        index++;
-        iterator++;
-        buffer[index] = '\0';
-        enum token_type type =  checktoken(str, iterator, buffer);
-        if (str[iterator] == ' ' || str[iterator] == '\n'
-            || str[iterator] == '\0' || str[iterator] == '\t')
-        {
-            struct token *token = token_init(type, buffer);
-            token_array_add(arr, token);
-            index = 0;
-        }
-    }
-    return arr;
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc > 0)
-    {
-        char *buff = calloc(10, sizeof(*buff));
-        if (!buff)
-            return 1;
-        struct token_array *arr = create_token_array(argv[1], 0, buff);
-        print_token_array(arr);
-        token_array_free(arr);
-        free(buff);
-    }
-    return 0;
 }

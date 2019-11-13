@@ -6,7 +6,7 @@ struct test *test_init(enum test_type type, struct test_props props, int star,
     struct test *res = calloc(1, sizeof(struct test));
     res->type = type;
     res->props.sub_test = props.sub_test;
-    res->props.token = props.token;
+    res->props.token_union = props.token_union;
     res->props.rule_id = props.rule_id;
     res->star = star;
     res->plus = plus;
@@ -24,7 +24,7 @@ void test_free(struct test *test)
     }
     else if (test->type == TEST_TOKEN)
     {
-        token_list_free(test->props.token);
+        token_array_free(test->props.token_union);
     }
     free(test);
 }

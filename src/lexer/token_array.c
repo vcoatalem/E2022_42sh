@@ -1,7 +1,4 @@
 #include "lexer.h"
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
 
 struct token_array *token_array_init()
 {
@@ -40,12 +37,38 @@ void token_array_add(struct token_array *arr, struct token *token)
     }
 }
 
-void print_token_array(struct token_array *arr)
+void token_array_print(struct token_array *arr, FILE *out)
 {
-    printf("size of array: %ld", arr->size);
+    fprintf(out, "size of array: %ld\n", arr->size);
     for (size_t i = 0; i < arr->size; i++)
     {
-        printf("type: %s, value: %s\n", token_to_string(arr->tok_array[i]->type),
-                arr->tok_array[i]->value);
+        fprintf(out, "type: %s, value: `%s`\n",
+            token_to_string(arr->tok_array[i]->type),
+            arr->tok_array[i]->value);
     }
+}
+
+struct token_array *token_array_create(char *str)
+{
+    size_t iterator = 0;
+    char buffer[2048];
+    struct token_array *arr = token_array_init(); 
+    size_t index = 0;
+    while (str[iterator] != 0)
+    {
+        //TODO case where tokens are like this "toto>lol or toto(foo)"
+        buffer[index] = str[iterator];
+        index++;
+        iterator++;
+        buffer[index] = '\0';
+        enum token_type type =  token_check(str, iterator, buffer);
+        if (str[iterator] == ' ' || str[iterator] == '\n'
+            || str[iterator] == '\0' || str[iterator] == '\t')
+        {
+            struct token *token = token_init(type, buffer);
+            token_array_add(arr, token);
+            index = 0;
+        }
+    }
+    return arr;
 }
