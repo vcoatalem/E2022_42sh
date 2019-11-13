@@ -17,7 +17,7 @@ token_handler token_to_handler5(enum token_type type)
     case (TOKEN_STDERR):
         return token_terminal_char;
     default:
-        warn("wrong token type");
+        //warn("wrong token type");
         return NULL;
     }
 }

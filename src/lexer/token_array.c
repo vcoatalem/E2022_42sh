@@ -42,10 +42,10 @@ void token_array_add(struct token_array *arr, struct token *token)
 
 void print_token_array(struct token_array *arr)
 {
-    printf("size of array: %ld", arr->size);
+    printf("size of array: %ld\n", arr->size);
     for (size_t i = 0; i < arr->size; i++)
     {
-        printf("type: %s, value: %s\n", token_to_string(arr->tok_array[i]->type),
+        printf("type: \"%s\", value: \"%s\"\n", token_to_string(arr->tok_array[i]->type),
                 arr->tok_array[i]->value);
     }
 }
