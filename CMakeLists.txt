@@ -7,8 +7,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 
+
 #launch all unit tests
 add_custom_target(check
     DEPENDS execution_check
     DEPENDS ast_check
+    DEPENDS lexer_check
 )
