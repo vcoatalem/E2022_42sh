@@ -9,6 +9,7 @@ target_link_libraries(test_lexer_basic lexer)
 set_target_properties(test_lexer_basic
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
 )
 
 # fetch .sh script for output comparison

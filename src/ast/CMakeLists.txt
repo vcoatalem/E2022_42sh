@@ -9,6 +9,7 @@ target_link_libraries(test_ast_basic ast)
 set_target_properties(test_ast_basic
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
 )
 
 ################
@@ -22,6 +23,7 @@ target_link_libraries(test_ast_print ast)
 set_target_properties(test_ast_print
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
 )
 
 ###############

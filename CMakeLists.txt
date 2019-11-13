@@ -14,3 +14,8 @@ add_custom_target(check
     DEPENDS ast_check
     DEPENDS lexer_check
 )
+
+set_target_properties(check
+    PROPERTIES
+    EXCLUDE_FROM_ALL "true"
+)
