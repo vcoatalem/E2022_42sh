@@ -52,9 +52,36 @@ enum token_type
 };
 
 
+
+
+
 // retrun 1 if the string has a token that we recognize else return 0
 typedef int (*token_handler)(char *str, size_t iterator, char *buffer, enum
         token_type type);
+
+int token_compare(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+
+int token_single_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+
+int token_double_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_one_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_diff_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_terminal_char(char *str, size_t iterator, char *buffer,
+        enum token_type type);
+
+
+
+token_handler token_to_handler(enum token_type type);
 
 
 /**
