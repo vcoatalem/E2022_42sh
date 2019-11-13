@@ -5,6 +5,82 @@
 
 //TODO finish this function
 
+
+char *token_to_string5(enum token_type type)
+{
+    switch (type)
+    {
+    case (TOKEN_STDIN):
+        return "<";
+    case (TOKEN_STDOUT):
+        return ">";
+    case (TOKEN_STDERR):
+        return "<<";
+    default:
+	err(1, "wrong token type");
+        return "";
+    }
+}
+
+
+char *token_to_string4(enum token_type type)
+{
+    switch (type)
+    {
+    case (TOKEN_LESS):
+        return "<";
+    case (TOKEN_GREAT):
+        return ">";
+    case (TOKEN_DOUBLE_LESS):
+        return "<<";
+    case (TOKEN_DOUBLE_GREAT):
+        return ">>";
+    case (TOKEN_DOUBLE_LESS_DASH):
+        return "<<-";//TODO NOT SURE
+    case (TOKEN_LESS_AMPERSAND):
+        return "<&";
+    case (TOKEN_GREAT_AMPERSAND):
+        return ">&";
+    case (TOKEN_GREAT_PIPE):
+        return ">|";
+    case (TOKEN_LESS_GREAT):
+        return "<>";
+    default:
+        return token_to_string5(type);
+    }
+}
+
+
+
+char *token_to_string3(enum token_type type)
+{
+    switch (type)
+    {
+    case (TOKEN_AMPERSAND):
+        return "&";
+    case (TOKEN_DOUBLE_AMPERSAND):
+        return "&&";
+    case (TOKEN_PIPE):
+        return "|";
+    case (TOKEN_DOUBLE_PIPE):
+        return "||";
+    case (TOKEN_EXCLAMATION_POINT):
+        return "!";
+    case (TOKEN_LEFT_BRACKET):
+        return "{";
+    case (TOKEN_RIGHT_BRACKET):
+        return "}";
+    case (TOKEN_LEFT_PARENTHESIS):
+        return "(";
+    case (TOKEN_RIGHT_PARENTHESIS):
+        return ")";
+    default:
+        return token_to_string4(type);
+    }
+}
+
+
+
 char *token_to_string2(enum token_type type)
 {
     switch (type)
@@ -19,9 +95,16 @@ char *token_to_string2(enum token_type type)
         return "esac";
     case (TOKEN_FUNCTION):
         return "function";
+    case (TOKEN_EOF):
+        return "\0";
+    case (TOKEN_EOL):
+        return "\n";
+    case (TOKEN_SEMI_COLON):
+        return ";";
+    case (TOKEN_DOUBLE_SEMICOLON):
+        return ";;";
     default:
-        err(1, "Wrong type input\n");
-        return "";
+        return token_to_string3(type);
     }
 }
 

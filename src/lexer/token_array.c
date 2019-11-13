@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include <stdlib.h>
 
 struct token_array *token_array_init()
 {
@@ -13,7 +14,7 @@ struct token_array *token_array_init()
     return res;
 }
 
-void token_array_free(struct token array *arr)
+void token_array_free(struct token_array *arr)
 {
     if (!arr)
         return;
@@ -28,8 +29,8 @@ void token_array_free(struct token array *arr)
 
 void token_array_add(struct token_array *arr, struct token *token)
 {
-    arr->token_array[size] = token;
-    size++;
+    arr->tok_array[arr->size] = token;
+    arr->size++;
     if (arr->size == arr->capacity)
     {
         arr->capacity = arr->capacity * 2;
