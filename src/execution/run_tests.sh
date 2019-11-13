@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 ITALIC='\033[3m'
@@ -15,17 +16,33 @@ EXP_RETURN=0
 OUTPUT_FILE=output
 EXP_OUTPUT_FILE=exp_output
 
+
 CMD_FILE=cmd
 
 clean_temp_files()
 {
+    rm -rf $CMD_FILE
     rm -rf $OUT
     rm -rf $EXP_OUT
     rm -rf $ERR
     rm -rf $EXP_ERR
     rm -rf $OUTPUT_FILE
     rm -rf $EXP_OUTPUT_FILE
+
 }
+
+setup()
+{
+    clean_temp_files
+    echo "echo \"hello world!\"" >> $CMD_FILE
+    echo "cat Makefile" >> $CMD_FILE
+    echo "echo \"im in file\" > exp_output" >> $CMD_FILE
+    echo "cat < input" >> $CMD_FILE
+    echo "echo A | echo B" >> $CMD_FILE
+
+    echo "catch me if you can" > input
+}
+
 
 run_test()
 {
@@ -60,14 +77,17 @@ run_test()
 }
 
 CURRENT_DIR=$PWD
-TEST_DIR=tests/
 
+TEST_DIR=tmp/
+
+mkdir $TEST_DIR 2>/dev/null
 cd $TEST_DIR
 
-TESTS=$(find . -name "*.test")
+setup $1
 
-for TEST in $(echo $TESTS); do
-    run_test $TEST
-done
+TEST=$1
+run_test $TEST
 
 cd $CURRENT_DIR
+rm -rf $TEST_DIR
+

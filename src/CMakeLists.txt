@@ -1,0 +1,9 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ast)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/execution)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lexer)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
+
+add_subdirectory(ast/)
+add_subdirectory(execution/)
+add_subdirectory(lexer/)
+add_subdirectory(parser/)
