@@ -52,9 +52,6 @@ enum token_type
 };
 
 
-
-
-
 // retrun 1 if the string has a token that we recognize else return 0
 typedef int (*token_handler)(char *str, size_t iterator, char *buffer, enum
         token_type type);
@@ -79,8 +76,6 @@ int token_diff_char(char *str, size_t iterator, char *buffer, enum
 int token_terminal_char(char *str, size_t iterator, char *buffer,
         enum token_type type);
 
-
-
 token_handler token_to_handler(enum token_type type);
 
 
@@ -95,6 +90,7 @@ struct token
 };
 
 char *token_to_string(enum token_type type);
+
 
 /**
 ** \brief String representation of a token (used for debugging and errors)

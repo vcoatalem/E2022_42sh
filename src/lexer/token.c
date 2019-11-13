@@ -150,7 +150,20 @@ struct token_array *create_token_array(char *str, size_t iterator, char *buffer)
             index = 0;
         }
     }
-    struct token *token = token_init(TOKEN_EOF, "\0");
-    token_array_add(arr, token);
     return arr;
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc > 0)
+    {
+        char *buff = calloc(10, sizeof(*buff));
+        if (!buff)
+            return 1;
+        struct token_array *arr = create_token_array(argv[1], 0, buff);
+        print_token_array(arr);
+        token_array_free(arr);
+        free(buff);
+    }
+    return 0;
 }
