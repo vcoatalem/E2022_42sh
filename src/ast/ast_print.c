@@ -28,17 +28,23 @@ char *type_character(enum operator_type type)
 
 void _ast_dot_print(struct ast *ast, int id, FILE *file)
 {
-    if (ast->node_type == NODE_VALUE)
-        fprintf(file, "%s%d", ast->content.value, id);
-
-    else
-        fprintf(file, "%s%d", type_character(ast->content.op_type), id);
-
     if (ast->forest == NULL)
-        fprintf(file, "\n");
+    {
+        if (ast->node_type == NODE_VALUE)
+            fprintf(file, "%s_%d\n", ast->content.value, id);
+
+        else
+            fprintf(file, "%s_%d\n", type_character(ast->content.op_type), id);
+    }
 
     for (size_t i = 0; i < ast->nb_children; i++)
     {
+        if (ast->node_type == NODE_VALUE)
+            fprintf(file, "%s_%d", ast->content.value, id);
+
+        else
+            fprintf(file, "%s_%d", type_character(ast->content.op_type), id);
+
         fprintf(file, " --- ");
         _ast_dot_print(ast->forest[i], id + 1, file);
     }
@@ -51,7 +57,9 @@ void ast_dot_print(struct ast *ast)
     if (file == NULL)
         err(errno, "ERROR_AST_PRINT: Cannot open file ast_print.dot");
 
+    fprintf(file, "ast {\n");
     _ast_dot_print(ast, 0, file);
+    fprintf(file, "}\n");
 
     fclose(file);
 }
