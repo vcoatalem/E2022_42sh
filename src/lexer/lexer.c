@@ -7,9 +7,8 @@
 #include <errno.h>
 
 #include "lexer.h"
-#include "token_array.h"
 
-struct token *token_init(enum token_type type, int value)
+struct token *token_init(enum token_type type, char *value)
 {
     struct token *res = malloc(sizeof(struct token));
     if (!res)
@@ -18,7 +17,7 @@ struct token *token_init(enum token_type type, int value)
     res->value = value;
     return res;
 }
-
+/*
 struct token_list *token_list_init(struct token *token)
 {
     struct token_list *tok_list = malloc(sizeof(struct token_list));
@@ -147,4 +146,4 @@ struct token *lexer_pop(struct lexer *lexer)
     struct token *tok = head->token;
     free(head);
     return tok;
-}
+}*/

@@ -9,7 +9,13 @@
 ** You should not edit this struct declaration but define one with the
 ** same name in another header file.
 */
-struct lexer;
+struct token_array
+{
+    struct token **tok_array;
+    size_t capacity;
+    size_t size;
+};
+
 
 struct lexer
 {
@@ -45,18 +51,7 @@ struct token *lexer_peek(struct lexer *lexer);
 */
 struct token *lexer_pop(struct lexer *lexer);
 
-struct token_array
-{
-    struct token **tok_array;
-    size_t capacity;
-    size_t size;
-};
-
-struct lexer
-{
-    struct token_array *arr;
-};
-
+struct token *token_init(enum token_type type, char *value);
 struct token_array *token_array_init();
 void token_array_free(struct token_array *arr);
 void token_array_add(struct token_array *arr, struct token *token);
