@@ -1,5 +1,7 @@
 #!/bin/sh
 
+TEST_AMOUNT=6
+
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 ITALIC='\033[3m'
@@ -35,7 +37,7 @@ cd $TEST_DIR
 
 TEST=$1
 
-for i in $(seq 0 1 5); do
+for i in $(seq 0 1 $TEST_AMOUNT); do
     run_test $TEST $i
 done
 

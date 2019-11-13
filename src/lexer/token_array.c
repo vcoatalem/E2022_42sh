@@ -48,6 +48,18 @@ void token_array_print(struct token_array *arr, FILE *out)
     }
 }
 
+#if 0
+static int is_separator(enum token_type type)
+{
+    if (token_to_handler(type)
+        && token_to_handler(type) != token_compare)
+    {
+        return 1;
+    }
+    return 0;
+}
+#endif
+
 struct token_array *token_array_create(char *str)
 {
     size_t iterator = 0;
@@ -61,7 +73,7 @@ struct token_array *token_array_create(char *str)
         index++;
         iterator++;
         buffer[index] = '\0';
-        enum token_type type =  token_check(str, iterator, buffer);
+        enum token_type type = token_check(str, iterator, buffer);
         if (str[iterator] == ' ' || str[iterator] == '\n'
             || str[iterator] == '\0' || str[iterator] == '\t')
         {
