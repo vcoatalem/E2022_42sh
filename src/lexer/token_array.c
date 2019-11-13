@@ -1,9 +1,10 @@
 #include "lexer.h"
 #include <stdlib.h>
+#include <stddef.h>
 
 struct token_array *token_array_init()
 {
-    struct token_array *res = malloc(*res);
+    struct token_array *res = malloc(sizeof(*res));
     if (!res)
         return NULL;
     res->capacity = 4;
