@@ -14,8 +14,7 @@ char *token_to_string5(enum token_type type)
     case (TOKEN_STDERR):
         return "<<";
     default:
-	err(1, "wrong token type");
-        return "";
+        return "word";
     }
 }
 
