@@ -13,10 +13,16 @@ int main(void)
     ast_add_child(ast2, ast4);
     ast_add_child(ast1, ast2);
 
+    struct ast *dup1 = ast_dup(ast1);
+
     assert(ast1->nb_children == 1);
     assert(ast2->nb_children == 2);
 
+    assert(dup1->nb_children == 1);
+    assert(dup1->forest[0]->nb_children == 2);
+
     ast_free(ast1);
+    ast_free(dup1);
 
     return 0;
 }

@@ -3,11 +3,11 @@
 
 int main(void)
 {
-    struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_AND);
+    struct ast *ast1 = ast_init(NODE_VALUE, "1", OPERATOR_NONE);
     struct ast *ast2 = ast_init(NODE_VALUE, "2", OPERATOR_NONE);
     struct ast *ast3 = ast_init(NODE_VALUE, "3", OPERATOR_NONE);
     struct ast *ast4 = ast_init(NODE_VALUE, "4", OPERATOR_NONE);
-    struct ast *ast5 = ast_init(NODE_OPERATOR, "&", OPERATOR_OR);
+    struct ast *ast5 = ast_init(NODE_VALUE, "5", OPERATOR_OR);
 
     ast_add_child(ast2, ast3);
     ast_add_child(ast2, ast4);

@@ -21,7 +21,7 @@ enum operator_type
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
-    //while, until, ..
+    //while, until, ...
 }
 
 struct ast
