@@ -1,4 +1,4 @@
-add_library(lexer lexer.c token.c token_array.c token_string.c token_to_handler.c)
+add_library(lexer   token/token.c token/token_string.c token_to_handler.c token_array.c handlers.c)
 
 # BASIC EXECUTION TEST
 

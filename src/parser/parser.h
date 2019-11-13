@@ -96,8 +96,9 @@ struct test_runner
 struct test *test_init(enum test_type type, struct test_props props,
         int star, int plus);
 
-struct test_runner_init(struct token_array *token_array, size_t pos);
-struct test_runner_dup(struct test_runner *tr);
+struct test_runner *test_runner_init(struct token_array *token_array,
+        size_t pos);
+struct test_runner *test_runner_dup(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
 
 int rule_run(struct rule *r, struct test_runner *tr);

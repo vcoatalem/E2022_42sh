@@ -95,15 +95,17 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "e"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    struct lexer *l = lexer_alloc(cmds[q]);
-    struct token_array *array = l->arr;
+    struct token_array *array = token_array_create(cmds[q]);
     int eq = token_array_are_equal(array, exp);
     if (!eq)
     {
+        fprintf(stderr, "output:\n");
+        token_array_print(array, stderr);
+        fprintf(stderr, "expected:\n");
+        token_array_print(exp, stderr);
         //dump both token arrays
     }
     token_array_free(array);
     token_array_free(exp);
-    lexer_free(l);
     return eq == 1 ? 0 : 1;
 }

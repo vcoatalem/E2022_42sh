@@ -1,7 +1,8 @@
-#include "token.h"
 #include <errno.h>
 #include <err.h>
-//TODO
+
+#include "lexer.h"
+#include "token/token.h"
 
 //function wich allow us to return the good token_handler
 
