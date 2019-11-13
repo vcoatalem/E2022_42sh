@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         "",
         "echo foo||catbar",
         "if a then b elsedsdfs c",
-        "a&&b|c|| d||& e"
+        "a&&b|c|| d||& e",
     };
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "c"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    else if (q == 5)
+    else if (q >= 5)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "a"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_AMPERSAND, "&&"));

@@ -18,6 +18,7 @@ struct token_array
 enum token_type token_check(char *str, size_t iterator, char *buffer);
 
 struct token *token_init(enum token_type type, char *value);
+void token_free(struct token *token);
 struct token_array *token_array_init();
 void token_array_free(struct token_array *arr);
 void token_array_add(struct token_array *arr, struct token *token);
