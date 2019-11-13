@@ -40,7 +40,18 @@ int get_option_type(struct options *options, int argc, char *argv[])
             options->nb_command++;
             options->command = realloc(options->command,
                                         options->nb_command * sizeof(char *));
-            options->command[options->nb_command - 1] = argv[++i];
+
+            if (i + 1 < argc)
+            {
+                for (; argv[i][0] != '-'; i++)
+                    continue;
+
+                options->command[options->nb_command - 1] = argv[i];
+            }
+
+            else
+                err(2, "42sh: -c: option requires an argument");
+
             break;
         }
 
@@ -61,16 +72,30 @@ int get_option_type(struct options *options, int argc, char *argv[])
             options->nb_set_shopt++;
             options->set_shopt = realloc(options->set_shopt,
                                     options->nb_set_shopt * sizeof(char *));
-            options->set_shopt[options->nb_set_shopt - 1] = argv[++i];
+
+            if (i + 1 < argc)
+                options->set_shopt[options->nb_set_shopt - 1] = argv[++i];
+
+            else
+                err(2, "42sh: -O: option requires an argument");
+
             break;
         }
 
         else if (strcmp(s, "+O") == 0)
         {
-            options->nb_unset_shopt++;
-            options->unset_shopt = realloc(options->unset_shopt,
+            if (i + 1 < argc)
+            {
+                options->nb_unset_shopt++;
+                options->unset_shopt = realloc(options->unset_shopt,
                                     options->nb_unset_shopt * sizeof(char *));
-            options->unset_shopt[options->nb_unset_shopt - 1] = argv[++i];
+
+                options->unset_shopt[options->nb_unset_shopt - 1] = argv[++i];
+            }
+
+            else
+                err(2, "42sh: +O: option requires an argument");
+
             break;
         }
 
@@ -105,17 +130,4 @@ void free_options(struct options *options)
 
     free(options);
     options = NULL;
-}
-
-int main(int argc, char *argv[])
-{
-    struct options *options = options_init();
-
-    if (argc == 1)
-        options->no_options = 1;
-
-    get_option_type(options, argc, argv);
-    free_options(options);
-
-    return 0;
 }
