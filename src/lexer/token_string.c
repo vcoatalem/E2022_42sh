@@ -3,9 +3,6 @@
 #include <err.h>
 #include <errno.h>
 
-//TODO finish this function
-
-
 char *token_to_string5(enum token_type type)
 {
     switch (type)
@@ -17,8 +14,7 @@ char *token_to_string5(enum token_type type)
     case (TOKEN_STDERR):
         return "<<";
     default:
-	err(1, "wrong token type");
-        return "";
+        return "word";
     }
 }
 

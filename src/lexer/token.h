@@ -56,6 +56,28 @@ enum token_type
 typedef int (*token_handler)(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
+int token_compare(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+
+int token_single_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+
+int token_double_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_one_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_diff_char(char *str, size_t iterator, char *buffer, enum
+        token_type type);
+
+int token_terminal_char(char *str, size_t iterator, char *buffer,
+        enum token_type type);
+
+token_handler token_to_handler(enum token_type type);
+
 
 /**
 ** \brief Token struct declaration
@@ -66,6 +88,9 @@ struct token
     enum token_type type;
     char *value;
 };
+
+char *token_to_string(enum token_type type);
+
 
 /**
 ** \brief String representation of a token (used for debugging and errors)

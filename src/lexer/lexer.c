@@ -7,18 +7,18 @@
 #include <errno.h>
 
 #include "lexer.h"
-#include "token_array.h"
 
-struct token *token_init(enum token_type type, int value)
+struct token *token_init(enum token_type type, char *value)
 {
     struct token *res = malloc(sizeof(struct token));
     if (!res)
         return NULL;
     res->type = type;
-    res->value = value;
+    res->value = calloc(1, strlen(value) + 1);
+    strcpy(res->value, value);
     return res;
 }
-
+/*
 struct token_list *token_list_init(struct token *token)
 {
     struct token_list *tok_list = malloc(sizeof(struct token_list));
@@ -147,4 +147,4 @@ struct token *lexer_pop(struct lexer *lexer)
     struct token *tok = head->token;
     free(head);
     return tok;
-}
+}*/
