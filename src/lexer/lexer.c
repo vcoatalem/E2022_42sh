@@ -7,7 +7,7 @@
 #include <errno.h>
 
 #include "lexer.h"
-#include "token_list.h"
+#include "token_array.h"
 
 struct token *token_init(enum token_type type, int value)
 {
