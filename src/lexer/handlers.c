@@ -20,7 +20,7 @@ int token_single_char(char *str, size_t iterator, char *buffer, enum
 {
     if ((buffer[0] == '&' || buffer[0] == '|' 
         || buffer[0] == ';' || buffer[0] == '<' || buffer[0] == '>')
-        && buffer[iterator] == '\0')
+        && buffer[1] == '\0')
     {
         if (buffer[0] != str[iterator]
             && token_compare(str, iterator, buffer, type))
@@ -38,6 +38,8 @@ int token_double_char(char *str, size_t iterator, char *buffer, enum
         || buffer[0] == ';' || buffer[0] == '<' || buffer[0] == '>')
         && buffer[1] == buffer[0] && buffer[2] == '\0')
     {
+        if (buffer[0] == '<' && buffer[1] == '<' && str[iterator] == '-')
+            return 0;
         if (token_compare(str, iterator, buffer, type))
             return 1;
         return 0;
