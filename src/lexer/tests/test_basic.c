@@ -40,7 +40,16 @@ int main(int argc, char **argv)
         "echo foo||catbar",
         "if a then b elsedsdfs c",
         "a&&b|c|| d||& e",
-        "||"
+        "||",
+        "blabla\necho 1>>2",
+        "   echo          e        e  foo ||    cat     -e",
+        "if pdw && ls; then\n\tcd;\nelse\n\talias;\nfi",
+        "echo ((cat -e))",
+        "toto<<-   foo",
+        "function func() { echo ok }",
+        "aa{bb",
+        "toto { foo }",
+        "foo{ foo}"
     };
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -96,9 +105,99 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "e"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    else if (q >= 6)
+    else if (q == 6)
     {
         token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 7)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "blabla"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "1"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_GREAT, ">>"));
+        token_array_add(exp, token_init(TOKEN_WORD, "2"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 8)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "e"));
+        token_array_add(exp, token_init(TOKEN_WORD, "e"));
+        token_array_add(exp, token_init(TOKEN_WORD, "foo"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
+        token_array_add(exp, token_init(TOKEN_WORD, "cat"));
+        token_array_add(exp, token_init(TOKEN_WORD, "-e"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 9)
+    {
+        token_array_add(exp, token_init(TOKEN_IF, "if"));
+        token_array_add(exp, token_init(TOKEN_WORD, "pdw"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_AMPERSAND, "&&"));
+        token_array_add(exp, token_init(TOKEN_WORD, "ls"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_THEN, "then"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_WORD, "cd"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_ELSE, "else"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_WORD, "alias"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_FI, "fi"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 10)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_WORD, "cat"));
+        token_array_add(exp, token_init(TOKEN_WORD, "-e"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 11)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "toto"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_LESS_DASH, "<<-"));
+        token_array_add(exp, token_init(TOKEN_WORD, "foo"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 12)
+    {
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_WORD, "func"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "ok"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 13)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "aa{bb"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 14)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "toto"));
+        token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "foo"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q >= 15)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "foo{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "foo}"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct token_array *array = token_array_create(cmds[q]);

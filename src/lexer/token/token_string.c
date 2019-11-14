@@ -8,11 +8,11 @@ char *token_to_string5(enum token_type type)
     switch (type)
     {
     case (TOKEN_STDIN):
-        return "<";
+        return "0";
     case (TOKEN_STDOUT):
-        return ">";
+        return "1";
     case (TOKEN_STDERR):
-        return "<<";
+        return "2";
     default:
         return "word";
     }

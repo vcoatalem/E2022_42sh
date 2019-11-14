@@ -52,8 +52,8 @@ void token_array_print(struct token_array *arr, FILE *out)
 static int is_separator(char c)
 {
     return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
-         || c == '(' || c == '{'  || c == '}' || c == ')' || c == '\0'
-         || c == '<' || c == '>');
+         || c == '(' || c == ')' || c == '\0' || c == '<' || c == '>'
+         || c == ';');
 }
 
 static int is_space(char c)
@@ -96,6 +96,7 @@ struct token_array *token_array_create(char *str)
     char buffer[2048] = { 0 };
     struct token_array *arr = token_array_init(); 
     size_t index = 0;
+    enum token_type type = TOKEN_EOF;
     while (str[iterator] != 0)
     {
         if (is_separator(str[iterator]))
@@ -108,8 +109,8 @@ struct token_array *token_array_create(char *str)
             buffer[index + 1] = 0;
             index++;
             iterator++;
-            enum token_type type = token_check(str, iterator, buffer);
-            if (type != TOKEN_WORD)
+            type = token_check(str, iterator, buffer);
+            if (type != TOKEN_WORD && is_separator(str[iterator]))
             {
                 struct token *token = token_init(type, buffer);
                 token_array_add(arr, token);
@@ -118,7 +119,7 @@ struct token_array *token_array_create(char *str)
         } 
     }
     if (index > 0)
-        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+        token_array_add(arr, token_init(token_check(buffer, 0, buffer), buffer));
     token_array_add(arr, token_init(TOKEN_EOF, ""));;
     return arr;
 }
