@@ -14,7 +14,7 @@ int main(void)
     ast_add_child(ast1, ast2);
     ast_add_child(ast3, ast5);
 
-    ast_dot_print(ast1);
+    ast_dot_print(ast1, "ast.dot");
 
     ast_free(ast1);
 

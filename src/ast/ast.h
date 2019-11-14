@@ -42,6 +42,6 @@ struct ast *ast_dup(struct ast *ast);
 
 void ast_free(struct ast *ast);
 
-void ast_dot_print(struct ast *ast);
+void ast_dot_print(struct ast *ast, const char *output);
 
 #endif /* AST_H */

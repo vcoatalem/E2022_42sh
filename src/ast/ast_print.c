@@ -54,9 +54,9 @@ void _ast_dot_print(struct ast *ast, FILE *file)
     }
 }
 
-void ast_dot_print(struct ast *ast)
+void ast_dot_print(struct ast *ast, const char *output)
 {
-    FILE *file = fopen("./ast_print.dot", "w");
+    FILE *file = fopen(output, "w");
 
     if (file == NULL)
         err(errno, "ERROR_AST_PRINT: Cannot open file ast_print.dot");
