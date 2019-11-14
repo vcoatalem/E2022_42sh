@@ -93,7 +93,7 @@ int get_option_type(struct options *options, int argc, char *argv[])
             else
             {
                 warn("42sh: +O: option requires an argument");
-                return 1;
+                return OPTIONS_FAILURE;
             }
         }
 
@@ -110,8 +110,8 @@ int get_option_type(struct options *options, int argc, char *argv[])
 
             else
             {
-                warn("42sh: +O: option requires an argument");
-                return 1;
+                warn("42sh: -O: option requires an argument");
+                return OPTIONS_FAILURE;
             }
         }
 
@@ -123,7 +123,7 @@ int get_option_type(struct options *options, int argc, char *argv[])
             else
             {
                 warn("42sh: +O: option requires an argument");
-                return 1;
+                return OPTIONS_FAILURE;
             }
         }
 
@@ -132,12 +132,12 @@ int get_option_type(struct options *options, int argc, char *argv[])
         else
         {
             warn("42sh: %s: invalid option", s);
-            return 1;
+            return OPTIONS_FAILURE;
         }
 
     }
 
-    return 0;
+    return OPTIONS_SUCCESS;
 }
 
 void free_options(struct options *options)
@@ -145,7 +145,5 @@ void free_options(struct options *options)
     free(options->command);
     free(options->set_shopt);
     free(options->set_shopt);
-
     free(options);
-    options = NULL;
 }

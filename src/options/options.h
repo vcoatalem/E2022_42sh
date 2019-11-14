@@ -3,6 +3,9 @@
 
 #include <stddef.h>
 
+#define OPTIONS_SUCCESS 1
+#define OPTIONS_FAILURE 0
+
 struct options
 {
     int no_options;
