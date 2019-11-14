@@ -1,6 +1,6 @@
 #include "parser.h"
 
-static enum command_type rule_ast_command(enum rule_id id)
+static enum operator_type rule_ast_command(enum rule_id id)
 {
     switch (id)
     {
@@ -36,7 +36,11 @@ int rule_execute(enum rule_id id, struct test_runner *parent,
     for (size_t i = 0; i < rule->n_recipes; i++)
     {
         struct test_runner *dup = test_runner_dup(parent);
-        dup->ast = ast_init(rule_ast_command(id));
+        enum operator_type ast_type = rule_ast_command(id);
+        dup->ast = ast_init(
+            ast_type == OPERATOR_NONE ? NODE_VALUE : NODE_OPERATOR,
+            ast_type == OPERATOR_NONE ? "" : NULL,
+            ast_type);
         //initialise ast
         struct test *test = *(rule->recipes + i);
         while (test)
@@ -49,11 +53,12 @@ int rule_execute(enum rule_id id, struct test_runner *parent,
             }
             test = test->next;
         }
-        //whenever a receipe success, immediatly return it. ?
-
         //append built ast to parent
+        ast_add_child(parent->ast, ast_dup(dup->ast));
 
         //update parent position to match this one. ?
+        
+        //free dup
         return PARSE_SUCCESS;
     }
     return PARSE_FAILURE;
