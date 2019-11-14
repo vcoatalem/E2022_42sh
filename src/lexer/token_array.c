@@ -33,7 +33,8 @@ void token_array_add(struct token_array *arr, struct token *token)
     if (arr->size == arr->capacity)
     {
         arr->capacity = arr->capacity * 2;
-        arr->tok_array = realloc(arr->tok_array, arr->capacity);
+        arr->tok_array = realloc(arr->tok_array, arr->capacity
+                * sizeof(void*));
     }
 }
 
@@ -48,39 +49,76 @@ void token_array_print(struct token_array *arr, FILE *out)
     }
 }
 
-#if 0
-static int is_separator(enum token_type type)
+static int is_separator(char c)
 {
-    if (token_to_handler(type)
-        && token_to_handler(type) != token_compare)
-    {
-        return 1;
-    }
-    return 0;
+    return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
+         || c == '(' || c == '{'  || c == '}' || c == ')' || c == '\0'
+         || c == '<' || c == '>');
 }
-#endif
+
+static int is_space(char c)
+{
+    return (c == ' ' || c == '\t');
+}
+
+static void handle_separators(char *str, size_t *iterator, char *buffer,
+        size_t *index, struct token_array *arr)
+{ 
+    if (*index > 0)
+    {
+        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+        *index = 0;
+    }
+    if (is_space(str[*iterator]))
+    {
+        *iterator = *iterator + 1;
+        return;
+    }
+    while (str[*iterator] && !is_space(str[*iterator]))
+    {
+        buffer[*index] = str[*iterator];
+        buffer[*index + 1] = 0;
+        *index = *index + 1;
+        *iterator = *iterator + 1;
+        enum token_type type = token_check(str, *iterator, buffer);
+        if (type != TOKEN_WORD)
+        {
+            token_array_add(arr, token_init(type, buffer));
+            break;
+        }
+    }
+    *index = 0;
+}
 
 struct token_array *token_array_create(char *str)
 {
     size_t iterator = 0;
-    char buffer[2048];
+    char buffer[2048] = { 0 };
     struct token_array *arr = token_array_init(); 
     size_t index = 0;
     while (str[iterator] != 0)
     {
-        //TODO case where tokens are like this "toto>lol or toto(foo)"
-        buffer[index] = str[iterator];
-        index++;
-        iterator++;
-        buffer[index] = '\0';
-        enum token_type type = token_check(str, iterator, buffer);
-        if (str[iterator] == ' ' || str[iterator] == '\n'
-            || str[iterator] == '\0' || str[iterator] == '\t')
+        if (is_separator(str[iterator]))
         {
-            struct token *token = token_init(type, buffer);
-            token_array_add(arr, token);
-            index = 0;
+            handle_separators(str, &iterator, buffer, &index, arr);
         }
+        else
+        {
+            buffer[index] = str[iterator];
+            buffer[index + 1] = 0;
+            index++;
+            iterator++;
+            enum token_type type = token_check(str, iterator, buffer);
+            if (type != TOKEN_WORD)
+            {
+                struct token *token = token_init(type, buffer);
+                token_array_add(arr, token);
+                index = 0;
+            }
+        } 
     }
+    if (index > 0)
+        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+    token_array_add(arr, token_init(TOKEN_EOF, ""));;
     return arr;
 }
