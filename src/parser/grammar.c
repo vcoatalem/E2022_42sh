@@ -17,3 +17,13 @@ struct grammar *grammar_build(void)
     g->rules[RULE_ELEMENT] = rule_element();
     return g;
 }
+
+void grammar_free(struct grammar *grammar)
+{
+    for (size_t i = 1; i < NB_RULES; i++)
+    {
+        rule_free(grammar->rules[i]);
+    }
+    free(grammar->rules);
+    free(grammar);
+}

@@ -15,7 +15,7 @@ enum lexer_state
     STATE_UNFINISHED,             //string could be parsed to a valid expression if given more characters
     STATE_FINISHED,               //lexer successfully lexed string and parser returned a valid expression
     STATE_ERROR                   //lexer successfully lexed string but parser returned an error
-}
+};
 
 struct lexer
 {

@@ -15,7 +15,6 @@ struct options *options_init(void)
 
     new_options->no_options = 0;
 
-    new_options->nb_command = 0;
     new_options->command = NULL;
 
     new_options->norc_is_set = 0;
@@ -31,19 +30,12 @@ struct options *options_init(void)
     return new_options;
 }
 
-static void set_command(struct options *options, int *index,
-                            int argc, char *argv[])
+static void set_command(struct options *options, char *arg)
 {
-    options->nb_command++;
-    options->command = realloc(options->command,
-                            options->nb_command * sizeof(char *));
-    for (; *index < argc; (*index)++)
+    if (!options->command)
     {
-        if (argv[(*index) + 1][0] != '-')
-            break;
+        options->command = arg;
     }
-
-    options->command[options->nb_command - 1] = argv[++(*index)];
 }
 
 static void set_norc(struct options *options)
@@ -88,7 +80,7 @@ int get_option_type(struct options *options, int argc, char *argv[])
         if (strcmp(s, "-c") == 0)
         {
             if (i + 1 < argc)
-                set_command(options, &i, argc, argv);
+                set_command(options, *(argv + i));
 
             else
             {
@@ -140,7 +132,7 @@ int get_option_type(struct options *options, int argc, char *argv[])
     return OPTIONS_SUCCESS;
 }
 
-void free_options(struct options *options)
+void options_free(struct options *options)
 {
     free(options->command);
     free(options->set_shopt);
