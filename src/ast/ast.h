@@ -3,6 +3,10 @@
 
 #include <stddef.h>
 
+#define AST_SUCCESS 0
+#define AST_ERROR 1
+
+
 enum node_type
 {
     NODE_VALUE,
@@ -43,5 +47,33 @@ struct ast *ast_dup(struct ast *ast);
 void ast_free(struct ast *ast);
 
 void ast_dot_print(struct ast *ast, const char *output);
+
+
+
+
+typedef int (*ast_handler)(struct ast *ast);
+
+int ast_handle_and(struct ast *ast);
+int ast_handle_or(struct ast *ast);
+int ast_handle_cmd(struct ast *ast);
+int ast_handle_pipe(struct ast *ast);
+
+//....
+
+/*
+ast_handler get_handler(enum operator_type type)
+{
+    //switch type
+}
+*/
+
+int ast_execute(struct ast *ast);
+/*
+{
+    //get handler(ast->type)
+    //return execute handler
+}
+*/
+
 
 #endif /* AST_H */
