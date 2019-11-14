@@ -4,6 +4,8 @@
 #include <err.h>
 #include <errno.h>
 
+#include <stdio.h>
+
 struct options *options_init(void)
 {
     struct options *new_options = malloc(sizeof(struct options));
@@ -29,80 +31,110 @@ struct options *options_init(void)
     return new_options;
 }
 
+static void set_command(struct options *options, int *index,
+                            int argc, char *argv[])
+{
+    options->nb_command++;
+    options->command = realloc(options->command,
+                            options->nb_command * sizeof(char *));
+    for (; *index < argc; (*index)++)
+    {
+        if (argv[(*index) + 1][0] != '-')
+            break;
+    }
+
+    options->command[options->nb_command - 1] = argv[++(*index)];
+}
+
+static void set_norc(struct options *options)
+{
+    options->norc_is_set = 1;
+}
+
+static void set_ast_print(struct options *options)
+{
+    options->ast_print_is_set = 1;
+}
+
+static void set_set_shopt(struct options *options, int *index, char *argv[])
+{
+
+    options->nb_set_shopt++;
+    options->set_shopt = realloc(options->set_shopt,
+                        options->nb_set_shopt * sizeof(char *));
+
+    options->set_shopt[options->nb_set_shopt - 1] = argv[++(*index)];
+}
+
+static void set_unset_shopt(struct options *options, int *index, char *argv[])
+{
+
+    options->nb_unset_shopt++;
+    options->unset_shopt = realloc(options->unset_shopt,
+                        options->nb_unset_shopt * sizeof(char *));
+
+    options->unset_shopt[options->nb_unset_shopt - 1] = argv[++(*index)];
+}
+
 int get_option_type(struct options *options, int argc, char *argv[])
 {
-    for (int i = 1; i < argc; i++)
+    if (argc == 0)
+        options->no_options = 1;
+
+    for (int i = 0; i < argc; i++)
     {
         char *s = argv[i];
 
         if (strcmp(s, "-c") == 0)
         {
-            options->nb_command++;
-            options->command = realloc(options->command,
-                                        options->nb_command * sizeof(char *));
-
             if (i + 1 < argc)
-            {
-                for (; argv[i][0] != '-'; i++)
-                    continue;
-
-                options->command[options->nb_command - 1] = argv[i];
-            }
+                set_command(options, &i, argc, argv);
 
             else
-                err(2, "42sh: -c: option requires an argument");
-
-            break;
+            {
+                warn("42sh: +O: option requires an argument");
+                return 1;
+            }
         }
 
         else if (strcmp(s, "--norc") == 0)
-        {
-            options->norc_is_set = 1;
-            break;
-        }
+            set_norc(options);
 
         else if (strcmp(s, "--ast-print") == 0)
-        {
-            options->ast_print_is_set = 1;
-            break;
-        }
+            set_ast_print(options);
 
         else if (strcmp(s, "-O") == 0)
         {
-            options->nb_set_shopt++;
-            options->set_shopt = realloc(options->set_shopt,
-                                    options->nb_set_shopt * sizeof(char *));
-
             if (i + 1 < argc)
-                options->set_shopt[options->nb_set_shopt - 1] = argv[++i];
+                set_set_shopt(options, &i, argv);
 
             else
-                err(2, "42sh: -O: option requires an argument");
-
-            break;
+            {
+                warn("42sh: +O: option requires an argument");
+                return 1;
+            }
         }
 
         else if (strcmp(s, "+O") == 0)
         {
             if (i + 1 < argc)
-            {
-                options->nb_unset_shopt++;
-                options->unset_shopt = realloc(options->unset_shopt,
-                                    options->nb_unset_shopt * sizeof(char *));
-
-                options->unset_shopt[options->nb_unset_shopt - 1] = argv[++i];
-            }
+                set_unset_shopt(options, &i, argv);
 
             else
-                err(2, "42sh: +O: option requires an argument");
-
-            break;
+            {
+                warn("42sh: +O: option requires an argument");
+                return 1;
+            }
         }
 
-        // TODO: Add case for option not implemented yet
+        // TODO: Add cases for options not implemented yet
 
         else
-            err(2, "42sh: %s: invalid option", s);
+        {
+            warn("42sh: %s: invalid option", s);
+            return 1;
+        }
+
     }
 
     return 0;
@@ -110,23 +142,9 @@ int get_option_type(struct options *options, int argc, char *argv[])
 
 void free_options(struct options *options)
 {
-    for (size_t i = 0; i < options->nb_command; i++)
-    {
-        free(options->command[i]);
-        options->command[i] = NULL;
-    }
-
-    for (size_t i = 0; i < options->nb_set_shopt; i++)
-    {
-        free(options->set_shopt[i]);
-        options->set_shopt[i] = NULL;
-    }
-
-    for (size_t i = 0; i < options->nb_unset_shopt; i++)
-    {
-        free(options->unset_shopt[i]);
-        options->unset_shopt[i] = NULL;
-    }
+    free(options->command);
+    free(options->set_shopt);
+    free(options->set_shopt);
 
     free(options);
     options = NULL;
