@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(42sh LANGUAGES C)
-add_compile_options(-Wall -Wextra -pedantic -Werror -std=c99)
+add_compile_options(-g -Wall -Wextra -pedantic -Werror -std=c99)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
