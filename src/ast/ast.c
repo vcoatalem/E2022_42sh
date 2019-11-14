@@ -69,3 +69,58 @@ void ast_free(struct ast *ast)
         free(ast->content.value);
     free(ast);
 }
+
+// =============
+// AST EXECUTION
+// =============
+
+int ast_handle_and(struct ast *ast)
+{
+    if (ast == NULL)
+        return AST_ERROR;
+
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast_execute(ast->forest[i]) == AST_ERROR)
+            return AST_ERROR;
+    }
+
+    return AST_SUCCESS;
+}
+
+int ast_handle_or(struct ast *ast)
+{
+    if (ast == NULL)
+        return AST_ERROR;
+
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast_execute(ast->forest[i]) == AST_SUCCESS)
+            return AST_SUCCESS;
+    }
+
+    return AST_ERROR;
+}
+
+int ast_handle_cmd(struct ast *ast);
+int ast_handle_pipe(struct ast *ast);
+
+ast_handler get_handler(enum operator_type type)
+{
+    if (type == OPERATOR_CMD)
+        return &ast_handle_cmd;
+
+    else if (type == OPERATOR_AND)
+        return &ast_handle_and;
+
+    else if (type == OPERATOR_OR)
+        return &ast_handle_or;
+
+    else if (type == OPERATOR_PIPE)
+         return &ast_handle_pipe;
+
+    else
+        return NULL;
+}
+
+int ast_execute(struct ast *ast);
