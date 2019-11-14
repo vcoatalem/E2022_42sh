@@ -22,27 +22,27 @@ int options_is_equal(struct options *opt1, struct options *opt2)
             || opt1->ast_print_is_set != opt2->ast_print_is_set
             || opt1->nb_set_shopt != opt2->nb_set_shopt
             || opt1->nb_unset_shopt != opt2->nb_unset_shopt)
-        return 1;
+        return 0;
 
     for (size_t i = 0; i < opt1->nb_command; i++)
     {
         if (strcmp(opt1->command[i], opt2->command[i]) != 0)
-            return 1;
+            return 0;
     }
 
     for (size_t i = 0; i < opt1->nb_set_shopt; i++)
     {
         if (strcmp(opt1->set_shopt[i], opt2->set_shopt[i]) != 0)
-            return 1;
+            return 0;
     }
 
     for (size_t i = 0; i < opt1->nb_unset_shopt; i++)
     {
         if (strcmp(opt1->unset_shopt[i], opt2->unset_shopt[i]) != 0)
-            return 1;
+            return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 int main(int argc, char *argv[])
@@ -70,6 +70,11 @@ int main(int argc, char *argv[])
     struct options *options_input = options_init();
     struct options *options_output = options_init();
 
+    for (size_t i = 0; *(cmd[q] + i); i++)
+    {
+        printf(" %s", *(cmd[q] + i));
+    }
+    fflush(stdout);
     if (q == 0)
     {
         options_output->nb_command = 1;
