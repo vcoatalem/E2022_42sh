@@ -119,7 +119,7 @@ struct grammar
 };
 
 struct grammar *grammar_build(void);
-
+void grammar_free(struct grammar *grammar);
 
 // grammar building utils
 struct test *test_tokens_create(int star, int plus, struct token *tok, ...);

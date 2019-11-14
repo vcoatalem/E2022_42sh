@@ -158,8 +158,8 @@ int main(int argc, char *argv[])
 
     assert(options_is_equal(options_input, options_output) == 0);
 
-    free_options(options_input);
-    free_options(options_output);
+    options_free(options_input);
+    options_free(options_output);
 
     return 0;
 }

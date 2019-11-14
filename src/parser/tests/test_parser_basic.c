@@ -14,6 +14,6 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct ast *ast = parse(exp);
-    ast_dot_print(ast);
+    ast_dot_print(ast, "ast.dot");
     return 0;
 }

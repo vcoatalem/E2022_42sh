@@ -30,6 +30,19 @@ set_target_properties(test_parser_basic
 ######################
 
 # List all tests
+
+add_executable(test_grammar_basic tests/test_grammar_basic.c)
+
+target_link_libraries(test_grammar_basic parser)
+
+set_target_properties(test_grammar_basic
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
+)
+# BASIC GRAMMAR TEST
+
 add_custom_target(parser_check
     DEPENDS test_parser_basic
+    DEPENDS test_grammar_basic
 )

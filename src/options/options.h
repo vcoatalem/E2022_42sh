@@ -10,8 +10,7 @@ struct options
 {
     int no_options;
 
-    size_t nb_command;
-    char **command;
+    char *command;
 
     int norc_is_set;
 
@@ -30,6 +29,6 @@ struct options *options_init(void);
 
 int get_option_type(struct options *options, int argc, char *argv[]);
 
-void free_options(struct options *options);
+void options_free(struct options *options);
 
 #endif /* OPTIONS_H */
