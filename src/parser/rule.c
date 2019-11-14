@@ -1,5 +1,22 @@
 #include "parser.h"
 
+struct rule *rule_init(void)
+{
+    struct rule *res = calloc(1, sizeof(struct rule));
+    res->recipes = NULL;
+    res->n_recipes = 0;
+    return res;
+}
+
+void rule_free(struct rule *rule)
+{
+    for (size_t i = 0; i < rule->n_recipes; i++)
+    {
+        test_free(*(rule->recipes + i));
+    }
+    free(rule);
+}
+
 static enum operator_type rule_ast_command(enum rule_id id)
 {
     switch (id)
@@ -62,4 +79,15 @@ int rule_execute(enum rule_id id, struct test_runner *parent,
         return PARSE_SUCCESS;
     }
     return PARSE_FAILURE;
+}
+
+void rule_print(struct rule *rule, FILE *out)
+{
+    printf("--- RULE:\n");
+    for (size_t i = 0; i < rule->n_recipes; i++)
+    {
+        fprintf(out, "recipe #%zu: ", i);
+        test_print(*(rule->recipes + i), out);
+    }
+    printf("\n");
 }
