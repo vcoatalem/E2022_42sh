@@ -7,6 +7,9 @@
 #include "../lexer/lexer.h"
 #include "../ast/ast.h"
 
+#define PARSE_SUCCESS 0
+#define PARSE_FAILURE 1
+
 enum test_type
 {
     TEST_NONE, //always succeed
@@ -44,27 +47,6 @@ enum rule_id //RULES TO BE ADDED
     //CASE_ITEM
 };
 
-//RULE STRUCTURE
-
-struct rule
-{
-    size_t n_recipes;
-    struct test **recipes;
-};
-
-struct rule *rule_input(void);
-struct rule *rule_list(void);
-struct rule *rule_and_or(void);
-struct rule *rule_and(void);
-struct rule *rule_or(void);
-struct rule *rule_pipeline(void);
-struct rule *rule_command(void);
-struct rule *rule_simple_command(void);
-struct rule *rule_redirection(void);
-struct rule *rule_element(void);
-
-void rule_free(struct rule *rule);
-
 // TEST STRUCTURE
 
 struct test_props
@@ -101,7 +83,38 @@ struct test_runner *test_runner_init(struct token_array *token_array,
 struct test_runner *test_runner_dup(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
 
-int rule_run(struct rule *r, struct test_runner *tr);
-int test_run(struct test *r, struct test_runner *tr);
+
+
+//RULE STRUCTURE
+
+struct rule
+{
+    size_t n_recipes;
+    struct test **recipes;
+};
+
+struct rule *rule_input(void);
+struct rule *rule_list(void);
+struct rule *rule_and_or(void);
+struct rule *rule_and(void);
+struct rule *rule_or(void);
+struct rule *rule_pipeline(void);
+struct rule *rule_command(void);
+struct rule *rule_simple_command(void);
+struct rule *rule_redirection(void);
+struct rule *rule_element(void);
+
+void rule_free(struct rule *rule);
+
+//GRAMMER STRUCTURE
+
+struct grammar
+{
+    struct rule **rules;
+    size_t n_rules;
+}
+
+int rule_execute(struct rule *r, struct test_runner *tr, struct grammar *g);
+int test_execute(struct test *r, struct test_runner *tr, struct grammar *g);
 
 #endif /* PARSER_H */
