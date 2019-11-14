@@ -53,7 +53,7 @@ void test_print(struct test *test, FILE *out)
         fprintf(out, " tokens: (\n"); 
         for (size_t i = 0; i < arr->size; i++)
         {
-            fprintf(out, "%s|", token_str(arr->tok_array[i]));
+            fprintf(out, "%s|", token_to_string(arr->tok_array[i]->type));
         }
     }
     fprintf(out, " ]");
