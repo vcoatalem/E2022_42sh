@@ -54,7 +54,8 @@ struct ast *ast_init(enum node_type type, char *value,
     else
     {
         new_ast->node_type = NODE_VALUE;
-        new_ast->content.value = value;
+        new_ast->content.value = calloc(1, strlen(value) + 1);
+        strcpy(new_ast->content.value, value);
     }
 
     new_ast->forest = NULL;
@@ -96,6 +97,7 @@ void ast_free(struct ast *ast)
 
     if (ast->forest != NULL)
         free(ast->forest);
-
+    if (ast->node_type == NODE_VALUE)
+        free(ast->content.value);
     free(ast);
 }
