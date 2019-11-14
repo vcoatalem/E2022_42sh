@@ -5,38 +5,6 @@
 #include <err.h>
 #include <errno.h>
 
-/*
-  ### STRUCTURES ###
-
-enum node_type
-{
-    NODE_VALUE,
-    NODE_OPERATOR,
-};
-
-enum operator_type
-{
-    OPERATOR_NONE,
-    OPERATOR_CMD,
-    OPERATOR_AND,
-    OPERATOR_OR,
-    OPERATOR_PIPE,
-    //while, until, ...
-}
-
-struct ast
-{
-    enum node_type node_type;
-    union
-    {
-        char *value;
-        enum operator_type op_type;
-    };
-    struct ast **forest;
-    size_t nb_children;
-};
-*/
-
 struct ast *ast_init(enum node_type type, char *value,
         enum operator_type op_type)
 {

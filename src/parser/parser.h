@@ -65,6 +65,12 @@ struct test
     int plus;
 };
 
+struct test *test_init(enum test_type type, struct test_props *props,
+        int star, int plus);
+void test_print(struct test *test, FILE *out);
+void test_add(struct test *test, struct test *res);
+void test_free(struct test *test);
+
 // TEST RUNNER STRUCTURE
 
 struct test_runner
@@ -75,15 +81,10 @@ struct test_runner
     //struct test ?
 };
 
-struct test *test_init(enum test_type type, struct test_props props,
-        int star, int plus);
-
 struct test_runner *test_runner_init(struct token_array *token_array,
         size_t pos);
 struct test_runner *test_runner_dup(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
-
-
 
 //RULE STRUCTURE
 
@@ -92,6 +93,8 @@ struct rule
     size_t n_recipes;
     struct test **recipes;
 };
+
+struct rule *rule_init(void);
 
 struct rule *rule_input(void);
 struct rule *rule_list(void);
@@ -104,6 +107,7 @@ struct rule *rule_simple_command(void);
 struct rule *rule_redirection(void);
 struct rule *rule_element(void);
 
+void rule_print(struct rule *rule, FILE *out);
 void rule_free(struct rule *rule);
 
 //GRAMMER STRUCTURE
@@ -116,6 +120,14 @@ struct grammar
 
 struct grammar *grammar_build(void);
 
+
+// grammar building utils
+struct test *test_tokens_create(int star, int plus, struct token *tok, ...);
+struct test *test_rule_create(int star, int plus, enum rule_id id);
+struct test *test_sub_create(int star, int plus, struct test *t, ...);
+//
+
+// parsing functions
 int rule_execute(enum rule_id id, struct test_runner *tr, struct grammar *g);
 int test_execute(struct test *r, struct test_runner *tr, struct grammar *g);
 

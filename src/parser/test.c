@@ -1,16 +1,23 @@
+#include <stdarg.h>
+
 #include "parser.h"
 
-struct test *test_init(enum test_type type, struct test_props props, int star,
+struct test *test_init(enum test_type type, struct test_props *props, int star,
         int plus)
 {
     struct test *res = calloc(1, sizeof(struct test));
     res->type = type;
-    res->props.sub_test = props.sub_test;
-    res->props.token_union = props.token_union;
-    res->props.rule_id = props.rule_id;
+    res->props.sub_test = props->sub_test;
+    res->props.token_union = props->token_union;
+    res->props.rule_id = props->rule_id;
     res->star = star;
     res->plus = plus;
     return res;
+}
+
+void test_add(struct test *test, struct test *res)
+{
+    test->next = res;
 }
 
 void test_free(struct test *test)
@@ -27,4 +34,37 @@ void test_free(struct test *test)
         token_array_free(test->props.token_union);
     }
     free(test);
+}
+
+void test_print(struct test *test, FILE *out)
+{
+    fprintf(out, "[ type %d ", test->type);
+    if (test->type == TEST_RULE)
+    {
+        fprintf(out, " rule_id: %d", test->props.rule_id);
+    }
+    else if (test->type == TEST_PARENT)
+    {
+        test_print(test->props.sub_test, out);
+    }
+    else if (test->type == TEST_TOKEN)
+    {
+        struct token_array *arr = test->props.token_union;
+        fprintf(out, " tokens: (\n"); 
+        for (size_t i = 0; i < arr->size; i++)
+        {
+            fprintf(out, "%s|", token_str(arr->tok_array[i]));
+        }
+    }
+    fprintf(out, " ]");
+    if (test->star)
+        fprintf(out, "*");
+    if (test->plus)
+        fprintf(out, "+");
+    if (test->next)
+    {
+        fprintf(out, " -> ");
+        test_print(test->next, out);
+    }
+    fprintf(out, "\n");
 }
