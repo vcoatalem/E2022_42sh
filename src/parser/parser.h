@@ -112,9 +112,13 @@ struct grammar
 {
     struct rule **rules;
     size_t n_rules;
-}
+};
 
-int rule_execute(struct rule *r, struct test_runner *tr, struct grammar *g);
+struct grammar *grammar_build(void);
+
+int rule_execute(enum rule_id id, struct test_runner *tr, struct grammar *g);
 int test_execute(struct test *r, struct test_runner *tr, struct grammar *g);
+
+struct ast *parse(struct token_array *tokens);
 
 #endif /* PARSER_H */

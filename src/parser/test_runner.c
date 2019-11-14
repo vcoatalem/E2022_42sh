@@ -28,10 +28,10 @@ static int test_execute_token_union(struct test *test,
         struct test_runner *runner)
 {
     struct token_array *tok_union = test->props.token_union;
-    struct token *current = *(runner->token_array->token_arr + runner->pos);
-    for (size_t i = 0; i < tok_union; i++)
+    struct token *current = *(runner->token_array->tok_array + runner->pos);
+    for (size_t i = 0; i < tok_union->size; i++)
     {
-        if (current->type == (*(tok_union->token_arr + i))->type)
+        if (current->type == (*(tok_union->tok_array + i))->type)
         {
             runner->pos++;
             return PARSE_SUCCESS;
@@ -39,17 +39,12 @@ static int test_execute_token_union(struct test *test,
     }
     return PARSE_FAILURE;
 }
-//
-
 
 static int test_execute_rule(struct test *test,
         struct test_runner *runner, struct grammar *grammar)
 {
-    struct rule *target_rule = *(grammar->rules + test->props.rule_id);
-    return rule_execute(target_rule, runner, grammar);
+    return rule_execute(test->props.rule_id, runner, grammar);
 }
-
-//
 
 static int test_execute_sub_test(struct test *test,
         struct test_runner *runner, struct grammar *grammar)
@@ -72,7 +67,7 @@ int test_execute(struct test *test, struct test_runner *runner,
         case TEST_RULE:
             val = test_execute_rule(test, runner, grammar);
             break;
-        case default:
+        default:
             val = PARSE_SUCCESS;
     }
     return val;
