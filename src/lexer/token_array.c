@@ -37,6 +37,25 @@ void token_array_add(struct token_array *arr, struct token *token)
                 * sizeof(void*));
     }
 }
+/*Useful when we are in interactive mode and we want to fusionate two arrays
+We have to stick the last token of the first array with the first token of 
+the second array with a \n between them*/
+void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
+{
+    size_t lena = strlen(arr1->tok_array[arr1->size - 1]->value);
+    size_t lenb = strlen(arr2->tok_array[0]->value);
+    size_t len = lena + lenb + 1;
+    arr1->tok_array[arr1->size - 1]->value =
+    realloc(arr1->tok_array[arr1->size - 1]->value, len);
+    memcpy(arr1->tok_array[arr1->size - 1]->value + lena,
+    arr2->tok_array[0]->value, lenb + 1);
+    
+    for(size_t i = 1; i < arr2->size; i++)
+    {
+        //TODO add free for token
+        token_array_add(arr1, arr2->tok_array[i]);
+    }
+}
 
 void token_array_print(struct token_array *arr, FILE *out)
 {

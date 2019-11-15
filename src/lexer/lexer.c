@@ -80,8 +80,16 @@ struct token_array *lex(struct lexer *lexer)
         } 
     }
     if (index > 0)
+    {
+        if (lexer->state != STATE_NONE)//If waiting " or ' we add \n to buffer
+        {
+            buffer[index] = '\n';
+            buffer[index+1] = 0;
+        }
         token_array_add(arr, token_init(token_check(buffer, 0, buffer), buffer));
-    token_array_add(arr, token_init(TOKEN_EOF, ""));;
+    }
+    if (lexer->state == STATE_NONE)
+        token_array_add(arr, token_init(TOKEN_EOF, ""));;
     return arr;
     //return token_array_create(lexer->str);
 }
