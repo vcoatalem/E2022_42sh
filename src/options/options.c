@@ -23,48 +23,49 @@ struct options *options_init(void)
     return new_options;
 }
 
+static int is_flag(char *arg)
+{
+    return *arg == '-';
+}
+
 static void set_command(struct options *options, int *i, char **argv)
 {
     *i = *i + 1;
+    while (*(argv + *i) && is_flag(*(argv + *i)))
+    {
+        *i = *i + 1;
+    }
     if (!options->command)
     {
         options->command = *(argv + *i);
     }
 }
 
-static void set_norc(struct options *options)
-{
-    options->norc_is_set = 1;
-}
-
-static void set_ast_print(struct options *options)
-{
-    options->ast_print_is_set = 1;
-}
-
 static void set_set_shopt(struct options *options, int *index, char *argv[])
 {
     //TODO: check if the option to be set is a valid option
-    options->nb_set_shopt++;
-    options->set_shopt = realloc(options->set_shopt,
+    *index = *index + 1;
+    if (argv[*index] != NULL)
+    {
+        options->nb_set_shopt++;
+        options->set_shopt = realloc(options->set_shopt,
                         options->nb_set_shopt * sizeof(char *));
-
-    options->set_shopt[options->nb_set_shopt - 1] = argv[++(*index)];
+        options->set_shopt[options->nb_set_shopt - 1] = argv[*index];
+    }
 }
 
 static void set_unset_shopt(struct options *options, int *index, char *argv[])
 {
     //TODO: check if option to be unset is a valid option
-    options->nb_unset_shopt++;
-    options->unset_shopt = realloc(options->unset_shopt,
-                        options->nb_unset_shopt * sizeof(char *));
+    *index = *index + 1;
+    if (argv[*index] != NULL)
+    {
+        options->nb_unset_shopt++;
+        options->unset_shopt = realloc(options->unset_shopt,
+                            options->nb_unset_shopt * sizeof(char *));
 
-    options->unset_shopt[options->nb_unset_shopt - 1] = argv[++(*index)];
-}
-
-static int is_flag(char *arg)
-{
-    return *arg == '-';
+        options->unset_shopt[options->nb_unset_shopt - 1] = argv[*index];
+    }
 }
 
 int get_option_type(struct options *options, int argc, char *argv[])
@@ -92,18 +93,16 @@ int get_option_type(struct options *options, int argc, char *argv[])
             }
         }
         else if (strcmp(s, "--norc") == 0)
-            set_norc(options);
+            options->norc_is_set = 1;
         else if (strcmp(s, "--ast-print") == 0)
-            set_ast_print(options);
+            options->ast_print_is_set = 1;
         else if (strcmp(s, "-O") == 0)
         {
-            if (i + 1 < argc)
-                set_set_shopt(options, &i, argv);
+            set_set_shopt(options, &i, argv);
         }
         else if (strcmp(s, "+O") == 0)
         {
-            if (i + 1 < argc)
-                set_unset_shopt(options, &i, argv);
+            set_unset_shopt(options, &i, argv);
         }
         // TODO: Add cases for options not implemented yet
     }
@@ -112,7 +111,6 @@ int get_option_type(struct options *options, int argc, char *argv[])
 
 void options_free(struct options *options)
 {
-    free(options->command);
     free(options->set_shopt);
     free(options->set_shopt);
     free(options);
