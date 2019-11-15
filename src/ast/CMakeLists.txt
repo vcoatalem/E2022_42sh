@@ -1,4 +1,8 @@
-add_library(ast ast.c ast_print.c)
+add_library(ast
+    ast.c
+    ast_print.c
+    ast_execute.c
+    handlers/handlers_basic.c)
 
 # BASIC INIT TEST
 

@@ -35,8 +35,6 @@ static enum operator_type rule_ast_command(enum rule_id id)
             return OPERATOR_OR;
         case RULE_PIPELINE:
             return OPERATOR_PIPE;
-        case RULE_SIMPLE_COMMAND:
-            return OPERATOR_CMD;
         case RULE_REDIRECTION:
             return OPERATOR_NONE;
         case RULE_ELEMENT:
