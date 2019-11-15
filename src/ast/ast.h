@@ -19,6 +19,11 @@ enum operator_type
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
+    OPERATOR_IF,
+    OPERATOR_THEN,
+    OPERATOR_WHILE,
+    OPERATOR_FOR,
+    OPERATOR_UNTIL,
     //while, until, ..
 };
 
@@ -57,6 +62,11 @@ operator_handler get_operator_handler(enum operator_type type);
 int ast_handle_and(struct ast *ast);
 int ast_handle_or(struct ast *ast);
 int ast_handle_pipe(struct ast *ast);
+int ast_handle_if(struct ast *ast);
+int ast_handle_then(struct ast *ast);
+int ast_handle_while(struct ast *ast);
+int ast_handle_for(struct ast *ast);
+int ast_handle_until(struct ast *ast);
 
 int ast_execute(struct ast *ast);
 /*
