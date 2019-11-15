@@ -2,7 +2,10 @@ add_library(ast
     ast.c
     ast_print.c
     ast_execute.c
-    handlers/handlers_basic.c)
+    handlers/and_or.c
+    handlers/pipe.c)
+
+target_link_libraries(ast execution)
 
 # BASIC INIT TEST
 
