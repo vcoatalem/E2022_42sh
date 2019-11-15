@@ -1,6 +1,8 @@
 
 #include "parser.h"
 
+//TODO: findout why va_list needs a delimiting TOKEN_WORD to prevent random
+//values from joining the list
 struct test *test_tokens_create(int optionnal, int repeatable,
         enum token_type tok, ...)
 {
