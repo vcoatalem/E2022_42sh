@@ -1,9 +1,5 @@
 #include "lexer.h"
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 //Function which verify if buffer has the same type of argument type
 int token_compare(char *str, size_t iterator, char *buffer, enum
         token_type type)
