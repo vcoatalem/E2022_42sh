@@ -94,7 +94,7 @@ char *token_to_string2(enum token_type type)
     case (TOKEN_EOF):
         return "\0";
     case (TOKEN_EOL):
-        return "\n";
+        return "\\n";
     case (TOKEN_SEMI_COLON):
         return ";";
     case (TOKEN_DOUBLE_SEMICOLON):
