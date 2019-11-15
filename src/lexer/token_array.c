@@ -42,6 +42,7 @@ We have to stick the last token of the first array with the first token of
 the second array with a \n between them*/
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
 {
+
     size_t lena = strlen(arr1->tok_array[arr1->size - 1]->value);
     size_t lenb = strlen(arr2->tok_array[0]->value);
     size_t len = lena + lenb + 1;
@@ -49,6 +50,7 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
     realloc(arr1->tok_array[arr1->size - 1]->value, len);
     memcpy(arr1->tok_array[arr1->size - 1]->value + lena,
     arr2->tok_array[0]->value, lenb + 1);
+    arr1->tok_array[arr1->size - 1]->type = TOKEN_WORD;
     
     for(size_t i = 1; i < arr2->size; i++)
     {
