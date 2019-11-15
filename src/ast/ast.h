@@ -16,7 +16,6 @@ enum node_type
 enum operator_type
 {
     OPERATOR_NONE,
-    OPERATOR_CMD,
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
@@ -51,21 +50,13 @@ void ast_dot_print(struct ast *ast, const char *output);
 
 // AST EXECUTION
 
-typedef int (*ast_handler)(struct ast *ast);
+typedef int (*operator_handler)(struct ast *ast);
+
+operator_handler get_operator_handler(enum operator_type type);
 
 int ast_handle_and(struct ast *ast);
 int ast_handle_or(struct ast *ast);
-int ast_handle_cmd(struct ast *ast);
 int ast_handle_pipe(struct ast *ast);
-
-//....
-
-/*
-ast_handler get_handler(enum operator_type type)
-{
-    //switch type
-}
-*/
 
 int ast_execute(struct ast *ast);
 /*

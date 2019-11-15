@@ -6,7 +6,7 @@ enum BASH_RETURN_VALUES
 {
     BASH_RETURN_OK = 0,
     BASH_RETURN_ERROR = 1,
-    BASH_RETURN_WRONG_FLAG = 2
+    BASH_RETURN_OPTIONS_ERROR = 2
 };
 
 struct execution_bundle
@@ -14,6 +14,12 @@ struct execution_bundle
     struct options *options;
     struct grammar *grammar;
 };
+
+void bundle_free(struct execution_bundle *bundle)
+{
+    free(bundle->options);
+    free(bundle->grammar);
+}
 
 static int execute_stdin(struct execution_bundle *bundle)
 {
@@ -24,7 +30,10 @@ static int execute_stdin(struct execution_bundle *bundle)
     size_t size;
     while (getline(&line, &size, stdin) != -1)
     {
-        printf("%s\n", line);
+        //run lexer + parser
+        struct token_array *arr = token_array_create(line);
+        token_array_print(arr, stdout);
+        token_array_free(arr);
         free(line);
     }
     return BASH_RETURN_OK;
@@ -42,6 +51,7 @@ int execute_interactive(struct execution_bundle *bundle)
         // run lexer + parser
         struct token_array *arr = token_array_create(input);
         token_array_print(arr, stdout);
+        token_array_free(arr);
         free(input);
     }
     return BASH_RETURN_OK;
@@ -54,20 +64,16 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     //TODO: load lexer with cmd, run lexing + parsing and return regardless of lexing state
     struct token_array *arr = token_array_create(cmd);
     token_array_print(arr, stdout);
+    token_array_free(arr);
     return BASH_RETURN_OK;
 }
 
 int main(int argc, char **argv)
 {
-    struct options *options = options_init();
-    if (argc > 2)
+    struct options *options = options_build(argc, argv);
+    if (!options)
     {
-        int get_options = get_option_type(options, argc, argv + 1);
-        if (get_options == OPTIONS_FAILURE)
-        {
-            options_free(options);
-            return BASH_RETURN_WRONG_FLAG;
-        }
+        return BASH_RETURN_OPTIONS_ERROR;
     }
     struct grammar *g = grammar_build();
     struct execution_bundle bundle = { .options = options,
@@ -77,7 +83,7 @@ int main(int argc, char **argv)
     {
         execution_val = execute_cmd(&bundle, options->command);
     }
-    if (isatty(0))
+    else if (!isatty(0))
     {
         execution_val = execute_stdin(&bundle);
     }
@@ -89,6 +95,5 @@ int main(int argc, char **argv)
     {
         //something went wrong...
     }
-    grammar_free(g);
     return BASH_RETURN_OK;
 }

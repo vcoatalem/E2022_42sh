@@ -7,9 +7,6 @@ char *type_character(enum operator_type type)
 {
     switch (type)
     {
-        case (OPERATOR_CMD):
-            return "CMD";
-
         case (OPERATOR_AND):
             return "&&";
 

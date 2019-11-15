@@ -31,4 +31,6 @@ int get_option_type(struct options *options, int argc, char *argv[]);
 
 void options_free(struct options *options);
 
+struct options *options_build(int argc, char **argv);
+
 #endif /* OPTIONS_H */
