@@ -86,8 +86,9 @@ void rule_print(struct rule *rule, FILE *out)
     {
         fprintf(out, "recipe #%zu: ", i);
         test_print(*(rule->recipes + i), out);
+        fprintf(out, "\n");
     }
-    printf("\n");
+    fprintf(out, "\n");
 }
 
 void rule_add_test(struct rule *rule, struct test *test)

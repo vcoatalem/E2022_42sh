@@ -2,16 +2,16 @@
 
 #include "parser.h"
 
-struct test *test_init(enum test_type type, struct test_props *props, int star,
-        int plus)
+struct test *test_init(enum test_type type, struct test_props *props,
+        int optionnal, int repeatable)
 {
     struct test *res = calloc(1, sizeof(struct test));
     res->type = type;
     res->props.sub_test = props->sub_test;
     res->props.token_union = props->token_union;
     res->props.rule_id = props->rule_id;
-    res->star = star;
-    res->plus = plus;
+    res->optionnal = optionnal;
+    res->repeatable = repeatable;
     return res;
 }
 
@@ -53,18 +53,19 @@ void test_print(struct test *test, FILE *out)
         fprintf(out, " tokens: ("); 
         for (size_t i = 0; i < arr->size; i++)
         {
-            fprintf(out, "%s|", token_to_string(arr->tok_array[i]->type));
+            fprintf(out, "`%s`|", token_to_string(arr->tok_array[i]->type));
         }
     }
     fprintf(out, " ]");
-    if (test->star)
+    if (test->optionnal && !test->repeatable)
+        fprintf(out, "!");
+    if (test->optionnal && test->repeatable)
         fprintf(out, "*");
-    if (test->plus)
+    else if (!test->optionnal && test->repeatable)
         fprintf(out, "+");
     if (test->next)
     {
         fprintf(out, " -> ");
         test_print(test->next, out);
     }
-    fprintf(out, "\n");
 }
