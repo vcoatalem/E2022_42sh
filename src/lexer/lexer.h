@@ -44,10 +44,12 @@ void token_array_free(struct token_array *arr);
 void token_array_add(struct token_array *arr, struct token *token);
 void token_array_print(struct token_array *arr, FILE *out);
 
+int is_separator(char c);
 
-//TODO: turn token_array_create into lex
-struct token_array *token_array_create(char *str);
-struct token_array *lex(struct lexer *lexer);
+int is_space(char c);
+
+void handle_separators(char *str, size_t *iterator, char *buffer,
+        size_t *index, struct token_array *arr);
 
 //TODO: lexer basic init
 struct lexer *lexer_init(void);
@@ -57,5 +59,13 @@ void lexer_add_string(struct lexer *lexer, char *str);
 
 //TODO: empty lexer
 void lexer_clear(struct lexer *lexer);
+
+//TODO: turn token_array_create into lex
+struct token_array *token_array_create(char *str);
+struct token_array *lex(struct lexer *lexer);
+
+
+
+
 
 #endif /* ! LEXER_H */

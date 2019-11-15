@@ -49,19 +49,19 @@ void token_array_print(struct token_array *arr, FILE *out)
     }
 }
 
-static int is_separator(char c)
+int is_separator(char c)
 {
     return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
          || c == '(' || c == ')' || c == '\0' || c == '<' || c == '>'
          || c == ';');
 }
 
-static int is_space(char c)
+int is_space(char c)
 {
     return (c == ' ' || c == '\t');
 }
 
-static void handle_separators(char *str, size_t *iterator, char *buffer,
+void handle_separators(char *str, size_t *iterator, char *buffer,
         size_t *index, struct token_array *arr)
 { 
     if (*index > 0)

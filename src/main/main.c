@@ -45,15 +45,21 @@ int execute_interactive(struct execution_bundle *bundle)
         return BASH_RETURN_ERROR;
     const char *ps1 = "42sh ";
     //const char *ps2 = "> ";
+    struct lexer *lexer = lexer_init();
     while (1)
     {
         char *input = readline(ps1);
+        if (!input)
+            break;
         // run lexer + parser
-        struct token_array *arr = token_array_create(input);
+        lexer_add_string(lexer, input);
+        struct token_array *arr = lex(lexer);
+        //struct token_array *arr = token_array_create(input);
         token_array_print(arr, stdout);
         token_array_free(arr);
         free(input);
     }
+    lexer_clear(lexer);
     return BASH_RETURN_OK;
 }
 
