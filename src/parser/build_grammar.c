@@ -1,19 +1,27 @@
+
 #include "parser.h"
 
-struct test *test_tokens_create(int star, int plus, struct token *tok, ...)
+struct test *test_tokens_create(int star, int plus, enum token_type tok, ...)
 {
-    va_list tokens;
-    va_start(tokens, tok);
     struct token_array *arr = token_array_init();
-    while (tok)
+    if (tok == TOKEN_WORD)
     {
-        token_array_add(arr, tok);
-        tok = va_arg(tokens, struct token*);
+        token_array_add(arr, token_init(TOKEN_WORD, ""));
     }
-    va_end(tokens);
+    else
+    {
+        va_list tokens; 
+        va_start(tokens, tok);
+        while (tok)
+        {
+            token_array_add(arr, token_init(tok, token_to_string(tok)));
+            tok = va_arg(tokens, enum token_type);
+        }
+        va_end(tokens);
+    }
     struct test_props p = { .sub_test = NULL, .token_union = arr,
             .rule_id = RULE_NONE };
-    struct test *res = test_init(TEST_TOKENS, &p, star, plus);
+    struct test *res = test_init(TEST_TOKEN, &p, star, plus);
     return res;
 }
 
@@ -32,11 +40,11 @@ struct test *test_sub_create(int star, int plus, struct test *t, ...)
     struct test *sub = t;
     while (t)
     {
-        t->next = va_arg(t, struct test);
+        t->next = va_arg(tests, struct test*);
         t = t->next;
     }
-    struct test_props p = { .sub_test = sub, token_union = NULL,
-            .rule_id = id };
+    struct test_props p = { .sub_test = sub, .token_union = NULL,
+            .rule_id = RULE_NONE };
     struct test *res = test_init(TEST_PARENT, &p, star, plus);
     return res;
 }

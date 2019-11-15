@@ -50,7 +50,7 @@ void test_print(struct test *test, FILE *out)
     else if (test->type == TEST_TOKEN)
     {
         struct token_array *arr = test->props.token_union;
-        fprintf(out, " tokens: (\n"); 
+        fprintf(out, " tokens: ("); 
         for (size_t i = 0; i < arr->size; i++)
         {
             fprintf(out, "%s|", token_to_string(arr->tok_array[i]->type));

@@ -1,6 +1,7 @@
 add_library(parser
     parse.c
     grammar.c
+    build_grammar.c
     rule.c
     shell_rules/rule_and_or.c
     shell_rules/rule_command.c

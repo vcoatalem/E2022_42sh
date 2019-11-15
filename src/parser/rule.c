@@ -89,3 +89,10 @@ void rule_print(struct rule *rule, FILE *out)
     }
     printf("\n");
 }
+
+void rule_add_test(struct rule *rule, struct test *test)
+{
+    rule->n_recipes++;
+    rule->recipes = realloc(rule->recipes, sizeof(void*) * rule->n_recipes);
+    *(rule->recipes + rule->n_recipes - 1) = test;
+}

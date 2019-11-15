@@ -2,6 +2,7 @@
 #define PARSER_H
 
 #include <stddef.h>
+#include <stdarg.h>
 #include <stdlib.h>
 
 #include "../lexer/lexer.h"
@@ -109,6 +110,7 @@ struct rule *rule_element(void);
 
 void rule_print(struct rule *rule, FILE *out);
 void rule_free(struct rule *rule);
+void rule_add_test(struct rule *rule, struct test *test);
 
 //GRAMMER STRUCTURE
 
@@ -122,7 +124,7 @@ struct grammar *grammar_build(void);
 void grammar_free(struct grammar *grammar);
 
 // grammar building utils
-struct test *test_tokens_create(int star, int plus, struct token *tok, ...);
+struct test *test_tokens_create(int star, int plus, enum token_type tok, ...);
 struct test *test_rule_create(int star, int plus, enum rule_id id);
 struct test *test_sub_create(int star, int plus, struct test *t, ...);
 //
