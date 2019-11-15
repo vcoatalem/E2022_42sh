@@ -16,6 +16,8 @@ struct options
 
     int ast_print_is_set;
 
+    int print_shopt_is_set;
+
     size_t nb_set_shopt;
     char **set_shopt;
 
