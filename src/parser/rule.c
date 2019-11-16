@@ -44,39 +44,36 @@ static enum operator_type rule_ast_command(enum rule_id id)
     }
 }
 
-int rule_execute(enum rule_id id, struct test_runner *parent,
+
+void rule_execute(enum rule_id id, struct test_runner *parent,
         struct grammar *grammar)
 {
+    printf("[LOG] entered rule_execute for id %d\n", id);
     struct rule *rule = *(grammar->rules + id);
+    if (!rule)
+    {
+        printf("[LOG] specified rule not found\n");
+        return;
+    }
     for (size_t i = 0; i < rule->n_recipes; i++)
     {
-        struct test_runner *dup = test_runner_dup(parent);
+        printf("[LOG] entered recipe #%zu / %zu\n", i, rule->n_recipes - 1);
+        struct test_runner *dup = test_runner_fork(parent);
         enum operator_type ast_type = rule_ast_command(id);
         dup->ast = ast_init(
             ast_type == OPERATOR_NONE ? NODE_VALUE : NODE_OPERATOR,
             ast_type == OPERATOR_NONE ? "" : NULL,
             ast_type);
-        //initialise ast
-        struct test *test = *(rule->recipes + i);
-        while (test)
+        recipe_execute(*(rule->recipes + i), dup, grammar);
+        if (dup->state == RUNNER_STATE_SUCCESS)
         {
-            int try_execute = test_execute(test, dup, grammar);
-            if (try_execute == PARSE_FAILURE)
-            {
-                //free ressources
-                continue;
-            }
-            test = test->next;
+            ast_add_child(parent->ast, dup->ast);
+            return;
         }
-        //append built ast to parent
-        ast_add_child(parent->ast, ast_dup(dup->ast));
-
-        //update parent position to match this one. ?
-        
-        //free dup
-        return PARSE_SUCCESS;
+        //initialise ast
     }
-    return PARSE_FAILURE;
+    //should the parent be dupped beforehand?
+    parent->state = RUNNER_STATE_ERROR;
 }
 
 void rule_print(struct rule *rule, FILE *out)

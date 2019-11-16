@@ -1,26 +1,26 @@
 #include "parser.h"
 
-struct grammar *g_grammar = NULL;
-
-struct ast *parse(struct token_array *tokens)
+struct ast *parse(struct token_array *tokens, struct grammar *grammar)
 {
-    if (!g_grammar)
-    {
-        g_grammar = grammar_build();
-    }
     struct test_runner *tr = test_runner_init(tokens, 0);
-    tr->ast = ast_init(NODE_OPERATOR, NULL, OPERATOR_AND);
-
-    int try_parse = rule_execute(RULE_INPUT, tr, g_grammar);
-    if (try_parse == PARSE_FAILURE)
+    
+    //rule_execute(RULE_INPUT, tr, grammar);
+    rule_execute(RULE_SIMPLE_COMMAND, tr, grammar);
+    if (tr->state == RUNNER_STATE_SUCCESS)
     {
-        //free stuff
-        return NULL;
+        if (tr->pos >= tr->token_array->size)
+        {
+            printf("parse: rule_execute returned success but do not \
+                use the entire token_array\n");
+            return NULL;
+        }
+        printf("parse: valid input; returning ast\n");
+        return tr->ast;
     }
     else
     {
-        struct ast *res = tr->ast;
-        //free stuff
-        return res;
+        printf("parse: invalid input\n");
+        //handle more cases
+        return NULL;
     }
 }

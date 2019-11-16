@@ -8,9 +8,6 @@
 #include "../lexer/lexer.h"
 #include "../ast/ast.h"
 
-#define PARSE_SUCCESS 0
-#define PARSE_FAILURE 1
-
 enum test_type
 {
     TEST_NONE, //always succeed
@@ -78,8 +75,17 @@ void test_free(struct test *test);
 
 // TEST RUNNER STRUCTURE
 
+enum runner_state
+{
+    RUNNER_STATE_NONE,
+    RUNNER_STATE_SUCCESS,
+    RUNNER_STATE_ERROR,
+    RUNNER_STATE_NEED_MORE_TOKENS
+};
+
 struct test_runner
 {
+    enum runner_state state;
     struct token_array *token_array;
     size_t pos;
     struct ast *ast;
@@ -89,7 +95,9 @@ struct test_runner
 struct test_runner *test_runner_init(struct token_array *token_array,
         size_t pos);
 struct test_runner *test_runner_dup(struct test_runner *tr);
+struct test_runner *test_runner_fork(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
+void test_runner_replace(struct test_runner **tr, struct test_runner *res);
 
 //RULE STRUCTURE
 
@@ -141,9 +149,9 @@ struct test *test_sub_create(int optionnal, int repeatable,
 //
 
 // parsing functions
-int rule_execute(enum rule_id id, struct test_runner *tr, struct grammar *g);
-int test_execute(struct test *r, struct test_runner *tr, struct grammar *g);
+void rule_execute(enum rule_id id, struct test_runner *tr, struct grammar *g);
+void recipe_execute(struct test *r, struct test_runner *tr, struct grammar *g);
 
-struct ast *parse(struct token_array *tokens);
+struct ast *parse(struct token_array *tokens, struct grammar *g);
 
 #endif /* PARSER_H */

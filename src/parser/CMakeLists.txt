@@ -3,6 +3,9 @@ add_library(parser
     grammar.c
     build_grammar.c
     rule.c
+    recipe.c
+    test.c
+    test_runner.c
     shell_rules/rule_and_or.c
     shell_rules/rule_command.c
     shell_rules/rule_element.c
@@ -10,9 +13,7 @@ add_library(parser
     shell_rules/rule_list.c
     shell_rules/rule_pipeline.c
     shell_rules/rule_redirection.c
-    test.c
-    test_runner.c)
-
+)
 target_link_libraries(parser lexer ast)
 
 
