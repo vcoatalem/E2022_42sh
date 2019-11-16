@@ -130,7 +130,7 @@ void options_free(struct options *options)
 struct options *options_build(int argc, char **argv)
 {
     struct options *options = options_init();
-    if (argc > 2)
+    if (argc >= 2)
     {
         int get_options = get_option_type(options, argc - 1, argv + 1);
         if (get_options != OPTIONS_SUCCESS)
