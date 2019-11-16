@@ -17,6 +17,7 @@ int ast_handle_pipe(struct ast *ast)
         {
             args[j] = (*(args_ast->forest + j))->content.value;
         }
+
         struct ast *redir_ast = *(cmd_ast->forest + 1);
         if (!redir_ast)
             break;

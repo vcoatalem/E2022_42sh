@@ -35,9 +35,24 @@ set_target_properties(test_ast_print
 
 ###############
 
+# EXEC PRINT TEST
+
+add_executable(test_ast_exec tests/ast_execution.test.c)
+
+target_link_libraries(test_ast_exec ast)
+
+set_target_properties(test_ast_exec
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
+)
+
+###############
+
 
 # List all tests
 add_custom_target(ast_check
     DEPENDS test_ast_basic
     DEPENDS test_ast_print
+    DEPENDS test_ast_exec
 )
