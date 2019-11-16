@@ -22,6 +22,8 @@ struct options *options_init(void)
     new_options->set_shopt = NULL;
     new_options->nb_unset_shopt = 0;
     new_options->unset_shopt = NULL;
+    new_options->script = NULL;
+
     return new_options;
 }
 
@@ -83,10 +85,13 @@ int get_option_type(struct options *options, int argc, char *argv[])
     {
         char *s = argv[i];
 
-        if (!is_flag(s))
-            return OPTIONS_FAILURE;
+        if (!is_flag(s) && options->command == NULL)
+        {
+            options->script = s;
+            break;
+        }
 
-        if (strcmp(s, "-c") == 0)
+        if (strcmp(s, "-c") == 0 && options->script == NULL)
         {
             if (i + 1 < argc)
                 set_command(options, &i, argv);
