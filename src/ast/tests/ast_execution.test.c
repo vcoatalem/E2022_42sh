@@ -6,6 +6,7 @@
 int main(void)
 {
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
+    struct ast *ast2 = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
     struct ast *ast3 = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
 
     struct ast *arg1 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
@@ -13,9 +14,10 @@ int main(void)
     ast_add_child(ast3, arg1);
     ast_add_child(ast3, arg2);
 
-    ast_add_child(ast1, ast3);
+    ast_add_child(ast2, ast3);
+    ast_add_child(ast1, ast2);
 
-    ast_handle_pipe(ast1);
+    printf("%d\n", ast_handle_pipe(ast1));
 
     ast_free(ast1);
 
