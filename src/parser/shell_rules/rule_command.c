@@ -3,7 +3,7 @@
 struct rule *rule_arg_list(void)
 {
     struct rule *r = rule_init();
-    struct test *t = test_rule_create(0, 1, RULE_ELEMENT);
+    struct test *t = test_rule_create(1, 1, RULE_ELEMENT);
     rule_add_test(r, t);
     return r;
 }

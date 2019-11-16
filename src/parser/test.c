@@ -36,7 +36,7 @@ void test_free(struct test *test)
     free(test);
 }
 
-void test_print(struct test *test, FILE *out)
+void test_print(struct test *test, int recursive, FILE *out)
 {
     fprintf(out, "[ type %d ", test->type);
     if (test->type == TEST_RULE)
@@ -45,7 +45,7 @@ void test_print(struct test *test, FILE *out)
     }
     else if (test->type == TEST_PARENT)
     {
-        test_print(test->props.sub_test, out);
+        test_print(test->props.sub_test, 1, out);
     }
     else if (test->type == TEST_TOKEN)
     {
@@ -63,9 +63,9 @@ void test_print(struct test *test, FILE *out)
         fprintf(out, "*");
     else if (!test->optionnal && test->repeatable)
         fprintf(out, "+");
-    if (test->next)
+    if (test->next && recursive)
     {
         fprintf(out, " -> ");
-        test_print(test->next, out);
+        test_print(test->next, recursive, out);
     }
 }

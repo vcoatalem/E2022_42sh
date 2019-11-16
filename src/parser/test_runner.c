@@ -19,8 +19,13 @@ struct test_runner *test_runner_dup(struct test_runner *tr)
 
 void test_runner_replace(struct test_runner **tr, struct test_runner *res)
 {
-    test_runner_free(*tr);
+    //test_runner_free(*tr);
     *tr = res;
+}
+
+int test_runner_is_over(struct test_runner *tr)
+{
+    return tr->pos >= tr->token_array->size;
 }
 
 //same as dup, except ast isnt copied
@@ -34,6 +39,6 @@ void test_runner_free(struct test_runner *tr)
 {
     if (!tr)
         return;
-    ast_free(tr->ast);
+    //ast_free(tr->ast);
     free(tr);
 }

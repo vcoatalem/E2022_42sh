@@ -67,12 +67,17 @@ void rule_execute(enum rule_id id, struct test_runner *parent,
         recipe_execute(*(rule->recipes + i), dup, grammar);
         if (dup->state == RUNNER_STATE_SUCCESS)
         {
+            printf("[LOG] successfully executed rule %d\n", id);
+            //if the recipe was runned successfully, set the parent pos to
+            //the pos of the successful test_runner
             ast_add_child(parent->ast, dup->ast);
+            parent->pos = dup->pos;
+            test_runner_free(dup);
             return;
         }
-        //initialise ast
+        test_runner_free(dup);
     }
-    //should the parent be dupped beforehand?
+    printf("[LOG] could not execute rule #%d\n", id);
     parent->state = RUNNER_STATE_ERROR;
 }
 
@@ -82,7 +87,7 @@ void rule_print(struct rule *rule, FILE *out)
     for (size_t i = 0; i < rule->n_recipes; i++)
     {
         fprintf(out, "recipe #%zu: ", i);
-        test_print(*(rule->recipes + i), out);
+        test_print(*(rule->recipes + i), 1, out);
         fprintf(out, "\n");
     }
     fprintf(out, "\n");
