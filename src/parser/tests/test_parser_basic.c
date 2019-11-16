@@ -14,6 +14,11 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "b"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
+    else if (q == 1)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+    }
     struct ast *ast = parse(exp, g);
     if (!ast)
     {

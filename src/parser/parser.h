@@ -69,7 +69,7 @@ struct test
 
 struct test *test_init(enum test_type type, struct test_props *props,
         int optionnal, int repeatable);
-void test_print(struct test *test, FILE *out);
+void test_print(struct test *test, int recursive, FILE *out);
 void test_add(struct test *test, struct test *res);
 void test_free(struct test *test);
 
@@ -98,6 +98,7 @@ struct test_runner *test_runner_dup(struct test_runner *tr);
 struct test_runner *test_runner_fork(struct test_runner *tr);
 void test_runner_free(struct test_runner *tr);
 void test_runner_replace(struct test_runner **tr, struct test_runner *res);
+int test_runner_is_over(struct test_runner *tr);
 
 //RULE STRUCTURE
 

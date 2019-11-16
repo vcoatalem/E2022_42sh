@@ -17,7 +17,7 @@ static void test_execute_token_union(struct test *test,
         if (current->type == (*(tok_union->tok_array + i))->type)
         {
             printf("[LOG] token_union success!\n");
-            runner->pos++;
+            runner->pos = runner->pos + 1;
             return;
         }
     }
@@ -61,12 +61,72 @@ static void test_execute_value(struct test *test, struct test_runner *tr,
 void recipe_execute(struct test *test, struct test_runner *runner,
         struct grammar *grammar)
 {
+    struct test_runner *disjunction_pass;
+    struct test_runner *disjunction_repeat;
+    if (test)
+    {
+        /**/printf("[LOG][%p] --- ENTERING recipe_execute:", (void*)runner);
+        /**/test_print(test, 1, stdout);
+        /**/printf("\n");
+        /**/printf("[LOG][%p] RUNNER POS: %zu\n", (void*)runner, runner->pos);
+    }
+    if (!test)
+    {
+        //disjunction_pass reached the end of the recipe
+        runner->state = RUNNER_STATE_SUCCESS;
+    }
     while (test)
     {
-        if (test->optionnal) //reccursive call #0
+        if (test_runner_is_over(runner))
+        {
+            //if runner does not have any more tokens to process, yet test
+            //is not finished TODO: change error by unfinished to handle
+            //multi line input
+            runner->state = RUNNER_STATE_ERROR;
+            return;
+        }
+        /**/printf("[LOG][%p] current test: ", (void*)runner);
+        /**/test_print(test, 0, stdout);
+        /**/printf("\n");
+        if (test->optionnal) 
+        {
+            //if test is optionnal, dup a test_runner that will be
+            //executed later on
+            disjunction_pass = test_runner_dup(runner);
+        }
+        /**/printf("[LOG][%p] before execution pos: %zu\n", (void*)runner, runner->pos);
+        test_execute_value(test, runner, grammar); //actual test execution call
+        /**/printf("[LOG][%p] after execution pos: %zu\n", (void*)runner, runner->pos);
+        if (runner->state == RUNNER_STATE_ERROR)
+        {
+            //current test execution failed
+            return;
+        }
+        if (test->repeatable && !test_runner_is_over(runner))
+        {
+            //repeat disjunction should be run before pass
+            printf("[LOG] test is repeatable; forking\n");
+            //disjunction test has already been run once above, trying to
+            //run it again
+            disjunction_repeat = test_runner_dup(runner);
+            recipe_execute(test, disjunction_repeat, grammar);
+            if (disjunction_repeat->state == RUNNER_STATE_SUCCESS)
+            {
+                printf("[LOG] repeat disjunction success. pos: %zu\n", disjunction_repeat->pos);
+                //runner that passed this reached the end of the recipe
+                test_runner_replace(&runner, disjunction_repeat);
+                return;
+            }
+            else
+            {
+                printf("[LOG] repeat disjunction failure\n");
+                //it didnt
+                test_runner_free(disjunction_repeat);
+            }
+        }
+        if (test->optionnal) //reccursive call #2
         {
             //disjunction
-            struct test_runner *disjunction_pass = test_runner_dup(runner);
             recipe_execute(test->next, disjunction_pass, grammar);
             if (disjunction_pass->state == RUNNER_STATE_SUCCESS)
             {
@@ -80,36 +140,9 @@ void recipe_execute(struct test *test, struct test_runner *runner,
                 test_runner_free(disjunction_pass);
             }
         }
-
-
-        test_execute_value(test, runner, grammar); //actual test execution call
-        if (runner->state != RUNNER_STATE_SUCCESS)
-        {
-            //current test execution failed
-            return;
-        }
-        
-
-        if (test->repeatable) //reccursive call #1
-        {
-            //disjunction test has already been run once above, trying to
-            //run it again
-            struct test_runner *disjunction_repeat = test_runner_dup(runner);
-            recipe_execute(test, disjunction_repeat, grammar);
-            if (disjunction_repeat->state == RUNNER_STATE_SUCCESS)
-            {
-                //runner that passed this reached the end of the recipe
-                test_runner_replace(&runner, disjunction_repeat);
-                return;
-            }
-            else
-            {
-                //it didnt
-                test_runner_free(disjunction_repeat);
-            }
-        }
         test = test->next;
     }
+    printf("[LOG][%p] reached end of recipe with pos: %zu\n", (void*)runner, runner->pos);
     //reached the end of the recipe
     runner->state = RUNNER_STATE_SUCCESS;
 }
