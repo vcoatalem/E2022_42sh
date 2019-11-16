@@ -42,6 +42,10 @@ void token_free(struct token *token);
 struct token_array *token_array_init();
 void token_array_free(struct token_array *arr);
 void token_array_add(struct token_array *arr, struct token *token);
+
+void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2);
+
+
 void token_array_print(struct token_array *arr, FILE *out);
 
 int is_separator(char c);
