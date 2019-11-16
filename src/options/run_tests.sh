@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TEST_AMOUNT=9
+TEST_AMOUNT=11
 
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'

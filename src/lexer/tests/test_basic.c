@@ -49,7 +49,13 @@ int main(int argc, char **argv)
         "function func() { echo ok }",
         "aa{bb",
         "toto { foo }",
-        "foo{ foo}"
+        "foo{ foo}",
+        "echo \"test\"",
+        "echo \'test\'",
+        "ec\"ho\"",
+        "echo \"\'\"",
+        "echo '\"'"
+
     };
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -194,10 +200,39 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    else if (q >= 15)
+    else if (q == 15)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "foo{"));
         token_array_add(exp, token_init(TOKEN_WORD, "foo}"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 16)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "test"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 17)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "test"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 18)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 19)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "\'"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q >= 20)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "\""));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct token_array *array = token_array_create(cmds[q]);
