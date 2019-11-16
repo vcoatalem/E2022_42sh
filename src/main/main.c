@@ -2,6 +2,7 @@
 
 #include "42sh.h"
 #include <signal.h>
+#include "readline.h"
 
 enum BASH_RETURN_VALUES
 {
@@ -35,8 +36,27 @@ void sigintHandler(int _)
 }
 
 
+void appendhistory(char *cmd)
+{
+    FILE *fd = fopen(".42sh_history", "at");
+    if (!fd)
+        fd = fopen(".42sh_history", "wt");
+    if (!fd)
+    {
+        return;
+    }
+
+    fputs(cmd, fd);
+    fputs("\n", fd);
+
+    fclose(fd);
+}
+
+
+
 static int execute_script(struct execution_bundle *bundle, char* script)
 {
+    appendhistory(script);
     if (!bundle)
         return BASH_RETURN_ERROR;
     FILE *fd = fopen(script, "r");
@@ -94,9 +114,10 @@ int execute_interactive(struct execution_bundle *bundle)
     while (1)
     {
         signal(SIGINT, sigintHandler);
-        char *input = readline(ps1);
+        char *input = get_next_line(ps1);
         if (!input)
             break;
+        appendhistory(input);
         // run lexer + parser
         lexer_add_string(lexer, input);
         arr = lex(lexer);
@@ -106,7 +127,7 @@ int execute_interactive(struct execution_bundle *bundle)
             || lexer->state == STATE_UNFINISHED)
         {
             signal(SIGINT, sigintHandler);//TODO Handle this case
-            input = readline(ps2);
+            input = get_next_line(ps2);
 
 
             if (!input)
@@ -142,9 +163,9 @@ int main(int argc, char **argv)
     {
         return BASH_RETURN_OPTIONS_ERROR;
     }
-    struct grammar *g = grammar_build();
+    //struct grammar *g = grammar_build();
     struct execution_bundle bundle = { .options = options,
-                                        .grammar = g };
+                                        .grammar = NULL};//g };
     int execution_val = 0;
     if (options->script != NULL)
     {
