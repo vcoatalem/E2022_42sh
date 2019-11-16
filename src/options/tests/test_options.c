@@ -41,6 +41,13 @@ int options_is_equal(struct options *opt1, struct options *opt2)
         if (strcmp(opt1->unset_shopt[i], opt2->unset_shopt[i]) != 0)
             return 0;
     }
+
+    if ((opt1->script != NULL && opt2->script != NULL)
+            && (strcmp(opt1->script, opt2->script) != 0))
+    {
+        return 0;
+    }
+
     return 1;
 }
 
@@ -60,11 +67,12 @@ int main(int argc, char *argv[])
     char *cmd9[] = { "--norc", "-c", "-23", "-a", "echo foo", NULL };
     char *cmd10[] = { NULL };
     char *cmd11[] = { "+O", NULL };
+    char *cmd12[] = { "test.sh", NULL };
 
     char **cmd[] =
     {
         cmd0, cmd1, cmd2, cmd3, cmd4, cmd5, cmd6, cmd7, cmd8, cmd9,
-        cmd10, cmd11
+        cmd10, cmd11, cmd12
     };
 
     struct options *options_input = options_init();
@@ -128,6 +136,8 @@ int main(int argc, char *argv[])
     if (q == 11)
         options_output->print_shopt_is_set = 1;
 
+    if (q == 12)
+        options_output->script = "test.sh";
 
     get_option_type(options_input, nb_argc(cmd[q]), cmd[q]);
 
@@ -166,7 +176,9 @@ int main(int argc, char *argv[])
         options_free(options_output);
         return 1;
     }
+
     options_free(options_input);
     options_free(options_output);
+
     return 0;
 }

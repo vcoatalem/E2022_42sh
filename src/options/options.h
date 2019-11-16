@@ -24,6 +24,8 @@ struct options
     size_t nb_unset_shopt;
     char **unset_shopt;
 
+    char *script;
+
     // TODO: Add options not implemented yet
 };
 
