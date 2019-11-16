@@ -35,6 +35,35 @@ void sigintHandler(int _)
 }
 
 
+static int execute_script(struct execution_bundle *bundle, char* script)
+{
+    if (!bundle)
+        return BASH_RETURN_ERROR;
+    FILE *fd = fopen(script, "r");
+    if (!fd)
+    {
+        printf("Error no such file or directory %s\n", script);
+        return BASH_RETURN_ERROR;
+    }
+    //TODO: read stdin line by line, running lexing + parsing along the way
+    char *line = NULL;
+    size_t size;
+    struct lexer *lexer = lexer_init();
+    struct token_array *arr = token_array_init();
+    while (getline(&line, &size, fd) != -1)
+    {
+        
+        lexer_add_string(lexer, line);
+        token_arrays_fusion(arr, lex(lexer));
+
+        free(line);
+    }
+    //run lexer + parser
+    token_array_print(arr, stdout);
+    token_array_free(arr);
+    return BASH_RETURN_OK;
+}
+
 static int execute_stdin(struct execution_bundle *bundle)
 {
     if (!bundle)
@@ -42,6 +71,7 @@ static int execute_stdin(struct execution_bundle *bundle)
     //TODO: read stdin line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
+    //struct lexer *lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
         //run lexer + parser
@@ -116,7 +146,11 @@ int main(int argc, char **argv)
     struct execution_bundle bundle = { .options = options,
                                         .grammar = g };
     int execution_val = 0;
-    if (options->command)
+    if (options->script != NULL)
+    {
+        execution_val = execute_script(&bundle, options->script);
+    }
+    else if (options->command)
     {
         execution_val = execute_cmd(&bundle, options->command);
     }

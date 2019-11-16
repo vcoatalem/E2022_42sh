@@ -42,6 +42,14 @@ We have to stick the last token of the first array with the first token of
 the second array with a \n between them*/
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
 {
+    if (arr1->size == 0)
+    {
+        for (size_t i = 0; i < arr2->size; ++i)
+        {
+            token_array_add(arr1, arr2->tok_array[i]);
+        }
+        return;
+    }
 
     size_t lena = strlen(arr1->tok_array[arr1->size - 1]->value);
     size_t lenb = strlen(arr2->tok_array[0]->value);
