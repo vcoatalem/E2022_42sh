@@ -1,0 +1,6 @@
+python -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+(ne pas push le dossier env/)
+lancer la test_suite:
+python test_suite.py (binaire_42sh)

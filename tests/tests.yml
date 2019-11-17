@@ -1,0 +1,14 @@
+ - name: ls_simple
+   stdin: ls
+
+ - name: ls_with_args
+   stdin: ls -la
+
+ - name: cat
+   stdin: cat
+
+ - name: missing_pipe_args
+   stdin: echo lol |
+   checks:
+     - has_stderr
+     - returncode
