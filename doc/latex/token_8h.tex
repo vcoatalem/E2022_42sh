@@ -1,0 +1,359 @@
+\hypertarget{token_8h}{}\section{/home/arthur/\+Bureau/42sh/\+E2022\+\_\+42sh/src/lexer/token/token.h File Reference}
+\label{token_8h}\index{/home/arthur/\+Bureau/42sh/\+E2022\+\_\+42sh/src/lexer/token/token.\+h@{/home/arthur/\+Bureau/42sh/\+E2022\+\_\+42sh/src/lexer/token/token.\+h}}
+
+
+file where we define function for the token  
+
+
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+Include dependency graph for token.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{token_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=237pt]{token_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtoken}{token}
+\begin{DoxyCompactList}\small\item\em Token struct declaration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{token_8h_a5c0ffd509619cfb91152a8c9dc70cc29}\label{token_8h_a5c0ffd509619cfb91152a8c9dc70cc29}} 
+\#define \hyperlink{token_8h_a5c0ffd509619cfb91152a8c9dc70cc29}{N\+B\+\_\+\+T\+O\+K\+E\+NS}~41
+\begin{DoxyCompactList}\small\item\em Type of a token (operators, value, ...) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \hyperlink{token_8h_ad55cb980f58514384532e9b5a208caa6}{token\+\_\+handler}) (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em handler for make compare if it is the good token \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} \{ \newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+W\+O\+RD}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+OF}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+OL}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+S\+E\+M\+I\+\_\+\+C\+O\+L\+ON}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+S\+E\+M\+I\+C\+O\+L\+ON}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+A\+M\+P\+E\+R\+S\+A\+ND}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+A\+M\+P\+E\+R\+S\+A\+ND}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+P\+I\+PE}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+P\+I\+PE}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+X\+C\+L\+A\+M\+A\+T\+I\+O\+N\+\_\+\+P\+O\+I\+NT}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+K\+ET}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+K\+ET}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E\+N\+T\+H\+E\+S\+IS}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E\+N\+T\+H\+E\+S\+IS}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+L\+E\+SS}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+G\+R\+E\+AT}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+L\+E\+SS}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+G\+R\+E\+AT}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+L\+E\+S\+S\+\_\+\+D\+A\+SH}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+L\+E\+S\+S\+\_\+\+A\+M\+P\+E\+R\+S\+A\+ND}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+G\+R\+E\+A\+T\+\_\+\+A\+M\+P\+E\+R\+S\+A\+ND}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+G\+R\+E\+A\+T\+\_\+\+P\+I\+PE}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+L\+E\+S\+S\+\_\+\+G\+R\+E\+AT}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+S\+T\+D\+IN}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+S\+T\+D\+O\+UT}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+S\+T\+D\+E\+RR}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+F\+OR}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+IN}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+W\+H\+I\+LE}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+U\+N\+T\+IL}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+DO}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+D\+O\+NE}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+C\+A\+SE}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+S\+AC}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+IF}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+T\+H\+EN}, 
+\newline
+{\bfseries T\+O\+K\+E\+N\+\_\+\+FI}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+L\+SE}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+E\+L\+IF}, 
+{\bfseries T\+O\+K\+E\+N\+\_\+\+F\+U\+N\+C\+T\+I\+ON}
+ \}\begin{DoxyCompactList}\small\item\em enum contain all type of token \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{token_8h_a7bd71417fd81dec6d4e8afcd1e33c3da}{token\+\_\+compare} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em verify if buffer has the same type of argument type \end{DoxyCompactList}\item 
+int \hyperlink{token_8h_a23a11d7de4a8b4af7895691ca92c55ae}{token\+\_\+single\+\_\+char} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em For token which can be doubled (\& $\vert$ ; $<$ $>$) \end{DoxyCompactList}\item 
+int \hyperlink{token_8h_a7afac5d5ee279ead5c2a307965700df6}{token\+\_\+double\+\_\+char} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em For token which is doubled (\&\& $\vert$$\vert$ ;; $<$$<$ $>$$>$) \end{DoxyCompactList}\item 
+int \hyperlink{token_8h_a924fb6461bfedef210a9c5d15b0cf207}{token\+\_\+one\+\_\+char} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em Function for token alone (\textquotesingle{}(\textquotesingle{} \textquotesingle{})\textquotesingle{} \textquotesingle{}\{\textquotesingle{} \textquotesingle{}\}\textquotesingle{} ! \textquotesingle{}~\newline
+\textquotesingle{}) \end{DoxyCompactList}\item 
+int \hyperlink{token_8h_a0c1a900124b38fff0db3042665bfec2f}{token\+\_\+diff\+\_\+char} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em Function for token (\char`\"{}$<$$<$-\/\char`\"{} \char`\"{}$<$\&\char`\"{} \char`\"{}$<$$>$\char`\"{} \char`\"{}$>$$\vert$\char`\"{} \char`\"{}$>$\&\char`\"{} ) \end{DoxyCompactList}\item 
+int \hyperlink{token_8h_a7119cb596ff003a654ba8125492c0b5f}{token\+\_\+terminal\+\_\+char} (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em Function for token (stdin stdout stderr) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{token_8h_a2a2e99b7702153e08591b3f89a01df9e}\label{token_8h_a2a2e99b7702153e08591b3f89a01df9e}} 
+\hyperlink{token_8h_ad55cb980f58514384532e9b5a208caa6}{token\+\_\+handler} {\bfseries token\+\_\+to\+\_\+handler} (enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\item 
+char $\ast$ \hyperlink{token_8h_ab62af9e9555df8f4261c2c29d697eb88}{token\+\_\+to\+\_\+string} (enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)
+\begin{DoxyCompactList}\small\item\em Convert a token into a string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{token_8h_a8c4c70c2170956eccad791266388521b}\label{token_8h_a8c4c70c2170956eccad791266388521b}} 
+struct \hyperlink{structtoken}{token} $\ast$ {\bfseries token\+\_\+alloc} (void)
+\item 
+void \hyperlink{token_8h_a92e7a0ccaad0c02ca0acf490695c338d}{token\+\_\+free} (struct \hyperlink{structtoken}{token} $\ast$\hyperlink{structtoken}{token})
+\begin{DoxyCompactList}\small\item\em free momory from token \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+file where we define function for the token 
+
+\begin{DoxyAuthor}{Author}
+alexandre.\+lyfoung arthur.\+pannier julien.\+chau victor.\+coatalem 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+September 17th 2019
+\end{DoxyDate}
+\hyperlink{token_8h}{token.\+h} where we define the function for the lexer 
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{token_8h_ad55cb980f58514384532e9b5a208caa6}\label{token_8h_ad55cb980f58514384532e9b5a208caa6}} 
+\index{token.\+h@{token.\+h}!token\+\_\+handler@{token\+\_\+handler}}
+\index{token\+\_\+handler@{token\+\_\+handler}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+handler}{token\_handler}}
+{\footnotesize\ttfamily typedef int($\ast$ token\+\_\+handler) (char $\ast$str, size\+\_\+t iterator, char $\ast$buffer, enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type} type)}
+
+
+
+handler for make compare if it is the good token 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}\label{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}} 
+\index{token.\+h@{token.\+h}!token\+\_\+type@{token\+\_\+type}}
+\index{token\+\_\+type@{token\+\_\+type}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+type}{token\_type}}
+{\footnotesize\ttfamily enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}
+
+
+
+enum contain all type of token 
+
+Contain int that correspond to a type of token 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{token_8h_a7bd71417fd81dec6d4e8afcd1e33c3da}\label{token_8h_a7bd71417fd81dec6d4e8afcd1e33c3da}} 
+\index{token.\+h@{token.\+h}!token\+\_\+compare@{token\+\_\+compare}}
+\index{token\+\_\+compare@{token\+\_\+compare}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+compare()}{token\_compare()}}
+{\footnotesize\ttfamily int token\+\_\+compare (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+verify if buffer has the same type of argument type 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a0c1a900124b38fff0db3042665bfec2f}\label{token_8h_a0c1a900124b38fff0db3042665bfec2f}} 
+\index{token.\+h@{token.\+h}!token\+\_\+diff\+\_\+char@{token\+\_\+diff\+\_\+char}}
+\index{token\+\_\+diff\+\_\+char@{token\+\_\+diff\+\_\+char}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+diff\+\_\+char()}{token\_diff\_char()}}
+{\footnotesize\ttfamily int token\+\_\+diff\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+Function for token (\char`\"{}$<$$<$-\/\char`\"{} \char`\"{}$<$\&\char`\"{} \char`\"{}$<$$>$\char`\"{} \char`\"{}$>$$\vert$\char`\"{} \char`\"{}$>$\&\char`\"{} ) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a7afac5d5ee279ead5c2a307965700df6}\label{token_8h_a7afac5d5ee279ead5c2a307965700df6}} 
+\index{token.\+h@{token.\+h}!token\+\_\+double\+\_\+char@{token\+\_\+double\+\_\+char}}
+\index{token\+\_\+double\+\_\+char@{token\+\_\+double\+\_\+char}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+double\+\_\+char()}{token\_double\_char()}}
+{\footnotesize\ttfamily int token\+\_\+double\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+For token which is doubled (\&\& $\vert$$\vert$ ;; $<$$<$ $>$$>$) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a92e7a0ccaad0c02ca0acf490695c338d}\label{token_8h_a92e7a0ccaad0c02ca0acf490695c338d}} 
+\index{token.\+h@{token.\+h}!token\+\_\+free@{token\+\_\+free}}
+\index{token\+\_\+free@{token\+\_\+free}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+free()}{token\_free()}}
+{\footnotesize\ttfamily void token\+\_\+free (\begin{DoxyParamCaption}\item[{struct \hyperlink{structtoken}{token} $\ast$}]{token }\end{DoxyParamCaption})}
+
+
+
+free momory from token 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$token} & token that needs to be released\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Nothing 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a924fb6461bfedef210a9c5d15b0cf207}\label{token_8h_a924fb6461bfedef210a9c5d15b0cf207}} 
+\index{token.\+h@{token.\+h}!token\+\_\+one\+\_\+char@{token\+\_\+one\+\_\+char}}
+\index{token\+\_\+one\+\_\+char@{token\+\_\+one\+\_\+char}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+one\+\_\+char()}{token\_one\_char()}}
+{\footnotesize\ttfamily int token\+\_\+one\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+Function for token alone (\textquotesingle{}(\textquotesingle{} \textquotesingle{})\textquotesingle{} \textquotesingle{}\{\textquotesingle{} \textquotesingle{}\}\textquotesingle{} ! \textquotesingle{}~\newline
+\textquotesingle{}) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a23a11d7de4a8b4af7895691ca92c55ae}\label{token_8h_a23a11d7de4a8b4af7895691ca92c55ae}} 
+\index{token.\+h@{token.\+h}!token\+\_\+single\+\_\+char@{token\+\_\+single\+\_\+char}}
+\index{token\+\_\+single\+\_\+char@{token\+\_\+single\+\_\+char}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+single\+\_\+char()}{token\_single\_char()}}
+{\footnotesize\ttfamily int token\+\_\+single\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+For token which can be doubled (\& $\vert$ ; $<$ $>$) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_a7119cb596ff003a654ba8125492c0b5f}\label{token_8h_a7119cb596ff003a654ba8125492c0b5f}} 
+\index{token.\+h@{token.\+h}!token\+\_\+terminal\+\_\+char@{token\+\_\+terminal\+\_\+char}}
+\index{token\+\_\+terminal\+\_\+char@{token\+\_\+terminal\+\_\+char}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+terminal\+\_\+char()}{token\_terminal\_char()}}
+{\footnotesize\ttfamily int token\+\_\+terminal\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{str,  }\item[{size\+\_\+t}]{iterator,  }\item[{char $\ast$}]{buffer,  }\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+Function for token (stdin stdout stderr) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$str} & string in the input, \\
+\hline
+{\em iterator} & where the program is in the string \\
+\hline
+{\em $\ast$buffer} & buffer where tokens are stocked \\
+\hline
+{\em $\ast$token\+\_\+type} & type token\+\_\+type to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1-\/$>$true 0-\/$>$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{token_8h_ab62af9e9555df8f4261c2c29d697eb88}\label{token_8h_ab62af9e9555df8f4261c2c29d697eb88}} 
+\index{token.\+h@{token.\+h}!token\+\_\+to\+\_\+string@{token\+\_\+to\+\_\+string}}
+\index{token\+\_\+to\+\_\+string@{token\+\_\+to\+\_\+string}!token.\+h@{token.\+h}}
+\subsubsection{\texorpdfstring{token\+\_\+to\+\_\+string()}{token\_to\_string()}}
+{\footnotesize\ttfamily char$\ast$ token\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{enum \hyperlink{token_8h_afe5ef662303b6b710ea6ee1a944bad0d}{token\+\_\+type}}]{type }\end{DoxyParamCaption})}
+
+
+
+Convert a token into a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enum} & token\+\_\+type type type of token\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char$\ast$ string of the token, default case return\+: word 
+\end{DoxyReturn}

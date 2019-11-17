@@ -7,9 +7,10 @@ int ast_handle_until(struct ast *ast)
 
     int try_execute = AST_ERROR;
 
-    while (try_execute == AST_ERROR)
+    while ((try_execute = ast_execute(ast->forest[0])) == AST_ERROR)
     {
-        try_execute = ast_execute(ast->forest[0]);
+        for (size_t i = 1; i < ast->nb_children; i++)
+            ast_execute(ast->forest[i]);
     }
 
     return try_execute;

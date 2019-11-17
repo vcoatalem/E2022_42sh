@@ -1,3 +1,16 @@
+/**
+ * \file token.h
+ * \brief file where we define function for the token
+ * \author alexandre.lyfoung arthur.pannier julien.chau victor.coatalem
+ * \version 1.0
+ * \date September 17th 2019
+ *
+ * token.h where we define the function for the lexer
+ *
+ *
+ */
+
+
 #ifndef TOKEN_H
 #define TOKEN_H
 
@@ -8,7 +21,13 @@
 #include <stddef.h>
 
 #define NB_TOKENS 41
-
+/**
+ * \enum token_type
+ * \brief enum contain all type of token
+ * 
+ * Contain int that correspond to a type of token
+ *
+ */
 enum token_type
 {
     TOKEN_WORD,
@@ -55,26 +74,101 @@ enum token_type
 
 
 // retrun 1 if the string has a token that we recognize else return 0
+
+/**
+ * \brief handler for make compare if it is the good token
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 typedef int (*token_handler)(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
+/**
+ * \brief verify if buffer has the same type of argument type
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_compare(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
 
+/**
+ * \brief For token which can be doubled (& | ; < >)
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_single_char(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
 
+/**
+ * \brief For token which is doubled (&& || ;; << >>)
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_double_char(char *str, size_t iterator, char *buffer, enum
         token_type type);
 
+/**
+ * \brief Function for token alone ('(' ')' '{' '}' ! '\n')
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_one_char(char *str, size_t iterator, char *buffer, enum
         token_type type);
-
+/**
+ * \brief Function for token ("<<-" "<&" "<>" ">|" ">&" )
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_diff_char(char *str, size_t iterator, char *buffer, enum
         token_type type);
-
+/**
+ * \brief Function for token (stdin stdout stderr)
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
 int token_terminal_char(char *str, size_t iterator, char *buffer,
         enum token_type type);
 
@@ -91,6 +185,14 @@ struct token
     char *value;
 };
 
+/**
+ * \brief Convert a token into a string
+ *
+ * \param enum token_type type type of token 
+ *
+ * \return char* string of the token, default case return: word
+ *
+ */
 char *token_to_string(enum token_type type);
 struct token *token_alloc(void);
 void token_free(struct token *token);

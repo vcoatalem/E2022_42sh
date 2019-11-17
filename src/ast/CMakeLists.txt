@@ -3,7 +3,11 @@ add_library(ast
     ast_print.c
     ast_execute.c
     handlers/and_or.c
-    handlers/pipe.c)
+    handlers/pipe.c
+    handlers/if_then.c
+    handlers/for.c
+    handlers/until.c
+    handlers/while.c)
 
 target_link_libraries(ast execution)
 
