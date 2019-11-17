@@ -19,7 +19,7 @@ struct analysis_table *table_init(void)
     }
 
     //Pour toute règle de la forme X->alpha 
-    for (size_t i = 0; i < t->n_rules; i++)
+    for (size_t i = 0; i < rules->size; i++)
     {
         struct rule *rule = *(rules->rules + i);
         struct symbol_array **line = transformation_mat[rule->rule_id];
@@ -40,7 +40,12 @@ struct analysis_table *table_init(void)
         //Si Eps(alpha) vaut vrai Alors
         if (epsilon(rule->symbols))
         {
-            struct symbol_array *nexts = next(i, rules);
+            struct symbol_array *nexts = next(rule->rule_id, rules);
+            #if 0
+            /**/printf("next for rule %d: ", rule->rule_id);
+            /**/symbol_array_print(nexts);
+            /**/printf("\n");
+            #endif
             if (nexts)
             {
                 //Pour tout b dans suivant(alpha)
@@ -77,7 +82,7 @@ void table_print(struct analysis_table *table)
         {
             if (line[j])
             {
-                printf("[ %s: ", token_to_string(j));
+                printf("[ `%s`: ", token_to_string(j));
                 symbol_array_print(line[j]);
                 printf(" ]");
                 count++;

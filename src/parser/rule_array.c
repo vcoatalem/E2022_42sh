@@ -40,5 +40,9 @@ struct rule_array *rule_array_build(void)
     sh_rule_element(rules);
     sh_rule_arg_list(rules);
     sh_rule_command(rules);
+    sh_rule_ionumber(rules); 
+    sh_rule_redirection_symbol(rules);
+    sh_rule_redirection(rules);
+    sh_rule_redirection_list(rules);
     return rules;
 }

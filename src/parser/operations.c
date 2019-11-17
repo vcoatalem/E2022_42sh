@@ -33,6 +33,13 @@ struct symbol_array *first(struct symbol_array *expression,
             }
         }
     }
+    #if 0
+    /**/printf("first for ");
+    /**/symbol_array_print(expression);
+    /**/printf(": ");
+    /**/symbol_array_print(array);
+    /**/printf("\n");
+    #endif
     return array;
 }
 
@@ -46,11 +53,16 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
         for (size_t j = 0; j < expr->size; j++)
         {
             struct symbol *current = expr->array[j];
-            if (current->type == SYMBOL_RULE && current->rule_id == rule_id
-                && j != expr->size - 1)
+            if (current->type == SYMBOL_RULE && current->rule_id == rule_id)
             {
                 //found an occurence of the symbol we research
-                struct symbol *next_symbol = *(expr->array) + j + 1;
+                struct symbol *next_symbol = j != expr->size - 1 ?
+                    expr->array[j + 1] : symbol_end();
+                #if 0
+                /**/printf("next symbol: ");
+                /**/symbol_print(next_symbol);
+                /**/printf("\n");
+                #endif
                 //same treatment as first here
                 if (next_symbol->type == SYMBOL_TOKEN)
                 {

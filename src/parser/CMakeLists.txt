@@ -1,5 +1,16 @@
 add_library(parser
+    rule.c
+    rule_array.c
+    symbol.c
+    symbol_array.c
     stamp.c
+    operations.c
+    table.c
+    stack.c
+    parse.c
+    shell_rules/element.c
+    shell_rules/command.c
+    shell_rules/redirection.c
 )
 target_link_libraries(parser lexer ast)
 

@@ -17,7 +17,7 @@ struct symbol *symbol_end(void)
 struct symbol *symbol_create(enum token_type token_type, enum rule_id rule_id)
 {
     struct symbol *res = calloc(1, sizeof(struct symbol));
-    if (res->rule_id == RULE_NONE)
+    if (rule_id == RULE_NONE)
     {
         //terminal symbol
         res->type = SYMBOL_TOKEN;
@@ -52,6 +52,6 @@ void symbol_print(struct symbol *s)
     }
     else
     {
-        printf("{token %s}", token_to_string(s->token_type));
+        printf("{token `%s`}", token_to_string(s->token_type));
     }
 }
