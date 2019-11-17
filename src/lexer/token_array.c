@@ -38,7 +38,7 @@ void token_array_add(struct token_array *arr, struct token *token)
     }
 }
 /*Useful when we are in interactive mode and we want to fusionate two arrays
-We have to stick the last token of the first array with the first token of 
+We have to stick the last token of the first array with the first token of
 the second array with a \n between them*/
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
 {
@@ -59,7 +59,6 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
     memcpy(arr1->tok_array[arr1->size - 1]->value + lena,
     arr2->tok_array[0]->value, lenb + 1);
     arr1->tok_array[arr1->size - 1]->type = TOKEN_WORD;
-    
     for(size_t i = 1; i < arr2->size; i++)
     {
         //TODO add free for token
@@ -126,7 +125,7 @@ struct token_array *token_array_create(char *str)
 {
     size_t iterator = 0;
     char buffer[2048] = { 0 };
-    struct token_array *arr = token_array_init(); 
+    struct token_array *arr = token_array_init();
     size_t index = 0;
     enum token_type type = TOKEN_EOF;
     while (str[iterator] != 0)
@@ -151,7 +150,8 @@ struct token_array *token_array_create(char *str)
         }
     }
     if (index > 0)
-        token_array_add(arr, token_init(token_check(buffer, 0, buffer), buffer));
-    token_array_add(arr, token_init(TOKEN_EOF, ""));;
+        token_array_add(arr, token_init(
+            token_check(buffer, 0, buffer),buffer));
+    token_array_add(arr, token_init(TOKEN_EOF, ""));
     return arr;
 }

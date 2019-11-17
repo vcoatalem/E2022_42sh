@@ -12,9 +12,12 @@ enum lexer_state
     STATE_NONE,                   //regular
     STATE_LEXING_QUOTES,          //in a '. asking for more input
     STATE_LEXING_DOUBLE_QUOTES,   //in a ". asking for more input
-    STATE_UNFINISHED,             //string could be parsed to a valid expression if given more characters
-    STATE_FINISHED,               //lexer successfully lexed string and parser returned a valid expression
-    STATE_ERROR                   //lexer successfully lexed string but parser returned an error
+    STATE_UNFINISHED,             /*string could be parsed to a valid
+                                  expression if given more characters*/
+    STATE_FINISHED,               /*lexer successfully lexed string and
+                                   parser returned a valid expression*/
+    STATE_ERROR                   //lexer successfully lexed string
+                                  //but parser returned an error
 };
 
 struct lexer
