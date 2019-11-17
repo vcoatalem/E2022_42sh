@@ -42,9 +42,16 @@ int main(int argc, char **argv)
     struct execution_bundle bundle = { .options = options,
                                         .grammar = NULL};//g };
     int execution_val = 0;
+    if (!options->ast_print_is_set)
+    {
+        //execute_script(&bundle, "/etc/42shrc", 1);
+        //execute_script(&bundle, ".42shrc", 1);
+        //execution_val = (execute_script(&bundle, "/42shrc.txt", "r+"));
+    }
+
     if (options->script != NULL)
     {
-        execution_val = execute_script(&bundle, options->script);
+        execution_val = execute_script(&bundle, options->script, 0);
     }
     else if (options->command)
     {

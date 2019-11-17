@@ -63,6 +63,6 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd);
  * \return int the return of bash
  *
  */
-int execute_script(struct execution_bundle *bundle, char* script);
+int execute_script(struct execution_bundle *bundle, char* script, int create);
 
 #endif 

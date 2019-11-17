@@ -35,19 +35,26 @@ def diff(ref, 42sh):
 if __name__ == "__main__":
     parser = ArgumentParser(description = "42sh TestSuite")
     parser.add_argument('bin', metavar='BIN')
+    parser.add_argument("-l", "--list")
+    parser.add.argument("-c", "--category")
+    parser.add.argument("-s","--sanity")
+
     args = parser.parse_args();
 
     binary = Path(args.bin).absolute()
 
-    with open("tests.yml", "r") as tests_files:
-        test_case = yaml.safe_load(tests_files)
+    if args.list:
+        call(["ls", "-d", "list-test/*/"])
+    else:            
+        with open("tests.yml", "r") as tests_files:
+            test_case = yaml.safe_load(tests_files)
 
-    for tests in test_case:
-        try:
-            test(binary, tests)
-        except AssertionError as err:
-            print(f"[{colored('KO', 'red')}]", tests["name"])
-            print(err)
-        else:
-            print(f"[{colored('OK', 'green')}]", tests["name"])
-            print(stdout)
+        for tests in test_case:
+            try:
+                test(binary, tests)
+            except AssertionError as err:
+                print(f"[{colored('KO', 'red')}]", tests["name"])
+                print(err)
+            else:
+                if args.
+                print(f"[{colored('OK', 'green')}]", tests["name"])
