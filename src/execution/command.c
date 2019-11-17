@@ -118,6 +118,6 @@ int command_execute(struct command *command)
         exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
-    printf("[LOG] command %s received %d\n", *(command->args), status); 
+    //printf("[LOG] command %s received %d\n", *(command->args), status); 
     return status;
 }

@@ -13,7 +13,7 @@ struct ast *tmp_parse(struct token_array *arr)
     ast_add_child(ast_cmd, ast_argv);
     ast_add_child(ast_cmd, ast_redir);
 
-    for (size_t i = 0; i < arr->size; ++i)
+    for (size_t i = 0; i < arr->size - 1; ++i)
     {
         ast_add_child(ast_argv, ast_init(NODE_VALUE, arr->tok_array[i]->value, OPERATOR_NONE));
     }

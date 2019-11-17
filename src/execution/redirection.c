@@ -31,7 +31,7 @@ struct redirection *redirection_dup(struct redirection *redirection)
 
 static void redirect(int from, int to)
 {
-    printf("[LOG] redirect %d to %d\n", from, to);
+    //printf("[LOG] redirect %d to %d\n", from, to);
     dup2(to, from);
 }
 

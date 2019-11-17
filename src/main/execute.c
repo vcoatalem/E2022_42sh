@@ -27,7 +27,8 @@ int execute_stdin(struct execution_bundle *bundle)
     {
         //run lexer + parser
         struct token_array *arr = token_array_create(line);
-        token_array_print(arr, stdout);
+        ast_execute(tmp_parse(arr));
+        //token_array_print(arr, stdout);
         token_array_free(arr);
         free(line);
     }
@@ -63,7 +64,8 @@ int execute_interactive(struct execution_bundle *bundle)
             lexer_add_string(lexer, input);
             token_arrays_fusion(arr, lex(lexer));
         }
-        token_array_print(arr, stdout);
+        ast_execute(tmp_parse(arr));
+        //token_array_print(arr, stdout);
         token_array_free(arr);
         free(input);
         resetlexer = 0;
@@ -79,7 +81,8 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     //TODO: load lexer with cmd, run lexing + parsing
     //and return regardless of lexing state
     struct token_array *arr = token_array_create(cmd);
-    token_array_print(arr, stdout);
+    ast_execute(tmp_parse(arr));
+    //token_array_print(arr, stdout);
     token_array_free(arr);
     return BASH_RETURN_OK;
 }
@@ -108,7 +111,8 @@ int execute_script(struct execution_bundle *bundle, char* script)
         free(line);
     }
     //run lexer + parser
-    token_array_print(arr, stdout);
+    ast_execute(tmp_parse(arr));
+    //token_array_print(arr, stdout);
     token_array_free(arr);
     return BASH_RETURN_OK;
 }
