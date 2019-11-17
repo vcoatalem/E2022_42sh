@@ -7,6 +7,8 @@
 
 #include <stddef.h>
 
+#define NB_TOKENS 41
+
 enum token_type
 {
     TOKEN_WORD,
