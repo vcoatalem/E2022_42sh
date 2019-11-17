@@ -20,7 +20,8 @@ int parse(struct token_array *tokens, struct analysis_table *table)
         stack_print(stack);
         stamp_print(input);
         struct token *current = stamp_read(input);
-        struct symbol *pop = stack_pop(stack);
+        struct stack_elt *head = stack_pop(stack);
+        struct symbol *pop = head->symbol;
         if (pop->type == SYMBOL_TOKEN)
         {
             if (pop->token_type != current->type)
@@ -54,7 +55,8 @@ int parse(struct token_array *tokens, struct analysis_table *table)
     stack_print(stack);
     while (stack->size != 0)
     {
-        struct symbol *pop = stack_pop(stack);
+        struct stack_elt *head = stack_pop(stack);
+        struct symbol *pop = head->symbol;
         struct symbol_array *arr = substitute_rule(
             pop->rule_id, table->n_symbols - 1, table);
         free(pop);

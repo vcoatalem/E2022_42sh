@@ -25,30 +25,32 @@ void stack_push_array(struct stack *stack, struct symbol_array *symbols)
     }
 }
 
-struct symbol *stack_peak(struct stack *stack)
+struct stack_elt *stack_peak(struct stack *stack)
 {
     if (stack->size == 0)
         return NULL;
-    struct symbol *s = stack->head->symbol;
-    return s;
+    return stack->head;
 }
 
-struct symbol *stack_pop(struct stack *stack)
+struct stack_elt *stack_pop(struct stack *stack)
 {
     if (stack->size == 0)
         return NULL;
     struct stack_elt *head = stack->head;
-    struct symbol *s = head->symbol;
-    stack->head = head->next; 
-    free(head);
+    stack->head = stack->head->next;
     stack->size--;
-    return s;
+    return head;
 }
 
 void stack_free(struct stack *stack)
 {
     while (stack->size)
-        free(stack_pop(stack));
+    {
+        struct stack_elt *head = stack_pop(stack);
+        ast_free(head->ast);
+        free(head->symbol);
+        free(head);
+    }
     free(stack);
 }
 

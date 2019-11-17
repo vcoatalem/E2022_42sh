@@ -117,6 +117,7 @@ struct stack_elt
 {
     struct symbol *symbol;
     struct stack_elt *next;
+    struct ast *ast;
 };
 
 struct stack
@@ -128,8 +129,8 @@ struct stack
 struct stack *stack_init();
 void stack_push(struct stack *stack, struct symbol *s);
 void stack_push_array(struct stack *stack, struct symbol_array *arr);
-struct symbol *stack_peak(struct stack *stack);
-struct symbol *stack_pop(struct stack *stack);
+struct stack_elt *stack_peak(struct stack *stack);
+struct stack_elt *stack_pop(struct stack *stack);
 void stack_print(struct stack *stack);
 void stack_free(struct stack *stack);
 
