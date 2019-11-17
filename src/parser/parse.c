@@ -82,7 +82,6 @@ void parse(struct parser *parser, struct analysis_table *table)
     }
     //if stamp is over, try to find epsilon substitution for all symbols left
     //in stack
-    printf("stamp over; stack left:\n");
     //TODO: try to factorise this with main loop
     stack_print(stack);
     while (stack->size != 0)
