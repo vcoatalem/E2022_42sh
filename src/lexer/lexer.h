@@ -1,3 +1,16 @@
+/**
+ * \file lexer.h
+ * \brief file where we define function for the lexer
+ * \author alexandre.lyfoung arthur.pannier julien.chau victor.coatalem
+ * \version 1.0
+ * \date September 17th 2019
+ *
+ * Lexer.h where we define the function for the lexer
+ *
+ *
+ */
+
+
 #ifndef LEXER_H
 #define LEXER_H
 
@@ -7,6 +20,13 @@
 #include <string.h>
 #include "token/token.h"
 
+/**
+ * \enum lexer_state
+ * \brief enum contain state of lexer
+ * 
+ * Contain int that corresped to a state for the lexer
+ *
+ */
 enum lexer_state
 {
     STATE_NONE,                   //regular
@@ -20,6 +40,15 @@ enum lexer_state
                                   //but parser returned an error
 };
 
+
+/**
+ * \struct lexer
+ * \brief Lexer object
+ *
+ * Lexer is an object that contain the state of the lexer (enum), 
+ * a string (char *) and an iterator (size_t)
+ *
+ */
 struct lexer
 {
     //
@@ -28,7 +57,14 @@ struct lexer
     char *str;
     size_t iterator;
 };
-
+/**
+ * \struct token_array
+ * \brief Token_array object 
+ *
+ * Token_array is an object that contain an array of token,
+ * his capacity and his actual size
+ *
+ */
 
 struct token_array
 {
@@ -38,10 +74,41 @@ struct token_array
 };
 
 //main lexing function
+/**
+ * \brief check the type of the token
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ *
+ * \return token_type in the buffer, TOKEN_WORD if it is not a token valid
+ *
+ */
 enum token_type token_check(char *str, size_t iterator, char *buffer);
 
+/**
+ * \brief create a new token
+ * 
+ * \param type type of new token
+ * \param *value string of new token
+ *
+ * \return token , NULL if there is not enough memory
+ */
 struct token *token_init(enum token_type type, char *value);
+
+/**
+ * \brief free momory from token
+ *
+ * \param *token token that needs to be released
+ *
+ * \return Nothing
+ */
 void token_free(struct token *token);
+
+/**
+ *
+ *
+ */
 struct token_array *token_array_init();
 void token_array_free(struct token_array *arr);
 void token_array_add(struct token_array *arr, struct token *token);
