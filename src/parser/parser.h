@@ -10,27 +10,27 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 17
+#define NB_RULES 16
 enum rule_id //RULES TO BE ADDED
 {
     RULE_NONE,                      //0
     RULE_INPUT,                     //1
-    RULE_OPTIONNAL_LINE_BREAKS,     //2
-    RULE_AND_OR,                    //3
-    RULE_AND,                       //4
-    RULE_AND_CONCAT,                //5
-    RULE_OR,                        //6
-    RULE_OR_CONCAT,                 //7
-    RULE_PIPELINE,                  //8
-    RULE_PIPE,                      //9
-    RULE_COMMAND,                   //10
-    RULE_REDIRECTION,               //11
-    RULE_REDIRECTION_SYMBOL,        //12
-    RULE_REDIRECTION_LIST,          //13
-    RULE_IONUMBER,                  //14
-    RULE_ELEMENT,                   //15
-    RULE_ARG_LIST,                  //16
+    RULE_AND_OR,                    //2
+    RULE_AND,                       //3
+    RULE_AND_CONCAT,                //4
+    RULE_OR,                        //5
+    RULE_OR_CONCAT,                 //6
+    RULE_PIPELINE,                  //7
+    RULE_PIPE,                      //8
+    RULE_COMMAND,                   //9
+    RULE_REDIRECTION,               //10
+    RULE_REDIRECTION_SYMBOL,        //11
+    RULE_REDIRECTION_LIST,          //12
+    RULE_IONUMBER,                  //13
+    RULE_ELEMENT,                   //14
+    RULE_ARG_LIST,                  //15
 };
+//TODO: add this back //RULE_OPTIONNAL_LINE_BREAKS,   //2
 
 enum symbol_type
 {
@@ -67,6 +67,7 @@ struct symbol_array *symbol_array_dup(struct symbol_array *symbols);
 void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2);
 void symbol_array_add(struct symbol_array *symbols, struct symbol *s);
 void symbol_array_free(struct symbol_array *arr);
+int symbol_array_contains(struct symbol_array *arr, struct symbol *s);
 
 // RULE ///////////////////////////////////////////////////////////////
 

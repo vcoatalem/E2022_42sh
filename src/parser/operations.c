@@ -15,7 +15,8 @@ static struct symbol_array *get_symbol_first(struct symbol_array *expression,
     struct symbol_array *array = symbol_array_init();
     if (symbol->type == SYMBOL_TOKEN)
     {
-        symbol_array_add(array, symbol_dup(symbol));
+        if (!symbol_array_contains(array, symbol))
+            symbol_array_add(array, symbol_dup(symbol));
     }
     else if (symbol->type == SYMBOL_RULE)
     {
@@ -117,7 +118,8 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
                     #endif
                     if (next_symbol->type == SYMBOL_TOKEN)
                     {
-                        symbol_array_add(array, symbol_dup(next_symbol));
+                        if (!symbol_array_contains(array, next_symbol))
+                            symbol_array_add(array, symbol_dup(next_symbol));
                     }
                     else if (next_symbol->type == SYMBOL_RULE)
                     {
@@ -154,10 +156,12 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
                 }
                 else
                 {
+                    struct symbol *end = symbol_end();
                     //if the searched symbol is at the end of the expr,
                     //add symbol_end (?) and first of all the rules of the
                     //rule_id of the expr 
-                    symbol_array_add(array, symbol_end());
+                    if (!symbol_array_contains(array, end))
+                        symbol_array_add(array, end); //TODO: check leaks here
                     //except in the case the rule is the same as the current
                     //expression we are examinating
                     if (rules->rules[i]->rule_id != current->rule_id)

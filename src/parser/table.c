@@ -7,7 +7,15 @@ struct analysis_table *table_init(void)
     struct rule_array *rules = rule_array_build();
     t->n_rules = NB_RULES;
     t->n_symbols = NB_TOKENS + 1; //SYMBOLE_END 
-
+    printf("---NEXT() values:\n");
+    for (size_t i = 1; i < NB_RULES; i++)
+    {
+        printf("[RULE#%zu] ", i);
+        struct symbol_array *nexts = next(i, rules);
+        symbol_array_print(nexts);
+        printf("\n");
+    }
+    printf("--------------------------------------\n\n\n");
     //build table
     struct symbol_array ***transformation_mat = calloc(t->n_rules,
         sizeof(void*));

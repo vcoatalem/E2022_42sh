@@ -35,21 +35,24 @@ struct symbol_array *symbol_array_dup(struct symbol_array *symbols)
     return arr;
 }
 
-#if 0
 //used to prevent same tokens to appear multiple times in first() and next()
-int symbol_array_contains(struct symbol_array *arr, struct symbol *s)
+int symbol_array_contains(struct symbol_array *symbols, struct symbol *s)
 {
-    for (size_t i = 0; i < arr->size; i++)
+    for (size_t i = 0; i < symbols->size; i++)
     {
-        if (s->type == SYMBOL_TOKEN
-            && s->token_type == arr->array[i]->token_type)
+        if (symbols->array[i]->type == SYMBOL_END
+            && s->type == SYMBOL_END)
+        {
+            return 1;
+        }
+        if (symbols->array[i]->type == SYMBOL_TOKEN
+            && symbols->array[i]->token_type == s->token_type)
         {
             return 1;
         }
     }
     return 0;
 }
-#endif
 
 //used in first() and next() to build sub rule firsts and nexts
 void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2)
@@ -58,10 +61,10 @@ void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2)
         return;
     for (size_t i = 0; i < s2->size; i++)
     {
-//        if (!symbol_array_contains(s1, s2->array[i]))
-//        {
-            symbol_array_add(s1, symbol_dup(s2->array[i]));
-//        }
+        if (!symbol_array_contains(s1, s2->array[i]))
+        {
+          symbol_array_add(s1, symbol_dup(s2->array[i]));
+        }
     }
 }
 

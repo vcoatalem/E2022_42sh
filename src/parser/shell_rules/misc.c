@@ -1,5 +1,6 @@
 #include "../parser.h"
 
+#if 0
 // optionnal_line_breaks -> '\n' optionnal_line_breaks
 // optionnal_line_breaks -> epsilon
 void sh_rule_optionnal_line_breaks(struct rule_array *rules)
@@ -14,3 +15,4 @@ void sh_rule_optionnal_line_breaks(struct rule_array *rules)
     rule_array_add(rules, rule);
     rule_array_add(rules, rule_eps);
 }
+#endif

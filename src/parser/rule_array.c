@@ -49,7 +49,7 @@ struct rule_array *rule_array_build(void)
     sh_rule_or_concat(rules);
     sh_rule_or(rules);
     sh_rule_and_or(rules);
-    sh_rule_optionnal_line_breaks(rules);
+    //sh_rule_optionnal_line_breaks(rules);
     sh_rule_pipe(rules);
     sh_rule_pipeline(rules);
     sh_rule_input(rules);
