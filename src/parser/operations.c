@@ -43,7 +43,7 @@ static struct symbol_array *get_symbol_first(struct symbol_array *expression,
                 struct symbol_array *sub = first(
                     rules->rules[i]->symbols, rules);
                 if (sub)
-                { 
+                {
                     symbol_array_merge(array, sub);
                     symbol_array_free(sub);
                 }
@@ -138,7 +138,7 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
                     struct symbol *end = symbol_end();
                     //if the searched symbol is at the end of the expr,
                     //add symbol_end (?) and first of all the rules of the
-                    //rule_id of the expr 
+                    //rule_id of the expr
                     if (!symbol_array_contains(array, end))
                         symbol_array_add(array, end);
                     else

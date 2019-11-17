@@ -58,11 +58,11 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd);
  * \brief execute command passed in arg
  *
  * \param struct execution_bundle *bundle bundle
- * \param char *script path of the script 
+ * \param char *script path of the script
  *
  * \return int the return of bash
  *
  */
 int execute_script(struct execution_bundle *bundle, char* script, int create);
 
-#endif 
+#endif

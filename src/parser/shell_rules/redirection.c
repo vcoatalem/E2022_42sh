@@ -112,7 +112,7 @@ void sh_rule_redirection_list(struct rule_array *rules)
             symbol_create(0, RULE_REDIRECTION),
             symbol_create(0, RULE_REDIRECTION_LIST),
             NULL);
-    struct rule *rule_epsilon = rule_build(RULE_REDIRECTION_LIST, 
+    struct rule *rule_epsilon = rule_build(RULE_REDIRECTION_LIST,
             symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);

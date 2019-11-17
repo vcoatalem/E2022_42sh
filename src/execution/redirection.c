@@ -43,7 +43,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection)
         if (fd == -1)
             return RETURN_ERROR;
         cmd->fd_in = fd;
-        redirect(STDIN_FILENO, fd); 
+        redirect(STDIN_FILENO, fd);
     }
     else if (redirection->type == STDOUT_TO_ARG
         || redirection->type == STDERR_TO_ARG)

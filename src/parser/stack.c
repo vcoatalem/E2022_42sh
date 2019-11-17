@@ -19,9 +19,9 @@ static void stack_elt_ast_init(struct stack_elt *elt)
         }
     }
     else
-    { 
+    {
         enum operator_type operator = rule_id_to_operator(
-                elt->symbol->rule_id); 
+                elt->symbol->rule_id);
         char *node_name = rule_id_to_string(elt->symbol->rule_id);
         if (operator == OPERATOR_NONE)
         {

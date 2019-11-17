@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     printf("[LOG] TEST: #%d\n", q);
 
     struct pipe *p = pipe_init();
-    
+
     char *hello_world[] = { "echo", "hello world!", NULL };
     char *cat_makefile[] = { "cat", "Makefile", NULL };
     char *in_file[] = { "echo", "im in file", NULL };
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     struct redirection *redirect_input = redirection_init(STDIN_FROM_ARG, "input");
     struct redirection *redirect_output_to_stderr = redirection_init(STDOUT_TO_STDERR, NULL);
     struct redirection *redirect_stderr_to_output = redirection_init(STDERR_TO_STDOUT, NULL);
-    
+
     if (q == 0)
     {
         struct command *command = command_init(commands[q], NULL);

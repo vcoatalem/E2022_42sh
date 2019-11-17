@@ -22,7 +22,7 @@
 /**
  * \enum lexer_state
  * \brief enum contain state of lexer
- * 
+ *
  * Contain int that corresped to a state for the lexer
  *
  */
@@ -44,7 +44,7 @@ enum lexer_state
  * \struct lexer
  * \brief Lexer object
  *
- * Lexer is an object that contain the state of the lexer (enum), 
+ * Lexer is an object that contain the state of the lexer (enum),
  * a string (char *) and an iterator (size_t)
  *
  */
@@ -58,7 +58,7 @@ struct lexer
 };
 /**
  * \struct token_array
- * \brief Token_array object 
+ * \brief Token_array object
  *
  * Token_array is an object that contain an array of token,
  * his capacity and his actual size
@@ -87,7 +87,7 @@ enum token_type token_check(char *str, size_t iterator, char *buffer);
 
 /**
  * \brief create a new token
- * 
+ *
  * \param type type of new token
  * \param *value string of new token
  *
@@ -107,7 +107,7 @@ void token_free(struct token *token);
 /**
  * \brief  create an object token_array
  *
- *allocate memory for an object token_array and create an object token_array 
+ *allocate memory for an object token_array and create an object token_array
  *
  * \return token_array new token_array
  */
@@ -191,7 +191,7 @@ int is_space(char c);
 /**
  * \brief handle character which is a separator
  *
- * 
+ *
  *
  */
 void handle_separators(char *str, size_t *iterator, char *buffer,
@@ -246,7 +246,7 @@ struct token_array *token_array_create(char *str);
  *
  * \param *lexer lexer with a string which does not have a token_array
  * associated
- * 
+ *
  * \return *token_array token_array of the lexer's string
  */
 struct token_array *lex(struct lexer *lexer);
