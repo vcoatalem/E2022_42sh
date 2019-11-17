@@ -39,12 +39,12 @@ int pipe_execute(struct pipe *p)
     int status = 0;
     while (*(p->commands + iterator))
     {
-        printf("[LOG] command: ");
-        for (size_t i = 0; i < (*(p->commands + iterator))->n_args; i++)
+        //printf("[LOG] command: ");
+        /*for (size_t i = 0; i < (*(p->commands + iterator))->n_args; i++)
         {
             printf(" %s", *((*(p->commands + iterator))->args) + i);
         }
-        printf("\n");
+        printf("\n");*/
         pipe(pipe_buffer);
         pid = fork();
         if (pid == 0)
@@ -60,20 +60,20 @@ int pipe_execute(struct pipe *p)
             {
                 int try_execute =
                         command_execute(*(p->commands + iterator));
-                /**/printf("[LOG] forked command child will return: %d\n", try_execute);
+                ///**/printf("[LOG] forked command child will return: %d\n", try_execute);
                 exit(try_execute % 255);
             }
             else
             {
                 waitpid(sub_pid, &sub_status, 0); 
-                /**/printf("[LOG] forked command child returned: %d\n", sub_status);
+                ///**/printf("[LOG] forked command child returned: %d\n", sub_status);
                 exit(sub_status % 255);
             }
         }
         else
         {
             waitpid(pid, &status, 0);
-            /**/printf("[LOG] pipe received status: %d\n", status);
+            ///**/printf("[LOG] pipe received status: %d\n", status);
             if (status != 0)
             {
                 return status % 255;

@@ -1,3 +1,15 @@
+/**
+ * \file readline.h
+ * \brief redefinition of function readline
+ * \author alexandre.lyfoung arthur.pannier julien.chau victor.coatalem
+ * \version 1.0
+ * \date November 17th 2019
+ *
+ * Lexer.h where we define the function for the lexer
+ *
+ *
+ */
+
 #ifndef READLINE_H
 #define READLINE_H
 
