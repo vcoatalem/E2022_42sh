@@ -1,22 +1,22 @@
 add_library(parser
-    # rule.c
-    # rule_array.c
-    # symbol.c
-    # symbol_array.c
-    # stamp.c
-    # operations.c
-    # table.c
-    # stack.c
-    # parse.c
-    # shell_rules/element.c
-    # shell_rules/command.c
-    # shell_rules/redirection.c
-    # shell_rules/misc.c
-    # shell_rules/pipeline.c
-    # shell_rules/and_or.c
-    # shell_rules/input.c
-    # ast_build/node_string.c
-    # ast_build/node_operator.c
+    rule.c
+    rule_array.c
+    symbol.c
+    symbol_array.c
+    stamp.c
+    operations.c
+    table.c
+    stack.c
+    parse.c
+    shell_rules/element.c
+    shell_rules/command.c
+    shell_rules/redirection.c
+    shell_rules/misc.c
+    shell_rules/pipeline.c
+    shell_rules/and_or.c
+    shell_rules/input.c
+    ast_build/node_string.c
+    ast_build/node_operator.c
     tmp_parse.c
 )
 target_link_libraries(parser lexer ast)
