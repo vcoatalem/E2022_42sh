@@ -19,7 +19,7 @@ void stack_push(struct stack *stack, struct symbol *s)
 void stack_push_array(struct stack *stack, struct symbol_array *symbols)
 {
     int i = symbols->size - 1;
-    for (; i > 0; i--)
+    for (; i >= 0; i--)
     {
         stack_push(stack, symbols->array[i]);
     }
@@ -50,4 +50,20 @@ void stack_free(struct stack *stack)
     while (stack->size)
         free(stack_pop(stack));
     free(stack);
+}
+
+void stack_print(struct stack *stack)
+{
+    printf("-- STACK of size %zu\n", stack->size);
+    struct stack_elt *it = stack->head;
+    size_t count = stack->size - 1;
+    while (it)
+    {
+        printf("[%zu] ", count);
+        symbol_print(it->symbol);
+        printf("\n");
+        count--;
+        it = it->next;
+    }
+    printf("----------\n");
 }

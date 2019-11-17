@@ -33,5 +33,19 @@ void stamp_free(struct stamp *stamp)
 
 int stamp_is_over(struct stamp *stamp)
 {
-    return stamp->pos == stamp->tokens->size - 1;
+    return stamp->pos == stamp->tokens->size;
+}
+
+void stamp_print(struct stamp *stamp)
+{
+    if (stamp_is_over(stamp))
+    {
+        printf("--- STAMP: over\n");
+    }
+    else
+    {
+        printf("--- STAMP: token %zu / %zu: %s\n", stamp->pos,
+                stamp->tokens->size - 1,
+                token_to_string(stamp_read(stamp)->type)); 
+    }
 }

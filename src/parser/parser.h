@@ -131,6 +131,7 @@ void stack_push(struct stack *stack, struct symbol *s);
 void stack_push_array(struct stack *stack, struct symbol_array *arr);
 struct symbol *stack_peak(struct stack *stack);
 struct symbol *stack_pop(struct stack *stack);
+void stack_print(struct stack *stack);
 void stack_free(struct stack *stack);
 
 // STAMP ///////////////////////////////////////////////////////////////
@@ -149,7 +150,7 @@ struct token *stamp_read(struct stamp *stamp);
 void stamp_continue(struct stamp *stamp);
 void stamp_free(struct stamp *stamp);
 int stamp_is_over(struct stamp *stamp);
-
+void stamp_print(struct stamp *stamp);
 
 // EXPRESSION OPERATIONS ///////////////////////////////////////////////
 

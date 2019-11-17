@@ -17,15 +17,18 @@ int parse(struct token_array *tokens, struct analysis_table *table)
     struct stack *stack = stack_init();
     while (!stamp_is_over(input))
     {
+        stack_print(stack);
+        stamp_print(input);
         struct token *current = stamp_read(input);
         struct symbol *pop = stack_pop(stack);
         if (pop->type == SYMBOL_TOKEN)
         {
-            if (pop->token_type == current->type)
+            if (pop->token_type != current->type)
             {
                 //failure
                 return 1;
             }
+            stamp_continue(input);
         }
         else if (pop->type == SYMBOL_RULE)
         {
@@ -33,6 +36,8 @@ int parse(struct token_array *tokens, struct analysis_table *table)
                     pop->rule_id, current->type, table);
             if (!arr)
             {
+                printf("could not find correspondance for popped rule in \
+                    analysis table\n");
                 //failure
                 return 1;
             }
@@ -42,7 +47,6 @@ int parse(struct token_array *tokens, struct analysis_table *table)
             }
         }
         free(pop);
-        stamp_continue(input);
     }
     int return_value = stack->size == 0;
     stack_free(stack);
