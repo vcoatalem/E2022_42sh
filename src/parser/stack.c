@@ -15,16 +15,22 @@ static void stack_elt_ast_init(struct stack_elt *elt)
     {
         if (elt->symbol->token_type == TOKEN_WORD)
         {
-            elt->ast = ast_init(NODE_VALUE,
-                    token_to_string(elt->symbol->token_type), 0);
+            elt->ast = ast_init(NODE_VALUE, "", 0);
         }
     }
     else
-    {
-        char *node_name = rule_id_to_string(elt->symbol->rule_id);
+    { 
         enum operator_type operator = rule_id_to_operator(
-                elt->symbol->rule_id);
-        elt->ast = ast_init(NODE_OPERATOR, node_name, operator);
+                elt->symbol->rule_id); 
+        char *node_name = rule_id_to_string(elt->symbol->rule_id);
+        if (operator == OPERATOR_NONE)
+        {
+            elt->ast = ast_init(NODE_VALUE, node_name, 0);
+        }
+        else
+        {
+            elt->ast = ast_init(NODE_OPERATOR, "", operator);
+        }
     }
 
 }
@@ -35,7 +41,7 @@ void stack_push(struct stack *stack, struct symbol *s, struct ast *parent)
     elt->next = stack->head;
     elt->symbol = s;
     stack_elt_ast_init(elt);
-    if (elt)
+    if (elt->ast)
     {
         ast_add_child(parent, elt->ast);
     }
