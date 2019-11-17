@@ -121,21 +121,17 @@ int execute_interactive(struct execution_bundle *bundle)
         // run lexer + parser
         lexer_add_string(lexer, input);
         arr = lex(lexer);
-
         while(lexer->state == STATE_LEXING_QUOTES
             || lexer->state == STATE_LEXING_DOUBLE_QUOTES
             || lexer->state == STATE_UNFINISHED)
         {
             signal(SIGINT, sigintHandler);//TODO Handle this case
             input = get_next_line(ps2);
-
-
             if (!input)
                 break;
             lexer_add_string(lexer, input);
             token_arrays_fusion(arr, lex(lexer));
         }
-
         token_array_print(arr, stdout);
         token_array_free(arr);
         free(input);

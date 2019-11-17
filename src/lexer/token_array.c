@@ -92,7 +92,7 @@ int is_space(char c)
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
         size_t *index, struct token_array *arr)
-{ 
+{
     if (*index > 0)
     {
         token_array_add(arr, token_init(TOKEN_WORD, buffer));
@@ -101,6 +101,9 @@ void handle_separators(char *str, size_t *iterator, char *buffer,
     if (is_space(str[*iterator]))
     {
         *iterator = *iterator + 1;
+        if (str[*iterator] == '#')
+            while(str[*iterator] != '\n' && str[*iterator] != 0)
+                *iterator = *iterator + 1;
         return;
     }
     while (str[*iterator] && !is_space(str[*iterator]))
@@ -145,7 +148,7 @@ struct token_array *token_array_create(char *str)
                 token_array_add(arr, token);
                 index = 0;
             }
-        } 
+        }
     }
     if (index > 0)
         token_array_add(arr, token_init(token_check(buffer, 0, buffer), buffer));

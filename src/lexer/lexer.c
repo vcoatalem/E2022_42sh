@@ -77,7 +77,7 @@ struct token_array *lex(struct lexer *lexer)
                 token_array_add(arr, token);
                 index = 0;
             }
-        } 
+        }
     }
     if (lexer->state != STATE_NONE)//If waiting " or ' we add \n to buffer
     {
@@ -90,7 +90,7 @@ struct token_array *lex(struct lexer *lexer)
         token_array_add(arr, token_init(token_check(buffer, 0, buffer), buffer));
     }
     if (lexer->state == STATE_NONE)
-        token_array_add(arr, token_init(TOKEN_EOF, ""));;
+        token_array_add(arr, token_init(TOKEN_EOF, ""));
     return arr;
     //return token_array_create(lexer->str);
 }
