@@ -9,5 +9,5 @@ CMakeCache.txt
 *.cmake
 CMakeLists/
 42sh
-doc/html
-doc/latex
+doc/html/
+doc/latex/
