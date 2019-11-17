@@ -3,7 +3,7 @@
 struct stack *stack_init()
 {
     struct stack *stack = calloc(1, sizeof(struct stack));
-    stack_push(stack, symbol_create(0, RULE_COMMAND)); //put higher level command here
+    stack_push(stack, symbol_create(0, RULE_INPUT));
     return stack;
 }
 

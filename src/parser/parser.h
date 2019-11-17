@@ -10,16 +10,20 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 8
+#define NB_RULES 17
 enum rule_id //RULES TO BE ADDED
 {
     RULE_NONE,
-    //RULE_INPUT,
+    RULE_INPUT,
+    RULE_OPTIONNAL_LINE_BREAKS,
     //RULE_LIST,
-    //RULE_AND_OR,
-    //RULE_AND,
-    //RULE_OR,
-    //RULE_PIPELINE,
+    RULE_AND_OR,
+    RULE_AND,
+    RULE_AND_CONCAT,
+    RULE_OR,
+    RULE_OR_CONCAT,
+    RULE_PIPELINE,
+    RULE_PIPE,
     RULE_COMMAND,
     //RULE_SIMPLE_COMMAND, 
     RULE_REDIRECTION,
@@ -104,7 +108,15 @@ void sh_rule_ionumber(struct rule_array *rules);
 void sh_rule_redirection(struct rule_array *rules);
 void sh_rule_redirection_list(struct rule_array *rules);
 void sh_rule_redirection_symbol(struct rule_array *rules);
-
+void sh_rule_and_concat(struct rule_array *rules);
+void sh_rule_and(struct rule_array *rules);
+void sh_rule_or_concat(struct rule_array *rules);
+void sh_rule_or(struct rule_array *rules);
+void sh_rule_and_or(struct rule_array *rules);
+void sh_rule_optionnal_line_breaks(struct rule_array *rules);
+void sh_rule_pipe(struct rule_array *rules);
+void sh_rule_pipeline(struct rule_array *rules);
+void sh_rule_input(struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);
