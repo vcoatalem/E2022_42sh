@@ -1,21 +1,5 @@
 #include "execution.h"
 
-#if 0
-
-struct command
-{
-    char **args;
-    size_t n_args;
-    struct redirection **redirections;
-    size_t n_redirections;
-    int fd_in;
-    int fd_out;
-    int fd_err;
-    struct command *pipe;
-};
-
-#endif
-
 struct command *command_init(char **args, struct redirection **redirections)
 {
     struct command *cmd = calloc(1, sizeof(struct command));
@@ -84,7 +68,8 @@ void command_print(struct command *command)
     printf("\n");
 }
 
-void command_add_redirection(struct command *command, struct redirection *redir)
+void command_add_redirection(struct command *command,
+        struct redirection *redir)
 {
     command->n_redirections++;
     command->redirections = realloc(command->redirections,
@@ -93,11 +78,6 @@ void command_add_redirection(struct command *command, struct redirection *redir)
     *(command->redirections + command->n_redirections) = NULL;
 }
 
-/*
-**
-** command_execute executes command->next
-**
-*/
 
 int command_execute(struct command *command)
 {
