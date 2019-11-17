@@ -6,15 +6,14 @@ struct analysis_table *table_init(void)
 
     struct rule_array *rules = rule_array_build();
     t->n_rules = NB_RULES;
-    t->n_symbols = NB_TOKENS;
-   
+    t->n_symbols = NB_TOKENS + 1; //SYMBOLE_END 
 
     //build table
-    struct symbol_array ***transformation_mat = calloc(NB_RULES,
+    struct symbol_array ***transformation_mat = calloc(t->n_rules,
         sizeof(void*));
     for (size_t i = 0; i < t->n_rules; i++)
     {
-        struct symbol_array **line = calloc(NB_TOKENS, sizeof(void*));
+        struct symbol_array **line = calloc(t->n_symbols, sizeof(void*));
         *(transformation_mat + i) = line;
     }
 
@@ -41,22 +40,22 @@ struct analysis_table *table_init(void)
         if (epsilon(rule->symbols))
         {
             struct symbol_array *nexts = next(rule->rule_id, rules);
-            #if 0
             /**/printf("next for rule %d: ", rule->rule_id);
             /**/symbol_array_print(nexts);
             /**/printf("\n");
-            #endif
             if (nexts)
             {
                 //Pour tout b dans suivant(alpha)
                 for (size_t j = 0; j < nexts->size; j++)
                 {
                     struct symbol *b = nexts->array[j];
+                    size_t index = b->type == SYMBOL_TOKEN ? b->token_type
+                        : t->n_symbols - 1;
                     //Ajouter X->alpha à la case d'indice (b,X)
-                    //Remplacer ?
-                    if (!line[b->token_type])
+                    if (!line[index])
                     {
-                        line[b->token_type] = symbol_array_dup(rule->symbols);
+                        //some nexts will be duplicated
+                        line[index] = symbol_array_dup(rule->symbols);
                     }
                 }
                 symbol_array_free(nexts);
@@ -73,16 +72,17 @@ struct analysis_table *table_init(void)
 
 void table_print(struct analysis_table *table)
 {
-    for (size_t i = 0; i < NB_RULES; i++)
+    for (size_t i = 0; i < table->n_rules; i++)
     {
         struct symbol_array **line = table->transformation_mat[i];
         int count = 0;
         printf("rule #%zu:", i);
-        for (size_t j = 0; j < NB_TOKENS; j++)
+        for (size_t j = 0; j < table->n_symbols; j++)
         {
             if (line[j])
             {
-                printf("[ `%s`: ", token_to_string(j));
+                printf("[ `%s`: ", j < table->n_symbols - 1 ?
+                        token_to_string(j) : "$");
                 symbol_array_print(line[j]);
                 printf(" ]");
                 count++;

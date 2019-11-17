@@ -64,7 +64,8 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
                 /**/printf("\n");
                 #endif
                 //same treatment as first here
-                if (next_symbol->type == SYMBOL_TOKEN)
+                if (next_symbol->type == SYMBOL_TOKEN
+                        || next_symbol->type == SYMBOL_END)
                 {
                     symbol_array_add(array, symbol_dup(next_symbol));
                 }

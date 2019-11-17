@@ -1,7 +1,7 @@
 #include "parser.h"
 
 struct symbol_array *substitute_rule(enum rule_id rule_id,
-        enum token_type token_type, struct analysis_table *table)
+        int token_type, struct analysis_table *table)
 {
     struct symbol_array *expr = table->transformation_mat[rule_id][token_type];
     if (!expr)
@@ -48,7 +48,27 @@ int parse(struct token_array *tokens, struct analysis_table *table)
         }
         free(pop);
     }
-    int return_value = stack->size == 0;
+    //if stamp is over, try to find epsilon substitution for all symbols left
+    //in stack
+    printf("stamp over; stack left:\n");
+    stack_print(stack);
+    while (stack->size != 0)
+    {
+        struct symbol *pop = stack_pop(stack);
+        struct symbol_array *arr = substitute_rule(
+            pop->rule_id, table->n_symbols - 1, table);
+        free(pop);
+        if (!arr)
+        {
+            break;
+        }
+        else
+        {
+            symbol_array_free(arr);
+        }
+    }
+    stack_print(stack);
+    int return_value = stack->size != 0;
     stack_free(stack);
     stamp_free(input);
     return return_value;

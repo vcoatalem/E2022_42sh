@@ -33,6 +33,10 @@ struct symbol *symbol_create(enum token_type token_type, enum rule_id rule_id)
 
 struct symbol *symbol_dup(struct symbol *s)
 {
+    if (s->type == SYMBOL_EPSILON)
+        return symbol_epsilon();
+    else if (s->type == SYMBOL_END)
+        return symbol_end();
     return symbol_create(s->token_type, s->rule_id);
 }
 
