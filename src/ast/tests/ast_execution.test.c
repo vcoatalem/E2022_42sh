@@ -1,76 +1,68 @@
-#include "../ast.h"
 #include <stddef.h>
-#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(void)
+#include "../ast.h"
+
+//use this to represent a command that succeeds
+static struct ast *ast_command_should_succeed(void)
 {
-    /* PIPE
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
-    struct ast *ast2 = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
-    struct ast *ast3 = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    
+    struct ast *ast_cmd = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    ast_add_child(ast1, ast_cmd);
+    
+    struct ast *ast_redir = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
+    struct ast *ast_argv = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    ast_add_child(ast_cmd, ast_argv);
+    ast_add_child(ast_cmd, ast_redir);
 
     struct ast *arg1 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
-    struct ast *arg2 = ast_init(NODE_VALUE, "foo", OPERATOR_NONE);
-    ast_add_child(ast3, arg1);
-    ast_add_child(ast3, arg2);
+    struct ast *arg2 = ast_init(NODE_VALUE, "foo", OPERATOR_NONE); 
+    ast_add_child(ast_argv, arg1);
+    ast_add_child(ast_argv, arg2);
+    return ast1;
+}
 
-    ast_add_child(ast2, ast3);
-    ast_add_child(ast1, ast2);
+//use this to represent a command that fails
+static struct ast *ast_command_should_fail(void)
+{
+    struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
+    
+    struct ast *ast_cmd = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    ast_add_child(ast1, ast_cmd);
+    
+    struct ast *ast_redir = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
+    struct ast *ast_argv = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    ast_add_child(ast_cmd, ast_argv);
+    ast_add_child(ast_cmd, ast_redir);
 
-    printf("%d\n", ast_handle_pipe(ast1));
+    struct ast *arg1 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
+    struct ast *arg2 = ast_init(NODE_VALUE, "Hello", OPERATOR_NONE); 
+    struct ast *arg3 = ast_init(NODE_VALUE, "World!", OPERATOR_NONE); 
+    ast_add_child(ast_argv, arg1);
+    ast_add_child(ast_argv, arg2);
+    ast_add_child(ast_argv, arg3);
+    return ast1;
+}
 
-    ast_free(ast1);
-    */
+int main(int argc, char **argv)
+{
 
-    ///* IF
-    struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_IF);
-
-    struct ast *ast2 = ast_init(NODE_VALUE, "2", OPERATOR_NONE);
-    struct ast *ast3 = ast_init(NODE_VALUE, "==", OPERATOR_NONE);
-    struct ast *ast4 = ast_init(NODE_VALUE, "2", OPERATOR_NONE);
-
-    struct ast *ast5 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
-    struct ast *ast6 = ast_init(NODE_VALUE, "bar", OPERATOR_NONE);
-
-    ast_add_child(ast3, ast4);
-    ast_add_child(ast2, ast3);
-    ast_add_child(ast1, ast2);
-
-    ast_add_child(ast5, ast6);
-    ast_add_child(ast1, ast5);
-
-    printf("%d\n", ast_handle_if(ast1));
-
-    ast_free(ast1);
-
-    //*/
-
-    /* WHILE
-    struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_WHILE);
-
-    struct ast *ast2 = ast_init(NODE_VALUE, "i", OPERATOR_NONE);
-    struct ast *ast3 = ast_init(NODE_VALUE, "+", OPERATOR_NONE);
-    struct ast *ast4 = ast_init(NODE_VALUE, "+", OPERATOR_NONE);
-    struct ast *ast5 = ast_init(NODE_VALUE, "<", OPERATOR_NONE);
-    struct ast *ast6 = ast_init(NODE_VALUE, "20", OPERATOR_NONE);
-
-    struct ast *ast7 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
-    struct ast *ast8 = ast_init(NODE_VALUE, "bar", OPERATOR_NONE);
-
-    ast_add_child(ast3, ast4);
-    ast_add_child(ast2, ast3);
-    ast_add_child(ast5, ast6);
-    ast_add_child(ast2, ast5);
-    ast_add_child(ast1, ast2);
-
-    ast_add_child(ast5, ast6);
-    ast_add_child(ast1, ast5);
-
-    printf("%d\n", ast_handle_while(ast1));
-
-    ast_free(ast1);
-    */
-
+    struct ast *root = ast_init(NODE_OPERATOR, NULL, OPERATOR_AND);
+    int q = argc == 1 ? 0 : atoi(*(argv + 1));
+    if (q == 0)
+    {
+        //cat foo
+        ast_add_child(root, ast_command_should_succeed());
+    }
+    else if (q == 1)
+    {
+        //echo Hello World
+        ast_add_child(root, ast_command_should_fail());
+    }
+    ast_dot_print(root, "ast.dot");
+    printf("%d\n", ast_execute(root));
+    ast_free(root);
     return 0;
 }
