@@ -13,37 +13,23 @@
 #define NB_RULES 17
 enum rule_id //RULES TO BE ADDED
 {
-    RULE_NONE,
-    RULE_INPUT,
-    RULE_OPTIONNAL_LINE_BREAKS,
-    //RULE_LIST,
-    RULE_AND_OR,
-    RULE_AND,
-    RULE_AND_CONCAT,
-    RULE_OR,
-    RULE_OR_CONCAT,
-    RULE_PIPELINE,
-    RULE_PIPE,
-    RULE_COMMAND,
-    //RULE_SIMPLE_COMMAND, 
-    RULE_REDIRECTION,
-    RULE_REDIRECTION_SYMBOL,
-    RULE_REDIRECTION_LIST,
-    RULE_IONUMBER,
-    RULE_ELEMENT,
-    RULE_ARG_LIST,
-    //RULE_SHELL_COMMAND,
-    //RULE_FUNCDEC,
-    //RULE_COMPOUND_LIST,
-    //RULE_COMPOUND_LIST_BREAK,
-    //RULE_FOR,
-    //RULE_WHILE,
-    //RULE_CASE,
-    //RULE_IF,
-    //ELSE_CLAUSE,
-    //DO_GROUP,
-    //CASE_CLAUSE,
-    //CASE_ITEM
+    RULE_NONE,                      //0
+    RULE_INPUT,                     //1
+    RULE_OPTIONNAL_LINE_BREAKS,     //2
+    RULE_AND_OR,                    //3
+    RULE_AND,                       //4
+    RULE_AND_CONCAT,                //5
+    RULE_OR,                        //6
+    RULE_OR_CONCAT,                 //7
+    RULE_PIPELINE,                  //8
+    RULE_PIPE,                      //9
+    RULE_COMMAND,                   //10
+    RULE_REDIRECTION,               //11
+    RULE_REDIRECTION_SYMBOL,        //12
+    RULE_REDIRECTION_LIST,          //13
+    RULE_IONUMBER,                  //14
+    RULE_ELEMENT,                   //15
+    RULE_ARG_LIST,                  //16
 };
 
 enum symbol_type
@@ -166,7 +152,9 @@ void stamp_print(struct stamp *stamp);
 
 // EXPRESSION OPERATIONS ///////////////////////////////////////////////
 
-int epsilon(struct symbol_array *expression);
+int expr_is_epsilon(struct symbol_array *expression);
+int rule_is_epsilon(enum rule_id rule_id, struct rule_array *rules);
+
 struct symbol_array *first(struct symbol_array *expression,
         struct rule_array *rules);
 struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules);

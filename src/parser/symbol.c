@@ -52,10 +52,10 @@ void symbol_print(struct symbol *s)
     }
     else if (s->type == SYMBOL_RULE)
     {
-        printf("{rule #%d}", s->rule_id);
+        printf("{R #%d}", s->rule_id);
     }
     else
     {
-        printf("{token `%s`}", token_to_string(s->token_type));
+        printf("{T `%s`}", token_to_string(s->token_type));
     }
 }
