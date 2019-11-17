@@ -19,7 +19,7 @@ struct analysis_table *table_init(void)
     {
         struct rule *rule = *(rules->rules + i);
         struct symbol_array **line = transformation_mat[rule->rule_id];
-        
+
         struct symbol_array *firsts = first(rule->symbols, rules);
         if (firsts)
         {

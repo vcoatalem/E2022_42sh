@@ -24,7 +24,7 @@
 /**
  * \enum token_type
  * \brief enum contain all type of token
- * 
+ *
  * Contain int that correspond to a type of token
  *
  */
@@ -188,7 +188,7 @@ struct token
 /**
  * \brief Convert a token into a string
  *
- * \param enum token_type type type of token 
+ * \param enum token_type type type of token
  *
  * \return char* string of the token, default case return: word
  *
@@ -198,7 +198,7 @@ char *token_to_string(enum token_type type);
 /**
  * \brief Print string value of a token
  *
- * \param enum token_type type type of token 
+ * \param enum token_type type type of token
  *
  * \prints token_to_string(type), or '\n' if type is TOKEN_EOL
  *

@@ -53,7 +53,7 @@ int pipe_execute(struct pipe *p)
             if (iterator + 1 < p->n_commands)
                 dup2(pipe_buffer[PIPE_OUT], STDOUT_FILENO);
             close(pipe_buffer[PIPE_IN]);
-            
+
             pid_t sub_pid = fork();
             int sub_status = 0;
             if (sub_pid == 0)
@@ -65,7 +65,7 @@ int pipe_execute(struct pipe *p)
             }
             else
             {
-                waitpid(sub_pid, &sub_status, 0); 
+                waitpid(sub_pid, &sub_status, 0);
                 ///**/printf("[LOG] forked command child returned: %d\n", sub_status);
                 exit(sub_status % 255);
             }

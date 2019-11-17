@@ -31,7 +31,7 @@ static int token_array_are_equal(struct token_array *a1, struct token_array *a2)
 int main(int argc, char **argv)
 {
     int q = (argc == 1 ? 0 : atoi(*(argv + 1)));
-    
+
     char *cmds[] =
     {
         "echo a || cat b",

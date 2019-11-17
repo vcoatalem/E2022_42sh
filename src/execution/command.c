@@ -90,7 +90,7 @@ int command_execute(struct command *command)
         for (size_t i = 0; i < command->n_redirections; i++)
         {
             redirection_execute(command, *(command->redirections + i));
-        } 
+        }
         //execute command
         execvp(*(command->args), command->args);
         //if execution failed
@@ -98,6 +98,6 @@ int command_execute(struct command *command)
         exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
-    //printf("[LOG] command %s received %d\n", *(command->args), status); 
+    //printf("[LOG] command %s received %d\n", *(command->args), status);
     return status;
 }

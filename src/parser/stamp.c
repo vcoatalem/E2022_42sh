@@ -46,6 +46,6 @@ void stamp_print(struct stamp *stamp)
     {
         printf("--- STAMP: token %zu / %zu: %s\n", stamp->pos,
                 stamp->tokens->size - 1,
-                token_to_string(stamp_read(stamp)->type)); 
+                token_to_string(stamp_read(stamp)->type));
     }
 }
