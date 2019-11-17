@@ -1,27 +1,55 @@
 #include "parser.h"
 
-struct stack *stack_init()
+struct stack *stack_init(struct ast *root)
 {
     struct stack *stack = calloc(1, sizeof(struct stack));
-    stack_push(stack, symbol_create(0, RULE_INPUT));
+    stack_push(stack, symbol_create(0, RULE_INPUT), root);
     return stack;
 }
 
-void stack_push(struct stack *stack, struct symbol *s)
+static void stack_elt_ast_init(struct stack_elt *elt)
+{
+    if (!elt)
+        return;
+    if (elt->symbol->type == SYMBOL_TOKEN)
+    {
+        if (elt->symbol->token_type == TOKEN_WORD)
+        {
+            elt->ast = ast_init(NODE_VALUE,
+                    token_to_string(elt->symbol->token_type), 0);
+        }
+    }
+    else
+    {
+        char *node_name = rule_id_to_string(elt->symbol->rule_id);
+        enum operator_type operator = rule_id_to_operator(
+                elt->symbol->rule_id);
+        elt->ast = ast_init(NODE_OPERATOR, node_name, operator);
+    }
+
+}
+
+void stack_push(struct stack *stack, struct symbol *s, struct ast *parent)
 {
     struct stack_elt *elt = calloc(1, sizeof(struct stack_elt));
     elt->next = stack->head;
     elt->symbol = s;
+    stack_elt_ast_init(elt);
+    if (elt)
+    {
+        ast_add_child(parent, elt->ast);
+    }
     stack->head = elt;
     stack->size++;
 }
 
-void stack_push_array(struct stack *stack, struct symbol_array *symbols)
+void stack_push_array(struct stack *stack, struct symbol_array *symbols,
+        struct ast *ast)
 {
     int i = symbols->size - 1;
     for (; i >= 0; i--)
     {
-        stack_push(stack, symbols->array[i]);
+        stack_push(stack, symbols->array[i], ast);
     }
 }
 
@@ -47,7 +75,7 @@ void stack_free(struct stack *stack)
     while (stack->size)
     {
         struct stack_elt *head = stack_pop(stack);
-        ast_free(head->ast);
+        free(head->ast);
         free(head->symbol);
         free(head);
     }

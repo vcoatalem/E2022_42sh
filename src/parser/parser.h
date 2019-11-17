@@ -62,9 +62,8 @@ struct symbol_array
     size_t capacity;
 };
 
-
+//TODO: replace this with actual parse
 struct ast *tmp_parse(struct token_array *arr);
-
 
 struct symbol_array *symbol_array_init(void);
 struct symbol_array *symbol_array_dup(struct symbol_array *symbols);
@@ -115,6 +114,11 @@ struct rule_array *rule_array_build(void);
 void rule_array_free(struct rule_array *array);
 void rule_array_add(struct rule_array *array, struct rule *r);
 
+// ast building functions
+
+enum operator_type rule_id_to_operator(enum rule_id id);
+char *rule_id_to_string(enum rule_id id);
+
 // SYMBOL STACK ////////////////////////////////////////////////////////
 
 struct stack_elt
@@ -131,8 +135,9 @@ struct stack
 };
 
 struct stack *stack_init();
-void stack_push(struct stack *stack, struct symbol *s);
-void stack_push_array(struct stack *stack, struct symbol_array *arr);
+void stack_push(struct stack *stack, struct symbol *s, struct ast *parent);
+void stack_push_array(struct stack *stack, struct symbol_array *arr,
+        struct ast *parent);
 struct stack_elt *stack_peak(struct stack *stack);
 struct stack_elt *stack_pop(struct stack *stack);
 void stack_print(struct stack *stack);
@@ -181,6 +186,22 @@ void table_free(struct analysis_table *table);
 
 // PARSER /////////////////////////////////////////////////////////////
 
-int parse(struct token_array *tokens, struct analysis_table *table);
+enum parser_state
+{
+    PARSER_STATE_SUCCESS,
+    PARSER_STATE_FAILURE
+};
+
+struct parser
+{
+    enum parser_state state;
+    struct stamp *input;
+    struct stack *stack;
+    struct ast *ast;
+};
+
+struct parser *parser_init(struct token_array *tokens);
+void parse(struct parser *parser, struct analysis_table *table);
+void parser_free(struct parser *parser, int free_ast);
 
 #endif /* PARSER_H */

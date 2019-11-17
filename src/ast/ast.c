@@ -30,6 +30,8 @@ struct ast *ast_init(enum node_type type, char *value,
 
 void ast_add_child(struct ast *ast, struct ast *child)
 {
+    if (!child)
+        return;
     ast->nb_children += 1;
     ast->forest = realloc(ast->forest, ast->nb_children * sizeof(struct ast*));
     *(ast->forest + ast->nb_children - 1) = child;

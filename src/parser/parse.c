@@ -11,55 +11,70 @@ struct symbol_array *substitute_rule(enum rule_id rule_id,
     return symbol_array_dup(expr);
 }
 
-int parse(struct token_array *tokens, struct analysis_table *table)
+struct parser *parser_init(struct token_array *tokens)
 {
-    struct stamp *input = stamp_init(tokens);
-    struct stack *stack = stack_init();
+    struct parser *parser = calloc(1, sizeof(struct parser));
+    parser->input = stamp_init(tokens);
+    parser->ast = ast_init(NODE_OPERATOR, "root", OPERATOR_AND);
+    parser->stack = stack_init(parser->ast);
+    return parser;
+}
+
+void parser_free(struct parser *parser, int free_ast)
+{
+    stamp_free(parser->input);
+    stack_free(parser->stack);
+    if (free_ast)
+        free(parser->ast);
+    free(parser);
+}
+
+void parse(struct parser *parser, struct analysis_table *table)
+{
+    struct stamp *input = parser->input;
+    struct stack *stack = parser->stack;
     while (!stamp_is_over(input))
     {
         stack_print(stack);
         stamp_print(input);
         struct token *current = stamp_read(input);
         struct stack_elt *head = stack_pop(stack);
-        struct symbol *pop = head->symbol;
-        if (pop->type == SYMBOL_TOKEN)
+        if (head->symbol->type == SYMBOL_TOKEN)
         {
-            if (pop->token_type != current->type)
+            if (head->symbol->token_type != current->type)
             {
-                //failure
-                return 1;
+                return;
             }
             stamp_continue(input);
         }
-        else if (pop->type == SYMBOL_RULE)
+        else if (head->symbol->type == SYMBOL_RULE)
         {
             struct symbol_array *arr = substitute_rule(
-                    pop->rule_id, current->type, table);
+                    head->symbol->rule_id, current->type, table);
             if (!arr)
             {
                 printf("could not find correspondance for popped rule in \
                     analysis table\n");
-                //failure
-                return 1;
+                return;
             }
             else
             {
-                stack_push_array(stack, arr);
+                stack_push_array(stack, arr, head->ast);
             }
         }
-        free(pop);
+        free(head);
     }
     //if stamp is over, try to find epsilon substitution for all symbols left
     //in stack
     printf("stamp over; stack left:\n");
+    //TODO: try to factorise this with main loop
     stack_print(stack);
     while (stack->size != 0)
     {
         struct stack_elt *head = stack_pop(stack);
-        struct symbol *pop = head->symbol;
         struct symbol_array *arr = substitute_rule(
-            pop->rule_id, table->n_symbols - 1, table);
-        free(pop);
+            head->symbol->rule_id, table->n_symbols - 1, table);
+        free(head);
         if (!arr)
         {
             break;
@@ -69,9 +84,6 @@ int parse(struct token_array *tokens, struct analysis_table *table)
             symbol_array_free(arr);
         }
     }
-    stack_print(stack);
-    int return_value = stack->size != 0;
-    stack_free(stack);
-    stamp_free(input);
-    return return_value;
+    if (stack->size == 0)
+        parser->state = PARSER_STATE_SUCCESS;
 }

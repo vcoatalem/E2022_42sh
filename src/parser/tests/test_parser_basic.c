@@ -30,8 +30,10 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct analysis_table *table = table_init();
-    int try_parse = parse(exp, table);
-    printf("parsed: %d\n", try_parse);
+    struct parser *p = parser_init(exp);
+    parse(p, table);
+    ast_dot_print(p->ast, "output");
+    //parser_free(p, 1);
     table_free(table);
-    return try_parse;
+    return 0;
 }
