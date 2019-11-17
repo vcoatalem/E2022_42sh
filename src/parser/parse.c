@@ -1,5 +1,17 @@
 #include "parser.h"
 
+static char *my_strdup(char *str)
+{
+    size_t size = 0;
+    while (*(str + size))
+    {
+        size++;
+    }
+    char *s = calloc(1, size + 1);
+    strcpy(s, str);
+    return s;
+}
+
 struct symbol_array *substitute_rule(enum rule_id rule_id,
         int token_type, struct analysis_table *table)
 {
@@ -44,6 +56,10 @@ void parse(struct parser *parser, struct analysis_table *table)
             if (head->symbol->token_type != current->type)
             {
                 return;
+            }
+            if (current->type == TOKEN_WORD)
+            {
+                head->ast->content.value = my_strdup(current->value);
             }
             stamp_continue(input);
         }
