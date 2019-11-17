@@ -37,12 +37,9 @@ struct analysis_table *table_init(void)
         //Fin Pour
         }
         //Si Eps(alpha) vaut vrai Alors
-        if (epsilon(rule->symbols))
+        if (expr_is_epsilon(rule->symbols))
         {
             struct symbol_array *nexts = next(rule->rule_id, rules);
-            /**/printf("next for rule %d: ", rule->rule_id);
-            /**/symbol_array_print(nexts);
-            /**/printf("\n");
             if (nexts)
             {
                 //Pour tout b dans suivant(alpha)
