@@ -47,8 +47,10 @@ void parse(struct parser *parser, struct analysis_table *table)
     struct stack *stack = parser->stack;
     while (!stamp_is_over(input))
     {
+        #if 0
         stack_print(stack);
         stamp_print(input);
+        #endif
         struct token *current = stamp_read(input);
         struct stack_elt *head = stack_pop(stack);
         if (head->symbol->type == SYMBOL_TOKEN)
@@ -69,8 +71,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                     head->symbol->rule_id, current->type, table);
             if (!arr)
             {
-                printf("could not find correspondance for popped rule in \
-                    analysis table\n");
+                //could not correspondance in analysis table
                 return;
             }
             else
@@ -83,7 +84,6 @@ void parse(struct parser *parser, struct analysis_table *table)
     //if stamp is over, try to find epsilon substitution for all symbols left
     //in stack
     //TODO: try to factorise this with main loop
-    stack_print(stack);
     while (stack->size != 0)
     {
         struct stack_elt *head = stack_pop(stack);

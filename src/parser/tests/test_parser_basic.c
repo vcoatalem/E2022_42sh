@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     struct parser *p = parser_init(exp);
     parse(p, table);
     ast_dot_print(p->ast, "output");
-    //parser_free(p, 1);
+    parser_free(p, 1);
     table_free(table);
     return 0;
 }

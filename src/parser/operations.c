@@ -71,27 +71,6 @@ struct symbol_array *first(struct symbol_array *expression,
     return array;
 }
 
-#if 0
-static struct symbol_array *first_of_rule(enum rule_id, struct rule_array *rules)
-{
-    struct symbol_array *array = symbol_array_init();
-    for (size_t i = 0; i < rules->size; i++)
-    {
-        if (rule_id == array->rules[i]->rule_id)
-        {
-            struct symbol_array *sub = first(array->rules[i]->symbols,
-                    rules);
-            if (sub)
-            {
-                symbol_array_merge(array, sub);
-                symbol_array_free(sub);
-            }
-        }
-    }
-    return array
-}
-#endif
-
 //all terminals(tokens) that may follow rule
 struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
 {
@@ -161,7 +140,9 @@ struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
                     //add symbol_end (?) and first of all the rules of the
                     //rule_id of the expr 
                     if (!symbol_array_contains(array, end))
-                        symbol_array_add(array, end); //TODO: check leaks here
+                        symbol_array_add(array, end);
+                    else
+                        free(end);
                     //except in the case the rule is the same as the current
                     //expression we are examinating
                     if (rules->rules[i]->rule_id != current->rule_id)

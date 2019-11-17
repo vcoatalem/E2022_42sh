@@ -55,8 +55,9 @@ void stack_push_array(struct stack *stack, struct symbol_array *symbols,
     int i = symbols->size - 1;
     for (; i >= 0; i--)
     {
-        stack_push(stack, symbols->array[i], ast);
+        stack_push(stack, symbol_dup(symbols->array[i]), ast);
     }
+    symbol_array_free(symbols);
 }
 
 struct stack_elt *stack_peak(struct stack *stack)
