@@ -194,6 +194,17 @@ struct token
  *
  */
 char *token_to_string(enum token_type type);
+
+/**
+ * \brief Print string value of a token
+ *
+ * \param enum token_type type type of token 
+ *
+ * \prints token_to_string(type), or '\n' if type is TOKEN_EOL
+ *
+ */
+void token_print(enum token_type type);
+
 struct token *token_alloc(void);
 void token_free(struct token *token);
 
