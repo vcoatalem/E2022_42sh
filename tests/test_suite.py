@@ -12,32 +12,30 @@ def run_42sh(args, stdin):
 
 def test(binary, tests):
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
-    42sh = run_42sh([binary], tests["stdin"])
+    sh = run_42sh([binary], tests["stdin"])
     for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
         if check == "stdout":
-            assert ref.stdout == 42sh.stdout, \
-                f"stdout differs:\n{diff(ref.stdout, 42sh.stdout)}"
+            assert ref.stdout == sh.stdout, \
+                f"stdout differs:\n{diff(ref.stdout, sh.stdout)}"
         elif check == "stderr":
-            assert ref.stderr == 42sh.stderr, \
-                f"stderr differs:\n{diff(ref.stderr, 42sh.stderr)}"
+            assert ref.stderr == sh.stderr, \
+                f"stderr differs:\n{diff(ref.stderr, sh.stderr)}"
         elif check == "returncode":
-            assert ref.returncode == 42sh.returncode, \
-                f"Exit with {42sh.returncode} , got {ref.returncode}"
+            assert ref.returncode == sh.returncode, \
+                f"Exit with {sh.returncode} , got {ref.returncode}"
         elif check == "has_stderr":
-            assert 42sh.stderr != "", "Something was expected on stderr"
+            assert sh.stderr != "", "Something was expected on stderr"
 
-def diff(ref, 42sh):
+def diff(ref, sh):
     ref = ref.splitlines(keepends=True)
-    42sh = 42sh.splitlines(keepends=True)
+    sh = sh.splitlines(keepends=True)
 
-    return ''.join(unified_diff(ref, 42sh, fromfile="ref", tofile="42sh"))
+    return ''.join(unified_diff(ref, sh, fromfile="ref", tofile="42sh"))
 
 if __name__ == "__main__":
     parser = ArgumentParser(description = "42sh TestSuite")
     parser.add_argument('bin', metavar='BIN')
     parser.add_argument("-l", "--list")
-    parser.add.argument("-c", "--category")
-    parser.add.argument("-s","--sanity")
 
     args = parser.parse_args();
 
@@ -56,5 +54,4 @@ if __name__ == "__main__":
                 print(f"[{colored('KO', 'red')}]", tests["name"])
                 print(err)
             else:
-                if args.
                 print(f"[{colored('OK', 'green')}]", tests["name"])
