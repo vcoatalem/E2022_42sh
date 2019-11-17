@@ -62,6 +62,10 @@ struct symbol_array
     size_t capacity;
 };
 
+
+struct ast *tmp_parse(struct token_array *arr);
+
+
 struct symbol_array *symbol_array_init(void);
 struct symbol_array *symbol_array_dup(struct symbol_array *symbols);
 void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2);
