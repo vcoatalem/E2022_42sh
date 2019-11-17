@@ -11,6 +11,10 @@ add_library(parser
     shell_rules/element.c
     shell_rules/command.c
     shell_rules/redirection.c
+    shell_rules/misc.c
+    shell_rules/pipeline.c
+    shell_rules/and_or.c
+    shell_rules/input.c
 )
 target_link_libraries(parser lexer ast)
 
