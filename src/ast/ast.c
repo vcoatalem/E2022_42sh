@@ -53,6 +53,8 @@ struct ast *ast_dup(struct ast *ast)
 
 void ast_free(struct ast *ast)
 {
+    if (!ast)
+        return;
     for (size_t i = 0; i < ast->nb_children; i++)
         ast_free(ast->forest[i]);
     if (ast->forest != NULL)
