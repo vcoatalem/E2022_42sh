@@ -1,5 +1,67 @@
 #include "parser.h"
 
+static int g_n_conflicts = 0;
+
+static void log_conflict(enum rule_id rule_id, struct symbol_array *in_slot,
+        struct symbol_array *to_be_inserted)
+{
+      printf("[LL PARSER] got conflict for rule #%d:\n", rule_id);
+      printf("[LL PARSER] in slot: ");
+      symbol_array_print(in_slot);
+      printf("\n");
+      printf("[LL PARSER] to be inserted: ");
+      symbol_array_print(to_be_inserted);
+      printf("\n");
+      g_n_conflicts++;
+}
+
+void fill_line_slot(struct analysis_table *t,
+        struct rule *rule, struct rule_array *rules)
+{   
+    struct symbol_array **line = t->transformation_mat[rule->rule_id];
+    struct symbol_array *firsts = first(rule->symbols, rules);
+    if (firsts)
+    {
+        for (size_t j = 0; j < firsts->size; j++)
+        {
+            struct symbol *a = firsts->array[j];
+            if (!line[a->token_type])
+            {
+                line[a->token_type] = symbol_array_dup(rule->symbols);
+            }
+            else
+            {
+                log_conflict(rule->rule_id, line[a->token_type],
+                            rule->symbols);
+            }
+        }
+        symbol_array_free(firsts);
+    }
+    if (expr_is_epsilon(rule->symbols))
+    {
+        struct symbol_array *nexts = next(rule->rule_id, rules);
+        if (nexts)
+        {
+            for (size_t j = 0; j < nexts->size; j++)
+            {
+                struct symbol *b = nexts->array[j];
+                size_t index = b->type == SYMBOL_TOKEN ? b->token_type
+                    : t->n_symbols - 1;
+                if (!line[index])
+                {
+                    line[index] = symbol_array_dup(rule->symbols);
+                }
+                else
+                {
+                    log_conflict(rule->rule_id, line[b->token_type],
+                                rule->symbols);
+                }
+            }
+            symbol_array_free(nexts);
+        }
+    }
+}
+
 struct analysis_table *table_init(void)
 {
     struct analysis_table *t = calloc(1, sizeof(struct analysis_table));
@@ -14,46 +76,16 @@ struct analysis_table *table_init(void)
         struct symbol_array **line = calloc(t->n_symbols, sizeof(void*));
         *(transformation_mat + i) = line;
     }
-
+    t->transformation_mat = transformation_mat;
+    
     for (size_t i = 0; i < rules->size; i++)
     {
-        struct rule *rule = *(rules->rules + i);
-        struct symbol_array **line = transformation_mat[rule->rule_id];
-
-        struct symbol_array *firsts = first(rule->symbols, rules);
-        if (firsts)
-        {
-            for (size_t j = 0; j < firsts->size; j++)
-            {
-                struct symbol *a = firsts->array[j];
-                if (!line[token_type])
-                {
-                    line[a->token_type] = symbol_array_dup(rule->symbols);
-                }
-            }
-            symbol_array_free(firsts);
-        }
-        if (expr_is_epsilon(rule->symbols))
-        {
-            struct symbol_array *nexts = next(rule->rule_id, rules);
-            if (nexts)
-            {
-                for (size_t j = 0; j < nexts->size; j++)
-                {
-                    struct symbol *b = nexts->array[j];
-                    size_t index = b->type == SYMBOL_TOKEN ? b->token_type
-                        : t->n_symbols - 1;
-                    if (!line[index])
-                    {
-                        line[index] = symbol_array_dup(rule->symbols);
-                    }
-                }
-                symbol_array_free(nexts);
-            }
-        }
+        struct rule *rule = rules->rules[i];
+        fill_line_slot(t, rule, rules);
     }
-    t->transformation_mat = transformation_mat;
     rule_array_free(rules);
+    printf("[LL PARSER] Built analysis table." );
+    printf(" Found #%d conflicts in grammar\n", g_n_conflicts);
     return t;
 }
 
