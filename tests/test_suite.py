@@ -40,7 +40,6 @@ if __name__ == "__main__":
 
     binary = Path(args.bin).absolute()
 
-
     with open("tests.yml", "r") as tests_files:
         test_case = yaml.safe_load(tests_files)
 
