@@ -24,6 +24,10 @@ enum operator_type
     OPERATOR_WHILE,
     OPERATOR_FOR,
     OPERATOR_UNTIL,
+    OPERATOR_IF_BODY,
+    OPERATOR_ELSE,
+    OPERATOR_DO,
+    OPERATOR_CASE,
     //while, until, ..
 };
 
