@@ -93,7 +93,7 @@ struct ast *get_child_of_name(struct ast *ast, const char *name)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->type == NODE_VALUE
+        if (ast->forest[i]->node_type == NODE_VALUE
                 && !(strcmp(ast->forest[i]->content.value, name)))
         {
             return ast->forest[i];
@@ -112,7 +112,7 @@ char **get_arg_list(struct ast *ast)
         struct ast *element = get_child_of_name(ast, "element");
         //element contains one child; the value to be appended to list
         arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
-        arg_list[index] = ast->forest[j]->content.value;
+        arg_list[index] = element->forest[0]->content.value;
         arg_list[index + 1] = NULL;
         index++;
         ast = sub_list;
@@ -123,6 +123,8 @@ char **get_arg_list(struct ast *ast)
 
 //do not use this for now, will need more work later on
 //should initialise struct redirection[] (from execution/ module), not string[]
+#if 0
+
 char **get_redir_list(struct ast *ast)
 {
     char **redir_list = calloc(1, sizeof(char *));
@@ -146,3 +148,4 @@ char **get_redir_list(struct ast *ast)
 
     return redir_list;
 }
+#endif
