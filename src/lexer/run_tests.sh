@@ -24,8 +24,8 @@ run_test()
     ERROR=0
     $TEST_BIN $Q_COUNT 1> $OUT 2> $ERR; RETURN=$?
     [ $RETURN -ne 0 ] && ERROR=1
-    [ $ERROR -eq 0 ] && echo "$GREEN OK:  $(cat "$OUT")  $NC"
-    [ $ERROR -eq 1 ] && cat "$ERR" && echo "$ORANGE KO ! $(cat "$OUT") $NC"
+    [ $ERROR -eq 0 ] && echo -e "$GREEN OK:  $(cat "$OUT")  $NC"
+    [ $ERROR -eq 1 ] && cat "$ERR" && echo -e "$ORANGE KO ! $(cat "$OUT") $NC"
     clean_temp_files
 }
 

@@ -61,6 +61,5 @@ void ast_dot_print(struct ast *ast, const char *output)
     fprintf(file, "digraph ast {\n\t");
     _ast_dot_print(ast, file);
     fprintf(file, "\r}\n");
-
     fclose(file);
 }
