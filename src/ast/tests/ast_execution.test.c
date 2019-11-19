@@ -7,7 +7,6 @@
 //use this to represent a command that succeeds
 static struct ast *ast_command_should_succeed(void)
 {
-    /* PIPE
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
 
     struct ast *ast_cmd = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
@@ -22,9 +21,12 @@ static struct ast *ast_command_should_succeed(void)
     struct ast *arg2 = ast_init(NODE_VALUE, "foo", OPERATOR_NONE);
     ast_add_child(ast_argv, arg1);
     ast_add_child(ast_argv, arg2);
-    */
+    return ast1;
+}
 
-    ///* IF
+//create new ast function when needed
+static struct ast *ast_if(void)
+{
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_IF);
 
     struct ast *ast_if_body = ast_init(NODE_OPERATOR, "if_body", OPERATOR_IF_BODY);
@@ -117,6 +119,10 @@ int main(int argc, char **argv)
     {
         //echo Hello World
         ast_add_child(root, ast_command_should_fail());
+    }
+    else if (q == 2)
+    {
+        ast_add_child(root, ast_if());
     }
     ast_dot_print(root, "ast.dot");
     printf("%d\n", ast_execute(root));
