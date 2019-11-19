@@ -1,13 +1,5 @@
 #include "execution.h"
 
-#if 0
-struct pipe
-{
-    struct command **commands;
-    size_t n_commands;
-}
-#endif
-
 #define PIPE_IN 0
 #define PIPE_OUT 1
 
@@ -21,11 +13,11 @@ struct pipe *pipe_init(void)
 
 void pipe_add_command(struct pipe *pipe, struct command *command)
 {
-    pipe->n_commands++;
     pipe->commands = realloc(pipe->commands,
-            sizeof(void*) * pipe->n_commands + 1);
-    *(pipe->commands + pipe->n_commands - 1) = command;
-    *(pipe->commands + pipe->n_commands - 0) = NULL;
+            sizeof(void*) * (pipe->n_commands + 2));
+    pipe->commands[pipe->n_commands] = command;
+    pipe->commands[pipe->n_commands + 1] = NULL;
+    pipe->n_commands++;
 }
 
 int pipe_execute(struct pipe *p)

@@ -16,14 +16,19 @@ enum node_type
 enum operator_type
 {
     OPERATOR_NONE,
+    OPERATOR_COMMAND,
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
     OPERATOR_IF,
+    OPERATOR_IF_BODY,
     OPERATOR_THEN,
+    OPERATOR_ELSE,
     OPERATOR_WHILE,
     OPERATOR_FOR,
     OPERATOR_UNTIL,
+    OPERATOR_DO,
+    OPERATOR_CASE,
     //while, until, ..
 };
 
@@ -52,6 +57,11 @@ void ast_free(struct ast *ast);
 
 void ast_dot_print(struct ast *ast, const char *output);
 
+void ast_clean(struct ast *ast);
+
+char **get_arg_list(struct ast *ast);
+
+char **get_redir_list(struct ast *ast);
 
 // AST EXECUTION
 

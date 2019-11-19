@@ -11,25 +11,26 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 16
+#define NB_RULES 17
 enum rule_id //RULES TO BE ADDED
 {
-    RULE_NONE,                      //0
-    RULE_INPUT,                     //1
-    RULE_AND_OR,                    //2
-    RULE_AND,                       //3
-    RULE_AND_CONCAT,                //4
-    RULE_OR,                        //5
-    RULE_OR_CONCAT,                 //6
-    RULE_PIPELINE,                  //7
-    RULE_PIPE,                      //8
-    RULE_COMMAND,                   //9
-    RULE_REDIRECTION,               //10
-    RULE_REDIRECTION_SYMBOL,        //11
-    RULE_REDIRECTION_LIST,          //12
-    RULE_IONUMBER,                  //13
-    RULE_ELEMENT,                   //14
-    RULE_ARG_LIST,                  //15
+    RULE_NONE,                     //0
+    RULE_INPUT,                    //1
+    RULE_AND_OR,                   //2
+    RULE_AND_OR_CONCAT,            //3 
+    RULE_AND_CONCAT,               //4
+    RULE_OR_CONCAT,                //5
+    RULE_PIPELINE,                 //6
+    RULE_PIPE,                     //7
+    RULE_COMMAND,                  //8
+    RULE_REDIR_LIST,               //9
+    RULE_REDIR,                    //10
+    RULE_REDIR_SYMBOL,             //11
+    RULE_REDIR_TO,                 //12
+    RULE_IONUMBER,                 //13
+    RULE_ELEMENT,                  //14
+    RULE_ELEMENT_LIST,             //15
+    RULE_ARG_LIST,                 //16
 };
 //TODO: add this back //RULE_OPTIONNAL_LINE_BREAKS,   //2
 
@@ -93,21 +94,23 @@ void rule_free(struct rule *rule);
 
 //TODO: add more rules
 void sh_rule_element(struct rule_array *rules);
+void sh_rule_element_list(struct rule_array *rules);
 void sh_rule_arg_list(struct rule_array *rules);
 void sh_rule_command(struct rule_array *rules);
 void sh_rule_ionumber(struct rule_array *rules);
-void sh_rule_redirection(struct rule_array *rules);
-void sh_rule_redirection_list(struct rule_array *rules);
-void sh_rule_redirection_symbol(struct rule_array *rules);
-void sh_rule_and_concat(struct rule_array *rules);
-void sh_rule_and(struct rule_array *rules);
-void sh_rule_or_concat(struct rule_array *rules);
-void sh_rule_or(struct rule_array *rules);
-void sh_rule_and_or(struct rule_array *rules);
+void sh_rule_ionumber_optionnal(struct rule_array *rules);
+void sh_rule_redir_list(struct rule_array *rules);
+void sh_rule_redir(struct rule_array *rules);
+void sh_rule_redir_symbol(struct rule_array *rules);
+void sh_rule_redir_to(struct rule_array *rules);
 void sh_rule_optionnal_line_breaks(struct rule_array *rules);
 void sh_rule_pipe(struct rule_array *rules);
 void sh_rule_pipeline(struct rule_array *rules);
 void sh_rule_input(struct rule_array *rules);
+void sh_rule_and_or_concat(struct rule_array *rules);
+void sh_rule_or_concat(struct rule_array *rules);
+void sh_rule_and_concat(struct rule_array *rules);
+void sh_rule_and_or(struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);
@@ -165,11 +168,10 @@ void stamp_print(struct stamp *stamp);
 // EXPRESSION OPERATIONS ///////////////////////////////////////////////
 
 int expr_is_epsilon(struct symbol_array *expression);
-int rule_is_epsilon(enum rule_id rule_id, struct rule_array *rules);
-
-struct symbol_array *first(struct symbol_array *expression,
+struct symbol_array *expr_first(struct symbol_array *expression,
         struct rule_array *rules);
-struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules);
+struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules);
+struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules);
 void symbol_array_print(struct symbol_array *s);
 
 // ANALYSIS_TABLE //////////////////////////////////////////////////////

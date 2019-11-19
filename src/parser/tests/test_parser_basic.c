@@ -23,10 +23,10 @@ int main(int argc, char **argv)
     else if (q == 2)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+        token_array_add(exp, token_init(TOKEN_WORD, "Hello"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
-        token_array_add(exp, token_init(TOKEN_WORD, "cat"));
-        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "World!"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct analysis_table *table = table_init();

@@ -63,12 +63,15 @@ int execute_interactive(struct execution_bundle *bundle)
             || lexer->state == STATE_UNFINISHED)
         {
             signal(SIGINT, sigintHandler);//TODO Handle this case
+            printf("lexer_quotes\n");
             input = get_next_line(ps2);
             if (!input)
                 break;
             lexer_add_string(lexer, input);
             token_arrays_fusion(arr, lex(lexer));
         }
+        if (lexer->state != STATE_NONE)
+            lexer->state = STATE_NONE;
         struct ast *ast = tmp_parse(arr);
         if (bundle->options->ast_print_is_set == 1)
         {
