@@ -19,7 +19,7 @@ void fill_line_slot(struct analysis_table *t,
         struct rule *rule, struct rule_array *rules)
 {   
     struct symbol_array **line = t->transformation_mat[rule->rule_id];
-    struct symbol_array *firsts = first(rule->symbols, rules);
+    struct symbol_array *firsts = expr_first(rule->symbols, rules);
     if (firsts)
     {
         for (size_t j = 0; j < firsts->size; j++)
@@ -39,7 +39,7 @@ void fill_line_slot(struct analysis_table *t,
     }
     if (expr_is_epsilon(rule->symbols))
     {
-        struct symbol_array *nexts = next(rule->rule_id, rules);
+        struct symbol_array *nexts = rule_next(rule->rule_id, rules);
         if (nexts)
         {
             for (size_t j = 0; j < nexts->size; j++)

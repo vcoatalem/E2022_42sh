@@ -1,188 +1,149 @@
 #include "parser.h"
 
-static struct symbol_array *get_symbol_first(struct symbol_array *expression,
-    size_t n, struct rule_array *rules)
-{
-    if (n == expression->size)
-    {
-        return NULL;
-    }
-    struct symbol *symbol = expression->array[n];
-    if (symbol->type == SYMBOL_EPSILON)
-    {
-        return NULL;
-    }
-    struct symbol_array *array = symbol_array_init();
-    if (symbol->type == SYMBOL_TOKEN)
-    {
-        if (!symbol_array_contains(array, symbol))
-            symbol_array_add(array, symbol_dup(symbol));
-    }
-    else if (symbol->type == SYMBOL_RULE)
-    {
-        //if first symbol refers to a rule, we search through all the rules
-        //for that symbol and add their first()
-        if (rule_is_epsilon(symbol->rule_id, rules))
-        {
-            //if the rule found is skippable, we return to our expression_list
-            //and do the same operation onto the next symbol
-            struct symbol_array *pass = get_symbol_first(expression, n + 1,
-                    rules);
-            if (pass)
-            {
-                symbol_array_merge(array, pass);
-                symbol_array_free(pass);
-            }
-        }
-        //regardless, of the rule is skippable or not
-        for (size_t i = 0; i < rules->size; i++)
-        {
-            struct rule *current = rules->rules[i];
-            if (current->rule_id == symbol->rule_id)
-            {
-                struct symbol_array *sub = first(
-                    rules->rules[i]->symbols, rules);
-                if (sub)
-                {
-                    symbol_array_merge(array, sub);
-                    symbol_array_free(sub);
-                }
-            }
-        }
-    }
-    return array;
-}
-
-//all terminals(token) that may be at the start of expression
-struct symbol_array *first(struct symbol_array *expression,
-        struct rule_array *rules)
-{
-    struct symbol_array *array = get_symbol_first(expression, 0, rules);
-    if (array)
-    {
-    #if 0
-        /**/printf("first for ");
-        /**/symbol_array_print(expression);
-        /**/printf(": ");
-        /**/symbol_array_print(array);
-        /**/printf("\n");
-    #endif
-    }
-    return array;
-}
-
-//all terminals(tokens) that may follow rule
-struct symbol_array *next(enum rule_id rule_id, struct rule_array *rules)
-{
-    //printf("--- ENTERED NEXT for RULE #%d\n", rule_id);
-    struct symbol_array *array = symbol_array_init();
-    for (size_t i = 0; i < rules->size; i++)
-    {
-        struct symbol_array *expr = (rules->rules[i])->symbols;
-        for (size_t j = 0; j < expr->size; j++)
-        {
-            struct symbol *current = expr->array[j];
-            if (current->type == SYMBOL_RULE && current->rule_id == rule_id)
-            {
-                //we found the rule we are seaching for in an exp
-                if (j < expr->size - 1)
-                {
-                    //if it is not at the end of the expression, get
-                    //the next symbol in the same expression
-                    struct symbol *next_symbol = expr->array[j + 1];
-                    #if 0
-                    /**/printf("RULE #%d; NEXT SYMBOL:", rule_id);
-                    /**/symbol_print(next_symbol);
-                    /**/printf("\n");
-                    #endif
-                    if (next_symbol->type == SYMBOL_TOKEN)
-                    {
-                        if (!symbol_array_contains(array, next_symbol))
-                            symbol_array_add(array, symbol_dup(next_symbol));
-                    }
-                    else if (next_symbol->type == SYMBOL_RULE)
-                    {
-                        if (rule_is_epsilon(next_symbol->rule_id,
-                                rules))
-                        {
-                            //if the rule represented by the next symbol is
-                            //an epsilon-rule, add its next to the current next
-                            struct symbol_array *pass = next(next_symbol->rule_id,
-                                    rules);
-                            if (pass)
-                            {
-                                symbol_array_merge(array, pass);
-                                symbol_array_free(pass);
-                            }
-                        }
-                        //if first symbol refers to a rule, we search through all the rules
-                        //for that symbol and add their first()
-                        for (size_t i = 0; i < rules->size; i++)
-                        {
-                            struct rule *current = rules->rules[i];
-                            if (current->rule_id == next_symbol->rule_id)
-                            {
-                                struct symbol_array *expr = rules->rules[i]->symbols;
-                                struct symbol_array *sub = first(expr, rules);
-                                if (sub)
-                                {
-                                    symbol_array_merge(array, sub);
-                                    symbol_array_free(sub);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    struct symbol *end = symbol_end();
-                    //if the searched symbol is at the end of the expr,
-                    //add symbol_end (?) and first of all the rules of the
-                    //rule_id of the expr
-                    if (!symbol_array_contains(array, end))
-                        symbol_array_add(array, end);
-                    else
-                        free(end);
-                    //except in the case the rule is the same as the current
-                    //expression we are examinating
-                    if (rules->rules[i]->rule_id != current->rule_id)
-                    {
-                        struct symbol_array *next_rule = next(
-                                rules->rules[i]->rule_id, rules);
-                        if (next_rule)
-                        {
-                            symbol_array_merge(array, next_rule);
-                            symbol_array_free(next_rule);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    #if 0
-    /**/printf("EXITING NEXT for RULE #%d with array: ", rule_id);
-    /**/symbol_array_print(array);
-    /**/printf("\n");
-    #endif
-    return array;
-}
-
 int expr_is_epsilon(struct symbol_array *expression)
 {
-    return (*(expression->array))->type == SYMBOL_EPSILON;
+    return expression->array[0]->type == SYMBOL_EPSILON;
 }
 
-int rule_is_epsilon(enum rule_id rule_id, struct rule_array *rules)
+static int rule_is_epsilon(enum rule_id rule_id, struct rule_array *rules)
 {
     for (size_t i = 0; i < rules->size; i++)
     {
         struct rule *curr = rules->rules[i];
         if (curr->rule_id == rule_id)
         {
-            int is_epsilon = expr_is_epsilon(curr->symbols);
-            if (is_epsilon)
+            if (expr_is_epsilon(curr->symbols))
                 return 1;
         }
     }
     return 0;
+}
+
+static struct symbol *get_next_symbol(struct symbol_array *expression,
+        size_t i)
+{
+    if (expression->size == i - 1)
+    {
+        return NULL;
+    }
+    else
+    {
+        return expression->array[i + 1];
+    }
+}
+
+#if 0
+//returns the first() for any symbol in any expression  
+static struct symbol_array *symbol_first(struct symbol_array *expression,
+        size_t i, struct rule_array *rules)
+{
+    struct symbol *s = expression->array[i];
+    struct symbol_array *res = symbol_array_init();
+    if (s->type == SYMBOL_TOKEN)
+    {
+        //if first symbol in expr is a token, add it to the list
+        if (!symbol_array_contains(res, s))
+            symbol_array_add(res, s);
+    }
+    else if (s->type == SYMBOL_RULE)
+    {
+        //if first symbol in expr is a rule, add rule_first() of this rule
+        symbol_array_merge(res, rule_first(s->rule_id, rules));
+        if (rule_is_epsilon(s->rule_id, rules))
+        {
+            symbol_array_merge(res, rule_next(s->rule_id, rules));
+        }
+    }
+    //handling of epsilon expr goes in rule_first
+    return res;
+}
+#endif
+
+struct symbol_array *expr_first(struct symbol_array *expression,
+        struct rule_array *rules)
+{
+    struct symbol *s = expression->array[0];
+    struct symbol_array *res = symbol_array_init();
+    if (s->type == SYMBOL_TOKEN)
+    {
+        //if first symbol in expr is a token, add it to the list
+        if (!symbol_array_contains(res, s))
+            symbol_array_add(res, s);
+    }
+    else if (s->type == SYMBOL_RULE)
+    {
+        //if first symbol in expr is a rule, add rule_first() of this rule
+        symbol_array_merge(res, rule_first(s->rule_id, rules));
+        if (rule_is_epsilon(s->rule_id, rules))
+        {
+            symbol_array_merge(res, rule_next(s->rule_id, rules));
+        }
+    }
+    //handling of epsilon expr goes in rule_first
+    return res;
+}
+
+struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
+{
+    struct symbol_array *res = symbol_array_init();
+    for (size_t i = 0; i < rules->size; i++)
+    {
+        //for each rule in rules...
+        if (rules->rules[i]->rule_id == rule_id)
+        {
+            //get expression of rule of the same id as the rule we called
+            //rule_first() with
+            struct symbol_array *expression = rules->rules[i]->symbols;
+            if (expr_is_epsilon(expression))
+            {
+                //if the expression is epsilon, add rule_next() //TODO: should we ?
+                symbol_array_merge(res, rule_next(rule_id, rules));
+            }
+            else
+            {
+                //else add expr_first()
+                symbol_array_merge(res, expr_first(expression, rules));
+            }
+        }
+    }
+    return res;
+}
+
+struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules)
+{
+    printf("[TABLE] entered rule_next(%d)\n", rule_id);
+    struct symbol_array *res = symbol_array_init();
+    for (size_t i = 0; i < rules->size; i++)
+    {
+        //for each rule in rules..
+        struct rule *rule = rules->rules[i];
+        struct symbol_array *expression = rule->symbols;
+        for (size_t j = 0; j < expression->size; j++)
+        {
+            //for each symbol in rule..
+            struct symbol *symbol = expression->array[j];
+            if (symbol->type == SYMBOL_RULE && symbol->rule_id == rule_id)
+            {
+                // when we find a symbol that represents the rule
+                // we called rule_next with ...
+                struct symbol *next_symbol = get_next_symbol(expression, j);
+                if (!next_symbol)
+                {
+                    //if there is no next symbol, add symbol_end
+                    symbol_array_add(res, symbol_end()); 
+                }
+                else if (next_symbol->type == SYMBOL_TOKEN)
+                {
+                    //if next symbol is a token, add it
+                    symbol_array_add(res, next_symbol);
+                }
+                else if (next_symbol->type == SYMBOL_RULE)
+                {
+                    //if next symbol is a rule, add rule_first()
+                    symbol_array_merge(res, rule_first(rule->rule_id, rules));
+                }
+            }
+        }
+    }
+    return res;
 }

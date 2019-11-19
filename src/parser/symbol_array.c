@@ -40,12 +40,7 @@ int symbol_array_contains(struct symbol_array *symbols, struct symbol *s)
 {
     for (size_t i = 0; i < symbols->size; i++)
     {
-        if (symbols->array[i]->type == SYMBOL_END
-            && s->type == SYMBOL_END)
-        {
-            return 1;
-        }
-        if (symbols->array[i]->type == SYMBOL_TOKEN
+        if (symbols->array[i]->type == s->type
             && symbols->array[i]->token_type == s->token_type)
         {
             return 1;
@@ -62,10 +57,12 @@ void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2)
     for (size_t i = 0; i < s2->size; i++)
     {
         if (!symbol_array_contains(s1, s2->array[i]))
-        {
-          symbol_array_add(s1, symbol_dup(s2->array[i]));
-        }
+            symbol_array_add(s1, symbol_dup(s2->array[i]));
     }
+    //if s2 contains a `$` but s1 does not
+    if (!symbol_array_contains(s1, NULL) && symbol_array_contains(s2, NULL))
+        symbol_array_add(s1, symbol_end());
+    symbol_array_free(s2);
 }
 
 void symbol_array_free(struct symbol_array *s)
