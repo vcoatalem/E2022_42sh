@@ -34,6 +34,7 @@ int execute_stdin(struct execution_bundle *bundle)
         }
         ast_execute(ast);
         //token_array_print(arr, stdout);
+        ast_free(ast);
         token_array_free(arr);
         free(line);
     }
@@ -79,6 +80,7 @@ int execute_interactive(struct execution_bundle *bundle)
         }
         ast_execute(ast);
         //token_array_print(arr, stdout);
+        ast_free(ast);
         token_array_free(arr);
         free(input);
         resetlexer = 0;
@@ -100,6 +102,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
         ast_dot_print(ast, "ast.dot");
     }
     ast_execute(ast);
+    ast_free(ast);
     //token_array_print(arr, stdout);
     token_array_free(arr);
     return BASH_RETURN_OK;
@@ -140,7 +143,11 @@ int execute_script(struct execution_bundle *bundle, char* script, int create)
     //run lexer + parser
     //token_array_print(arr, stdout);
     if (arr->size)
-        ast_execute(tmp_parse(arr));
+        {
+            struct ast *ast = tmp_parse(arr);
+            ast_execute(ast);
+            ast_free(ast);
+        }
 
     token_array_free(arr);
     return BASH_RETURN_OK;
