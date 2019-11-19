@@ -57,6 +57,11 @@ void ast_free(struct ast *ast);
 
 void ast_dot_print(struct ast *ast, const char *output);
 
+void ast_clean(struct ast *ast);
+
+char **get_arg_list(struct ast *ast);
+
+char **get_redir_list(struct ast *ast);
 
 // AST EXECUTION
 
