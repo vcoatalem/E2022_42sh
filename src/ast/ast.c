@@ -20,8 +20,15 @@ struct ast *ast_init(enum node_type type, char *value,
     else
     {
         new_ast->node_type = NODE_VALUE;
-        new_ast->content.value = calloc(1, strlen(value) + 1);
-        strcpy(new_ast->content.value, value);
+
+        if (value != NULL)
+        {
+            new_ast->content.value = calloc(1, strlen(value) + 1);
+             strcpy(new_ast->content.value, value);
+        }
+
+        else
+            new_ast->content.value = NULL;
     }
     new_ast->forest = NULL;
     new_ast->nb_children = 0;
@@ -66,3 +73,66 @@ void ast_free(struct ast *ast)
     free(ast);
 }
 
+void ast_clean(struct ast *ast)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->nb_children == 1)
+        {
+            free(ast->forest[i]->forest[0]);
+            free(ast->forest[i]);
+            ast->nb_children--;
+        }
+
+        else
+            ast_clean(ast->forest[i]);
+    }
+}
+
+char **get_arg_list(struct ast *ast)
+{
+    char **arg_list = calloc(1, sizeof(char *));
+    size_t index = 0;
+
+    while (ast->nb_children == 2)
+    {
+        for (size_t i = 0; i < 2; i++)
+        {
+            if (strcmp(ast->forest[i]->content.value, "arg_list") == 0)
+            {
+                int j = i == 0 ? 1 : 0;
+                arg_list[index] = ast->forest[j]->content.value;
+                arg_list = realloc(arg_list, (index + 1) * sizeof(char *));
+                index++;
+                ast = ast->forest[i];
+                break;
+            }
+        }
+    }
+
+    return arg_list;
+}
+
+char **get_redir_list(struct ast *ast)
+{
+    char **redir_list = calloc(1, sizeof(char *));
+    size_t index = 0;
+
+    while (ast->nb_children == 2)
+    {
+        for (size_t i = 0; i < 2; i++)
+        {
+            if (strcmp(ast->forest[i]->content.value, "redir_list") == 0)
+            {
+                int j = i == 0 ? 1 : 0;
+                redir_list[index] = ast->forest[j]->content.value;
+                redir_list = realloc(arg_list, (index + 1) * sizeof(char *));
+                index++;
+                ast = ast->forest[i];
+                break;
+            }
+        }
+    }
+
+    return redir_list;
+}
