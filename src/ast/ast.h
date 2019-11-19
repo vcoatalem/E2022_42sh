@@ -16,16 +16,17 @@ enum node_type
 enum operator_type
 {
     OPERATOR_NONE,
+    OPERATOR_COMMAND,
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
     OPERATOR_IF,
+    OPERATOR_IF_BODY,
     OPERATOR_THEN,
+    OPERATOR_ELSE,
     OPERATOR_WHILE,
     OPERATOR_FOR,
     OPERATOR_UNTIL,
-    OPERATOR_IF_BODY,
-    OPERATOR_ELSE,
     OPERATOR_DO,
     OPERATOR_CASE,
     //while, until, ..

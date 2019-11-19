@@ -20,8 +20,15 @@ struct ast *ast_init(enum node_type type, char *value,
     else
     {
         new_ast->node_type = NODE_VALUE;
-        new_ast->content.value = calloc(1, strlen(value) + 1);
-        strcpy(new_ast->content.value, value);
+
+        if (value != NULL)
+        {
+            new_ast->content.value = calloc(1, strlen(value) + 1);
+             strcpy(new_ast->content.value, value);
+        }
+
+        else
+            new_ast->content.value = NULL;
     }
     new_ast->forest = NULL;
     new_ast->nb_children = 0;
@@ -66,3 +73,17 @@ void ast_free(struct ast *ast)
     free(ast);
 }
 
+void ast_clean(struct ast *ast)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->content.value == NULL)
+        {
+            ast->nb_children--;
+            free(ast->forest[i]);
+        }
+
+        else
+            ast_clean(ast->forest[i]);
+    }
+}
