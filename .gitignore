@@ -12,3 +12,4 @@ CMakeLists/
 doc/html/
 doc/latex/
 a.out
+.gdb_history
