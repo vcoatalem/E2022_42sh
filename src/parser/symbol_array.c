@@ -77,6 +77,11 @@ void symbol_array_free(struct symbol_array *s)
 
 void symbol_array_print(struct symbol_array *s)
 {
+    if (!s)
+    {
+        printf("NULL");
+        return;
+    }
     printf("[");
     for (size_t i = 0; i < s->size; i++)
     {
