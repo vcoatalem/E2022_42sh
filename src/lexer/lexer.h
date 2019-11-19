@@ -23,7 +23,8 @@
  * \enum lexer_state
  * \brief enum contain state of lexer
  *
- * Contain int that corresped to a state for the lexer
+ * Contain int that corresponded to a state for the lexer
+ *
  *
  */
 enum lexer_state
@@ -74,7 +75,7 @@ struct token_array
 
 //main lexing function
 /**
- * \brief check the type of the token
+ * \brief check token type
  *
  * \param *str string in the input,
  * \param iterator where the program is in the string
@@ -100,7 +101,7 @@ struct token *token_init(enum token_type type, char *value);
  *
  * \param *token token that needs to be released
  *
- * \return Nothing
+ * \return None
  */
 void token_free(struct token *token);
 
@@ -109,7 +110,7 @@ void token_free(struct token *token);
  *
  *allocate memory for an object token_array and create an object token_array
  *
- * \return token_array new token_array
+ * \return *token_array a new array of token
  */
 struct token_array *token_array_init();
 
@@ -133,7 +134,7 @@ void token_array_free(struct token_array *arr);
  * \param *arr the token_array where we add the new token
  * \param *token the token that will be added to the token_array
  *
- * \return Nothing
+ * \return None
  */
 void token_array_add(struct token_array *arr, struct token *token);
 
@@ -147,7 +148,7 @@ void token_array_add(struct token_array *arr, struct token *token);
  * \param *arr1 the token_array that was already completed
  * \param *arr2 the token_array that has been filled
  *
- * \return Nothing
+ * \return None
  */
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2);
 
@@ -159,7 +160,7 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2);
  * \param *arr token_array which will be print
  * \param *out FILE where the token_array will be print
  *
- * \return Nothing
+ * \return None
  */
 void token_array_print(struct token_array *arr, FILE *out);
 
