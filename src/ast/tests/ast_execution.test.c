@@ -9,15 +9,15 @@ static struct ast *ast_command_should_succeed(void)
 {
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
 
-    struct ast *ast_cmd = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    struct ast *ast_cmd = ast_init(NODE_VALUE, "command", OPERATOR_NONE);
     ast_add_child(ast1, ast_cmd);
 
-    struct ast *ast_redir = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
-    struct ast *ast_argv = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *ast_redir = ast_init(NODE_VALUE, "redir_list", OPERATOR_NONE);
+    struct ast *ast_argv = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
     ast_add_child(ast_cmd, ast_argv);
     ast_add_child(ast_cmd, ast_redir);
 
-    struct ast *arg1 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
+    struct ast *arg1 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
     struct ast *arg2 = ast_init(NODE_VALUE, "foo", OPERATOR_NONE);
     ast_add_child(ast_argv, arg1);
     ast_add_child(ast_argv, arg2);
@@ -36,29 +36,29 @@ static struct ast *ast_if(void)
     ast_add_child(ast1, ast_then);
     ast_add_child(ast1, ast_else);
 
-    struct ast *ast_cmd_if = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
-    struct ast *ast_cmd_then = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
-    struct ast *ast_cmd_else = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    struct ast *ast_cmd_if = ast_init(NODE_VALUE, "command", OPERATOR_NONE);
+    struct ast *ast_cmd_then = ast_init(NODE_VALUE, "command", OPERATOR_NONE);
+    struct ast *ast_cmd_else = ast_init(NODE_VALUE, "command", OPERATOR_NONE);
     ast_add_child(ast_if_body, ast_cmd_if);
     ast_add_child(ast_then, ast_cmd_then);
     ast_add_child(ast_else, ast_cmd_else);
 
-    struct ast *ast_redir_if = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
-    struct ast *ast_argv_if = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *ast_redir_if = ast_init(NODE_VALUE, "redir_list", OPERATOR_NONE);
+    struct ast *ast_argv_if = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
     ast_add_child(ast_cmd_if, ast_redir_if);
     ast_add_child(ast_cmd_if, ast_argv_if);
 
-    struct ast *ast_redir_then = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
-    struct ast *ast_argv_then = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *ast_redir_then = ast_init(NODE_VALUE, "redir_list", OPERATOR_NONE);
+    struct ast *ast_argv_then = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
     ast_add_child(ast_cmd_then, ast_redir_then);
     ast_add_child(ast_cmd_then, ast_argv_then);
 
-    struct ast *ast_redir_else = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
-    struct ast *ast_argv_else = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *ast_redir_else = ast_init(NODE_VALUE, "redir_list", OPERATOR_NONE);
+    struct ast *ast_argv_else = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
     ast_add_child(ast_cmd_else, ast_redir_else);
     ast_add_child(ast_cmd_else, ast_argv_else);
 
-    struct ast *arg1 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
+    struct ast *arg1 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
     struct ast *arg2 = ast_init(NODE_VALUE, "Hello", OPERATOR_NONE);
     //struct ast *redir_arg1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_NONE);
     ast_add_child(ast_argv_if, arg1);
@@ -72,7 +72,7 @@ static struct ast *ast_if(void)
     ast_add_child(ast_argv_then, arg4);
     //ast_add_child(ast_redir_then, redir_arg2);
 
-    struct ast *arg5 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
+    struct ast *arg5 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
     struct ast *arg6 = ast_init(NODE_VALUE, "there!", OPERATOR_NONE);
     //struct ast *redir_arg3 = ast_init(NODE_OPERATOR, NULL, OPERATOR_NONE);
     ast_add_child(ast_argv_else, arg5);
@@ -88,11 +88,11 @@ static struct ast *ast_command_should_fail(void)
 {
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_PIPE);
 
-    struct ast *ast_cmd = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    struct ast *ast_cmd = ast_init(NODE_VALUE, "command", OPERATOR_NONE);
     ast_add_child(ast1, ast_cmd);
 
-    struct ast *ast_redir = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
-    struct ast *ast_argv = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *ast_redir = ast_init(NODE_VALUE, "redir_list", OPERATOR_NONE);
+    struct ast *ast_argv = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
     ast_add_child(ast_cmd, ast_argv);
     ast_add_child(ast_cmd, ast_redir);
 
