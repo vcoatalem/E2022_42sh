@@ -6,17 +6,37 @@
 
 
 
-struct HashTableVar *initHashTable(size_t size)
+struct HashTableVar *init_hash_table(size_t size)
 {
     struct HashTableVar* ht = malloc(sizeof(struct HashTableVar));
     ht->size = size;
     ht->items = calloc(1, sizeof(struct HashedVar) * size);
     return ht;
-
 }
 
 
-size_t hash(char *name, size_t sizeHT) //add together each char of name by multiplying each char by is index
+void free_hash_table(struct HashTableVar *ht)
+{
+    for (size_t i = 0; i < ht->size; ++i)
+    {
+        struct HashedVar *items = ht->items[i];
+        while(items)
+        {
+            struct HashedVar *itemtofree = items;
+            free(itemtofree->name);
+            free(itemtofree->data);
+            //free(itemtofree->next);
+            items = items->next;
+            free(itemtofree);
+        }
+        free(items);
+    }
+    free(ht->items);
+    free(ht);
+}
+
+//add together each char of name by multiplying each char by is index
+size_t hash(char *name, size_t sizeHT)
 {
     size_t result = 0;
     int i = 0;
@@ -26,20 +46,10 @@ size_t hash(char *name, size_t sizeHT) //add together each char of name by multi
     }
     return result % sizeHT;
 }
-/*
-size_t hash(char *name, size_t sizeHT) //add each ascii char of name together * the size of the the name
-{
-    size_t result = 0;
-    int i = 0;
-    for (; name[i]; ++i)
-    {
-        result += name[i];
-    }
-    result *= i;
-    return result % sizeHT;
-}*/
 
-void insertVariable(struct HashTableVar *ht, char *name, char *data)
+
+
+void insert_variable(struct HashTableVar *ht, char *name, char *data)
 {
     size_t key = hash(name, ht->size);
     struct HashedVar *items = ht->items[key];
@@ -47,8 +57,8 @@ void insertVariable(struct HashTableVar *ht, char *name, char *data)
     if (!items)
     {
         struct HashedVar *newitem = calloc(1, sizeof(struct HashedVar));
-        newitem->name = name;
-        newitem->data = data;
+        newitem->name = strdup(name);
+        newitem->data = strdup(data);
         newitem->next = NULL;
         ht->items[key] = newitem;
         return;
@@ -60,19 +70,20 @@ void insertVariable(struct HashTableVar *ht, char *name, char *data)
     }
     if (strcmp(items->name, name) == 0) //We change the data of an existing variable
     {
-        items->data = data;
+        free(items->data);
+        items->data = strdup(data);
     }
     else
     {
         struct HashedVar *newitem = calloc(1, sizeof(struct HashedVar));
-        newitem->name = name;
-        newitem->data = data;
+        newitem->name = strdup(name);
+        newitem->data = strdup(data);
         newitem->next = NULL;
         items->next = newitem;
     }
 }
 
-char *getVariable(struct HashTableVar *ht, char *name)
+char *get_variable(struct HashTableVar *ht, char *name)
 {
     size_t key = hash(name, ht->size);
     struct HashedVar *items = ht->items[key];
@@ -82,17 +93,14 @@ char *getVariable(struct HashTableVar *ht, char *name)
     {
         items = items->next;
     }
-    if (strcmp(items->name, name) == 0) //We change the data of an existing variable
+    if (strcmp(items->name, name) == 0)
     {
         return items->data;
     }
     return "";
-
-
-
 }
 
-void printHashTable(struct HashTableVar *ht)
+void print_hash_table(struct HashTableVar *ht)
 {
     printf("size = %ld\n", ht->size);
     for (size_t i = 0; i < ht->size; ++i)
@@ -112,14 +120,17 @@ void printHashTable(struct HashTableVar *ht)
 
 int main()
 {
-    struct HashTableVar *HT = initHashTable(5);
-    insertVariable(HT, "lol", "issou");
-    insertVariable(HT, "echo", "2");
-    insertVariable(HT, "echoa", "2");
-    insertVariable(HT, "echo", "42");
-    insertVariable(HT, "edho", "42");
-    insertVariable(HT, "edzeezz", "42");
-    printf("lol :%s\n", getVariable(HT, "edzeezza"));
-    printHashTable(HT);
+    char *a = "edzeezza";
+    char *b = "CHHHHARGGGEEERRR!!";
+    struct HashTableVar *HT = init_hash_table(5);
+    insert_variable(HT, "lol", "issou");
+    insert_variable(HT, "echo", "2");
+    insert_variable(HT, "echoa", "2");
+    insert_variable(HT, "echo", "42");
+    insert_variable(HT, "edho", "42");
+    insert_variable(HT, a, b);
+    printf("lol :%s\n", get_variable(HT, "edzeezza"));
+    print_hash_table(HT);
+    free_hash_table(HT);
 }
 
