@@ -60,6 +60,8 @@ void ast_dot_print(struct ast *ast, const char *output);
 
 void ast_clean(struct ast *ast);
 
+struct ast *get_child_of_name(struct ast *ast, const char *name);
+
 char **get_arg_list(struct ast *ast);
 
 char **get_redir_list(struct ast *ast);

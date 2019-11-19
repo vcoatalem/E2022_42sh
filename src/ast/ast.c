@@ -93,6 +93,9 @@ void ast_clean(struct ast *ast)
 
 struct ast *get_child_of_name(struct ast *ast, const char *name)
 {
+    if (ast == NULL)
+        return NULL;
+
     for (size_t i = 0; i < ast->nb_children; i++)
     {
         if (ast->forest[i]->node_type == NODE_VALUE
