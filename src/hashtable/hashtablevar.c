@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "hashtable.h"
+#include "hashtablevar.h"
 
 
 

@@ -1,5 +1,5 @@
-#ifndef HASHTABLE_H
-#define HASHTABLE_H
+#ifndef HASHTABLEVAR_H
+#define HASHTABLEVAR_H
 
 
 struct HashedVar
@@ -48,7 +48,7 @@ void free_hash_table(struct HashTableVar *ht);
  *
  * \return size_t the hashed number
  */
-size_t hash(char *name, size_t sizeHT);
+size_t hashf(char *name, size_t sizeHT);
 
 /**
  * \brief insert_variable

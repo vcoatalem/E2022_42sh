@@ -1,19 +1,19 @@
-#ifndef HASHTABLE_H
-#define HASHTABLE_H
+#ifndef HASHTABLEVAR_H
+#define HASHTABLEVAR_H
 
 
-struct HashedVar
+struct hashed_func
 {
     //size_t key;
     char *name;
-    char *data;
-    struct HashedVar *next;
+    struct ast *ast;
+    struct hashed_func *next;
 };
 
-struct HashTableVar
+struct hash_table_func
 {
     size_t size;
-    struct HashedVar **items;
+    struct hashed_func **items;
 };
 
 /**
@@ -26,7 +26,7 @@ struct HashTableVar
  *
  * \return *token_array token_array of the lexer's string
  */
-struct HashTableVar *init_hash_table(size_t size);
+struct hash_table_func *init_hash_tablefunc(size_t size);
 /**
  * \brief free a HashTable
  *
@@ -37,18 +37,7 @@ struct HashTableVar *init_hash_table(size_t size);
  *
  * \return void
  */
-void free_hash_table(struct HashTableVar *ht);
-/**
- * \brief hashing function
- *
- * function that hash the name into a number
- *
- *
- * \param char *name name to be hashed, size_t sizeHT size of the HashTable
- *
- * \return size_t the hashed number
- */
-size_t hash(char *name, size_t sizeHT);
+void free_hash_tablefunc(struct hash_table_func *ht);
 
 /**
  * \brief insert_variable
@@ -60,7 +49,7 @@ size_t hash(char *name, size_t sizeHT);
  * char *data data of the variable
  * \return void
  */
-void insert_variable(struct HashTableVar *ht, char *name, char *data);
+void insert_func(struct hash_table_func *ht, char *name, struct ast *ast);
 /**
  * \brief get_variable
  *
@@ -71,9 +60,9 @@ void insert_variable(struct HashTableVar *ht, char *name, char *data);
  *
  * \return char * the data of the variable
  */
-char *get_variable(struct HashTableVar *ht, char *name);
+struct ast *get_func(struct hash_table_func *ht, char *name);
 
-void print_hash_table(struct HashTableVar *ht);
+void print_hash_table(struct hash_table_func *ht);
 
 
 #endif

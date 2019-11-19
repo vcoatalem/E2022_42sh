@@ -1,7 +1,7 @@
 #include "../ast.h"
 #include "../../execution/execution.h"
 
-struct ast *find_op_if_body(struct ast *ast)
+static struct ast *find_op_if_body(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
@@ -12,7 +12,7 @@ struct ast *find_op_if_body(struct ast *ast)
     return NULL;
 }
 
-struct ast *find_op_then(struct ast *ast)
+static struct ast *find_op_then(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
@@ -23,7 +23,7 @@ struct ast *find_op_then(struct ast *ast)
     return NULL;
 }
 
-struct ast *find_op_else(struct ast *ast)
+static struct ast *find_op_else(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {

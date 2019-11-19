@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <err.h>
 #include <errno.h>
+#include "../execution/execution.h"
 
 struct ast *ast_init(enum node_type type, char *value,
         enum operator_type op_type)
@@ -77,7 +78,8 @@ void ast_clean(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->nb_children == 1)
+        if (ast->forest[i]->nb_children == 1
+                && ast->forest[i]->forest[0]->node_type == NODE_EPSILON)
         {
             free(ast->forest[i]->forest[0]);
             free(ast->forest[i]);
@@ -91,6 +93,9 @@ void ast_clean(struct ast *ast)
 
 struct ast *get_child_of_name(struct ast *ast, const char *name)
 {
+    if (ast == NULL)
+        return NULL;
+
     for (size_t i = 0; i < ast->nb_children; i++)
     {
         if (ast->forest[i]->node_type == NODE_VALUE
@@ -123,7 +128,19 @@ char **get_arg_list(struct ast *ast)
 
 //do not use this for now, will need more work later on
 //should initialise struct redirection[] (from execution/ module), not string[]
+
 #if 0
+struct redirection **get_redirections(struct ast *ast)
+{
+    struct redirection **redir_list = NULL;
+    size_t index = 0;
+
+    while (ast->nb_children == 2)
+    {
+        struct ast *sub_list = get_child_of_name(ast, "redir_list");
+        struct ast *redirection = get_child_of_name(ast, "redir");
+    }
+}
 
 char **get_redir_list(struct ast *ast)
 {
