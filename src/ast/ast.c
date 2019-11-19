@@ -120,6 +120,9 @@ char **get_arg_list(struct ast *ast)
     return arg_list;
 }
 
+
+//do not use this for now, will need more work later on
+//should initialise struct redirection[] (from execution/ module), not string[]
 char **get_redir_list(struct ast *ast)
 {
     char **redir_list = calloc(1, sizeof(char *));
