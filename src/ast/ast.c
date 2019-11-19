@@ -89,27 +89,34 @@ void ast_clean(struct ast *ast)
     }
 }
 
-char **get_arg_list(struct ast *ast)
+struct ast *get_child_of_name(struct ast *ast, const char *name)
 {
-    char **arg_list = calloc(1, sizeof(char *));
-    size_t index = 0;
-
-    while (ast->nb_children == 2)
+    for (size_t i = 0; i < ast->nb_children; i++)
     {
-        for (size_t i = 0; i < 2; i++)
+        if (ast->forest[i]->type == NODE_VALUE
+                && !(strcmp(ast->forest[i]->content.value, name)))
         {
-            if (strcmp(ast->forest[i]->content.value, "arg_list") == 0)
-            {
-                int j = i == 0 ? 1 : 0;
-                arg_list[index] = ast->forest[j]->content.value;
-                arg_list = realloc(arg_list, (index + 1) * sizeof(char *));
-                index++;
-                ast = ast->forest[i];
-                break;
-            }
+            return ast->forest[i];
         }
     }
+    return NULL;
+}
 
+char **get_arg_list(struct ast *ast)
+{
+    char **arg_list = NULL;
+    size_t index = 0;
+    while (ast->nb_children == 2)
+    {
+        struct ast *sub_list = get_child_of_name(ast, "arg_list");
+        struct ast *element = get_child_of_name(ast, "element");
+        //element contains one child; the value to be appended to list
+        arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
+        arg_list[index] = ast->forest[j]->content.value;
+        arg_list[index + 1] = NULL;
+        index++;
+        ast = sub_list;
+    }
     return arg_list;
 }
 
