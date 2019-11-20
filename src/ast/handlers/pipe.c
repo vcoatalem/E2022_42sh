@@ -28,6 +28,7 @@ int ast_handle_pipe(struct ast *ast)
         struct command *cmd = command_init(args, NULL);
         pipe_add_command(pipe, cmd);
     }
-
-    return pipe_execute(pipe);
+    int result = pipe_execute(pipe);
+    pipe_free(pipe);
+    return result;
 }

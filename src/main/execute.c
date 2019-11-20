@@ -36,8 +36,8 @@ int execute_stdin(struct execution_bundle *bundle)
         //token_array_print(arr, stdout);
         ast_free(ast);
         token_array_free(arr);
-        free(line);
     }
+    free(line);
     return BASH_RETURN_OK;
 }
 

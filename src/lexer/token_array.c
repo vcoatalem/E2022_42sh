@@ -20,7 +20,7 @@ void token_array_free(struct token_array *arr)
     for(size_t i = 0; i < arr->size; i++)
     {
         //TODO add free for token
-        free(arr->tok_array[i]);
+        token_free(arr->tok_array[i]);
     }
     free(arr->tok_array);
     free(arr);
@@ -86,7 +86,7 @@ int is_separator(char c)
 
 int is_space(char c)
 {
-    return (c == ' ' || c == '\t');
+    return (c == ' ' || c == '\t' || c == '\n');
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
@@ -148,7 +148,9 @@ struct token_array *token_array_create(char *str)
                 index = 0;
             }
         }
+
     }
+
     if (index > 0)
         token_array_add(arr, token_init(
             token_check(buffer, 0, buffer),buffer));
