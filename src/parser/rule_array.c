@@ -38,6 +38,7 @@ struct rule_array *rule_array_build(void)
     struct rule_array *rules = rule_array_init();
     //add all preconstructed rules here
     sh_rule_input(rules);
+    sh_rule_optionnal_line_breaks(rules);
     sh_rule_and_or(rules);
     sh_rule_and_or_concat(rules);
     sh_rule_and_concat(rules);
@@ -52,5 +53,8 @@ struct rule_array *rule_array_build(void)
     sh_rule_ionumber(rules);
     sh_rule_element(rules);
     sh_rule_arg_list(rules);
+    sh_rule_list_delim(rules);
+    sh_rule_list(rules);
+    sh_rule_list_concat(rules);
     return rules;
 }

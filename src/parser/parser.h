@@ -11,25 +11,29 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 16
+#define NB_RULES 20
 enum rule_id //RULES TO BE ADDED
 {
     RULE_NONE,                     //0
-    RULE_INPUT,                    //1
-    RULE_AND_OR,                   //2
-    RULE_AND_OR_CONCAT,            //3 
-    RULE_AND_CONCAT,               //4
-    RULE_OR_CONCAT,                //5
-    RULE_PIPELINE,                 //6
-    RULE_PIPE,                     //7
-    RULE_COMMAND,                  //8
-    RULE_REDIR_LIST,               //9
-    RULE_REDIR,                    //10
-    RULE_REDIR_SYMBOL,             //11
-    RULE_REDIR_TO,                 //12
-    RULE_IONUMBER,                 //13
-    RULE_ELEMENT,                  //14
-    RULE_ARG_LIST,                 //15
+    RULE_LINE_BREAKS,              //1
+    RULE_INPUT,                    //2
+    RULE_LIST_DELIM,               //3
+    RULE_LIST_CONCAT,              //4
+    RULE_LIST,                     //5
+    RULE_AND_OR,                   //6
+    RULE_AND_OR_CONCAT,            //7
+    RULE_AND_CONCAT,               //8
+    RULE_OR_CONCAT,                //9
+    RULE_PIPELINE,                 //10
+    RULE_PIPE,                     //11
+    RULE_COMMAND,                  //12
+    RULE_REDIR_LIST,               //13
+    RULE_REDIR,                    //14
+    RULE_REDIR_SYMBOL,             //15
+    RULE_REDIR_TO,                 //16
+    RULE_IONUMBER,                 //17
+    RULE_ELEMENT,                  //18
+    RULE_ARG_LIST,                 //19
 };
 //TODO: add this back //RULE_OPTIONNAL_LINE_BREAKS,   //2
 
@@ -111,6 +115,9 @@ void sh_rule_and_or_concat(struct rule_array *rules);
 void sh_rule_or_concat(struct rule_array *rules);
 void sh_rule_and_concat(struct rule_array *rules);
 void sh_rule_and_or(struct rule_array *rules);
+void sh_rule_list_delim(struct rule_array *rules);
+void sh_rule_list(struct rule_array *rules);
+void sh_rule_list_concat(struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);
