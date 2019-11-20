@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 17
+#define NB_RULES 16
 enum rule_id //RULES TO BE ADDED
 {
     RULE_NONE,                     //0
@@ -29,8 +29,7 @@ enum rule_id //RULES TO BE ADDED
     RULE_REDIR_TO,                 //12
     RULE_IONUMBER,                 //13
     RULE_ELEMENT,                  //14
-    RULE_ELEMENT_LIST,             //15
-    RULE_ARG_LIST,                 //16
+    RULE_ARG_LIST,                 //15
 };
 //TODO: add this back //RULE_OPTIONNAL_LINE_BREAKS,   //2
 
@@ -71,6 +70,7 @@ struct symbol_array *symbol_array_init(void);
 struct symbol_array *symbol_array_dup(struct symbol_array *symbols);
 void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2);
 void symbol_array_add(struct symbol_array *symbols, struct symbol *s);
+void symbol_array_add_if_not_in(struct symbol_array *symbols, struct symbol *s);
 void symbol_array_free(struct symbol_array *arr);
 int symbol_array_contains(struct symbol_array *arr, struct symbol *s);
 
@@ -94,7 +94,6 @@ void rule_free(struct rule *rule);
 
 //TODO: add more rules
 void sh_rule_element(struct rule_array *rules);
-void sh_rule_element_list(struct rule_array *rules);
 void sh_rule_arg_list(struct rule_array *rules);
 void sh_rule_command(struct rule_array *rules);
 void sh_rule_ionumber(struct rule_array *rules);

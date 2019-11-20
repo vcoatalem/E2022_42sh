@@ -96,6 +96,7 @@ void sh_rule_redir_list(struct rule_array *rules)
             NULL);
     struct rule *rule_repeat = rule_build(RULE_REDIR_LIST,
             symbol_create(0, RULE_REDIR_LIST),
+            symbol_create(0, RULE_REDIR),
             NULL);
     rule_array_add(rules, rule);
     rule_array_add(rules, rule_pass);

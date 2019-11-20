@@ -9,27 +9,17 @@ void sh_rule_element(struct rule_array *rules)
     rule_array_add(rules, rule);
 }
 
-// ELEMENT_LIST -> ELEMENT ELEMENT_LIST
-// ELEMENT_LIST -> eps
-void sh_rule_element_list(struct rule_array *rules)
-{
-    struct rule *rule = rule_build(RULE_ELEMENT_LIST,
-            symbol_create(0, RULE_ELEMENT),
-            symbol_create(0, RULE_ELEMENT_LIST),
-            NULL);
-    struct rule *rule_eps = rule_build(RULE_ELEMENT_LIST,
-            symbol_epsilon(),
-            NULL);
-    rule_array_add(rules, rule);
-    rule_array_add(rules, rule_eps);
-}
-
 // ARG_LIST -> ELEMENT ELEMENT_LIST
+// ARG_LIST -> epsilon
 void sh_rule_arg_list(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_ARG_LIST,
             symbol_create(0, RULE_ELEMENT),
-            symbol_create(0, RULE_ELEMENT_LIST),
+            symbol_create(0, RULE_ARG_LIST),
+            NULL);
+    struct rule *rule_eps = rule_build(RULE_ARG_LIST,
+            symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);
+    rule_array_add(rules, rule_eps);
 }

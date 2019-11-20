@@ -4,7 +4,7 @@ struct symbol_array *symbol_array_init(void)
 {
     int initial_capacity = 4;
     struct symbol_array *res = calloc(1, sizeof(struct symbol_array));
-    res->array = calloc(1, sizeof(void*) * initial_capacity);
+    res->array = calloc(initial_capacity, sizeof(void*));
     res->capacity = initial_capacity;
     res->size = 0;
     return res;
@@ -21,6 +21,26 @@ void symbol_array_add(struct symbol_array *symbols, struct symbol *s)
     }
     symbols->array[symbols->size - 1] = s;
 }
+
+void symbol_array_add_if_not_in(struct symbol_array *symbols,
+        struct symbol *s)
+{
+    if (symbol_array_contains(symbols, s))
+    {
+        if (s)
+        {
+            free(s);
+        }
+        return;
+    }
+    if (s)
+    {
+        symbol_array_add(symbols, s);
+    }
+    else
+        symbol_array_add(symbols, symbol_end());
+}
+
 
 struct symbol_array *symbol_array_dup(struct symbol_array *symbols)
 {
@@ -40,7 +60,14 @@ int symbol_array_contains(struct symbol_array *symbols, struct symbol *s)
 {
     for (size_t i = 0; i < symbols->size; i++)
     {
-        if (symbols->array[i]->type == s->type
+        if (!s)
+        {
+            if (symbols->array[i]->type == SYMBOL_END)
+            {
+                return 1;
+            }
+        }
+        else if (symbols->array[i]->type == s->type
             && symbols->array[i]->token_type == s->token_type)
         {
             return 1;
@@ -56,8 +83,8 @@ void symbol_array_merge(struct symbol_array *s1, struct symbol_array *s2)
         return;
     for (size_t i = 0; i < s2->size; i++)
     {
-        if (!symbol_array_contains(s1, s2->array[i]))
-            symbol_array_add(s1, symbol_dup(s2->array[i]));
+        if (s2->array[i]->type == SYMBOL_TOKEN)
+            symbol_array_add_if_not_in(s1, symbol_dup(s2->array[i]));
     }
     //if s2 contains a `$` but s1 does not
     if (!symbol_array_contains(s1, NULL) && symbol_array_contains(s2, NULL))
