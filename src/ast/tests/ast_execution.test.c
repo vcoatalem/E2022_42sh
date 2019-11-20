@@ -83,6 +83,37 @@ static struct ast *ast_if(void)
     return ast1;
 }
 
+static struct ast *ast_and(void)
+{
+    struct ast *ast = ast_init(NODE_OPERATOR, NULL, OPERATOR_AND);
+
+    struct ast *cmd1 = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    struct ast *cmd2 = ast_init(NODE_VALUE, "cmd", OPERATOR_NONE);
+    ast_add_child(ast, cmd1);
+    ast_add_child(ast, cmd2);
+
+    struct ast *redir1 = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
+    struct ast *argv1 = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    struct ast *redir2 = ast_init(NODE_VALUE, "redir", OPERATOR_NONE);
+    struct ast *argv2 = ast_init(NODE_VALUE, "argv", OPERATOR_NONE);
+    ast_add_child(cmd1, redir1);
+    ast_add_child(cmd1, argv1);
+    ast_add_child(cmd2, redir2);
+    ast_add_child(cmd2, argv2);
+
+    struct ast *arg1 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
+    struct ast *arg2 = ast_init(NODE_VALUE, "foo", OPERATOR_NONE);
+    ast_add_child(argv1, arg1);
+    ast_add_child(argv1, arg2);
+
+    struct ast *arg3 = ast_init(NODE_VALUE, "cat", OPERATOR_NONE);
+    struct ast *arg4 = ast_init(NODE_VALUE, "bar", OPERATOR_NONE);
+    ast_add_child(argv2, arg3);
+    ast_add_child(argv2, arg4);
+
+    return ast;
+}
+
 //use this to represent a command that fails
 static struct ast *ast_command_should_fail(void)
 {
@@ -111,19 +142,17 @@ int main(int argc, char **argv)
     struct ast *root = ast_init(NODE_OPERATOR, NULL, OPERATOR_AND);
     int q = argc == 1 ? 0 : atoi(*(argv + 1));
     if (q == 0)
-    {
-        //cat foo
         ast_add_child(root, ast_command_should_succeed());
-    }
+
     else if (q == 1)
-    {
-        //echo Hello World
         ast_add_child(root, ast_command_should_fail());
-    }
+
     else if (q == 2)
-    {
         ast_add_child(root, ast_if());
-    }
+
+    else if (q == 3)
+        ast_add_child(root, ast_and());
+
     ast_dot_print(root, "ast.dot");
     printf("%d\n", ast_execute(root));
     ast_free(root);
