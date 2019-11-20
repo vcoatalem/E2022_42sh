@@ -18,6 +18,14 @@ struct ast *ast_init(enum node_type type, char *value,
         new_ast->node_type = NODE_OPERATOR;
         new_ast->content.op_type = op_type;
     }
+
+    else if (type == NODE_EPSILON)
+    {
+        new_ast->node_type = NODE_EPSILON;
+        new_ast->content.op_type = OPERATOR_NONE;
+        new_ast->content.value = NULL;
+    }
+
     else
     {
         new_ast->node_type = NODE_VALUE;
@@ -31,6 +39,7 @@ struct ast *ast_init(enum node_type type, char *value,
         else
             new_ast->content.value = NULL;
     }
+
     new_ast->forest = NULL;
     new_ast->nb_children = 0;
     return new_ast;
