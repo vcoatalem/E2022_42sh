@@ -65,6 +65,7 @@ int main(int argc, char **argv)
     {
         execution_val = execute_interactive(&bundle);
     }
+    options_free(options);
     if (execution_val != BASH_RETURN_OK)
     {
         //something went wrong...

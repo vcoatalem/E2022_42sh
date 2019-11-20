@@ -20,7 +20,7 @@ void token_array_free(struct token_array *arr)
     for(size_t i = 0; i < arr->size; i++)
     {
         //TODO add free for token
-        free(arr->tok_array[i]);
+        token_free(arr->tok_array[i]);
     }
     free(arr->tok_array);
     free(arr);
