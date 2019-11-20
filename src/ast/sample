@@ -1,0 +1,8 @@
+digraph ast {
+	"&&_0x5593ed60f9d0" -> "&&_0x5593ed60f650" -> "&&_0x5593ed60d740" -> "&&_0x5593ed60d880";
+	"&&_0x5593ed60d740" -> "|_0x5593ed60d7d0" -> "|_0x5593ed60d590";
+	"|_0x5593ed60d7d0" -> "command_0x5593ed60d6b0" -> "redirection_list_0x5593ed60d470";
+	"command_0x5593ed60d6b0" -> "args_0x5593ed60d620" -> "args_0x5593ed60d350" -> "args_0x5593ed60d2a0";
+	"args_0x5593ed60d350" -> "element_0x5593ed60d3e0" -> "a_0x5593ed60cef0";
+	"args_0x5593ed60d620" -> "element_0x5593ed60d500" -> "echo_0x5593ed60d1d0";
+	}
