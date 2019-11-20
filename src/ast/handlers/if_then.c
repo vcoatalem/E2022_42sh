@@ -44,10 +44,8 @@ int ast_handle_if(struct ast *ast)
     if (ast_if_body == NULL || ast_then == NULL)
         return AST_ERROR;
 
-    if (ast_handle_pipe(ast_if_body) == AST_SUCCESS)
-    {
-        return ast_handle_pipe(ast_then);
-    }
+    if (ast_execute(ast_if_body) == AST_SUCCESS)
+        return ast_execute(ast_then);
 
     else
     {
@@ -55,6 +53,6 @@ int ast_handle_if(struct ast *ast)
         if (ast_else == NULL)
             return AST_ERROR;
 
-        return ast_handle_pipe(ast_else);
+        return ast_execute(ast_else);
     }
 }
