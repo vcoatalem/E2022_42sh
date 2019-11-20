@@ -14,6 +14,7 @@ add_library(parser
     shell_rules/misc.c
     shell_rules/pipeline.c
     shell_rules/and_or.c
+    shell_rules/list.c
     shell_rules/input.c
     ast_build/node_string.c
     ast_build/node_operator.c
