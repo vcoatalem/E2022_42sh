@@ -8,6 +8,8 @@ static struct ast *find_op_while_body(struct ast *ast)
         if (ast->forest[i]->content.op_type == OPERATOR_WHILE_BODY)
             return ast->forest[i];
     }
+
+    return NULL;
 }
 
 static struct ast *find_op_do(struct ast *ast)
@@ -17,6 +19,8 @@ static struct ast *find_op_do(struct ast *ast)
         if (ast->forest[i]->content.op_type == OPERATOR_DO)
             return ast->forest[i];
     }
+
+    return NULL;
 }
 
 static struct ast *find_op_done(struct ast *ast)
@@ -26,6 +30,8 @@ static struct ast *find_op_done(struct ast *ast)
         if (ast->forest[i]->content.op_type == OPERATOR_DONE)
             return ast->forest[i];
     }
+
+    return NULL;
 }
 
 int ast_handle_while(struct ast *ast)
@@ -41,9 +47,7 @@ int ast_handle_while(struct ast *ast)
     while (try_execute == AST_SUCCESS)
     {
         try_execute = ast_execute(ast_while_body);
-
-        for (size_t i = 1; i < ast->nb_children; i++)
-            ast_execute(ast_do);
+        ast_execute(ast_do);
     }
 
     struct ast *ast_done = find_op_done(ast);
