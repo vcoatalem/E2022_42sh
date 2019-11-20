@@ -1,6 +1,33 @@
 #include "../ast.h"
 #include "../../execution/execution.h"
 
+static struct ast *find_op_while_body(struct ast *ast)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->content.op_type == OPERATOR_WHILE_BODY)
+            return ast->forest[i];
+    }
+}
+
+static struct ast *find_op_do(struct ast *ast)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->content.op_type == OPERATOR_DO)
+            return ast->forest[i];
+    }
+}
+
+static struct ast *find_op_done(struct ast *ast)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->content.op_type == OPERATOR_DONE)
+            return ast->forest[i];
+    }
+}
+
 int ast_handle_while(struct ast *ast)
 {
     if (ast == NULL)
@@ -8,14 +35,17 @@ int ast_handle_while(struct ast *ast)
 
     int try_execute = AST_SUCCESS;
 
-    while ((try_execute = ast_execute(ast->forest[0])) == AST_SUCCESS)
+    struct ast *ast_while_body = find_op_while_body(ast);
+    struct ast *ast_do = find_op_do(ast);
+
+    while (try_execute == AST_SUCCESS)
     {
+        try_execute = ast_execute(ast_while_body);
+
         for (size_t i = 1; i < ast->nb_children; i++)
-            ast_execute(ast->forest[i]);
+            ast_execute(ast_do);
     }
 
-    if (try_execute == AST_ERROR)
-        return AST_SUCCESS;
-
-    return AST_ERROR;
+    struct ast *ast_done = find_op_done(ast);
+    return ast_execute(ast_done);
 }
