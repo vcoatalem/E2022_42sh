@@ -2,12 +2,13 @@
 
 static int g_n_conflicts = 0;
 
-static void log_conflict(enum rule_id rule_id, struct symbol_array *in_slot,
-        struct symbol_array *to_be_inserted)
+static void log_conflict(struct rule *rule, size_t index,
+        struct symbol_array *in_slot, struct symbol_array *to_be_inserted)
 {
-    printf("array equal : %d\n", symbol_array_equal(in_slot, to_be_inserted));
-      printf("[LL PARSER] got conflict for rule #%d:\n", rule_id);
-      printf("[LL PARSER] in slot: ");
+      printf("[LL PARSER] got conflict for rule: ");
+      rule_print(rule);
+      printf("\n");
+      printf("[LL PARSER] in slot #%zu: ", index);
       symbol_array_print(in_slot);
       printf("\n");
       printf("[LL PARSER] to be inserted: ");
@@ -26,16 +27,16 @@ void fill_line_slot(struct analysis_table *t,
         for (size_t j = 0; j < firsts->size; j++)
         {
             struct symbol *a = firsts->array[j];
-            if (!line[a->token_type])
+            size_t index = a->token_type;
+            if (!line[index])
             {
-                line[a->token_type] = symbol_array_dup(rule->symbols);
+                line[index] = symbol_array_dup(rule->symbols);
             }
             else
             {
-                if (!symbol_array_equal(line[a->token_type], rule->symbols))
+                if (!symbol_array_equal(line[index], rule->symbols))
                 {
-                    log_conflict(rule->rule_id, line[a->token_type],
-                            rule->symbols);
+                    log_conflict(rule, index, line[index], rule->symbols);
                 }
             }
         }
@@ -59,8 +60,7 @@ void fill_line_slot(struct analysis_table *t,
                 {
                     if (!symbol_array_equal(line[index], rule->symbols))
                     {
-                        log_conflict(rule->rule_id, line[index],
-                                rule->symbols);
+                        log_conflict(rule, index, line[index], rule->symbols);
                     }
                 }
             }
