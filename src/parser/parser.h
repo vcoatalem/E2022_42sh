@@ -73,6 +73,7 @@ void symbol_array_add(struct symbol_array *symbols, struct symbol *s);
 void symbol_array_add_if_not_in(struct symbol_array *symbols, struct symbol *s);
 void symbol_array_free(struct symbol_array *arr);
 int symbol_array_contains(struct symbol_array *arr, struct symbol *s);
+int symbol_array_equal(struct symbol_array *s1, struct symbol_array *s2);
 
 // RULE ///////////////////////////////////////////////////////////////
 
