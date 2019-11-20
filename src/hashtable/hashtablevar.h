@@ -37,7 +37,7 @@ struct hash_table_var *init_hash_table_var(size_t size);
  *
  * \return void
  */
-void free_hash_table(struct hash_table_var *ht);
+void free_hash_table_var(struct hash_table_var *ht);
 /**
  * \brief hashing function
  *

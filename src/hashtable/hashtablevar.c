@@ -23,7 +23,7 @@ struct hash_table_var *init_hash_table_var(size_t size)
 }
 
 
-void free_hash_table(struct hash_table_var *ht)
+void free_hash_table_var(struct hash_table_var *ht)
 {
     for (size_t i = 0; i < ht->size; ++i)
     {

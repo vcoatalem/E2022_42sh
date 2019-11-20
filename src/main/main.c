@@ -9,6 +9,8 @@ void bundle_free(struct execution_bundle *bundle)
 {
     free(bundle->options);
     free(bundle->grammar);
+    free_hash_table_func(bundle->hash_table_func);
+    free_hash_table_var(bundle->hash_table_var);
 }
 
 
@@ -83,6 +85,7 @@ int main(int argc, char **argv)
         execution_val = execute_interactive(&bundle);
     }
     options_free(options);
+    bundle_free(&bundle);
     if (execution_val != BASH_RETURN_OK)
     {
         //something went wrong...
