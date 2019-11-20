@@ -10,10 +10,8 @@ char *rule_id_to_string(enum rule_id id)
         return "input";
     case RULE_AND_OR:
         return "and|or";
-    case RULE_AND:
+    case RULE_AND_CONCAT:
         return "and";
-    case RULE_OR:
-        return "or";
     case RULE_OR_CONCAT:
         return "or";
     case RULE_PIPELINE:
@@ -22,11 +20,13 @@ char *rule_id_to_string(enum rule_id id)
         return "|";
     case RULE_COMMAND:
         return "command";
-    case RULE_REDIRECTION:
+    case RULE_REDIR:
         return "redirection";
-    case RULE_REDIRECTION_SYMBOL:
+    case RULE_REDIR_TO:
+        return "redirection_to";
+    case RULE_REDIR_SYMBOL:
         return "redirection_symbol";
-    case RULE_REDIRECTION_LIST:
+    case RULE_REDIR_LIST:
         return "redirection_list";
     case RULE_IONUMBER:
         return "ionumber";
