@@ -20,15 +20,3 @@ void token_free(struct token *token)
     free(token->value);
     free(token);
 }
-
-void token_print(enum token_type type)
-{
-    if (type == TOKEN_EOL)
-    {
-        printf("\\n");
-    }
-    else
-    {
-        printf("%s", token_to_string(type));
-    }
-}

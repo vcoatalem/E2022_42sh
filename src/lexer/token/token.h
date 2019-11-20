@@ -196,6 +196,16 @@ struct token
 char *token_to_string(enum token_type type);
 
 /**
+ * \brief Convert a token into a displayable string
+ *
+ * \param enum token_type type type of token
+ *
+ * \return "\\n" when TOKEN_EOL, token_to_string(type) otherwise
+ *
+ */
+char *token_to_formatted_string(enum token_type type);
+
+/**
  * \brief Print string value of a token
  *
  * \param enum token_type type type of token

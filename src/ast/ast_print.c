@@ -56,7 +56,7 @@ void ast_dot_print(struct ast *ast, const char *output)
     FILE *file = fopen(output, "w");
 
     if (file == NULL)
-        err(errno, "ERROR_AST_PRINT: Cannot open file ast_print.dot");
+        err(errno, "ERROR_AST_PRINT: Could not open %s.", output);
 
     fprintf(file, "digraph ast {\n\t");
     _ast_dot_print(ast, file);

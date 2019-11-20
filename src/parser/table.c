@@ -2,12 +2,22 @@
 
 static int g_n_conflicts = 0;
 
-static void log_conflict(enum rule_id rule_id, struct symbol_array *in_slot,
-        struct symbol_array *to_be_inserted)
+static void log_conflict(struct rule *rule, size_t index,
+        struct symbol_array *in_slot, struct symbol_array *to_be_inserted)
 {
-    printf("array equal : %d\n", symbol_array_equal(in_slot, to_be_inserted));
-      printf("[LL PARSER] got conflict for rule #%d:\n", rule_id);
-      printf("[LL PARSER] in slot: ");
+      printf("[LL PARSER] got conflict for rule: ");
+      rule_print(rule);
+      printf("\n");
+      printf("[LL PARSER] in slot `");
+      if (index == NB_TOKENS)
+      {
+        printf("$");
+      }
+      else
+      {
+        printf("%s", token_to_formatted_string(index));    
+      }
+      printf("` ; ");
       symbol_array_print(in_slot);
       printf("\n");
       printf("[LL PARSER] to be inserted: ");
@@ -26,16 +36,16 @@ void fill_line_slot(struct analysis_table *t,
         for (size_t j = 0; j < firsts->size; j++)
         {
             struct symbol *a = firsts->array[j];
-            if (!line[a->token_type])
+            size_t index = a->token_type;
+            if (!line[index])
             {
-                line[a->token_type] = symbol_array_dup(rule->symbols);
+                line[index] = symbol_array_dup(rule->symbols);
             }
             else
             {
-                if (!symbol_array_equal(line[a->token_type], rule->symbols))
+                if (!symbol_array_equal(line[index], rule->symbols))
                 {
-                    log_conflict(rule->rule_id, line[a->token_type],
-                            rule->symbols);
+                    log_conflict(rule, index, line[index], rule->symbols);
                 }
             }
         }
@@ -59,8 +69,7 @@ void fill_line_slot(struct analysis_table *t,
                 {
                     if (!symbol_array_equal(line[index], rule->symbols))
                     {
-                        log_conflict(rule->rule_id, line[index],
-                                rule->symbols);
+                        log_conflict(rule, index, line[index], rule->symbols);
                     }
                 }
             }
@@ -87,13 +96,13 @@ struct analysis_table *table_init(void)
     
     for (size_t i = 0; i < ll_rules->size; i++)
     {
-        printf("---------- [TABLE] setting rule #%zu\n", i);
+        printf("[LL PARSER] ---------- [TABLE] setting rule #%zu\n", i);
         struct rule *rule = ll_rules->rules[i];
         fill_line_slot(t, rule, ll_rules);
     }
     rule_array_free(ll_rules);
     printf("[LL PARSER] Built analysis table." );
-    printf(" Found #%d conflicts in grammar\n", g_n_conflicts);
+    printf("[LL PARSER] Found #%d conflicts in grammar\n", g_n_conflicts);
     return t;
 }
 
@@ -109,7 +118,7 @@ void table_print(struct analysis_table *table)
             if (line[j])
             {
                 printf("[ `%s`: ", j < table->n_symbols - 1 ?
-                        token_to_string(j) : "$");
+                        token_to_formatted_string(j) : "$");
                 symbol_array_print(line[j]);
                 printf(" ]");
                 count++;

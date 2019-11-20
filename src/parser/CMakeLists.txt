@@ -11,7 +11,7 @@ add_library(parser
     shell_rules/element.c
     shell_rules/command.c
     shell_rules/redirection.c
-    shell_rules/misc.c
+    # shell_rules/misc.c
     shell_rules/pipeline.c
     shell_rules/and_or.c
     shell_rules/list.c
@@ -33,6 +33,12 @@ set_target_properties(test_parser_basic
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "."
     EXCLUDE_FROM_ALL "true"
+)
+
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_parser_basic
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/parser/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/parser/test_parser_basic"
 )
 
 ######################

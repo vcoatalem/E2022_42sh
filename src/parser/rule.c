@@ -17,6 +17,12 @@ struct rule *rule_build(enum rule_id id, struct symbol *s, ...)
     return res;
 }
 
+void rule_print(struct rule *rule)
+{
+    printf("ID: %d ; EXPRESSION:  ", rule->rule_id);
+    symbol_array_print(rule->symbols);
+}
+
 void rule_free(struct rule *rule)
 {
     symbol_array_free(rule->symbols);

@@ -56,8 +56,6 @@ void symbol_print(struct symbol *s)
     }
     else
     {
-        printf("{T `");
-        token_print(s->token_type);
-        printf("`}");
+        printf("{T `%s`}", token_to_formatted_string(s->token_type));
     }
 }
