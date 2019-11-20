@@ -64,13 +64,11 @@ struct symbol_array *expr_first(struct rule *rule, struct rule_array *rules)
         break;
     }
     return res;
-    #if 0
-    printf("expr first for ");
+    printf("[LL PARSER] expr first for ");
     symbol_array_print(expression);
     printf(" returning: ");
     symbol_array_print(res);
     printf("\n");
-    #endif
 }
 
 struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
@@ -93,11 +91,9 @@ struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
             symbol_array_merge(res, expr_first(current, rules));
         }
     }
-    #if 0
-    printf("rule first for id %d returning: ", rule_id);
+    printf("[LL PARSER] rule first for id %d returning: ", rule_id);
     symbol_array_print(res);
     printf("\n");
-    #endif
     return res;
 }
 
@@ -139,10 +135,8 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules)
             }
         }
     }
-    #if 0
-    printf("rule next for id %d returning: ", rule_id);
+    printf("[LL PARSER] rule next for id %d returning: ", rule_id);
     symbol_array_print(res);
     printf("\n");
-    #endif
     return res;
 }

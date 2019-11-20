@@ -35,6 +35,12 @@ set_target_properties(test_parser_basic
     EXCLUDE_FROM_ALL "true"
 )
 
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_parser_basic
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/parser/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/parser/test_parser_basic"
+)
+
 ######################
 
 # List all tests
