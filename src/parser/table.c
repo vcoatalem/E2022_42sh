@@ -25,7 +25,8 @@ void fill_line_slot(struct analysis_table *t,
         for (size_t j = 0; j < firsts->size; j++)
         {
             struct symbol *a = firsts->array[j];
-            if (!line[a->token_type])
+            if (!line[a->token_type]
+                    || !symbol_array_equal(line[a->token_type], rule->symbols))
             {
                 line[a->token_type] = symbol_array_dup(rule->symbols);
             }
@@ -47,8 +48,9 @@ void fill_line_slot(struct analysis_table *t,
                 struct symbol *b = nexts->array[j];
                 size_t index = b->type == SYMBOL_TOKEN ? b->token_type
                     : t->n_symbols - 1;
-                if (!line[index])
-                {
+                if (!line[index]
+                        || !symbol_array_equal(line[b->token_type], rule->symbols))
+                {    
                     line[index] = symbol_array_dup(rule->symbols);
                 }
                 else

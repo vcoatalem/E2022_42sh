@@ -22,6 +22,32 @@ void symbol_array_add(struct symbol_array *symbols, struct symbol *s)
     symbols->array[symbols->size - 1] = s;
 }
 
+int symbol_array_equal(struct symbol_array *s1, struct symbol_array *s2)
+{
+    if (s1->size != s2->size)
+    {
+        return 0;
+    }
+    for (size_t i = 0; i < s1->size; i++)
+    {
+        if (s1->array[i]->type != s2->array[i]->type)
+        {
+            return 0;
+        }
+        if (s1->array[i]->type == SYMBOL_TOKEN
+                && s1->array[i]->token_type != s2->array[i]->token_type)
+        {
+            return 0; 
+        }
+        else if (s1->array[i]->type == SYMBOL_RULE
+                && s1->array[i]->rule_id != s2->array[i]->rule_id)
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 void symbol_array_add_if_not_in(struct symbol_array *symbols,
         struct symbol *s)
 {
