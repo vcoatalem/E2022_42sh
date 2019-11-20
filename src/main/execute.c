@@ -1,4 +1,3 @@
-#include "execute.h"
 #include "42sh.h"
 #include <signal.h>
 
@@ -22,21 +21,23 @@ int execute_stdin(struct execution_bundle *bundle)
     //TODO: read stdin line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
+    char res[4086] = {0};
     //struct lexer *lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
-        //run lexer + parser
-        struct token_array *arr = token_array_create(line);
-        struct ast *ast = tmp_parse(arr);
-        if (bundle->options->ast_print_is_set == 1)
-        {
-            ast_dot_print(ast, "ast.dot");
-        }
-        ast_execute(ast);
-        //token_array_print(arr, stdout);
-        ast_free(ast);
-        token_array_free(arr);
+        strcat(res, line);
     }
+        //run lexer + parser
+    struct token_array *arr = token_array_create(res);
+    struct ast *ast = tmp_parse(arr);
+    if (bundle->options->ast_print_is_set == 1)
+    {
+        ast_dot_print(ast, "ast.dot");
+    }
+    ast_execute(ast);
+    token_array_print(arr, stdout);
+    ast_free(ast);
+    token_array_free(arr);
     free(line);
     return BASH_RETURN_OK;
 }
@@ -45,12 +46,12 @@ int execute_interactive(struct execution_bundle *bundle)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
-    const char *ps1 = "42sh$ ";
-    const char *ps2 = "> ";
     struct lexer *lexer = lexer_init();
     struct token_array *arr = NULL;
     while (1)
     {
+        char *ps1 = get_variable(bundle->hash_table_var, "ps1");
+        char *ps2 = get_variable(bundle->hash_table_var, "ps2");
         signal(SIGINT, sigintHandler);
         char *input = get_next_line(ps1);
         if (!input)
@@ -108,7 +109,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     return BASH_RETURN_OK;
 }
 
-int execute_script(struct execution_bundle *bundle, char* script, int create)
+int execute_script(struct execution_bundle *bundle, char* script)
 {
     appendhistory(script);
     if (!bundle)
@@ -116,11 +117,6 @@ int execute_script(struct execution_bundle *bundle, char* script, int create)
     //printf("mode = %s\n", mode);
     FILE *fd;
     fd = fopen(script, "r");
-    if (fd == NULL && create == 1)
-    {
-        fclose(fd);
-        fd = fopen(script, "w");
-    }
     if (fd == NULL)
     {
         printf("Error no such file or directory %s\n", script);
