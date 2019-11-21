@@ -192,6 +192,7 @@ int builtin_shopt(char **str, size_t size, struct execution_bundle *bundle)
             {
                 for (size_t i = 3; i < size; i++)
                     set_option(shopt, str[i]);
+                return 0;
             }
         }
         else
