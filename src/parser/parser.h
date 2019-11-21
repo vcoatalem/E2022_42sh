@@ -207,7 +207,8 @@ void table_free(struct analysis_table *table);
 enum parser_state
 {
     PARSER_STATE_SUCCESS,
-    PARSER_STATE_FAILURE
+    PARSER_STATE_FAILURE,
+    PARSER_STATE_CONTINUE
 };
 
 struct parser

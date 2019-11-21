@@ -6,15 +6,19 @@
 int main(int argc, char **argv)
 {
     int q = argc == 1 ? 0 : atoi(*(argv + 1));
-    const char *output_file_name = argc <= 1 ? "tmp_ast" : *(argv + 2);
+    const char *output_file_name = argc <= 1 ? "tmp_basic_ast" : *(argv + 2);
     struct token_array *exp = token_array_init();
     enum parser_state expected_parser_state[] =
     {
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_FAILURE,
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_SUCCESS
+        PARSER_STATE_SUCCESS,  //0
+        PARSER_STATE_CONTINUE, //1
+        PARSER_STATE_SUCCESS,  //2
+        PARSER_STATE_SUCCESS,  //3
+        PARSER_STATE_SUCCESS,  //4
+        PARSER_STATE_FAILURE,  //5
+        PARSER_STATE_SUCCESS,  //6
+        PARSER_STATE_FAILURE,  //7
+        PARSER_STATE_SUCCESS   //8
     };
     if (q == 0)
     {
@@ -50,6 +54,44 @@ int main(int argc, char **argv)
     else if (q == 4)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 5)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "this"));
+        token_array_add(exp, token_init(TOKEN_WORD, "should"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
+        token_array_add(exp, token_init(TOKEN_WORD, "fail"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 6)
+    {
+        token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "A"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "|"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "B"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 7)
+    {
+        token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
+        token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "fail"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 8)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "i"));
+        token_array_add(exp, token_init(TOKEN_WORD, "love"));
+        token_array_add(exp, token_init(TOKEN_WORD, "C"));
+        token_array_add(exp, token_init(TOKEN_STDIN, "0"));
+        token_array_add(exp, token_init(TOKEN_GREAT, ">"));
+        token_array_add(exp, token_init(TOKEN_WORD, "output"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct analysis_table *table = table_build();

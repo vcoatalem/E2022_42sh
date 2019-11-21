@@ -44,28 +44,30 @@ void parser_free(struct parser *parser, int free_ast)
     free(parser);
 }
 
+//if the only token left after an error is a token EOF
+//set parser_state_continue instrad of parser_state_error
+static void set_parsing_ending_status(struct parser *parser,
+        enum token_type current_token_type)
+{
+    if (current_token_type == TOKEN_EOF)
+        parser->state = PARSER_STATE_CONTINUE;
+    else
+        parser->state = PARSER_STATE_FAILURE;
+}
+
 //TODO: refactorize this once figured out. Also, leeks.
 void parse(struct parser *parser, struct analysis_table *table)
 {
     printf("[LL PARSER] entered parsing\n");
     struct stamp *input = parser->input;
     struct stack *stack = parser->stack;
-    struct token *current = NULL;
-    int should_read_input = 1;
     while (!stamp_is_over(input))
     {
         stack_print(stack);
         stamp_print(input);
         //in case we just popped an epsilon rule, we dont want to get next
         //symbol on stamp
-        if (should_read_input)
-        {
-            current = stamp_read(input);
-        }
-        else
-        {
-            should_read_input = 1;
-        }
+        struct token *current = stamp_read(input);
         printf("[LL PARSER] current head of stamp: %s\n",
                 token_to_formatted_string(current->type));
         struct stack_elt *head = stack_pop(stack);
@@ -73,11 +75,12 @@ void parse(struct parser *parser, struct analysis_table *table)
         {
             if (head->symbol->token_type != current->type)
             {
-                parser->state = PARSER_STATE_FAILURE;
+                set_parsing_ending_status(parser, current->type);
                 return;
             }
             if (current->type == TOKEN_WORD)
             {
+                //get current word value into the ast
                 head->ast->content.value = my_strdup(current->value);
             }
             stamp_continue(input);
@@ -92,7 +95,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                     head->symbol->rule_id, table->n_symbols - 1, table);
                 if (!is_epsilon)
                 {
-                    parser->state = PARSER_STATE_FAILURE;
+                    set_parsing_ending_status(parser, current->type);
                     //could not find correspondance in analysis table
                     return;
                 }
@@ -101,9 +104,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                     //current top of stack rule is an epsilon rule, therefore
                     //can be canceled. 
                     symbol_array_free(is_epsilon);
-                    should_read_input = 0;
                     continue;
-                
                 }
             }
             else
@@ -113,25 +114,8 @@ void parse(struct parser *parser, struct analysis_table *table)
         }
         free(head);
     }
-    //if stamp is over, try to find epsilon substitution for all symbols left
-    //in stack
-    //TODO: try to factorise this with main loop
-    while (stack->size != 0)
-    {
-        struct stack_elt *head = stack_pop(stack);
-        struct symbol_array *arr = substitute_rule(
-            head->symbol->rule_id, table->n_symbols - 1, table);
-        free(head);
-        if (!arr)
-        {
-            break;
-        }
-        else
-        {
-            symbol_array_free(arr);
-        }
-    }
     stack_print(stack);
-    if (stack->size == 0)
-        parser->state = PARSER_STATE_SUCCESS;
+    parser->state = stack->size == 0 ?
+            PARSER_STATE_SUCCESS : PARSER_STATE_CONTINUE;
+
 }

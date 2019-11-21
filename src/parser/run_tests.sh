@@ -4,7 +4,7 @@ TEST_BIN=$1
 
 echo $TEST_BIN
 
-TEST_AMOUNT=4
+TEST_AMOUNT=8
 
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
@@ -17,7 +17,7 @@ run_test()
 {
     TEST_BIN=$1
     Q_COUNT=$2
-    OUTPUT_FILE="$OUTPUT_DIR/ast_$Q_COUNT.dot"
+    OUTPUT_FILE="$OUTPUT_DIR/ast_basic_$Q_COUNT.dot"
     ERROR=0
     $TEST_BIN $Q_COUNT $OUTPUT_FILE 1>/dev/null 2> /dev/null; RETURN=$?
     [ $RETURN -ne 0 ] && ERROR=1
