@@ -70,7 +70,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "A"));
-        token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "|"));
+        token_array_add(exp, token_init(TOKEN_PIPE, "|"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "B"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));

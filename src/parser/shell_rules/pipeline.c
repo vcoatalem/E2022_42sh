@@ -1,6 +1,6 @@
 #include "../parser.h"
 
-//pipe -> '|' command pipeline
+//pipe -> '|' pipeline
 //pipe -> epsilon
 void sh_rule_pipe(struct rule_array *rules)
 {

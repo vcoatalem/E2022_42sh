@@ -104,8 +104,8 @@ struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
 // search symbols representing the rule `rule_id` in expression of the
 // rule `rule`. res, rules and path_list from rule_next()
 // TODO: reduce the amount of arguments on this one
-static void rule_next_find_handle_occurence(
-        struct rule *rule, enum rule_id rule_id, struct symbol_array *res,
+static void rule_next_find_handle_occurence(enum rule_id rule_id,
+        struct rule *rule, struct symbol_array *res,
         struct rule_array *rules, int **path_list)
 {
     struct symbol_array *expression = rule->symbols;
@@ -113,7 +113,7 @@ static void rule_next_find_handle_occurence(
     {
         //for each symbol in rule..
         struct symbol *symbol = expression->array[j];
-        if (symbol->type == SYMBOL_RULE /*trying to prevent infinite here*/&& symbol->rule_id != rule_id)
+        if (symbol->type == SYMBOL_RULE && symbol->rule_id == rule_id)
         {
             // when we find a symbol that represents the rule
             // we called rule_next with ...
@@ -160,9 +160,7 @@ static void rule_next_find_handle_occurence(
 struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
     int **path_list)
 {
-    #if 0
     printf("[LL PARSER] entered rule_next(%d)\n", rule_id);
-    #endif
     if (!path_list)
     {
         int new_path_list[NB_RULES] = { 0 };
@@ -179,13 +177,11 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
     for (size_t i = 0; i < rules->size; i++)
     {
         //for each rule in rules
-        rule_next_find_handle_occurence(rules->rules[i], rule_id, res,
-                rules, path_list);
+        rule_next_find_handle_occurence(rules->rules[i]->rule_id,
+                rules->rules[i], res, rules, path_list);
     }
-    #if 0
     printf("[LL PARSER] rule next for id %d returning: ", rule_id);
     symbol_array_print(res);
     printf("\n");
-    #endif
     return res;
 }

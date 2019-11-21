@@ -81,6 +81,7 @@ void parse(struct parser *parser, struct analysis_table *table)
             if (current->type == TOKEN_WORD)
             {
                 //get current word value into the ast
+                //TODO: give this treatment to more types (eg. excl point)
                 head->ast->content.value = my_strdup(current->value);
             }
             stamp_continue(input);
