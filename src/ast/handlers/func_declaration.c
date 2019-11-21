@@ -24,9 +24,9 @@ static struct ast *find_op_function_body(struct ast *ast)
     return NULL;
 }
 
-int ast_handle_func_declaration(struct ast *ast,
-        struct execution_bundle *bundle)
+int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
 

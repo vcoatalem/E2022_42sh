@@ -6,10 +6,11 @@
 #define MAX_ARGS_COUNT 2048
 #define MAX_REDIR_COUNT 64
 
-int ast_handle_pipe(struct ast *ast, struct execution_bundle *bundle)
+int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     if (!bundle)
-        break;
+        return AST_ERROR;
 
     struct pipe *pipe = pipe_init();
 

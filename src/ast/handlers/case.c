@@ -11,7 +11,7 @@ static struct *find_op_compound(struct ast *ast)
     }
 }
 
-int ast_handle_case(struct ast *ast, struct execution_bundle *bundle)
+int ast_handle_case(struct ast *ast, void *bundle_ptr)
 {
     if (!bundle)
         break;

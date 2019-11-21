@@ -35,10 +35,11 @@ static struct ast *find_op_else(struct ast *ast)
     return NULL;
 }
 
-int ast_handle_if(struct ast *ast, struct execution_bundle *bundle)
+int ast_handle_if(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     if (!bundle)
-        break;
+        return AST_ERROR;
 
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
@@ -48,8 +49,8 @@ int ast_handle_if(struct ast *ast, struct execution_bundle *bundle)
     if (ast_if_body == NULL || ast_then == NULL)
         return AST_ERROR;
 
-    if (ast_execute(ast_if_body) == AST_SUCCESS)
-        return ast_execute(ast_then);
+    if (ast_execute(ast_if_body, bundle) == AST_SUCCESS)
+        return ast_execute(ast_then, bundle);
 
     else
     {
@@ -57,6 +58,6 @@ int ast_handle_if(struct ast *ast, struct execution_bundle *bundle)
         if (ast_else == NULL)
             return AST_ERROR;
 
-        return ast_execute(ast_else);
+        return ast_execute(ast_else, bundle);
     }
 }

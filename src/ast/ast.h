@@ -13,7 +13,6 @@
 #define AST_H
 
 #include <stddef.h>
-#include "../main/42sh.h"
 
 #define AST_SUCCESS 0
 #define AST_ERROR 1
@@ -174,7 +173,7 @@ char **get_arg_list(struct ast *ast);
  * \return *int handler function
  */
 typedef int (*operator_handler)(struct ast *ast,
-        struct execution_bundle *bundle);
+        void *bundle);
 
 /**
  * \brief get the handler corresponding to the operator type
@@ -185,16 +184,16 @@ typedef int (*operator_handler)(struct ast *ast,
  */
 operator_handler get_operator_handler(enum operator_type type);
 
-int ast_handle_and(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_or(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_pipe(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_if(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_then(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_while(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_for(struct ast *ast, struct execution_bundle *bundle);
-int ast_handle_until(struct ast *ast, struct execution_bundle *bundle);
+int ast_handle_and(struct ast *ast, void *bundle);
+int ast_handle_or(struct ast *ast, void *bundle);
+int ast_handle_pipe(struct ast *ast, void *bundle);
+int ast_handle_if(struct ast *ast, void *bundle);
+int ast_handle_then(struct ast *ast, void *bundle);
+int ast_handle_while(struct ast *ast, void *bundle);
+int ast_handle_for(struct ast *ast, void *bundle);
+int ast_handle_until(struct ast *ast, void *bundle);
 int ast_handle_func_declaration(struct ast *ast,
-        struct execution_bundle *bundle);
+        void *bundle);
 
 /**
  * \brief execution function of ast
@@ -203,6 +202,6 @@ int ast_handle_func_declaration(struct ast *ast,
  *
  * \return int return AST_SUCCESS (= 0) or AST_ERROR (= 1)
  */
-int ast_execute(struct ast *ast);
+int ast_execute(struct ast *ast, void *bundle);
 
 #endif /* AST_H */
