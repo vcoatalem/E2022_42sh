@@ -13,7 +13,9 @@ int main(int argc, char **argv)
         PARSER_STATE_SUCCESS,
         PARSER_STATE_FAILURE,
         PARSER_STATE_SUCCESS,
-        PARSER_STATE_SUCCESS
+        PARSER_STATE_SUCCESS,
+        PARSER_STATE_SUCCESS,
+        PARSER_STATE_SUCCESS,
     };
     if (q == 0)
     {
@@ -56,6 +58,20 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_THEN, "then"));
         token_array_add(exp, token_init(TOKEN_WORD, "B"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_FI, "fi"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 4)
+    {
+        fprintf(stderr, "simple multi-line IF statement with multiple separators");
+        token_array_add(exp, token_init(TOKEN_IF, "if"));
+        token_array_add(exp, token_init(TOKEN_WORD, "A"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_THEN, "then"));
+        token_array_add(exp, token_init(TOKEN_WORD, "B"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
         token_array_add(exp, token_init(TOKEN_FI, "fi"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
