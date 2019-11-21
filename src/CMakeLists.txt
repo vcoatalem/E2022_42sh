@@ -4,6 +4,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lexer)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/options)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hashtable)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/builtins)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/main)
 
 
@@ -13,4 +14,5 @@ add_subdirectory(lexer/)
 add_subdirectory(parser/)
 add_subdirectory(options/)
 add_subdirectory(hashtable/)
+add_subdirectory(builtins/)
 add_subdirectory(main/)

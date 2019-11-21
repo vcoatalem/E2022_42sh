@@ -28,7 +28,6 @@ enum node_type
 {
     NODE_VALUE,
     NODE_OPERATOR,
-    NODE_EPSILON
 };
 
 /**
@@ -48,6 +47,7 @@ enum operator_type
     OPERATOR_IF,
     OPERATOR_IF_BODY,
     OPERATOR_THEN,
+    OPERATOR_ELIF,
     OPERATOR_ELSE,
     OPERATOR_WHILE,
     OPERATOR_WHILE_BODY,
@@ -58,6 +58,8 @@ enum operator_type
     OPERATOR_DO,
     OPERATOR_DONE,
     OPERATOR_CASE,
+    OPERATOR_PATTERN,
+    OPERATOR_COMPOUND,
     OPERATOR_FUNC_DECLARATION,
     OPERATOR_FUNC_NAME,
     OPERATOR_FUNC_BODY,
@@ -143,8 +145,19 @@ void ast_clean(struct ast *ast);
  * \param ast parent node
  * \param name name to check
  *
+ * \return ast
  */
 struct ast *get_child_of_name(struct ast *ast, const char *name);
+
+/**
+ * \brief find the children with the corresponding operator type
+ *
+ * \param ast parent node
+ * \param op_type operator type to check
+ *
+ * \return ast , NULL if not found
+ */
+struct ast *find_op_type(struct ast *ast, enum operator_type op_type);
 
 /**
  * \brief get all arguments from an arg_list node

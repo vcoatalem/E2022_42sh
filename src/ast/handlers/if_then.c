@@ -2,39 +2,6 @@
 #include "../../main/42sh.h"
 #include "../../execution/execution.h"
 
-static struct ast *find_op_if_body(struct ast *ast)
-{
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->op_type == OPERATOR_IF_BODY)
-            return ast->forest[i];
-    }
-
-    return NULL;
-}
-
-static struct ast *find_op_then(struct ast *ast)
-{
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->op_type == OPERATOR_THEN)
-            return ast->forest[i];
-    }
-
-    return NULL;
-}
-
-static struct ast *find_op_else(struct ast *ast)
-{
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->op_type == OPERATOR_ELSE)
-            return ast->forest[i];
-    }
-
-    return NULL;
-}
-
 int ast_handle_if(struct ast *ast, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
@@ -44,8 +11,8 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
 
-    struct ast *ast_if_body = find_op_if_body(ast);
-    struct ast *ast_then = find_op_then(ast);
+    struct ast *ast_if_body = find_op_type(ast, OPERATOR_IF_BODY);
+    struct ast *ast_then = find_op_type(ast, OPERATOR_THEN);
     if (ast_if_body == NULL || ast_then == NULL)
         return AST_ERROR;
 
@@ -54,7 +21,15 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
 
     else
     {
-        struct ast *ast_else = find_op_else(ast);
+        for (size_t i = 0; i < ast->nb_children; i++)
+        {
+            struct ast *ast_elif = ast->forest[i];
+            if (ast_elif->op_type == OPERATOR_ELIF
+                    && ast_execute(ast_elif, bundle_ptr) == AST_SUCCESS)
+                return ast_execute(ast_then, bundle);
+        }
+
+        struct ast *ast_else = find_op_type(ast, OPERATOR_ELSE);
         if (ast_else == NULL)
             return AST_ERROR;
 
