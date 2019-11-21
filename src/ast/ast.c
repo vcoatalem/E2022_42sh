@@ -14,32 +14,17 @@ struct ast *ast_init(enum node_type type, char *value,
     if (new_ast == NULL)
         return NULL;
 
-    if (type == NODE_OPERATOR)
+    new_ast->node_type = type;
+    new_ast->op_type = op_type;
+
+    if (value != NULL)
     {
-        new_ast->node_type = NODE_OPERATOR;
-        new_ast->value = NULL;
-        new_ast->op_type = op_type;
+        new_ast->value = calloc(1, strlen(value) + 1);
+        strcpy(new_ast->value, value);
     }
 
-    else if (type == NODE_EPSILON)
-    {
-        new_ast->node_type = NODE_EPSILON;
-        new_ast->value = NULL;
-        new_ast->op_type = OPERATOR_NONE;
-    }
     else
-    {
-        new_ast->node_type = NODE_VALUE;
-
-        if (value != NULL)
-        {
-            new_ast->value = calloc(1, strlen(value) + 1);
-            strcpy(new_ast->value, value);
-        }
-
-        else
-            new_ast->value = NULL;
-    }
+        new_ast->value = NULL;
 
     new_ast->forest = NULL;
     new_ast->nb_children = 0;
@@ -84,10 +69,9 @@ void ast_clean(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->nb_children == 1
-                && ast->forest[i]->forest[0]->node_type == NODE_EPSILON)
+        if (ast->forest[i]->node_type == NODE_OPERATOR
+                && ast->forest[i]->nb_children == 1)
         {
-            ast_free(ast->forest[i]->forest[0]);
             ast_free(ast->forest[i]);
             ast->nb_children--;
         }

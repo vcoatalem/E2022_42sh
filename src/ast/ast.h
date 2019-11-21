@@ -28,7 +28,6 @@ enum node_type
 {
     NODE_VALUE,
     NODE_OPERATOR,
-    NODE_EPSILON
 };
 
 /**
