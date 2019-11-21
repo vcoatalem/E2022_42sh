@@ -70,7 +70,7 @@ void ast_clean(struct ast *ast)
     for (size_t i = 0; i < ast->nb_children; i++)
     {
         if (ast->forest[i]->node_type == NODE_OPERATOR
-                && ast->forest[i]->nb_children == 1)
+                && ast->forest[i]->nb_children == 0)
         {
             ast_free(ast->forest[i]);
             ast->nb_children--;
@@ -94,6 +94,17 @@ struct ast *get_child_of_name(struct ast *ast, const char *name)
             return ast->forest[i];
         }
     }
+    return NULL;
+}
+
+struct ast *find_op_type(struct ast *ast, enum operator_type op_type)
+{
+    for (size_t i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->forest[i]->op_type == op_type)
+            return ast->forest[i];
+    }
+
     return NULL;
 }
 
