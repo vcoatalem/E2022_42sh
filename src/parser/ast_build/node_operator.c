@@ -14,14 +14,10 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_NONE;
     case RULE_LIST_CONCAT:
         return OPERATOR_AND;
-    case RULE_LIST_END:
-        return OPERATOR_NONE;
     case RULE_COMPOUND_LIST:
         return OPERATOR_AND;
     case RULE_COMPOUND_LIST_CONCAT:
         return OPERATOR_AND;
-    case RULE_COMPOUND_LIST_END:
-        return OPERATOR_NONE;
     case RULE_COMPOUND_LIST_LINEBREAK:
         return OPERATOR_AND;
     case RULE_AND_OR:

@@ -20,12 +20,13 @@ operator_handler get_operator_handler(enum operator_type type)
         return NULL;
 }
 
-int ast_execute(struct ast *ast)
+int ast_execute(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundler *bundle = bundle_ptr;
     if (ast->node_type == NODE_VALUE)
     {
         return AST_SUCCESS;
     }
-    operator_handler handler = get_operator_handler(ast->content.op_type);
-    return handler(ast);
+    operator_handler handler = get_operator_handler(ast->op_type);
+    return handler(ast, bundle);
 }

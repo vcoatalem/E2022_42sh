@@ -2,18 +2,6 @@
 
 //LIST
 
-void sh_rule_list_end(struct rule_array *rules)
-{
-    struct rule *rule = rule_build(RULE_LIST_END,
-            symbol_create(0, RULE_LIST_DELIM),
-            NULL);
-    struct rule *rule_eps = rule_build(RULE_LIST_END,
-            symbol_epsilon(),
-            NULL);
-    rule_array_add(rules, rule);
-    rule_array_add(rules, rule_eps);
-}
-
 void sh_rule_list_delim(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_LIST_DELIM,
@@ -31,9 +19,12 @@ void sh_rule_list(struct rule_array *rules)
     struct rule *rule = rule_build(RULE_LIST,
             symbol_create(0, RULE_AND_OR),
             symbol_create(0, RULE_LIST_CONCAT),
-            symbol_create(0, RULE_LIST_END), //this wont work, find a proper implementation later
+            NULL);
+    struct rule *rule_eps = rule_build(RULE_LIST,
+            symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);
+    rule_array_add(rules, rule_eps);
 }
 
 void sh_rule_list_concat(struct rule_array *rules)

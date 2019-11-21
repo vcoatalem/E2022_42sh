@@ -1,12 +1,17 @@
 #include "../ast.h"
+#include "../../main/42sh.h"
 #include "../../execution/execution.h"
 #include "string.h"
 
 #define MAX_ARGS_COUNT 2048
 #define MAX_REDIR_COUNT 64
 
-int ast_handle_pipe(struct ast *ast)
+int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
+    if (!bundle)
+        return AST_ERROR;
+
     struct pipe *pipe = pipe_init();
 
     for (size_t i = 0; i < ast->nb_children; i++)
@@ -17,7 +22,7 @@ int ast_handle_pipe(struct ast *ast)
 
         for (size_t j = 0; j < args_ast->nb_children; j++)
         {
-            args[j] = (*(args_ast->forest + j))->content.value;
+            args[j] = (*(args_ast->forest + j))->value;
         }
 
         struct ast *redir_ast = get_child_of_name(cmd_ast, "redir");

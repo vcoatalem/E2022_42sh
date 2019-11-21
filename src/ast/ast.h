@@ -28,7 +28,6 @@ enum node_type
 {
     NODE_VALUE,
     NODE_OPERATOR,
-    NODE_EPSILON
 };
 
 /**
@@ -48,6 +47,7 @@ enum operator_type
     OPERATOR_IF,
     OPERATOR_IF_BODY,
     OPERATOR_THEN,
+    OPERATOR_ELIF,
     OPERATOR_ELSE,
     OPERATOR_WHILE,
     OPERATOR_WHILE_BODY,
@@ -58,33 +58,26 @@ enum operator_type
     OPERATOR_DO,
     OPERATOR_DONE,
     OPERATOR_CASE,
+    OPERATOR_PATTERN,
+    OPERATOR_COMPOUND,
+    OPERATOR_FUNC_DECLARATION,
+    OPERATOR_FUNC_NAME,
+    OPERATOR_FUNC_BODY,
     //while, until, ..
-};
-
-/**
- * \union content
- * \brief content of the node
- *
- * Content of the node
- *
- */
-union content
-{
-    char *value;
-    enum operator_type op_type;
 };
 
 /**
  * \struct ast
  * \brief ast structure
  *
- * Contain the type and content of the node, the number of children and a list of these children
+ * Contain the type, the value of the node, the number of children and a list of these children
  *
  */
 struct ast
 {
     enum node_type node_type;
-    union content content;
+    char *value;
+    enum operator_type op_type;
     struct ast **forest;
     size_t nb_children;
 };
@@ -152,8 +145,19 @@ void ast_clean(struct ast *ast);
  * \param ast parent node
  * \param name name to check
  *
+ * \return ast
  */
 struct ast *get_child_of_name(struct ast *ast, const char *name);
+
+/**
+ * \brief find the children with the corresponding operator type
+ *
+ * \param ast parent node
+ * \param op_type operator type to check
+ *
+ * \return ast , NULL if not found
+ */
+struct ast *find_op_type(struct ast *ast, enum operator_type op_type);
 
 /**
  * \brief get all arguments from an arg_list node
@@ -181,25 +185,28 @@ char **get_arg_list(struct ast *ast);
  *
  * \return *int handler function
  */
-typedef int (*operator_handler)(struct ast *ast);
+typedef int (*operator_handler)(struct ast *ast,
+        void *bundle);
 
 /**
  * \brief get the handler corresponding to the operator type
  *
- * \param operator_type operator type to get handler grom
+ * \param operator_type operator type to get handler from
  *
  * \return operator_handler resulting handler
  */
 operator_handler get_operator_handler(enum operator_type type);
 
-int ast_handle_and(struct ast *ast);
-int ast_handle_or(struct ast *ast);
-int ast_handle_pipe(struct ast *ast);
-int ast_handle_if(struct ast *ast);
-int ast_handle_then(struct ast *ast);
-int ast_handle_while(struct ast *ast);
-int ast_handle_for(struct ast *ast);
-int ast_handle_until(struct ast *ast);
+int ast_handle_and(struct ast *ast, void *bundle);
+int ast_handle_or(struct ast *ast, void *bundle);
+int ast_handle_pipe(struct ast *ast, void *bundle);
+int ast_handle_if(struct ast *ast, void *bundle);
+int ast_handle_then(struct ast *ast, void *bundle);
+int ast_handle_while(struct ast *ast, void *bundle);
+int ast_handle_for(struct ast *ast, void *bundle);
+int ast_handle_until(struct ast *ast, void *bundle);
+int ast_handle_func_declaration(struct ast *ast,
+        void *bundle);
 
 /**
  * \brief execution function of ast
@@ -208,6 +215,6 @@ int ast_handle_until(struct ast *ast);
  *
  * \return int return AST_SUCCESS (= 0) or AST_ERROR (= 1)
  */
-int ast_execute(struct ast *ast);
+int ast_execute(struct ast *ast, void *bundle);
 
 #endif /* AST_H */
