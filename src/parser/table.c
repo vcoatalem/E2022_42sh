@@ -39,6 +39,10 @@ void fill_line_slot(struct analysis_table *t,
             size_t index = a->token_type;
             if (line[index] && expr_is_epsilon(line[index]))
             {
+                //if current slot has an epsilon, we have a conflict.
+                //we opt to reduce always reduce (replace the epsilon expr
+                //with the new one)
+                log_conflict(rule, index, line[index], rule->symbols);
                 symbol_array_free(line[index]); 
                 line[index] = symbol_array_dup(rule->symbols);
             }

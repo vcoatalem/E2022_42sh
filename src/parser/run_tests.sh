@@ -1,6 +1,7 @@
 #!/bin/sh
 
 TEST_BIN=$1
+AST_FILE_BASENAME=$2
 
 echo $TEST_BIN
 
@@ -18,7 +19,7 @@ run_test()
 {
     TEST_BIN=$1
     Q_COUNT=$2
-    OUTPUT_FILE="$OUTPUT_DIR/ast_basic_$Q_COUNT.dot"
+    OUTPUT_FILE="$OUTPUT_DIR/"$AST_FILE_BASENAME"_$Q_COUNT.dot"
     ERROR=0
     $TEST_BIN $Q_COUNT $OUTPUT_FILE 1>/dev/null 2> $ERR_DIR; RETURN=$?
     [ $RETURN -ne 0 ] && ERROR=1

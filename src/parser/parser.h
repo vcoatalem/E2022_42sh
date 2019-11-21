@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 25
+#define NB_RULES 32
 enum rule_id //MORE RULES TO BE ADDED
 {
     RULE_NONE,                     //0
@@ -19,26 +19,33 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_LIST_DELIM,               //2
     RULE_LIST_CONCAT,              //3
     RULE_LIST,                     //4
-    RULE_LIST_LINEBREAK,           //5
-    RULE_AND_OR,                   //6
-    RULE_AND_OR_CONCAT,            //7
-    RULE_AND_CONCAT,               //8
-    RULE_AND_LINEBREAK,            //9
-    RULE_OR_CONCAT,                //10
-    RULE_OR_LINEBREAK,             //11
-    RULE_PIPELINE,                 //12
-    RULE_PIPE,                     //13
-    RULE_COMMAND,                  //14
-    RULE_REDIR_LIST,               //15
-    RULE_REDIR,                    //16
-    RULE_REDIR_SYMBOL,             //17
-    RULE_REDIR_TO,                 //18
-    RULE_IONUMBER,                 //19
-    RULE_ELEMENT,                  //20
-    RULE_ELEMENT_LIST,             //21
-    RULE_ARG_LIST,                 //22
-    RULE_IF,                       //23
-    RULE_ELSE_CONCAT,              //24
+    RULE_LIST_END,                 //5
+    RULE_COMPOUND_LIST_END,        //6
+    RULE_COMPOUND_LIST_LINEBREAK,  //7
+    RULE_COMPOUND_LIST_DELIM,      //8
+    RULE_COMPOUND_LIST_CONCAT,     //9
+    RULE_COMPOUND_LIST,            //10
+    RULE_AND_OR,                   //11
+    RULE_AND_OR_CONCAT,            //12
+    RULE_AND_CONCAT,               //13
+    RULE_AND_LINEBREAK,            //14
+    RULE_OR_CONCAT,                //15
+    RULE_OR_LINEBREAK,             //16
+    RULE_PIPELINE,                 //17
+    RULE_PIPE,                     //18
+    RULE_COMMAND,                  //19
+    RULE_SIMPLE_COMMAND,           //20
+    RULE_SHELL_COMMAND,            //21
+    RULE_REDIR_LIST,               //22
+    RULE_REDIR,                    //23
+    RULE_REDIR_SYMBOL,             //24
+    RULE_REDIR_TO,                 //25
+    RULE_IONUMBER,                 //26
+    RULE_ELEMENT,                  //27
+    RULE_ELEMENT_LIST,             //28
+    RULE_ARG_LIST,                 //29
+    RULE_IF,                       //30
+    RULE_ELSE_CONCAT,              //31
 };
 
 enum symbol_type
@@ -107,6 +114,8 @@ void sh_rule_element(struct rule_array *rules);
 void sh_rule_element_list(struct rule_array *rules);
 void sh_rule_arg_list(struct rule_array *rules);
 void sh_rule_command(struct rule_array *rules);
+void sh_rule_shell_command(struct rule_array *rules);
+void sh_rule_simple_command(struct rule_array *rules);
 void sh_rule_ionumber(struct rule_array *rules);
 void sh_rule_ionumber_optionnal(struct rule_array *rules);
 void sh_rule_redir_list(struct rule_array *rules);
@@ -122,10 +131,15 @@ void sh_rule_and_concat(struct rule_array *rules);
 void sh_rule_and_or(struct rule_array *rules);
 void sh_rule_and_linebreak(struct rule_array *rules);
 void sh_rule_or_linebreak(struct rule_array *rules);
-void sh_rule_list_delim(struct rule_array *rules);
 void sh_rule_list(struct rule_array *rules);
+void sh_rule_list_delim(struct rule_array *rules);
+void sh_rule_list_end(struct rule_array *rules);
 void sh_rule_list_concat(struct rule_array *rules);
-void sh_rule_list_linebreak(struct rule_array *rules);
+void sh_rule_compound_list(struct rule_array *rules);
+void sh_rule_compound_list_linebreak(struct rule_array *rules);
+void sh_rule_compound_list_delim(struct rule_array *rules);
+void sh_rule_compound_list_end(struct rule_array *rules);
+void sh_rule_compound_list_concat(struct rule_array *rules);
 void sh_rule_if(struct rule_array *rules);
 void sh_rule_else_concat(struct rule_array *rules);
 

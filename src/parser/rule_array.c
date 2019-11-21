@@ -46,7 +46,9 @@ struct rule_array *rule_array_build(void)
     sh_rule_or_linebreak(rules);
     sh_rule_pipeline(rules);
     sh_rule_pipe(rules);
-    sh_rule_command(rules);
+    sh_rule_command(rules);    
+    sh_rule_simple_command(rules);    
+    sh_rule_shell_command(rules);
     sh_rule_redir_list(rules);
     sh_rule_redir(rules);
     sh_rule_redir_symbol(rules);
@@ -55,10 +57,15 @@ struct rule_array *rule_array_build(void)
     sh_rule_element(rules);
     sh_rule_element_list(rules);
     sh_rule_arg_list(rules);
-    sh_rule_list_delim(rules);
     sh_rule_list(rules);
-    sh_rule_list_linebreak(rules);
+    sh_rule_list_delim(rules);
+    sh_rule_list_end(rules);
     sh_rule_list_concat(rules);
+    sh_rule_compound_list(rules);
+    sh_rule_compound_list_linebreak(rules);
+    sh_rule_compound_list_delim(rules);
+    sh_rule_compound_list_end(rules);
+    sh_rule_compound_list_concat(rules);
     sh_rule_if(rules);
     sh_rule_else_concat(rules);
     return rules;

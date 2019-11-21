@@ -15,6 +15,7 @@ add_library(parser
     shell_rules/pipeline.c
     shell_rules/and_or.c
     shell_rules/list.c
+    shell_rules/compound_list.c
     shell_rules/input.c
     ast_build/node_string.c
     ast_build/node_operator.c
@@ -38,10 +39,31 @@ set_target_properties(test_parser_basic
 # fetch .sh script for output comparison
 add_custom_command(TARGET test_parser_basic
 POST_BUILD
-    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/parser/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/parser/test_parser_basic"
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/parser/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/parser/test_parser_basic" "ast_basic"
 )
 
 ######################
+
+# MORE ADVANCED PARSER TEST
+
+add_executable(test_parser_more tests/test_parser_more.c)
+
+target_link_libraries(test_parser_more parser)
+
+set_target_properties(test_parser_more
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "."
+    EXCLUDE_FROM_ALL "true"
+)
+
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_parser_more
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/parser/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/parser/test_parser_more" "ast_more"
+)
+
+######################
+
 
 # List all tests
 
@@ -57,6 +79,7 @@ set_target_properties(test_grammar_basic
 # BASIC GRAMMAR TEST
 
 add_custom_target(parser_check
-    DEPENDS test_parser_basic
     DEPENDS test_grammar_basic
+    DEPENDS test_parser_basic
+    DEPENDS test_parser_more
 )

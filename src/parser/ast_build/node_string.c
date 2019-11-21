@@ -14,8 +14,18 @@ char *rule_id_to_string(enum rule_id id)
         return "list_concat";
     case RULE_LIST:
         return "list";
-    case RULE_LIST_LINEBREAK:
-        return "list_linebreak";
+    case RULE_LIST_END:
+        return "list_end";
+    case RULE_COMPOUND_LIST_LINEBREAK:
+        return "compound_list_linebreak";
+    case RULE_COMPOUND_LIST_DELIM:
+        return "list_delim";
+    case RULE_COMPOUND_LIST_CONCAT:
+        return "list_concat";
+    case RULE_COMPOUND_LIST:
+        return "list";
+    case RULE_COMPOUND_LIST_END:
+        return "list_end";
     case RULE_AND_OR:
         return "and|or";
     case RULE_AND_CONCAT:
@@ -32,6 +42,10 @@ char *rule_id_to_string(enum rule_id id)
         return "|";
     case RULE_COMMAND:
         return "command";
+    case RULE_SIMPLE_COMMAND:
+        return "simple_command";
+    case RULE_SHELL_COMMAND:
+        return "shell_command";
     case RULE_REDIR:
         return "redirection";
     case RULE_REDIR_TO:
