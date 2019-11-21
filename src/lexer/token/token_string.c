@@ -133,6 +133,10 @@ char *token_to_string(enum token_type type)
 
 char *token_to_formatted_string(enum token_type type)
 {
+    if (type == TOKEN_EOF)
+    {
+        return "EOF";
+    }
     if (type == TOKEN_EOL)
     {
         return "\\n";
