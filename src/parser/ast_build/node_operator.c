@@ -48,6 +48,10 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_NONE;
     case RULE_ARG_LIST:
         return OPERATOR_NONE;
+    case RULE_IF:
+        return OPERATOR_NONE;
+    case RULE_ELSE_CONCAT:
+        return OPERATOR_NONE;
     default:
         return OPERATOR_NONE;
     }

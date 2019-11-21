@@ -70,7 +70,7 @@ run_test()
         [ $EXP_RETURN -ne $RETURN ] && ERROR=1 && echo "ERROR in RETURN: $EXP_RETURN ? $RETURN"
 
         LINES_PRINTED=$(cat $OUT | wc -l)
-        [ $ERROR -eq 0 ] && echo "$GREEN OK:  $line $ITALIC ($LINES_PRINTED lines printed) $NC" && continue
+        [ $ERROR -eq 0 ] && echo -e "$GREEN OK:  $line $ITALIC ($LINES_PRINTED lines printed) $NC" && continue
         echo "$ORANGE KO:   $line  $NC"
     done < $CMD_FILE
     clean_temp_files

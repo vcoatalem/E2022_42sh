@@ -22,19 +22,21 @@ int main(int argc, char **argv)
     };
     if (q == 0)
     {
+        fprintf(stderr, "simple command");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "a"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 1)
     {
-
+        fprintf(stderr, "unfinished OR");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 2)
     {
+        fprintf(stderr, "correct OR");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "Hello"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
@@ -44,6 +46,7 @@ int main(int argc, char **argv)
     }
     else if (q == 3)
     {
+        fprintf(stderr, "2 simple command lines");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "Hello"));
         token_array_add(exp, token_init(TOKEN_EOL, "\n"));
@@ -53,11 +56,13 @@ int main(int argc, char **argv)
     }
     else if (q == 4)
     {
+        fprintf(stderr, "simple newline");
         token_array_add(exp, token_init(TOKEN_WORD, "\n"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 5)
     {
+        fprintf(stderr, "uncorrect OR");
         token_array_add(exp, token_init(TOKEN_WORD, "this"));
         token_array_add(exp, token_init(TOKEN_WORD, "should"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_PIPE, "||"));
@@ -67,6 +72,7 @@ int main(int argc, char **argv)
     }
     else if (q == 6)
     {
+        fprintf(stderr, "correct pipe with `!`");
         token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "A"));
@@ -77,6 +83,7 @@ int main(int argc, char **argv)
     }
     else if (q == 7)
     {
+        fprintf(stderr, "uncorrect pipe with 2 `!`");
         token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
         token_array_add(exp, token_init(TOKEN_EXCLAMATION_POINT, "!"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
@@ -85,6 +92,7 @@ int main(int argc, char **argv)
     }
     else if (q == 8)
     {
+        fprintf(stderr, "simple redirected command");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "i"));
         token_array_add(exp, token_init(TOKEN_WORD, "love"));

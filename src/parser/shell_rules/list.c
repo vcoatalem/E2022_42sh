@@ -24,7 +24,7 @@ void sh_rule_list_delim(struct rule_array *rules)
     struct rule *rule_c = rule_build(RULE_LIST_DELIM,
             symbol_create(0, RULE_LIST_LINEBREAK),
             NULL);
-
+    //should we add EOF ?
     rule_array_add(rules, rule_a);
     rule_array_add(rules, rule_b);
     rule_array_add(rules, rule_c);

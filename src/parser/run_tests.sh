@@ -12,6 +12,7 @@ ITALIC='\033[3m'
 NC='\033[0m'
 
 OUTPUT_DIR=output
+ERR_DIR=err
 
 run_test()
 {
@@ -19,10 +20,11 @@ run_test()
     Q_COUNT=$2
     OUTPUT_FILE="$OUTPUT_DIR/ast_basic_$Q_COUNT.dot"
     ERROR=0
-    $TEST_BIN $Q_COUNT $OUTPUT_FILE 1>/dev/null 2> /dev/null; RETURN=$?
+    $TEST_BIN $Q_COUNT $OUTPUT_FILE 1>/dev/null 2> $ERR_DIR; RETURN=$?
     [ $RETURN -ne 0 ] && ERROR=1
-    [ $ERROR -eq 0 ] && echo -e "$GREEN TEST #$Q_COUNT: OK ! $NC"
-    [ $ERROR -eq 1 ] && echo -e "$ORANGE TEST #$Q_COUNT: KO ! $NC"
+    [ $ERROR -eq 0 ] && echo -e  "$GREEN TEST #$Q_COUNT: $(cat $ERR_DIR) : OK ! $NC"
+    [ $ERROR -eq 1 ] && echo -e "$ORANGE TEST #$Q_COUNT: $(cat $ERR_DIR) : KO ! $NC"
+    rm $ERR_DIR
 }
 
 mkdir $OUTPUT_DIR 2>/dev/null

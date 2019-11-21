@@ -59,5 +59,7 @@ struct rule_array *rule_array_build(void)
     sh_rule_list(rules);
     sh_rule_list_linebreak(rules);
     sh_rule_list_concat(rules);
+    sh_rule_if(rules);
+    sh_rule_else_concat(rules);
     return rules;
 }

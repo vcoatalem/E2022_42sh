@@ -22,7 +22,7 @@ static int rule_is_epsilon(enum rule_id rule_id, struct rule_array *rules)
 static struct symbol *get_next_symbol(struct symbol_array *expression,
         size_t i)
 {
-    if (expression->size == i - 1)
+    if (expression->size == i + 1)
     {
         return NULL;
     }
