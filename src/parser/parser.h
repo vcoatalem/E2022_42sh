@@ -184,19 +184,21 @@ void stamp_print(struct stamp *stamp);
 int expr_is_epsilon(struct symbol_array *expression);
 struct symbol_array *expr_first(struct rule *rule, struct rule_array *rules);
 struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules);
-struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules);
+struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
+        int **path_list);
 void symbol_array_print(struct symbol_array *s);
 
 // ANALYSIS_TABLE //////////////////////////////////////////////////////
 
 struct analysis_table
 {
+    struct rule_array *rules;
     size_t n_rules;
     size_t n_symbols;
     struct symbol_array ***transformation_mat;
 };
 
-struct analysis_table *table_init(void);
+struct analysis_table *table_build(void);
 void table_print(struct analysis_table *table);
 void table_free(struct analysis_table *table);
 

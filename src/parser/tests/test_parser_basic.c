@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "\n"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    struct analysis_table *table = table_init();
+    struct analysis_table *table = table_build();
     struct parser *p = parser_init(exp);
     parse(p, table);
     ast_dot_print(p->ast, output_file_name);

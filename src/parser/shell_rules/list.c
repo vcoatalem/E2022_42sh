@@ -45,7 +45,7 @@ void sh_rule_list_concat(struct rule_array *rules)
             symbol_create(0, RULE_LIST_DELIM),
             symbol_create(0, RULE_LIST),
             NULL);
-    struct rule *rule_eps = rule_build(RULE_ARG_LIST,
+    struct rule *rule_eps = rule_build(RULE_LIST_CONCAT,
             symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);

@@ -1,12 +1,11 @@
 #include "../parser.h"
 
-//pipe -> '|' command pipe
+//pipe -> '|' command pipeline
 //pipe -> epsilon
 void sh_rule_pipe(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_PIPE,
             symbol_create(TOKEN_PIPE, 0),
-            symbol_create(0, RULE_COMMAND),
             symbol_create(0, RULE_PIPELINE),
             NULL);
     struct rule *rule_eps = rule_build(RULE_PIPE,

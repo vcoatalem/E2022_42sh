@@ -31,13 +31,18 @@ void fill_line_slot(struct analysis_table *t,
 {   
     struct symbol_array **line = t->transformation_mat[rule->rule_id];
     struct symbol_array *firsts = expr_first(rule, rules);
-    if (firsts)
+    if (firsts->size > 0)
     {
         for (size_t j = 0; j < firsts->size; j++)
         {
             struct symbol *a = firsts->array[j];
             size_t index = a->token_type;
-            if (!line[index])
+            if (line[index] && expr_is_epsilon(line[index]))
+            {
+                symbol_array_free(line[index]); 
+                line[index] = symbol_array_dup(rule->symbols);
+            }
+            else if (!line[index])
             {
                 line[index] = symbol_array_dup(rule->symbols);
             }
@@ -49,11 +54,10 @@ void fill_line_slot(struct analysis_table *t,
                 }
             }
         }
-        symbol_array_free(firsts);
     }
-    if (expr_is_epsilon(rule->symbols))
+    else if (expr_is_epsilon(rule->symbols))
     {
-        struct symbol_array *nexts = rule_next(rule->rule_id, rules);
+        struct symbol_array *nexts = rule_next(rule->rule_id, rules, NULL);
         if (nexts)
         {
             for (size_t j = 0; j < nexts->size; j++)
@@ -76,13 +80,14 @@ void fill_line_slot(struct analysis_table *t,
             symbol_array_free(nexts);
         }
     }
+    symbol_array_free(firsts);
 }
 
-struct analysis_table *table_init(void)
+static struct analysis_table *table_init(void)
 {
     struct analysis_table *t = calloc(1, sizeof(struct analysis_table));
-
     struct rule_array *ll_rules = rule_array_build();
+    t->rules = ll_rules;
     t->n_rules = NB_RULES;
     t->n_symbols = NB_TOKENS + 1;
     struct symbol_array ***transformation_mat = calloc(t->n_rules,
@@ -93,14 +98,21 @@ struct analysis_table *table_init(void)
         *(transformation_mat + i) = line;
     }
     t->transformation_mat = transformation_mat;
-    
-    for (size_t i = 0; i < ll_rules->size; i++)
+    return t;
+}
+
+struct analysis_table *table_build(void)
+{
+    struct analysis_table *t = table_init();
+    for (size_t i = 0; i < t->rules->size; i++)
     {
-        printf("[LL PARSER] ---------- [TABLE] setting rule #%zu\n", i);
-        struct rule *rule = ll_rules->rules[i];
-        fill_line_slot(t, rule, ll_rules);
+        struct rule *rule = t->rules->rules[i];
+        printf("[LL PARSER] ---------- [TABLE] setting rule #%zu ; ", i);
+        rule_print(rule);
+        printf("\n");
+        fill_line_slot(t, rule, t->rules);
     }
-    rule_array_free(ll_rules);
+    rule_array_free(t->rules);
     printf("[LL PARSER] Built analysis table." );
     printf("[LL PARSER] Found #%d conflicts in grammar\n", g_n_conflicts);
     return t;
