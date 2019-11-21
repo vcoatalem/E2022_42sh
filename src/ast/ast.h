@@ -66,29 +66,17 @@ enum operator_type
 };
 
 /**
- * \union content
- * \brief content of the node
- *
- * Content of the node
- *
- */
-union content
-{
-    char *value;
-    enum operator_type op_type;
-};
-
-/**
  * \struct ast
  * \brief ast structure
  *
- * Contain the type and content of the node, the number of children and a list of these children
+ * Contain the type, the value of the node, the number of children and a list of these children
  *
  */
 struct ast
 {
     enum node_type node_type;
-    union content content;
+    char *value;
+    enum operator_type op_type;
     struct ast **forest;
     size_t nb_children;
 };

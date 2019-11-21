@@ -21,7 +21,7 @@ int ast_handle_pipe(struct ast *ast, struct execution_bundle *bundle)
 
         for (size_t j = 0; j < args_ast->nb_children; j++)
         {
-            args[j] = (*(args_ast->forest + j))->content.value;
+            args[j] = (*(args_ast->forest + j))->value;
         }
 
         struct ast *redir_ast = get_child_of_name(cmd_ast, "redir");

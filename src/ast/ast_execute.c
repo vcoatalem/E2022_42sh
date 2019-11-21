@@ -26,6 +26,6 @@ int ast_execute(struct ast *ast)
     {
         return AST_SUCCESS;
     }
-    operator_handler handler = get_operator_handler(ast->content.op_type);
+    operator_handler handler = get_operator_handler(ast->op_type);
     return handler(ast);
 }

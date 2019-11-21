@@ -6,7 +6,7 @@ static struct ast *find_op_while_body(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_WHILE_BODY)
+        if (ast->forest[i]->op_type == OPERATOR_WHILE_BODY)
             return ast->forest[i];
     }
 
@@ -17,7 +17,7 @@ static struct ast *find_op_do(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_DO)
+        if (ast->forest[i]->op_type == OPERATOR_DO)
             return ast->forest[i];
     }
 
@@ -28,7 +28,7 @@ static struct ast *find_op_done(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_DONE)
+        if (ast->forest[i]->op_type == OPERATOR_DONE)
             return ast->forest[i];
     }
 

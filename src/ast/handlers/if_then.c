@@ -6,7 +6,7 @@ static struct ast *find_op_if_body(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_IF_BODY)
+        if (ast->forest[i]->op_type == OPERATOR_IF_BODY)
             return ast->forest[i];
     }
 
@@ -17,7 +17,7 @@ static struct ast *find_op_then(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_THEN)
+        if (ast->forest[i]->op_type == OPERATOR_THEN)
             return ast->forest[i];
     }
 
@@ -28,7 +28,7 @@ static struct ast *find_op_else(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_ELSE)
+        if (ast->forest[i]->op_type == OPERATOR_ELSE)
             return ast->forest[i];
     }
 

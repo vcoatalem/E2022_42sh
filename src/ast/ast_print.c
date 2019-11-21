@@ -30,12 +30,12 @@ void _ast_dot_print(struct ast *ast, FILE *file)
     {
         if (ast->node_type == NODE_VALUE)
         {
-            fprintf(file, "\"%s_%p\";\n\t", ast->content.value, ast_cast);
+            fprintf(file, "\"%s_%p\";\n\t", ast->value, ast_cast);
         }
         else if (ast->node_type == NODE_OPERATOR)
         {
             fprintf(file, "\"%s_%p\";\n\t",
-                    type_character(ast->content.op_type), ast_cast);
+                    type_character(ast->op_type), ast_cast);
         }
         else // NODE_EPSILON
         {
@@ -47,11 +47,11 @@ void _ast_dot_print(struct ast *ast, FILE *file)
     for (size_t i = 0; i < ast->nb_children; i++)
     {
         if (ast->node_type == NODE_VALUE)
-            fprintf(file, "\"%s_%p\"", ast->content.value, ast_cast);
+            fprintf(file, "\"%s_%p\"", ast->value, ast_cast);
 
         else
             fprintf(file, "\"%s_%p\"",
-                    type_character(ast->content.op_type), ast_cast);
+                    type_character(ast->op_type), ast_cast);
 
         fprintf(file, " -> ");
 
