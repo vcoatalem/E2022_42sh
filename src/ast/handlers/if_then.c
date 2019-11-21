@@ -23,9 +23,9 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
     {
         for (size_t i = 0; i < ast->nb_children; i++)
         {
-            struct ast *ast_elif = forest[i];
+            struct ast *ast_elif = ast->forest[i];
             if (ast_elif->op_type == OPERATOR_ELIF
-                    && ast_execute(ast_elif) == AST_SUCCESS)
+                    && ast_execute(ast_elif, bundle_ptr) == AST_SUCCESS)
                 return ast_execute(ast_then, bundle);
         }
 
