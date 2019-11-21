@@ -25,7 +25,6 @@ struct ast *ast_init(enum node_type type, char *value,
         new_ast->content.op_type = OPERATOR_NONE;
         new_ast->content.value = NULL;
     }
-
     else
     {
         new_ast->node_type = NODE_VALUE;

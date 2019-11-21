@@ -29,11 +29,19 @@ void _ast_dot_print(struct ast *ast, FILE *file)
     if (ast->forest == NULL)
     {
         if (ast->node_type == NODE_VALUE)
+        {
             fprintf(file, "\"%s_%p\";\n\t", ast->content.value, ast_cast);
-
-        else
+        }
+        else if (ast->node_type == NODE_OPERATOR)
+        {
             fprintf(file, "\"%s_%p\";\n\t",
                     type_character(ast->content.op_type), ast_cast);
+        }
+        else // NODE_EPSILON
+        {
+            fprintf(file, "\"%s_%p\";\n\t",
+                    "EPSILON", ast_cast);
+        }
     }
 
     for (size_t i = 0; i < ast->nb_children; i++)
