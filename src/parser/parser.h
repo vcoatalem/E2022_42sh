@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 33
+#define NB_RULES 36
 enum rule_id //MORE RULES TO BE ADDED
 {
     RULE_NONE,                       //0
@@ -46,7 +46,10 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_ELEMENT_LIST,               //29
     RULE_ARG_LIST,                   //30
     RULE_IF,                         //31
-    RULE_ELSE_CONCAT                 //32
+    RULE_ELSE_CONCAT,                //32
+    RULE_WHILE,                      //33
+    RULE_UNTIL,                      //34
+    RULE_DO_GROUP                    //35
 };
 
 enum symbol_type
@@ -144,6 +147,9 @@ void sh_rule_compound_list_break_delim(struct rule_array *rules);
 void sh_rule_compound_list_break_concat(struct rule_array *rules);
 void sh_rule_if(struct rule_array *rules);
 void sh_rule_else_concat(struct rule_array *rules);
+void sh_rule_do_group(struct rule_array *rules);
+void sh_rule_while(struct rule_array *rules);
+void sh_rule_until(struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);

@@ -62,6 +62,12 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_NONE;
     case RULE_ELSE_CONCAT:
         return OPERATOR_NONE;
+    case RULE_WHILE:
+        return OPERATOR_WHILE;
+    case RULE_UNTIL:
+        return OPERATOR_UNTIL;
+    case RULE_DO_GROUP:
+        return OPERATOR_AND;
     default:
         return OPERATOR_NONE;
     }
