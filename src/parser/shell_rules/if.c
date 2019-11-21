@@ -5,9 +5,9 @@ void sh_rule_if(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_IF,
             symbol_create(TOKEN_IF, 0),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(TOKEN_THEN, 0),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(0, RULE_ELSE_CONCAT),
             symbol_create(TOKEN_FI, 0),
             NULL);
@@ -21,13 +21,13 @@ void sh_rule_else_concat(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_ELSE_CONCAT,
             symbol_create(TOKEN_ELSE, 0),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             NULL);
     struct rule *rule_elif = rule_build(RULE_ELSE_CONCAT,
             symbol_create(TOKEN_ELIF, 0),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(TOKEN_THEN, 0),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(0, RULE_ELSE_CONCAT),
             NULL);
     struct rule *rule_eps = rule_build(RULE_ELSE_CONCAT,

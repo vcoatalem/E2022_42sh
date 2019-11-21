@@ -35,6 +35,7 @@ void rule_array_free(struct rule_array *array)
 //this function builds the whole predetermined rule list
 struct rule_array *rule_array_build(void)
 {
+    //TODO: merge rule functions in sub categories
     struct rule_array *rules = rule_array_init();
     //add all preconstructed rules here
     sh_rule_input(rules);
@@ -61,10 +62,16 @@ struct rule_array *rule_array_build(void)
     sh_rule_list_delim(rules);
     sh_rule_list_concat(rules);
     sh_rule_compound_list(rules);
-    sh_rule_compound_list_linebreak(rules);
     sh_rule_compound_list_delim(rules);
     sh_rule_compound_list_concat(rules);
+    sh_rule_compound_list_break(rules);
+    sh_rule_compound_list_break_line(rules);
+    sh_rule_compound_list_break_delim(rules);
+    sh_rule_compound_list_break_concat(rules);
     sh_rule_if(rules);
     sh_rule_else_concat(rules);
+    sh_rule_do_group(rules);
+    sh_rule_while(rules);
+    sh_rule_until(rules);
     return rules;
 }

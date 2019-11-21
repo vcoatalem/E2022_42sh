@@ -14,8 +14,14 @@ char *rule_id_to_string(enum rule_id id)
         return "list_concat";
     case RULE_LIST:
         return "list";
-    case RULE_COMPOUND_LIST_LINEBREAK:
-        return "compound_list_linebreak";
+    case RULE_COMPOUND_LIST_BREAK:
+        return "compound_list_break"; 
+    case RULE_COMPOUND_LIST_BREAK_DELIM:
+        return "compound_list_break_delim";
+    case RULE_COMPOUND_LIST_BREAK_CONCAT:
+        return "compound_list_break_concat";
+    case RULE_COMPOUND_LIST_BREAK_LINE:
+        return "compound_list_break_empty_lines";
     case RULE_COMPOUND_LIST_DELIM:
         return "list_delim";
     case RULE_COMPOUND_LIST_CONCAT:
@@ -62,6 +68,12 @@ char *rule_id_to_string(enum rule_id id)
         return "if";
     case RULE_ELSE_CONCAT:
         return "else";
+    case RULE_DO_GROUP:
+        return "do_group";
+    case RULE_WHILE:
+        return "while";
+    case RULE_UNTIL:
+        return "until";
     default:
         return "unknown";
     }

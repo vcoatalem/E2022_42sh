@@ -34,7 +34,7 @@ int execute_stdin(struct execution_bundle *bundle)
     {
         ast_dot_print(ast, "ast.dot");
     }
-    ast_execute(ast);
+    ast_execute(ast, bundle);
     token_array_print(arr, stdout);
     ast_free(ast);
     token_array_free(arr);
@@ -79,7 +79,7 @@ int execute_interactive(struct execution_bundle *bundle)
         {
             ast_dot_print(ast, "ast.dot");
         }
-        ast_execute(ast);
+        ast_execute(ast, bundle);
         //token_array_print(arr, stdout);
         ast_free(ast);
         token_array_free(arr);
@@ -102,7 +102,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     {
         ast_dot_print(ast, "ast.dot");
     }
-    ast_execute(ast);
+    ast_execute(ast, bundle);
     ast_free(ast);
     //token_array_print(arr, stdout);
     token_array_free(arr);
@@ -141,7 +141,7 @@ int execute_script(struct execution_bundle *bundle, char* script)
     if (arr->size)
         {
             struct ast *ast = tmp_parse(arr);
-            ast_execute(ast);
+            ast_execute(ast, bundle);
             ast_free(ast);
         }
 
