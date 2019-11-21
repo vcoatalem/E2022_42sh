@@ -18,7 +18,7 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_AND;
     case RULE_COMPOUND_LIST_CONCAT:
         return OPERATOR_AND;
-    case RULE_COMPOUND_LIST_LINEBREAK:
+    case RULE_COMPOUND_LIST_BREAK:
         return OPERATOR_AND;
     case RULE_AND_OR:
         return OPERATOR_AND;

@@ -61,9 +61,11 @@ struct rule_array *rule_array_build(void)
     sh_rule_list_delim(rules);
     sh_rule_list_concat(rules);
     sh_rule_compound_list(rules);
-    sh_rule_compound_list_linebreak(rules);
     sh_rule_compound_list_delim(rules);
     sh_rule_compound_list_concat(rules);
+    sh_rule_compound_list_break(rules);
+    sh_rule_compound_list_break_delim(rules);
+    sh_rule_compound_list_break_concat(rules);
     sh_rule_if(rules);
     sh_rule_else_concat(rules);
     return rules;

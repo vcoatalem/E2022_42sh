@@ -16,6 +16,7 @@ add_library(parser
     shell_rules/and_or.c
     shell_rules/list.c
     shell_rules/compound_list.c
+    shell_rules/compound_list_break.c
     shell_rules/input.c
     ast_build/node_string.c
     ast_build/node_operator.c

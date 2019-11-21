@@ -14,8 +14,8 @@ char *rule_id_to_string(enum rule_id id)
         return "list_concat";
     case RULE_LIST:
         return "list";
-    case RULE_COMPOUND_LIST_LINEBREAK:
-        return "compound_list_linebreak";
+    case RULE_COMPOUND_LIST_BREAK:
+        return "compound_list_break";
     case RULE_COMPOUND_LIST_DELIM:
         return "list_delim";
     case RULE_COMPOUND_LIST_CONCAT:

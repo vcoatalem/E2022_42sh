@@ -11,39 +11,41 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 30
+#define NB_RULES 32
 enum rule_id //MORE RULES TO BE ADDED
 {
-    RULE_NONE,                     //0
-    RULE_INPUT,                    //1
-    RULE_LIST_DELIM,               //2
-    RULE_LIST_CONCAT,              //3
-    RULE_LIST,                     //4
-    RULE_COMPOUND_LIST_LINEBREAK,  //5
-    RULE_COMPOUND_LIST_DELIM,      //6
-    RULE_COMPOUND_LIST_CONCAT,     //7
-    RULE_COMPOUND_LIST,            //8
-    RULE_AND_OR,                   //9
-    RULE_AND_OR_CONCAT,            //10
-    RULE_AND_CONCAT,               //11
-    RULE_AND_LINEBREAK,            //12
-    RULE_OR_CONCAT,                //13
-    RULE_OR_LINEBREAK,             //14
-    RULE_PIPELINE,                 //15
-    RULE_PIPE,                     //16
-    RULE_COMMAND,                  //17
-    RULE_SIMPLE_COMMAND,           //18
-    RULE_SHELL_COMMAND,            //19
-    RULE_REDIR_LIST,               //20
-    RULE_REDIR,                    //21
-    RULE_REDIR_SYMBOL,             //22
-    RULE_REDIR_TO,                 //23
-    RULE_IONUMBER,                 //24
-    RULE_ELEMENT,                  //25
-    RULE_ELEMENT_LIST,             //26
-    RULE_ARG_LIST,                 //27
-    RULE_IF,                       //28
-    RULE_ELSE_CONCAT               //29
+    RULE_NONE,                       //0
+    RULE_INPUT,                      //1
+    RULE_LIST_DELIM,                 //2
+    RULE_LIST_CONCAT,                //3
+    RULE_LIST,                       //4
+    RULE_COMPOUND_LIST_BREAK_DELIM,  //5
+    RULE_COMPOUND_LIST_BREAK_CONCAT, //6
+    RULE_COMPOUND_LIST_BREAK,        //7
+    RULE_COMPOUND_LIST_DELIM,        //8
+    RULE_COMPOUND_LIST_CONCAT,       //9
+    RULE_COMPOUND_LIST,              //10
+    RULE_AND_OR,                     //11
+    RULE_AND_OR_CONCAT,              //12
+    RULE_AND_CONCAT,                 //13
+    RULE_AND_LINEBREAK,              //14
+    RULE_OR_CONCAT,                  //15
+    RULE_OR_LINEBREAK,               //16
+    RULE_PIPELINE,                   //17
+    RULE_PIPE,                       //18
+    RULE_COMMAND,                    //19
+    RULE_SIMPLE_COMMAND,             //20
+    RULE_SHELL_COMMAND,              //21
+    RULE_REDIR_LIST,                 //22
+    RULE_REDIR,                      //23
+    RULE_REDIR_SYMBOL,               //24
+    RULE_REDIR_TO,                   //25
+    RULE_IONUMBER,                   //26
+    RULE_ELEMENT,                    //27
+    RULE_ELEMENT_LIST,               //28
+    RULE_ARG_LIST,                   //29
+    RULE_IF,                         //30
+    RULE_ELSE_CONCAT                 //31
 };
 
 enum symbol_type
@@ -133,9 +135,11 @@ void sh_rule_list(struct rule_array *rules);
 void sh_rule_list_delim(struct rule_array *rules);
 void sh_rule_list_concat(struct rule_array *rules);
 void sh_rule_compound_list(struct rule_array *rules);
-void sh_rule_compound_list_linebreak(struct rule_array *rules);
 void sh_rule_compound_list_delim(struct rule_array *rules);
 void sh_rule_compound_list_concat(struct rule_array *rules);
+void sh_rule_compound_list_break(struct rule_array *rules);
+void sh_rule_compound_list_break_delim(struct rule_array *rules);
+void sh_rule_compound_list_break_concat(struct rule_array *rules);
 void sh_rule_if(struct rule_array *rules);
 void sh_rule_else_concat(struct rule_array *rules);
 
