@@ -1,12 +1,16 @@
 #include "../ast.h"
+#include "../../main/42sh.h"
 #include "../../execution/execution.h"
 #include "string.h"
 
 #define MAX_ARGS_COUNT 2048
 #define MAX_REDIR_COUNT 64
 
-int ast_handle_pipe(struct ast *ast)
+int ast_handle_pipe(struct ast *ast, struct execution_bundle *bundle)
 {
+    if (!bundle)
+        break;
+
     struct pipe *pipe = pipe_init();
 
     for (size_t i = 0; i < ast->nb_children; i++)

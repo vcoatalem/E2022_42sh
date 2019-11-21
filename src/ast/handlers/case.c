@@ -1,4 +1,5 @@
 #include "../ast.h"
+#include "../../main/42sh.h"
 #include "../../execution/execution.h"
 
 static struct *find_op_compound(struct ast *ast)
@@ -10,8 +11,11 @@ static struct *find_op_compound(struct ast *ast)
     }
 }
 
-int ast_handle_case(struct ast *ast)
+int ast_handle_case(struct ast *ast, struct execution_bundle *bundle)
 {
+    if (!bundle)
+        break;
+
     if (ast == NULL)
         return AST_ERROR;
 

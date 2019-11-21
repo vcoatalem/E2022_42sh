@@ -1,7 +1,11 @@
 #include "ast.h"
+#include "../../main/42sh.h"
 
-int ast_handle_and(struct ast *ast)
+int ast_handle_and(struct ast *ast, struct execution_bundle *bundle)
 {
+    if (!bundle)
+        break;
+
     if (ast == NULL)
         return AST_ERROR;
 
@@ -15,8 +19,11 @@ int ast_handle_and(struct ast *ast)
     return try_execute;
 }
 
-int ast_handle_or(struct ast *ast)
+int ast_handle_or(struct ast *ast, struct execution_bundle *bundle)
 {
+    if (!bundle)
+        break;
+
     if (ast == NULL)
         return AST_ERROR;
 

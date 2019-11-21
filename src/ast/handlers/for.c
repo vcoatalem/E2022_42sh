@@ -1,4 +1,5 @@
 #include "../ast.h"
+#include "../../main/42sh.h"
 #include "../../execution/execution.h"
 
 static struct ast *find_op_for_body(struct ast *ast)
@@ -34,8 +35,11 @@ static struct ast *find_op_done(struct ast *ast)
     return NULL;
 }
 
-int ast_handle_for(struct ast *ast)
+int ast_handle_for(struct ast *ast, struct execution_bundle *bundle)
 {
+    if (!bundle)
+        break;
+
     if (ast == NULL)
         return AST_ERROR;
 
