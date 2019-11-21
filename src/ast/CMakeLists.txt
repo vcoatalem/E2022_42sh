@@ -7,7 +7,9 @@ add_library(ast
     handlers/if_then.c
     handlers/for.c
     handlers/until.c
-    handlers/while.c)
+    handlers/while.c
+    handlers/case.c
+    handlers/func_declaration.c)
 
 target_link_libraries(ast execution)
 
