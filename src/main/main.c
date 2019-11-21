@@ -3,13 +3,14 @@
 #include "42sh.h"
 #include <signal.h>
 #include "readline.h"
-#include "execute.h"
 
 
 void bundle_free(struct execution_bundle *bundle)
 {
     free(bundle->options);
     free(bundle->grammar);
+    free_hash_table_func(bundle->hash_table_func);
+    free_hash_table_var(bundle->hash_table_var);
 }
 
 
@@ -29,6 +30,17 @@ void appendhistory(char *cmd)
     fclose(fd);
 }
 
+/*
+static int check_file_exist(char* path)
+{
+    FILE *fd;
+    fd = fopen(path,"r");
+    if (!fd)
+        return 0;
+    fclose(fd);
+    return 1;
+}*/
+
 
 
 int main(int argc, char **argv)
@@ -40,18 +52,25 @@ int main(int argc, char **argv)
     }
     //struct grammar *g = grammar_build();
     struct execution_bundle bundle = { .options = options,
-                                        .grammar = NULL};//g };
+                                        .grammar = NULL,
+                                        .hash_table_var = init_hash_table_var(50),
+                                        .hash_table_func = init_hash_table_func(50)};//g };
     int execution_val = 0;
-    if (!options->ast_print_is_set)
+    /*if (!options->norc_is_set)
     {
+        if (check_file_exist("/etc/42shrc"))
+            execute_script(&bundle, "/etc/42shrc");
+        if (check_file_exist(".42shrc"))
+            execute_script(&bundle, ".42shrc");
+        //execute_script(&bundle, ".42shrc", 1);
         //execute_script(&bundle, "/etc/42shrc", 1);
         //execute_script(&bundle, ".42shrc", 1);
         //execution_val = (execute_script(&bundle, "/42shrc.txt", "r+"));
-    }
+    }*/
 
     if (options->script != NULL)
     {
-        execution_val = execute_script(&bundle, options->script, 0);
+        execution_val = execute_script(&bundle, options->script);
     }
     else if (options->command)
     {
@@ -66,6 +85,7 @@ int main(int argc, char **argv)
         execution_val = execute_interactive(&bundle);
     }
     options_free(options);
+    bundle_free(&bundle);
     if (execution_val != BASH_RETURN_OK)
     {
         //something went wrong...

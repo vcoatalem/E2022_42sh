@@ -1,2 +1,2 @@
-add_library(hashtable hashtable.c)
+add_library(hashtable hashtablefunc.c hashtablevar.c)
 
