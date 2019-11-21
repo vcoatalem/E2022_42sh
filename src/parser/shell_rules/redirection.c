@@ -105,8 +105,8 @@ void sh_rule_redir(struct rule_array *rules)
 void sh_rule_redir_list(struct rule_array *rules)
 {
     struct rule *rule_repeat = rule_build(RULE_REDIR_LIST,
-            symbol_create(0, RULE_REDIR_LIST),
             symbol_create(0, RULE_REDIR),
+            symbol_create(0, RULE_REDIR_LIST),
             NULL);
     struct rule *rule_pass = rule_build(RULE_REDIR_LIST,
             symbol_epsilon(),
