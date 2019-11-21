@@ -57,6 +57,7 @@ int main(int argc, char **argv)
     parse(p, table);
     ast_dot_print(p->ast, output_file_name);
     int return_value = (p->state == expected_parser_state[q]) ? 0 : 1;
+    printf("[LL PARSER] parser state: %d\n", p->state);
     parser_free(p, 1);
     table_free(table);
     return return_value;

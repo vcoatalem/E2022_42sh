@@ -19,7 +19,7 @@ run_test()
     Q_COUNT=$2
     OUTPUT_FILE="$OUTPUT_DIR/ast_$Q_COUNT.dot"
     ERROR=0
-    $TEST_BIN $Q_COUNT $OUTPUT_FILE | sed '/[LL PARSER]/d' 2> /dev/null; RETURN=$?
+    $TEST_BIN $Q_COUNT $OUTPUT_FILE 1>/dev/null 2> /dev/null; RETURN=$?
     [ $RETURN -ne 0 ] && ERROR=1
     [ $ERROR -eq 0 ] && echo -e "$GREEN TEST #$Q_COUNT: OK ! $NC"
     [ $ERROR -eq 1 ] && echo -e "$ORANGE TEST #$Q_COUNT: KO ! $NC"

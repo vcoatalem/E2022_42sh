@@ -10,6 +10,7 @@ void sh_rule_command(struct rule_array *rules)
             symbol_create(0, RULE_REDIR_LIST),
             NULL);
     struct rule *rule_b = rule_build(RULE_COMMAND,
+            symbol_create(0, RULE_REDIR),
             symbol_create(0, RULE_REDIR_LIST),
             NULL);
     rule_array_add(rules, rule_a);

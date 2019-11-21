@@ -1,5 +1,8 @@
 #include "../parser.h"
 
+
+//<
+//>
 static void sh_rule_redir_symbol_basic(struct rule_array *rules)
 {
     struct rule *rule_less = rule_build(RULE_REDIR_SYMBOL,
@@ -13,6 +16,8 @@ static void sh_rule_redir_symbol_basic(struct rule_array *rules)
 }
 
 //TODO: add this
+//<<
+//>>
 void sh_rule_redir_symbol_more(struct rule_array *rules)
 {
     struct rule *rule_double_less = rule_build(RULE_REDIR_SYMBOL,
@@ -26,6 +31,9 @@ void sh_rule_redir_symbol_more(struct rule_array *rules)
 }
 
 //TODO: add this
+//>|
+//<>
+//...
 void sh_rule_redir_symbol_advanced(struct rule_array *rules)
 {
     struct rule *rule_great_pipe = rule_build(RULE_REDIR_SYMBOL,
@@ -38,11 +46,14 @@ void sh_rule_redir_symbol_advanced(struct rule_array *rules)
     rule_array_add(rules, rule_less_great);
 }
 
+//calls all functions above to list all possible redirection symbol
 void sh_rule_redir_symbol(struct rule_array *rules)
 {
     sh_rule_redir_symbol_basic(rules);
 }
 
+// REDIR_TO -> IO_NUMBER
+// REDIR_TO -> WORD
 void sh_rule_redir_to(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_REDIR_TO,
@@ -55,6 +66,9 @@ void sh_rule_redir_to(struct rule_array *rules)
     rule_array_add(rules, rule_b);
 }
 
+// IO_NUMBER -> 0
+// IO_NUMBER -> 1
+// IO_NUMBER -> 2
 void sh_rule_ionumber(struct rule_array *rules)
 {
     struct rule *rule_stdin = rule_build(RULE_IONUMBER,
@@ -71,6 +85,8 @@ void sh_rule_ionumber(struct rule_array *rules)
     rule_array_add(rules, rule_stderr);
 }
 
+// REDIR -> IO_NUMBER REDIR_SYMBOL REDIR_TO
+// REDIR -> REDIR_SYMBOL REDIR_TO
 void sh_rule_redir(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_REDIR,
@@ -91,12 +107,12 @@ void sh_rule_redir_list(struct rule_array *rules)
     struct rule *rule = rule_build(RULE_REDIR_LIST,
             symbol_create(0, RULE_REDIR),
             NULL);
-    struct rule *rule_pass = rule_build(RULE_REDIR_LIST,
-            symbol_epsilon(),
-            NULL);
     struct rule *rule_repeat = rule_build(RULE_REDIR_LIST,
             symbol_create(0, RULE_REDIR_LIST),
             symbol_create(0, RULE_REDIR),
+            NULL);
+    struct rule *rule_pass = rule_build(RULE_REDIR_LIST,
+            symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);
     rule_array_add(rules, rule_pass);

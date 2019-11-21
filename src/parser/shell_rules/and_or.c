@@ -46,34 +46,22 @@ void sh_rule_and_or_concat(struct rule_array *rules)
 
 void sh_rule_or_concat(struct rule_array *rules)
 {
-    struct rule *rule_lb = rule_build(RULE_OR_CONCAT,
+    struct rule *rule = rule_build(RULE_OR_CONCAT,
             symbol_create(TOKEN_DOUBLE_PIPE, 0),
-            symbol_create(TOKEN_EOL, 0),
             symbol_create(0, RULE_OR_LINEBREAK),
             symbol_create(0, RULE_AND_OR),
             NULL);
-    struct rule *rule = rule_build(RULE_OR_CONCAT,
-            symbol_create(TOKEN_DOUBLE_PIPE, 0),
-            symbol_create(0, RULE_AND_OR),
-            NULL);
     rule_array_add(rules, rule);
-    rule_array_add(rules, rule_lb);
 }
 
 void sh_rule_and_concat(struct rule_array *rules)
 {
-    struct rule *rule_lb = rule_build(RULE_AND_CONCAT,
+    struct rule *rule = rule_build(RULE_AND_CONCAT,
             symbol_create(TOKEN_DOUBLE_AMPERSAND, 0),
-            symbol_create(TOKEN_EOL, 0),
             symbol_create(0, RULE_AND_LINEBREAK),
             symbol_create(0, RULE_AND_OR),
             NULL);
-    struct rule *rule = rule_build(RULE_AND_CONCAT,
-            symbol_create(TOKEN_DOUBLE_AMPERSAND, 0),
-            symbol_create(0, RULE_AND_OR),
-            NULL);
     rule_array_add(rules, rule);
-    rule_array_add(rules, rule_lb);
 }
 
 void sh_rule_and_or(struct rule_array *rules)

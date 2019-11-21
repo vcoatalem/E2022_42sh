@@ -53,6 +53,7 @@ struct rule_array *rule_array_build(void)
     sh_rule_redir_to(rules);
     sh_rule_ionumber(rules);
     sh_rule_element(rules);
+    sh_rule_element_list(rules);
     sh_rule_arg_list(rules);
     sh_rule_list_delim(rules);
     sh_rule_list(rules);

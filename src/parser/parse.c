@@ -57,6 +57,7 @@ void parse(struct parser *parser, struct analysis_table *table)
         {
             if (head->symbol->token_type != current->type)
             {
+                parser->state = PARSER_STATE_FAILURE;
                 return;
             }
             if (current->type == TOKEN_WORD)
@@ -71,6 +72,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                     head->symbol->rule_id, current->type, table);
             if (!arr)
             {
+                parser->state = PARSER_STATE_FAILURE;
                 //could not correspondance in analysis table
                 return;
             }
@@ -84,6 +86,7 @@ void parse(struct parser *parser, struct analysis_table *table)
     //if stamp is over, try to find epsilon substitution for all symbols left
     //in stack
     //TODO: try to factorise this with main loop
+    #if 0
     while (stack->size != 0)
     {
         struct stack_elt *head = stack_pop(stack);
@@ -99,6 +102,8 @@ void parse(struct parser *parser, struct analysis_table *table)
             symbol_array_free(arr);
         }
     }
+    #endif
+    stack_print(stack);
     if (stack->size == 0)
         parser->state = PARSER_STATE_SUCCESS;
 }
