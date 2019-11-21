@@ -6,7 +6,7 @@ static struct ast *find_op_function_name(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_FUNC_NAME)
+        if (ast->forest[i]->op_type == OPERATOR_FUNC_NAME)
             return ast->forest[i];
     }
 
@@ -17,7 +17,7 @@ static struct ast *find_op_function_body(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->content.op_type == OPERATOR_FUNC_BODY)
+        if (ast->forest[i]->op_type == OPERATOR_FUNC_BODY)
             return ast->forest[i];
     }
 
@@ -36,7 +36,7 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
     if (ast_func_name == NULL || ast_func_body == NULL)
         return AST_ERROR;
 
-    insert_func(bundle->hash_table_func, ast_func_name->content.value,
+    insert_func(bundle->hash_table_func, ast_func_name->value,
             ast_func_body);
 
     return AST_SUCCESS;
