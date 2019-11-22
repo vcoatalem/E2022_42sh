@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 39
+#define NB_RULES 40
 enum rule_id //MORE RULES TO BE ADDED
 {
     RULE_NONE,                       //0
@@ -46,13 +46,14 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_ELEMENT_LIST,               //29
     RULE_ARG_LIST,                   //30
     RULE_IF,                         //31
-    RULE_ELSE_CONCAT,                //32
-    RULE_WHILE,                      //33
-    RULE_UNTIL,                      //34
-    RULE_FOR,                        //35
-    RULE_DO_GROUP,                   //36
-    RULE_FUNCDEC_BODY,               //37
-    RULE_FUNCDEC                     //38
+    RULE_THEN,                       //32
+    RULE_ELSE_CONCAT,                //33
+    RULE_WHILE,                      //34
+    RULE_UNTIL,                      //35
+    RULE_FOR,                        //36
+    RULE_DO_GROUP,                   //37
+    RULE_FUNCDEC_BODY,               //38
+    RULE_FUNCDEC                     //39
 };
 
 enum symbol_type

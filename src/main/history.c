@@ -1,11 +1,12 @@
 #include "42sh.h"
 #include <readline/history.h>
 
-void init_history(void)
+void init_history(struct execution_bundle *bundle)
 {
-    FILE *fd = fopen(".42sh_history", "r");
+    char *historyfile = get_variable(bundle->hash_table_var, "HISTFILE");
+    FILE *fd = fopen(historyfile, "r");
     if (!fd)
-        fd = fopen(".42sh_history", "w");
+        fd = fopen(historyfile, "w");
     if (!fd)
     {
         return;
@@ -21,11 +22,12 @@ void init_history(void)
 }
 
 
-void appendhistory(char *cmd)
+void appendhistory(char *cmd, struct execution_bundle *bundle)
 {
-    FILE *fd = fopen(".42sh_history", "at");
+    char *historyfile = get_variable(bundle->hash_table_var, "HISTFILE");
+    FILE *fd = fopen(historyfile, "at");
     if (!fd)
-        fd = fopen(".42sh_history", "wt");
+        fd = fopen(historyfile, "wt");
     if (!fd)
     {
         return;

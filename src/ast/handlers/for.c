@@ -12,16 +12,15 @@ int ast_handle_for(struct ast *ast, void *bundle_ptr)
         return AST_ERROR;
 
     int try_execute = AST_SUCCESS;
+    int return_execute = AST_ERROR;
 
-    struct ast *ast_for_body = find_op_type(ast, OPERATOR_FOR_BODY);
+    struct ast *ast_for_body = find_op_type(ast, OPERATOR_AND);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
 
     while (try_execute == AST_SUCCESS)
     {
         try_execute = ast_execute(ast_for_body, bundle);
-        ast_execute(ast_do, bundle);
+        return_execute = ast_execute(ast_do, bundle);
     }
-
-    struct ast *ast_done = find_op_type(ast, OPERATOR_DONE);
-    return ast_execute(ast_done, bundle);
+    return return_execute;
 }

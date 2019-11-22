@@ -6,6 +6,7 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         || id == RULE_LIST || id == RULE_COMPOUND_LIST_BREAK
         || id == RULE_LIST_DELIM || id == RULE_COMPOUND_LIST_BREAK_DELIM
         || id == RULE_LIST_CONCAT || id == RULE_COMPOUND_LIST_BREAK_CONCAT
+        || id == RULE_COMPOUND_LIST_BREAK_LINE
         || id == RULE_LIST_DELIM || id == RULE_LIST_CONCAT
         || id == RULE_AND_OR || id == RULE_AND_OR_CONCAT
         || id == RULE_AND_CONCAT || id == RULE_AND_LINEBREAK
@@ -32,7 +33,15 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_IF;
     }
-    if (id == RULE_ARG_LIST)
+    if (id == RULE_THEN)
+    {
+        return OPERATOR_THEN;
+    }
+    if (id == RULE_ELSE_CONCAT)
+    {
+        return OPERATOR_ELSE;
+    }
+    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
     {
         return OPERATOR_ARG_LIST;
     }
@@ -44,7 +53,8 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_REDIR_LIST;
     }
-    if (id == RULE_ELEMENT || id == RULE_REDIR_SYMBOL)
+    if (id == RULE_ELEMENT || id == RULE_REDIR_SYMBOL || id == RULE_IONUMBER
+        || id == RULE_REDIR_TO)
     {
         return OPERATOR_GET_VALUE;
     }

@@ -39,7 +39,6 @@ int main(int argc, char **argv)
     {
         return BASH_RETURN_OPTIONS_ERROR;
     }
-    init_history();
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
     {  
@@ -55,7 +54,7 @@ int main(int argc, char **argv)
     };
     *g_bundle = bundle;
     int execution_val = 0;
-
+    init_history(&bundle);
     /*if (!options->norc_is_set)
     {
         if (check_file_exist("/etc/42shrc"))

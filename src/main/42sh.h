@@ -33,9 +33,9 @@ struct execution_bundle
     struct ast *ast;
     struct token_array *token_array;
 };
-void init_history(void);
+void init_history(struct execution_bundle *bundle);
 
-void appendhistory(char *cmd);
+void appendhistory(char *cmd, struct execution_bundle *bundle);
 
 /**
  * \brief handle the case wen the user hit ctrl + c

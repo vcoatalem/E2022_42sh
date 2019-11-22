@@ -69,8 +69,7 @@ void ast_clean(struct ast *ast)
 {
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->forest[i]->node_type == NODE_OPERATOR
-                && ast->forest[i]->nb_children == 0)
+        if (ast->forest[i]->node_type == NODE_OPERATOR)
         {
             ast_free(ast->forest[i]);
             ast->nb_children--;

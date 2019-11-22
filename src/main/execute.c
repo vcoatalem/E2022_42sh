@@ -72,7 +72,7 @@ int execute_interactive(struct execution_bundle *bundle)
         char *input = get_next_line(prompt);
         if (!input)
             break;
-        appendhistory(input);
+        appendhistory(input, bundle);
         // run lexer + parser
         lexer_add_string(bundle->lexer, input);
         struct token_array *try_lex = lex(bundle->lexer);
@@ -113,7 +113,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
 
 int execute_script(struct execution_bundle *bundle, char* script)
 {
-    appendhistory(script);
+    appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
     //printf("mode = %s\n", mode);
