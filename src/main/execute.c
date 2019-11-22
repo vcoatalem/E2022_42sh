@@ -132,8 +132,8 @@ int execute_script(struct execution_bundle *bundle, char* script)
     {
         lexer_add_string(bundle->lexer, line);
         run_lex_parse(bundle);
-        free(line);
     }
+    free(line);
     fclose(fd);
     //run lexer + parser
     //token_array_print(arr, stdout);
