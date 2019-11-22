@@ -114,14 +114,13 @@ char **get_arg_list(struct ast *ast)
     size_t index = 0;
     while (ast->nb_children == 2)
     {
-        struct ast *sub_list = get_child_of_name(ast, "arg_list");
-        struct ast *element = get_child_of_name(ast, "element");
-        //element contains one child; the value to be appended to list
+        struct ast *ast_value = find_op_type(ast, OPERATOR_GET_VALUE);
+        struct ast *element_list = get_child_of_name(ast, "element_list");
         arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
-        arg_list[index] = element->forest[0]->value;
+        arg_list[index] = ast_value->forest[0]->value;
         arg_list[index + 1] = NULL;
         index++;
-        ast = sub_list;
+        ast = element_list;
     }
     return arg_list;
 }

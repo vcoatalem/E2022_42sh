@@ -16,16 +16,13 @@ int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
 
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        struct ast *cmd_ast = get_child_of_name(ast, "cmd");
-        struct ast *args_ast = get_child_of_name(cmd_ast, "argv");
-        char *args[MAX_ARGS_COUNT] = { NULL };
+        struct ast *cmd_ast = find_op_type(ast, OPERATOR_COMMAND);
+        struct ast *simple_cmd_ast = get_child_of_name(cmd_ast,
+                                                        "simple_command");
+        struct ast *args_ast = find_op_type(simple_cmd_ast, OPERATOR_ARG_LIST);
+        char **args = get_arg_list(args_ast);
 
-        for (size_t j = 0; j < args_ast->nb_children; j++)
-        {
-            args[j] = (*(args_ast->forest + j))->value;
-        }
-
-        struct ast *redir_ast = get_child_of_name(cmd_ast, "redir");
+        struct ast *redir_ast = find_op_type(cmd_ast, OPERATOR_REDIR_LIST);
         if (!redir_ast)
             break;
         //handle redirections later on
