@@ -4,6 +4,7 @@
 
 #include "42sh.h"
 #include "readline.h"
+#include <readline/history.h>
 
 void bundle_free(struct execution_bundle *bundle)
 {
@@ -21,6 +22,26 @@ void bundle_free(struct execution_bundle *bundle)
 
 static struct execution_bundle *g_bundle = NULL;
 
+void init_history(void)
+{
+    FILE *fd = fopen(".42sh_history", "r");
+    if (!fd)
+        fd = fopen(".42sh_history", "w");
+    if (!fd)
+    {
+        return;
+    }
+    char *line = NULL;
+    size_t size;
+    while (getline(&line, &size, fd) != -1)
+    {
+        line[strlen(line) - 1] = '\0';
+        add_history(line);
+    }
+    free(line);
+}
+
+
 void appendhistory(char *cmd)
 {
     FILE *fd = fopen(".42sh_history", "at");
@@ -30,7 +51,7 @@ void appendhistory(char *cmd)
     {
         return;
     }
-
+    add_history(cmd);
     fputs(cmd, fd);
     fputs("\n", fd);
 
@@ -55,6 +76,7 @@ int main(int argc, char **argv)
     {
         return BASH_RETURN_OPTIONS_ERROR;
     }
+    init_history();
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
     {  
