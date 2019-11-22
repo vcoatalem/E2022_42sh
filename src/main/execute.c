@@ -50,10 +50,10 @@ int execute_stdin(struct execution_bundle *bundle)
     //TODO: read stdin line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
-    struct lexer *lexer = lexer_init();
+    bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
-        lexer_add_string(lexer, line);
+        lexer_add_string(bundle->lexer, line);
         run_lex_parse(bundle);
     }
     free(line);
