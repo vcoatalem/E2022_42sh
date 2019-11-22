@@ -42,7 +42,6 @@ static int run_lex_parse(struct execution_bundle *bundle)
     return return_value;
 }
 
-
 int execute_stdin(struct execution_bundle *bundle)
 {
     if (!bundle)
@@ -65,11 +64,12 @@ int execute_interactive(struct execution_bundle *bundle)
     if (!bundle)
         return BASH_RETURN_ERROR;
     bundle->lexer = lexer_init();
+    char *ps1 = get_variable(bundle->hash_table_var, "ps1");
+    char *ps2 = get_variable(bundle->hash_table_var, "ps2");
+    char *prompt = ps1;
     while (1)
     {
-        char *ps1 = get_variable(bundle->hash_table_var, "ps1");
-        char *ps2 = get_variable(bundle->hash_table_var, "ps2");
-        char *input = get_next_line(ps1);
+        char *input = get_next_line(prompt);
         if (!input)
             break;
         appendhistory(input);
@@ -89,6 +89,11 @@ int execute_interactive(struct execution_bundle *bundle)
         }
         token_array_free(try_lex);
         run_lex_parse(bundle);
+        //set prompt for next iteration
+        if (bundle->parser->state == PARSER_STATE_CONTINUE)
+            prompt = ps2;
+        else
+            prompt = ps1;
         free(input);
     }
     return BASH_RETURN_OK;
