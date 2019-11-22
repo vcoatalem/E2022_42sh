@@ -68,6 +68,8 @@ char *rule_id_to_string(enum rule_id id)
         return "args";
     case RULE_IF:
         return "if";
+    case RULE_THEN:
+        return "then";
     case RULE_ELSE_CONCAT:
         return "else";
     case RULE_DO_GROUP:

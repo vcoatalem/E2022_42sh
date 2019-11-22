@@ -17,6 +17,8 @@ static char *operator_to_string(enum operator_type type)
             return "cmd";
         case (OPERATOR_IF):
             return "if";
+        case (OPERATOR_THEN):
+            return "then";
         case (OPERATOR_ARG_LIST):
             return "args";
         case (OPERATOR_REDIR):
