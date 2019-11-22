@@ -20,9 +20,7 @@ static void sh_rule_funcdec(struct rule_array *rules)
             symbol_create(0, RULE_ELEMENT),
             symbol_create(TOKEN_LEFT_PARENTHESIS, 0),
             symbol_create(TOKEN_RIGHT_PARENTHESIS, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(0, RULE_ELSE_CONCAT),
-            symbol_create(TOKEN_FI, 0),
+            symbol_create(0, RULE_FUNCDEC_BODY),
             NULL);
     rule_array_add(rules, rule);
 }

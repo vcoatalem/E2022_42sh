@@ -53,8 +53,12 @@ static void sh_rule_command(struct rule_array *rules)
     struct rule *rule_b = rule_build(RULE_COMMAND,
             symbol_create(0, RULE_SHELL_COMMAND),
             NULL);
+    struct rule *rule_c = rule_build(RULE_COMMAND,
+            symbol_create(0, RULE_FUNCDEC),
+            NULL);
     rule_array_add(rules, rule_a);
     rule_array_add(rules, rule_b);
+    rule_array_add(rules, rule_c);
 }
 
 void sh_rule_command_groups(struct rule_array *rules)

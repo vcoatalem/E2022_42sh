@@ -17,7 +17,8 @@ int main(int argc, char **argv)
         PARSER_STATE_SUCCESS,
         PARSER_STATE_FAILURE,
         PARSER_STATE_CONTINUE,
-        PARSER_STATE_FAILURE
+        PARSER_STATE_FAILURE,
+        PARSER_STATE_SUCCESS
     };
     if (q == 0)
     {
@@ -107,6 +108,34 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_EOL, "\n"));
         token_array_add(exp, token_init(TOKEN_ELSE, "else"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 8)
+    {
+        fprintf(stderr, "correct funcdec");
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_WORD, "function_name"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "line_1"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_WORD, "line_2"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 9)
+    {
+
+    }
+    else if (q == 10)
+    {
+
+    }
+    else if (q == 11)
+    {
+
     }
     else
     {
