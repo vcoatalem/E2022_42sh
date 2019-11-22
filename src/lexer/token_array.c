@@ -2,12 +2,12 @@
 
 struct token_array *token_array_init()
 {
-    struct token_array *res = malloc(sizeof(*res));
+    struct token_array *res = calloc(1, sizeof(struct token_array));
     if (!res)
         return NULL;
     res->capacity = 4;
     res->size = 0;
-    res->tok_array = calloc(res->capacity, sizeof(struct token));
+    res->tok_array = calloc(res->capacity, sizeof(void *));
     if (!res->tok_array)
         return NULL;
     return res;

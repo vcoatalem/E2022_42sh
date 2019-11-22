@@ -10,10 +10,7 @@ struct lexer *lexer_init(void)
     if (!lex)
         err(1, "error while calloc lexer");
     lex->state = LEXER_STATE_NONE;
-    lex->str = calloc(1, sizeof(char*));
-    if (!lex->str)
-        err(1, "error while calloc lex->str");
-    //lex->str = "";
+    lex->str = NULL;
     lex->iterator = 0;
     return lex;
 }
@@ -67,7 +64,6 @@ void change_lexer_state(struct lexer *lex)
         lex->state = LEXER_STATE_NONE;
     lex->iterator++;
 }
-
 
 struct token_array *lex(struct lexer *lexer)
 {

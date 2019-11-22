@@ -1,18 +1,23 @@
 #define _POSIX_C_SOURCE 200809L
 
-#include "42sh.h"
 #include <signal.h>
+
+#include "42sh.h"
 #include "readline.h"
+
 
 
 void bundle_free(struct execution_bundle *bundle)
 {
+    if (!bundle)
+        return;
     free(bundle->shopt);
     table_free(bundle->parser_table);
     free_hash_table_func(bundle->hash_table_func);
     free_hash_table_var(bundle->hash_table_var);
 }
 
+static struct execution_bundle *g_bundle = NULL;
 
 void appendhistory(char *cmd)
 {
@@ -30,27 +35,26 @@ void appendhistory(char *cmd)
     fclose(fd);
 }
 
-/*
-static int check_file_exist(char* path)
+void sig_handler(int val)
 {
-    FILE *fd;
-    fd = fopen(path,"r");
-    if (!fd)
-        return 0;
-    fclose(fd);
-    return 1;
-}*/
-
-
+    if (val == SIGINT)
+    {
+        bundle_free(g_bundle);
+        free(g_bundle);
+        exit(SIGINT);
+    }
+}
 
 int main(int argc, char **argv)
 {
+    signal(SIGINT, sig_handler);
     struct options *options = options_build(argc, argv);
     if (!options)
     {
         return BASH_RETURN_OPTIONS_ERROR;
     }
     //struct grammar *g = grammar_build();
+    g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
     {  
         .options = options,
@@ -59,7 +63,9 @@ int main(int argc, char **argv)
         .hash_table_func = init_hash_table_func(50),
         .shopt = shopt_init(options)
     };
+    *g_bundle = bundle;
     int execution_val = 0;
+
     /*if (!options->norc_is_set)
     {
         if (check_file_exist("/etc/42shrc"))
