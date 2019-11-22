@@ -163,10 +163,10 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
     #if 0
     printf("[LL PARSER] entered rule_next(%d)\n", rule_id);
     #endif
+    int new_path_list[NB_RULES] = { 0 };
+    int *new_path_list_ptr = new_path_list;
     if (!path_list)
     {
-        int new_path_list[NB_RULES] = { 0 };
-        int *new_path_list_ptr = new_path_list;
         path_list = &new_path_list_ptr;
     }
     if ((*path_list)[rule_id] == 1)
