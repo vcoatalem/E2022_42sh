@@ -13,6 +13,8 @@ char *token_to_string5(enum token_type type)
         return "1";
     case (TOKEN_STDERR):
         return "2";
+    case (TOKEN_ASSIGNMENT):
+        return "word_assignment";
     default:
         return "word";
     }

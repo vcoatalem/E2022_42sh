@@ -1,5 +1,8 @@
 #include "lexer.h"
 
+#include <string.h>
+#include <ctype.h>
+
 struct token_array *token_array_init()
 {
     struct token_array *res = calloc(1, sizeof(struct token_array));
@@ -38,8 +41,8 @@ void token_array_add(struct token_array *arr, struct token *token)
     }
 }
 /*Useful when we are in interactive mode and we want to fusionate two arrays
-We have to stick the last token of the first array with the first token of
-the second array with a \n between them*/
+  We have to stick the last token of the first array with the first token of
+  the second array with a \n between them*/
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
 {
     if (arr1->size == 0)
@@ -55,9 +58,9 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
     size_t lenb = strlen(arr2->tok_array[0]->value);
     size_t len = lena + lenb + 1;
     arr1->tok_array[arr1->size - 1]->value =
-    realloc(arr1->tok_array[arr1->size - 1]->value, len);
+        realloc(arr1->tok_array[arr1->size - 1]->value, len);
     memcpy(arr1->tok_array[arr1->size - 1]->value + lena,
-    arr2->tok_array[0]->value, lenb + 1);
+            arr2->tok_array[0]->value, lenb + 1);
     arr1->tok_array[arr1->size - 1]->type = TOKEN_WORD;
     for(size_t i = 1; i < arr2->size; i++)
     {
@@ -71,8 +74,8 @@ void token_array_print(struct token_array *arr, FILE *out)
     for (size_t i = 0; i < arr->size; i++)
     {
         fprintf(out, "-> [ %s : `%s` ]",
-            token_to_formatted_string(arr->tok_array[i]->type),
-            arr->tok_array[i]->value);
+                token_to_formatted_string(arr->tok_array[i]->type),
+                arr->tok_array[i]->value);
     }
     fprintf(out, "\n");
 }
@@ -80,8 +83,8 @@ void token_array_print(struct token_array *arr, FILE *out)
 int is_separator(char c)
 {
     return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
-         || c == '(' || c == ')' || c == '\0' || c == '<' || c == '>'
-         || c == ';');
+            || c == '(' || c == ')' || c == '\0' || c == '<' || c == '>'
+            || c == ';');
 }
 
 int is_space(char c)
@@ -89,12 +92,63 @@ int is_space(char c)
     return (c == ' ' || c == '\t');
 }
 
+static int search_unique_equal(char *buffer)
+{
+    int occ = 0;
+    int index = 0;
+    for (int i = 0; buffer[i]; i++)
+    {
+        if (buffer[i] == '=')
+        {
+            occ++;
+            index = i;
+        }
+    }
+    if (occ != 1)
+        return 0;
+    return index;
+}
+
+static int is_assignment(char *buffer, int equal)
+{
+    if (isdigit(buffer[0]))
+        return 0;
+    for (int i = 0; i < equal; i++)
+    {
+        if (is_separator(buffer[i])
+                || (!isalnum(buffer[i]) && buffer[i] != '_'))
+        {
+            return 0;
+        }
+    }
+    for (int j = equal + 1; buffer[j]; j++)
+    {
+        if (is_separator(buffer[j]))
+            return 0;
+    }
+    return 1;
+}
+
+void check_assignment(char *buffer, struct token_array *arr)
+{
+    int assignment = 0;
+    int tmp = search_unique_equal(buffer);
+    if (tmp)
+    {
+        assignment = is_assignment(buffer, tmp);
+    }
+    if (assignment)
+        token_array_add(arr, token_init(TOKEN_ASSIGNMENT, buffer));
+    else
+        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+}
+
 void handle_separators(char *str, size_t *iterator, char *buffer,
         size_t *index, struct token_array *arr)
 {
     if (*index > 0)
     {
-        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+        check_assignment(buffer, arr);
         *index = 0;
     }
     if (is_space(str[*iterator]))
@@ -148,12 +202,16 @@ struct token_array *token_array_create(char *str)
                 index = 0;
             }
         }
-
     }
 
     if (index > 0)
-        token_array_add(arr, token_init(
-            token_check(buffer, 0, buffer),buffer));
+    {
+        enum token_type tok = token_check(buffer, 0, buffer);
+        if (tok == TOKEN_WORD)
+            check_assignment(buffer, arr);
+        else
+            token_array_add(arr, token_init(tok,buffer));
+    }
     token_array_add(arr, token_init(TOKEN_EOF, ""));
     return arr;
 }
