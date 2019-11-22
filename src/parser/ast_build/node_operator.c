@@ -41,7 +41,7 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_ELSE;
     }
-    if (id == RULE_ARG_LIST)
+    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
     {
         return OPERATOR_ARG_LIST;
     }
