@@ -27,11 +27,25 @@ struct options *options_init(void)
     return new_options;
 }
 
+/**
+ * \brief check if argument is a flag (start with '-' or '+')
+ *
+ * \param arg argument to check
+ *
+ * \return int true or false
+ */
 static int is_flag(char *arg)
 {
     return *arg == '-' || *arg == '+';
 }
 
+/**
+ * \brief set commands of struct options
+ *
+ * \param options options to set
+ * \param int index of arguments
+ * \param argv list of arguments
+ */
 static void set_command(struct options *options, int *i, char **argv)
 {
     *i = *i + 1;
@@ -45,6 +59,13 @@ static void set_command(struct options *options, int *i, char **argv)
     }
 }
 
+/**
+ * \brief set shopt variables of options structure
+ *
+ * \param options options to set
+ * \param index index of arguments
+ * \param argv list of arguments
+ */
 static void set_set_shopt(struct options *options, int *index, char *argv[])
 {
     *index = *index + 1;
@@ -60,6 +81,13 @@ static void set_set_shopt(struct options *options, int *index, char *argv[])
         options->print_shopt_is_set = 1;
 }
 
+/**
+ * \brief set unset shopt variables of options structure
+ *
+ * \param options options to set
+ * \param index index of arguments
+ * \param argv list of arguments
+ */
 static void set_unset_shopt(struct options *options, int *index, char *argv[])
 {
     *index = *index + 1;
