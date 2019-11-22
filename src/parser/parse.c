@@ -16,9 +16,11 @@ struct symbol_array *substitute_rule(enum rule_id rule_id,
         int token_type, struct analysis_table *table)
 {
     struct symbol_array *expr = table->transformation_mat[rule_id][token_type];
+    #if 0
     printf("substitute_rule %d for token type %d: ", rule_id, token_type);
     symbol_array_print(expr);
     printf("\n");
+    #endif
     if (!expr)
     {
         return NULL;
@@ -63,13 +65,17 @@ void parse(struct parser *parser, struct analysis_table *table)
     struct stack *stack = parser->stack;
     while (!stamp_is_over(input))
     {
+        #if 0
         stack_print(stack);
         stamp_print(input);
+        #endif
         //in case we just popped an epsilon rule, we dont want to get next
         //symbol on stamp
         struct token *current = stamp_read(input);
+        #if 0
         printf("[LL PARSER] current head of stamp: %s\n",
                 token_to_formatted_string(current->type));
+        #endif
         struct stack_elt *head = stack_pop(stack);
         if (head->symbol->type == SYMBOL_TOKEN)
         {
@@ -115,8 +121,10 @@ void parse(struct parser *parser, struct analysis_table *table)
         }
         free(head);
     }
+    #if 0
     stack_print(stack);
+    #endif
     parser->state = stack->size == 0 ?
             PARSER_STATE_SUCCESS : PARSER_STATE_CONTINUE;
-
+    printf("[LL PARSER] done parsing. state: %d\n", parser->state);
 }

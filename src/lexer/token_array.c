@@ -68,13 +68,13 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
 
 void token_array_print(struct token_array *arr, FILE *out)
 {
-    fprintf(out, "size of array: %ld\n", arr->size);
     for (size_t i = 0; i < arr->size; i++)
     {
-        fprintf(out, "type: %s, value: `%s`\n",
-            token_to_string(arr->tok_array[i]->type),
+        fprintf(out, "-> [ %s : `%s` ]",
+            token_to_formatted_string(arr->tok_array[i]->type),
             arr->tok_array[i]->value);
     }
+    fprintf(out, "\n");
 }
 
 int is_separator(char c)

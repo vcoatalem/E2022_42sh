@@ -21,4 +21,8 @@ int builtin_history(char **str, size_t size, void *bundle);
  */
 int builtin_shopt(char **str, size_t size, void *bundle);
 
+
+struct shopt *shopt_init(void *options_ptr);
+void shopt_free(struct shopt *shopt);
+
 #endif/* ( ! BUILTINS_H) */

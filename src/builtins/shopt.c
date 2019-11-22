@@ -73,12 +73,14 @@ void shopt_init_set_shopt(struct shopt *shopt, int val,
     }
 }
 
-struct shopt shopt_init(struct options *option)
+struct shopt *shopt_init(void *options_ptr)
 {
-    struct shopt *res = malloc(sizeof(*res));
-    shopt_init_set_shopt(res, 0, option->unset_shopt, option->nb_unset_shopt);
-    shopt_init_set_shopt(res, 0, option->set_shopt, option->nb_set_shopt);
-    return *res;
+    struct options *options = options_ptr;
+    struct shopt *res = malloc(sizeof(struct shopt));
+    shopt_init_set_shopt(res, 0, options->unset_shopt,
+            options->nb_unset_shopt);
+    shopt_init_set_shopt(res, 0, options->set_shopt, options->nb_set_shopt);
+    return res;
 }
 
 void shopt_free(struct shopt *shopt)

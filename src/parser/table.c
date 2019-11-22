@@ -111,9 +111,11 @@ struct analysis_table *table_build(void)
     for (size_t i = 0; i < t->rules->size; i++)
     {
         struct rule *rule = t->rules->rules[i];
+        #if 0
         printf("[LL PARSER] ---------- [TABLE] setting rule #%zu ; ", i);
         rule_print(rule);
         printf("\n");
+        #endif
         fill_line_slot(t, rule, t->rules);
     }
     rule_array_free(t->rules);

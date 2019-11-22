@@ -7,7 +7,7 @@
 #include <readline/readline.h>
 
 #include "readline.h"
-//#include "execute.h"
+#include "../builtins/builtins.h"
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../hashtable/hashtablevar.h"
@@ -37,7 +37,7 @@ enum BASH_RETURN_VALUES
 struct execution_bundle
 {
     struct options *options;
-    struct grammar *grammar;
+    struct analysis_table *parser_table;
     struct hash_table_var *hash_table_var;
     struct hash_table_func *hash_table_func;
     struct shopt *shopt;

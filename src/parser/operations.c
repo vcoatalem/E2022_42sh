@@ -160,7 +160,9 @@ static void rule_next_find_handle_occurence(enum rule_id rule_id,
 struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
     int **path_list)
 {
+    #if 0
     printf("[LL PARSER] entered rule_next(%d)\n", rule_id);
+    #endif
     if (!path_list)
     {
         int new_path_list[NB_RULES] = { 0 };
@@ -180,8 +182,10 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
         rule_next_find_handle_occurence(rules->rules[i]->rule_id,
                 rules->rules[i], res, rules, path_list);
     }
+    #if 0
     printf("[LL PARSER] rule next for id %d returning: ", rule_id);
     symbol_array_print(res);
     printf("\n");
+    #endif
     return res;
 }
