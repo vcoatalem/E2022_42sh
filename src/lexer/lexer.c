@@ -119,6 +119,8 @@ struct token_array *lex(struct lexer *lexer)
 
 void lexer_free(struct lexer *lexer)
 {
-    lexer_clear(lexer);
+    if (!lexer)
+        return;
+    free(lexer->str);
     free(lexer);
 }

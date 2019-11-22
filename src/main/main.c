@@ -5,8 +5,6 @@
 #include "42sh.h"
 #include "readline.h"
 
-
-
 void bundle_free(struct execution_bundle *bundle)
 {
     if (!bundle)
@@ -15,6 +13,9 @@ void bundle_free(struct execution_bundle *bundle)
     table_free(bundle->parser_table);
     free_hash_table_func(bundle->hash_table_func);
     free_hash_table_var(bundle->hash_table_var);
+    lexer_free(bundle->lexer);
+    ast_free(bundle->ast);
+    parser_free(bundle->parser, 0);
 }
 
 static struct execution_bundle *g_bundle = NULL;
@@ -53,7 +54,6 @@ int main(int argc, char **argv)
     {
         return BASH_RETURN_OPTIONS_ERROR;
     }
-    //struct grammar *g = grammar_build();
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
     {  
@@ -61,7 +61,10 @@ int main(int argc, char **argv)
         .parser_table = table_build(),
         .hash_table_var = init_hash_table_var(50),
         .hash_table_func = init_hash_table_func(50),
-        .shopt = shopt_init(options)
+        .shopt = shopt_init(options),
+        .lexer = NULL,
+        .parser = NULL,
+        .ast = NULL
     };
     *g_bundle = bundle;
     int execution_val = 0;
@@ -80,25 +83,24 @@ int main(int argc, char **argv)
 
     if (options->script != NULL)
     {
-        execution_val = execute_script(&bundle, options->script);
+        execution_val = execute_script(g_bundle, options->script);
     }
     else if (options->command)
     {
-        execution_val = execute_cmd(&bundle, options->command);
+        execution_val = execute_cmd(g_bundle, options->command);
     }
     else if (!isatty(0))
     {
-        execution_val = execute_stdin(&bundle);
+        execution_val = execute_stdin(g_bundle);
     }
     else
     {
-        execution_val = execute_interactive(&bundle);
+        execution_val = execute_interactive(g_bundle);
     }
-    options_free(options);
-    bundle_free(&bundle);
     if (execution_val != BASH_RETURN_OK)
     {
         //something went wrong...
     }
+    bundle_free(g_bundle);
     return BASH_RETURN_OK;
 }
