@@ -107,23 +107,48 @@ struct ast *find_op_type(struct ast *ast, enum operator_type op_type)
     return NULL;
 }
 
+static char *get_element_value(struct ast *ast)
+{
+    struct ast *element_ast = find_op_type(ast, OPERATOR_GET_VALUE);
+
+    if (element_ast == NULL)
+        return NULL;
+
+    return element_ast->forest[0]->value;
+}
+
 char **get_arg_list(struct ast *ast)
 {
     char **arg_list = NULL;
     size_t index = 0;
-    while (ast->nb_children == 2)
+
+    while (ast != NULL)
     {
-        struct ast *ast_value = find_op_type(ast, OPERATOR_GET_VALUE);
-        struct ast *element_list = get_child_of_name(ast, "element_list");
+        struct ast *element_list = find_op_type(ast, OPERATOR_ARG_LIST);
         arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
-        arg_list[index] = ast_value->forest[0]->value;
+        arg_list[index] = get_element_value(ast);
         arg_list[index + 1] = NULL;
         index++;
         ast = element_list;
     }
+
     return arg_list;
 }
 
+struct command *get_command(struct ast *ast)
+{
+    struct ast *simple_cmd = get_child_of_name(ast, "simple_command");
+    struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
+    //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
+
+    char **arg_list = get_arg_list(args);
+    // TODO: Add get redirection_list function
+    //struct redirection **redirs = get_redirs(redir_list);
+
+    struct command *cmd = command_init(arg_list, NULL);
+
+    return cmd;
+}
 
 //do not use this for now, will need more work later on
 //should initialise struct redirection[] (from execution/ module), not string[]

@@ -13,6 +13,7 @@
 #define AST_H
 
 #include <stddef.h>
+#include "../execution/execution.h"
 
 #define AST_SUCCESS 0
 #define AST_ERROR 1
@@ -160,6 +161,15 @@ struct ast *find_op_type(struct ast *ast, enum operator_type op_type);
  *
  */
 char **get_arg_list(struct ast *ast);
+
+/**
+ * \brief get all arguments of command type node
+ *
+ * \param ast ast node to get arguments from
+ *
+ * \return command return a new command structure
+ */
+struct command *get_command(struct ast *ast);
 
 /**
  * \brief
