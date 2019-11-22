@@ -33,7 +33,7 @@ int builtin_history(char **str, size_t size, void *bundle);
  *
  */
 int builtin_shopt(char **str, size_t size, void *bundle);
-
+void shopt_print(struct shopt *shopt, int mode);
 struct shopt *shopt_init(void *options_ptr);
 void shopt_free(struct shopt *shopt);
 
