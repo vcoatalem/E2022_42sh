@@ -1,5 +1,6 @@
 add_library(builtins builtins.c history.c shopt.c)
 
+target_link_libraries(builtins options)
 
 ######################
 

@@ -14,19 +14,6 @@
 #include "../hashtable/hashtablefunc.h"
 #include "../options/options.h"
 
-struct shopt           
-{                      
-    int ast_print;     
-    int dotglob;       
-    int expand_aliases;
-    int extglob;       
-    int nocaseglob;    
-    int nullglob;      
-    int sourcepath;    
-    int xpg_echo;      
-};                     
-
-
 enum BASH_RETURN_VALUES
 {
     BASH_RETURN_OK = 0,

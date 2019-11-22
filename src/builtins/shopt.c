@@ -111,26 +111,30 @@ int shopt_is_set(struct shopt *shopt, char *str)
     return -1;
 }
 
-void shopt_print_option(struct shopt *shopt, char **option_array, size_t size)
+void shopt_print(struct shopt *shopt)
 {
-    for (size_t i = 0; i < size; i++)
-    {
-        if (shopt_is_set(shopt, option_array[i]))
-            printf("%s \t on\n", option_array[i]);
-        else
-            printf("%s \t off\n", option_array[i]);
-    }
+    printf("ast_print %s\n", shopt->ast_print ? "on" : "off");
+    printf("dotglob %s\n", shopt->dotglob ? "on" : "off");
+    printf("expand_aliases %s\n", shopt->expand_aliases ? "on" : "off");
+    printf("extglob %s\n", shopt->extglob ? "on" : "off");
+    printf("nullglob %s\n", shopt->nullglob ? "on" : "off");
+    printf("sourcepath %s\n", shopt->sourcepath ? "on" : "off");
+    printf("xpg_echo %s\n", shopt->xpg_echo ? "on" : "off");
 }
+
 int builtin_shopt(char **args, size_t size, void *bundle_ptr)
 {
     //linit a deja eu lieu auparavant. cherche bundle->shopt et execute dessus
     struct execution_bundle *bundle = bundle_ptr;
-    if (!strcmp(args[1], "-s"))
+    if (size == 1)
+    {
+        shopt_print(bundle->shopt);
+    }
+    else if (!strcmp(args[1], "-s"))
     {
         if (size == 2)
         {
-            shopt_print_option(bundle->shopt, bundle->options->unset_shopt,
-                    bundle->options->nb_set_shopt);
+            shopt_print(bundle->shopt);
         }
         else if (!strcmp(args[2], "-q"))
         {
@@ -144,12 +148,11 @@ int builtin_shopt(char **args, size_t size, void *bundle_ptr)
         }
         return 0;
     }
-    if (!strcmp(args[1], "-u"))
+    else if (!strcmp(args[1], "-u"))
     {
         if (size == 2)
         {
-            shopt_print_option(bundle->shopt, bundle->options->unset_shopt,
-                    bundle->options->nb_unset_shopt);
+            shopt_print(bundle->shopt);
         }
         else if (!strcmp(args[2], "-q"))
         {
@@ -164,7 +167,7 @@ int builtin_shopt(char **args, size_t size, void *bundle_ptr)
         }
         return 0;
     }
-    if (!strcmp(args[1],"-q"))
+    else if (!strcmp(args[1],"-q"))
     {
         if (size == 2)
             return 0;
@@ -196,9 +199,5 @@ int builtin_shopt(char **args, size_t size, void *bundle_ptr)
             return res;
         }
     }
-    shopt_print_option(bundle->shopt, bundle->options->set_shopt,
-            bundle->options->nb_set_shopt);
-    shopt_print_option(bundle->shopt, bundle->options->unset_shopt,
-            bundle->options->nb_unset_shopt);
     return 0;
 }

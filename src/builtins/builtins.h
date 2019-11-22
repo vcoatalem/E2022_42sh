@@ -3,7 +3,20 @@
 
 #include <stddef.h>
 
+struct shopt           
+{                      
+    int ast_print;     
+    int dotglob;       
+    int expand_aliases;
+    int extglob;       
+    int nocaseglob;    
+    int nullglob;      
+    int sourcepath;    
+    int xpg_echo;      
+};
+
 typedef int (*builtin_handler)(char **str, size_t size, void *bundle);
+
 builtin_handler str_to_builtin(char *name);
 int builtin_history(char **str, size_t size, void *bundle);
 
@@ -20,7 +33,6 @@ int builtin_history(char **str, size_t size, void *bundle);
  *
  */
 int builtin_shopt(char **str, size_t size, void *bundle);
-
 
 struct shopt *shopt_init(void *options_ptr);
 void shopt_free(struct shopt *shopt);
