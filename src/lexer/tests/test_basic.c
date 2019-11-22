@@ -43,7 +43,7 @@ int main(int argc, char **argv)
         "||",
         "blabla\necho 1>>2",
         "   echo          e        e  foo ||    cat     -e",
-        "if pdw && ls; then\n\tcd;\nelse\n\talias;\nfi",
+        "if pdw && ls; then\n cd;\nelse\n\talias;\nfi",
         "echo ((cat -e))",
         "toto<<-   foo",
         "function func() { echo ok }",
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     else if (q == 7)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "blabla"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "1"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_GREAT, ">>"));
@@ -145,15 +145,15 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "ls"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_THEN, "then"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
         token_array_add(exp, token_init(TOKEN_WORD, "cd"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
         token_array_add(exp, token_init(TOKEN_ELSE, "else"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
         token_array_add(exp, token_init(TOKEN_WORD, "alias"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
         token_array_add(exp, token_init(TOKEN_FI, "fi"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
