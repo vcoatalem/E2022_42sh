@@ -60,7 +60,7 @@ void ast_free(struct ast *ast)
         ast_free(ast->forest[i]);
     if (ast->forest != NULL)
         free(ast->forest);
-    if (ast->node_type == NODE_VALUE)
+    if (ast->value)
         free(ast->value);
     free(ast);
 }

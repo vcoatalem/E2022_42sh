@@ -50,10 +50,10 @@ int execute_stdin(struct execution_bundle *bundle)
     //TODO: read stdin line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
-    struct lexer *lexer = lexer_init();
+    bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
-        lexer_add_string(lexer, line);
+        lexer_add_string(bundle->lexer, line);
         run_lex_parse(bundle);
     }
     free(line);
@@ -75,7 +75,7 @@ int execute_interactive(struct execution_bundle *bundle)
         appendhistory(input);
         // run lexer + parser
         lexer_add_string(bundle->lexer, input);
-        lex(bundle->lexer);
+        struct token_array *try_lex = lex(bundle->lexer);
         while (bundle->lexer->state == LEXER_STATE_LEXING_QUOTES
             || bundle->lexer->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
             || bundle->lexer->state == LEXER_STATE_UNFINISHED)
@@ -84,8 +84,10 @@ int execute_interactive(struct execution_bundle *bundle)
             if (!input)
                 break;
             lexer_add_string(bundle->lexer, input);
-            lex(bundle->lexer);
+            struct token_array *arr = lex(bundle->lexer);
+            token_array_free(arr);
         }
+        token_array_free(try_lex);
         run_lex_parse(bundle);
         free(input);
     }

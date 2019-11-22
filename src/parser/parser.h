@@ -163,6 +163,7 @@ void stack_push_array(struct stack *stack, struct symbol_array *arr,
 struct stack_elt *stack_peak(struct stack *stack);
 struct stack_elt *stack_pop(struct stack *stack);
 void stack_print(struct stack *stack);
+void stack_elt_free(struct stack_elt *elt);
 void stack_free(struct stack *stack);
 
 // STAMP ///////////////////////////////////////////////////////////////
