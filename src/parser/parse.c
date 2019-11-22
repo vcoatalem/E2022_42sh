@@ -85,7 +85,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                 stack_elt_free(head);
                 break;
             }
-            if (current->type == TOKEN_WORD)
+            else if (current->type == TOKEN_WORD)
             {
                 //get current word value into the ast
                 //TODO: give this treatment to more types (eg. excl point)
@@ -128,7 +128,10 @@ void parse(struct parser *parser, struct analysis_table *table)
     #if 0
     stack_print(stack);
     #endif
-    parser->state = stack->size == 0 ?
+    if (parser->state != PARSER_STATE_FAILURE)
+    {
+        parser->state = stack->size == 0 ?
             PARSER_STATE_SUCCESS : PARSER_STATE_CONTINUE;
+    }
     printf("[LL PARSER] done parsing. state: %d\n", parser->state);
 }
