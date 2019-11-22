@@ -1,6 +1,6 @@
 #include "../parser.h"
 
-void sh_rule_compound_list_break_line(struct rule_array *rules)
+static void sh_rule_compound_list_break_line(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_COMPOUND_LIST_BREAK_LINE,
             symbol_create(TOKEN_EOL, 0),
@@ -13,7 +13,7 @@ void sh_rule_compound_list_break_line(struct rule_array *rules)
     rule_array_add(rules, rule_b);
 }
 
-void sh_rule_compound_list_break_delim(struct rule_array *rules)
+static void sh_rule_compound_list_break_delim(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_COMPOUND_LIST_BREAK_DELIM,
             symbol_create(TOKEN_SEMI_COLON, 0),
@@ -31,7 +31,7 @@ void sh_rule_compound_list_break_delim(struct rule_array *rules)
     rule_array_add(rules, rule_c);
 }
 
-void sh_rule_compound_list_break_concat(struct rule_array *rules)
+static void sh_rule_compound_list_break_concat(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_COMPOUND_LIST_BREAK_CONCAT,
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
@@ -43,7 +43,7 @@ void sh_rule_compound_list_break_concat(struct rule_array *rules)
     rule_array_add(rules, rule_eps);
 }
 
-void sh_rule_compound_list_break(struct rule_array *rules)
+static void sh_rule_compound_list_break(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_COMPOUND_LIST_BREAK,
             symbol_create(0, RULE_AND_OR),
@@ -56,4 +56,12 @@ void sh_rule_compound_list_break(struct rule_array *rules)
             NULL);
     rule_array_add(rules, rule);
     rule_array_add(rules, rule_repeat);
+}
+
+void sh_rule_compound_list_break_groups(struct rule_array *rules)
+{
+    sh_rule_compound_list_break(rules);
+    sh_rule_compound_list_break_concat(rules);
+    sh_rule_compound_list_break_delim(rules);
+    sh_rule_compound_list_break_line(rules);
 }

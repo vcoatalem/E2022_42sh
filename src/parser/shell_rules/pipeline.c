@@ -2,7 +2,7 @@
 
 //pipe -> '|' pipeline
 //pipe -> epsilon
-void sh_rule_pipe(struct rule_array *rules)
+static void sh_rule_pipe(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_PIPE,
             symbol_create(TOKEN_PIPE, 0),
@@ -17,7 +17,7 @@ void sh_rule_pipe(struct rule_array *rules)
 
 //pipeline -> command pipe
 //pipeline -> '!' command pipe
-void sh_rule_pipeline(struct rule_array *rules)
+static void sh_rule_pipeline(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_PIPELINE,
             symbol_create(0, RULE_COMMAND),
@@ -30,4 +30,10 @@ void sh_rule_pipeline(struct rule_array *rules)
             NULL);
     rule_array_add(rules, rule_a);
     rule_array_add(rules, rule_b);
+}
+
+void sh_rule_pipe_groups(struct rule_array *rules)
+{
+    sh_rule_pipe(rules);
+    sh_rule_pipeline(rules);
 }

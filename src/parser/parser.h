@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 36
+#define NB_RULES 39
 enum rule_id //MORE RULES TO BE ADDED
 {
     RULE_NONE,                       //0
@@ -49,7 +49,10 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_ELSE_CONCAT,                //32
     RULE_WHILE,                      //33
     RULE_UNTIL,                      //34
-    RULE_DO_GROUP                    //35
+    RULE_FOR,                        //35
+    RULE_DO_GROUP,                   //36
+    RULE_FUNCDEC_BODY,               //37
+    RULE_FUNCDEC                     //38
 };
 
 enum symbol_type
@@ -114,42 +117,18 @@ void rule_print(struct rule *rule);
 void rule_free(struct rule *rule);
 
 //TODO: add more rules
-void sh_rule_element(struct rule_array *rules);
-void sh_rule_element_list(struct rule_array *rules);
-void sh_rule_arg_list(struct rule_array *rules);
-void sh_rule_command(struct rule_array *rules);
-void sh_rule_shell_command(struct rule_array *rules);
-void sh_rule_simple_command(struct rule_array *rules);
-void sh_rule_ionumber(struct rule_array *rules);
-void sh_rule_ionumber_optionnal(struct rule_array *rules);
-void sh_rule_redir_list(struct rule_array *rules);
-void sh_rule_redir(struct rule_array *rules);
-void sh_rule_redir_symbol(struct rule_array *rules);
-void sh_rule_redir_to(struct rule_array *rules);
-void sh_rule_pipe(struct rule_array *rules);
-void sh_rule_pipeline(struct rule_array *rules);
-void sh_rule_input(struct rule_array *rules);
-void sh_rule_and_or_concat(struct rule_array *rules);
-void sh_rule_or_concat(struct rule_array *rules);
-void sh_rule_and_concat(struct rule_array *rules);
-void sh_rule_and_or(struct rule_array *rules);
-void sh_rule_and_linebreak(struct rule_array *rules);
-void sh_rule_or_linebreak(struct rule_array *rules);
-void sh_rule_list(struct rule_array *rules);
-void sh_rule_list_delim(struct rule_array *rules);
-void sh_rule_list_concat(struct rule_array *rules);
-void sh_rule_compound_list(struct rule_array *rules);
-void sh_rule_compound_list_delim(struct rule_array *rules);
-void sh_rule_compound_list_concat(struct rule_array *rules);
-void sh_rule_compound_list_break(struct rule_array *rules);
-void sh_rule_compound_list_break_line(struct rule_array *rules);
-void sh_rule_compound_list_break_delim(struct rule_array *rules);
-void sh_rule_compound_list_break_concat(struct rule_array *rules);
-void sh_rule_if(struct rule_array *rules);
-void sh_rule_else_concat(struct rule_array *rules);
-void sh_rule_do_group(struct rule_array *rules);
-void sh_rule_while(struct rule_array *rules);
-void sh_rule_until(struct rule_array *rules);
+void sh_rule_element_groups            (struct rule_array *rules);
+void sh_rule_command_groups            (struct rule_array *rules);
+void sh_rule_redir_groups              (struct rule_array *rules);
+void sh_rule_pipe_groups               (struct rule_array *rules);
+void sh_rule_input                     (struct rule_array *rules);
+void sh_rule_and_or_groups             (struct rule_array *rules);
+void sh_rule_list_groups               (struct rule_array *rules);
+void sh_rule_compound_list_groups      (struct rule_array *rules);
+void sh_rule_compound_list_break_groups(struct rule_array *rules);
+void sh_rule_do_groups                 (struct rule_array *rules);
+void sh_rule_funcdec_groups            (struct rule_array *rules);
+void sh_rule_if_groups                 (struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);

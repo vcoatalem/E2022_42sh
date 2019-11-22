@@ -18,7 +18,7 @@ static void sh_rule_redir_symbol_basic(struct rule_array *rules)
 //TODO: add this
 //<<
 //>>
-void sh_rule_redir_symbol_more(struct rule_array *rules)
+static void sh_rule_redir_symbol_more(struct rule_array *rules)
 {
     struct rule *rule_double_less = rule_build(RULE_REDIR_SYMBOL,
             symbol_create(TOKEN_DOUBLE_LESS, 0),
@@ -34,7 +34,7 @@ void sh_rule_redir_symbol_more(struct rule_array *rules)
 //>|
 //<>
 //...
-void sh_rule_redir_symbol_advanced(struct rule_array *rules)
+static void sh_rule_redir_symbol_advanced(struct rule_array *rules)
 {
     struct rule *rule_great_pipe = rule_build(RULE_REDIR_SYMBOL,
             symbol_create(TOKEN_GREAT_PIPE, 0),
@@ -46,15 +46,10 @@ void sh_rule_redir_symbol_advanced(struct rule_array *rules)
     rule_array_add(rules, rule_less_great);
 }
 
-//calls all functions above to list all possible redirection symbol
-void sh_rule_redir_symbol(struct rule_array *rules)
-{
-    sh_rule_redir_symbol_basic(rules);
-}
 
 // REDIR_TO -> IO_NUMBER
 // REDIR_TO -> WORD
-void sh_rule_redir_to(struct rule_array *rules)
+static void sh_rule_redir_to(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_REDIR_TO,
             symbol_create(0, RULE_IONUMBER),
@@ -69,7 +64,7 @@ void sh_rule_redir_to(struct rule_array *rules)
 // IO_NUMBER -> 0
 // IO_NUMBER -> 1
 // IO_NUMBER -> 2
-void sh_rule_ionumber(struct rule_array *rules)
+static void sh_rule_ionumber(struct rule_array *rules)
 {
     struct rule *rule_stdin = rule_build(RULE_IONUMBER,
             symbol_create(TOKEN_STDIN, 0),
@@ -87,7 +82,7 @@ void sh_rule_ionumber(struct rule_array *rules)
 
 // REDIR -> IO_NUMBER REDIR_SYMBOL REDIR_TO
 // REDIR -> REDIR_SYMBOL REDIR_TO
-void sh_rule_redir(struct rule_array *rules)
+static void sh_rule_redir(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_REDIR,
             symbol_create(0, RULE_IONUMBER),
@@ -102,7 +97,7 @@ void sh_rule_redir(struct rule_array *rules)
     rule_array_add(rules, rule_b);
 }
 
-void sh_rule_redir_list(struct rule_array *rules)
+static void sh_rule_redir_list(struct rule_array *rules)
 {
     struct rule *rule_repeat = rule_build(RULE_REDIR_LIST,
             symbol_create(0, RULE_REDIR),
@@ -113,4 +108,15 @@ void sh_rule_redir_list(struct rule_array *rules)
             NULL);
     rule_array_add(rules, rule_pass);
     rule_array_add(rules, rule_repeat);
+}
+
+void sh_rule_redir_groups(struct rule_array *rules)
+{
+    sh_rule_redir_list(rules);
+    sh_rule_redir(rules);
+    sh_rule_ionumber(rules);
+    sh_rule_redir_to(rules);
+    sh_rule_redir_symbol_basic(rules);
+    sh_rule_redir_symbol_more(rules);
+    sh_rule_redir_symbol_advanced(rules);
 }

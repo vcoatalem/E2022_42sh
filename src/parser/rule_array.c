@@ -38,40 +38,18 @@ struct rule_array *rule_array_build(void)
     //TODO: merge rule functions in sub categories
     struct rule_array *rules = rule_array_init();
     //add all preconstructed rules here
-    sh_rule_input(rules);
-    sh_rule_and_or(rules);
-    sh_rule_and_or_concat(rules);
-    sh_rule_and_concat(rules);
-    sh_rule_or_concat(rules);    
-    sh_rule_and_linebreak(rules);
-    sh_rule_or_linebreak(rules);
-    sh_rule_pipeline(rules);
-    sh_rule_pipe(rules);
-    sh_rule_command(rules);    
-    sh_rule_simple_command(rules);    
-    sh_rule_shell_command(rules);
-    sh_rule_redir_list(rules);
-    sh_rule_redir(rules);
-    sh_rule_redir_symbol(rules);
-    sh_rule_redir_to(rules);
-    sh_rule_ionumber(rules);
-    sh_rule_element(rules);
-    sh_rule_element_list(rules);
-    sh_rule_arg_list(rules);
-    sh_rule_list(rules);
-    sh_rule_list_delim(rules);
-    sh_rule_list_concat(rules);
-    sh_rule_compound_list(rules);
-    sh_rule_compound_list_delim(rules);
-    sh_rule_compound_list_concat(rules);
-    sh_rule_compound_list_break(rules);
-    sh_rule_compound_list_break_line(rules);
-    sh_rule_compound_list_break_delim(rules);
-    sh_rule_compound_list_break_concat(rules);
-    sh_rule_if(rules);
-    sh_rule_else_concat(rules);
-    sh_rule_do_group(rules);
-    sh_rule_while(rules);
-    sh_rule_until(rules);
+    
+    sh_rule_element_groups            (rules);          
+    sh_rule_command_groups            (rules);          
+    sh_rule_redir_groups              (rules);            
+    sh_rule_pipe_groups               (rules);             
+    sh_rule_input                     (rules);                   
+    sh_rule_and_or_groups             (rules);           
+    sh_rule_list_groups               (rules);             
+    sh_rule_compound_list_groups      (rules);    
+    sh_rule_compound_list_break_groups(rules);    
+    sh_rule_do_groups                 (rules);               
+    sh_rule_funcdec_groups            (rules);          
+    sh_rule_if_groups                 (rules);
     return rules;
 }

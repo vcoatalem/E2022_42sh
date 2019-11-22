@@ -1,7 +1,7 @@
 #include "../parser.h"
 
 // ELEMENT -> `word`
-void sh_rule_element(struct rule_array *rules)
+static void sh_rule_element(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_ELEMENT,
             symbol_create(TOKEN_WORD, 0),
@@ -11,7 +11,7 @@ void sh_rule_element(struct rule_array *rules)
 
 // ELEMENT_LIST -> ELEMENT ELEMENT_LIST
 // ELEMENT_LIST -> epsilon
-void sh_rule_element_list(struct rule_array *rules)
+static void sh_rule_element_list(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_ELEMENT_LIST,
             symbol_create(0, RULE_ELEMENT),
@@ -25,11 +25,18 @@ void sh_rule_element_list(struct rule_array *rules)
 }
 
 // ARG_LIST -> ELEMENT ELEMENT_LIST
-void sh_rule_arg_list(struct rule_array *rules)
+static void sh_rule_arg_list(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_ARG_LIST,
             symbol_create(0, RULE_ELEMENT),
             symbol_create(0, RULE_ELEMENT_LIST),
             NULL);
     rule_array_add(rules, rule);
+}
+
+void sh_rule_element_groups(struct rule_array *rules)
+{
+    sh_rule_element(rules);
+    sh_rule_element_list(rules);
+    sh_rule_arg_list(rules);
 }

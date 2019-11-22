@@ -17,6 +17,7 @@ add_library(parser
     shell_rules/list.c
     shell_rules/compound_list.c
     shell_rules/compound_list_break.c
+    shell_rules/funcdec.c
     shell_rules/do.c
     shell_rules/input.c
     ast_build/node_string.c

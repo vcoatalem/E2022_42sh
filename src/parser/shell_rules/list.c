@@ -2,7 +2,7 @@
 
 //LIST
 
-void sh_rule_list_delim(struct rule_array *rules)
+static void sh_rule_list_delim(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_LIST_DELIM,
             symbol_create(TOKEN_SEMI_COLON, 0),
@@ -14,7 +14,7 @@ void sh_rule_list_delim(struct rule_array *rules)
     rule_array_add(rules, rule_b);
 }
 
-void sh_rule_list(struct rule_array *rules)
+static void sh_rule_list(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_LIST,
             symbol_create(0, RULE_AND_OR),
@@ -27,7 +27,7 @@ void sh_rule_list(struct rule_array *rules)
     rule_array_add(rules, rule_eps);
 }
 
-void sh_rule_list_concat(struct rule_array *rules)
+static void sh_rule_list_concat(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_LIST_CONCAT,
             symbol_create(0, RULE_LIST_DELIM),
@@ -38,4 +38,11 @@ void sh_rule_list_concat(struct rule_array *rules)
             NULL);
     rule_array_add(rules, rule);
     rule_array_add(rules, rule_eps);
+}
+
+void sh_rule_list_groups(struct rule_array *rules)
+{
+    sh_rule_list_concat(rules);
+    sh_rule_list(rules);
+    sh_rule_list_delim(rules);
 }
