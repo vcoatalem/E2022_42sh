@@ -15,7 +15,8 @@ void bundle_free(struct execution_bundle *bundle)
     free_hash_table_var(bundle->hash_table_var);
     lexer_free(bundle->lexer);
     ast_free(bundle->ast);
-    parser_free(bundle->parser, 0);
+    parser_free(bundle->parser);
+    token_array_free(bundle->token_array);
 }
 
 static struct execution_bundle *g_bundle = NULL;
@@ -64,7 +65,8 @@ int main(int argc, char **argv)
         .shopt = shopt_init(options),
         .lexer = NULL,
         .parser = NULL,
-        .ast = NULL
+        .ast = NULL,
+        .token_array = NULL
     };
     *g_bundle = bundle;
     int execution_val = 0;

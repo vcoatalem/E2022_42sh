@@ -37,12 +37,12 @@ struct parser *parser_init(struct token_array *tokens)
     return parser;
 }
 
-void parser_free(struct parser *parser, int free_ast)
+void parser_free(struct parser *parser)
 {
+    if (!parser)
+        return;
     stamp_free(parser->input);
     stack_free(parser->stack);
-    if (free_ast)
-        free(parser->ast);
     free(parser);
 }
 

@@ -31,6 +31,7 @@ struct execution_bundle
     struct lexer *lexer;
     struct parser *parser;
     struct ast *ast;
+    struct token_array *token_array;
 };
 
 void appendhistory(char *cmd);

@@ -3,13 +3,15 @@
 
 static int run_lex_parse(struct execution_bundle *bundle)
 {
-    struct token_array *arr = lex(bundle->lexer);
+    if (bundle->token_array)
+        token_array_free(bundle->token_array);
+    bundle->token_array = lex(bundle->lexer);
     printf("[LEXER] done lexing. Got token array: ");
-    token_array_print(arr, stdout);
+    token_array_print(bundle->token_array, stdout);
     
     if (bundle->parser)
-        free(bundle->parser);
-    bundle->parser = parser_init(arr);
+        parser_free(bundle->parser);
+    bundle->parser = parser_init(bundle->token_array);
     
     parse(bundle->parser, bundle->parser_table);
     
@@ -36,7 +38,6 @@ static int run_lex_parse(struct execution_bundle *bundle)
     else //if (p->state == PARSER_STATE_CONTINUE)
     {
     }
-    token_array_free(arr);
     printf("lexing parsing process returning: %d\n", return_value);
     return return_value;
 }

@@ -225,6 +225,6 @@ struct parser
 
 struct parser *parser_init(struct token_array *tokens);
 void parse(struct parser *parser, struct analysis_table *table);
-void parser_free(struct parser *parser, int free_ast);
+void parser_free(struct parser *parser);
 
 #endif /* PARSER_H */
