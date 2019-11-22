@@ -77,14 +77,22 @@ struct stack_elt *stack_pop(struct stack *stack)
     return head;
 }
 
+void stack_elt_free(struct stack_elt *elt)
+{
+    if (!elt)
+        return;
+    free(elt->symbol);
+    free(elt);
+}
+
 void stack_free(struct stack *stack)
 {
+    if (!stack)
+        return;
     while (stack->size)
     {
         struct stack_elt *head = stack_pop(stack);
-        free(head->ast);
-        free(head->symbol);
-        free(head);
+        stack_elt_free(head);
     }
     free(stack);
 }

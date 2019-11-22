@@ -82,7 +82,8 @@ void parse(struct parser *parser, struct analysis_table *table)
             if (head->symbol->token_type != current->type)
             {
                 set_parsing_ending_status(parser, current->type);
-                return;
+                stack_elt_free(head);
+                break;
             }
             if (current->type == TOKEN_WORD)
             {
@@ -103,6 +104,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                 if (!is_epsilon)
                 {
                     set_parsing_ending_status(parser, current->type);
+                    stack_elt_free(head);
                     //could not find correspondance in analysis table
                     return;
                 }
@@ -111,7 +113,6 @@ void parse(struct parser *parser, struct analysis_table *table)
                     //current top of stack rule is an epsilon rule, therefore
                     //can be canceled. 
                     symbol_array_free(is_epsilon);
-                    continue;
                 }
             }
             else
@@ -119,7 +120,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                 stack_push_array(stack, arr, head->ast);
             }
         }
-        free(head);
+        stack_elt_free(head);
     }
     #if 0
     stack_print(stack);
