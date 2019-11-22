@@ -3,7 +3,7 @@
 #include <err.h>
 #include <errno.h>
 
-char *type_character(enum operator_type type)
+static char *operator_to_string(enum operator_type type)
 {
     switch (type)
     {
@@ -28,30 +28,18 @@ void _ast_dot_print(struct ast *ast, FILE *file)
     void *ast_cast = ast;
     if (ast->forest == NULL)
     {
-        if (ast->node_type == NODE_VALUE)
-        {
-            fprintf(file, "\"%s_%p\";\n\t", ast->value, ast_cast);
-        }
-        else if (ast->node_type == NODE_OPERATOR)
-        {
-            fprintf(file, "\"%s_%p\";\n\t",
-                    type_character(ast->op_type), ast_cast);
-        }
-        else // NODE_EPSILON
-        {
-            fprintf(file, "\"%s_%p\";\n\t",
-                    "EPSILON", ast_cast);
-        }
+        fprintf(file, "\"%s(%s)_%p\";\n\t",
+                ast->value,
+                operator_to_string(ast->op_type),
+                ast_cast);
     }
 
     for (size_t i = 0; i < ast->nb_children; i++)
     {
-        if (ast->node_type == NODE_VALUE)
-            fprintf(file, "\"%s_%p\"", ast->value, ast_cast);
-
-        else
-            fprintf(file, "\"%s_%p\"",
-                    type_character(ast->op_type), ast_cast);
+            fprintf(file, "\"%s(%s)_%p\"",
+                    ast->value,
+                    operator_to_string(ast->op_type),
+                    ast_cast);
 
         fprintf(file, " -> ");
 

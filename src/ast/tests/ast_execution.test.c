@@ -154,7 +154,7 @@ int main(int argc, char **argv)
         ast_add_child(root, ast_and());
 
     ast_dot_print(root, "ast.dot");
-    printf("%d\n", ast_execute(root));
+    printf("%d\n", ast_execute(root, NULL));
     ast_free(root);
     return 0;
 }
