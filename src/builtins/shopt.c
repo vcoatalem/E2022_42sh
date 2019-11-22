@@ -6,6 +6,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <err.h>
+#include <errno.h>
 
 void shopt_set_option(struct shopt *shopt, char *str)
 {
@@ -26,6 +28,7 @@ void shopt_set_option(struct shopt *shopt, char *str)
         shopt->sourcepath = 1;
     if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 1;
+    warn(1, "%s is not in 42sh option\n", str);
 }
 
 void shopt_unset_option(struct shopt *shopt, char *str)
@@ -47,6 +50,7 @@ void shopt_unset_option(struct shopt *shopt, char *str)
         shopt->sourcepath = 0;
     if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 0;
+    warn(1, "%s is not in 42sh option\n", str);
 }
 
 void shopt_init_set_shopt(struct shopt *shopt, int val,
@@ -114,15 +118,22 @@ int shopt_is_set(struct shopt *shopt, char *str)
     return -1;
 }
 
-void shopt_print(struct shopt *shopt)
+void shopt_print(struct shopt *shopt, int mode)
 {
-    printf("ast_print %s\n", shopt->ast_print ? "on" : "off");
-    printf("dotglob %s\n", shopt->dotglob ? "on" : "off");
-    printf("expand_aliases %s\n", shopt->expand_aliases ? "on" : "off");
-    printf("extglob %s\n", shopt->extglob ? "on" : "off");
-    printf("nullglob %s\n", shopt->nullglob ? "on" : "off");
-    printf("sourcepath %s\n", shopt->sourcepath ? "on" : "off");
-    printf("xpg_echo %s\n", shopt->xpg_echo ? "on" : "off");
+    if (shopt->ast_print == mode || mode == -1)
+        printf("ast_print %s\n", shopt->ast_print ? "on" : "off");
+    if (shopt->dotglob == mode || mode == -1)
+        printf("dotglob %s\n", shopt->dotglob ? "on" : "off");
+    if (shopt->expand_aliases == mode || mode == -1)
+        printf("expand_aliases %s\n", shopt->expand_aliases ? "on" : "off");
+    if (shopt->extglob == mode || mode == -1)
+        printf("extglob %s\n", shopt->extglob ? "on" : "off");
+    if (shopt->nullglob == mode || mode == -1)
+        printf("nullglob %s\n", shopt->nullglob ? "on" : "off");
+    if (shopt->sourcepath == mode || mode == -1)
+        printf("sourcepath %s\n", shopt->sourcepath ? "on" : "off");
+    if (shopt->xpg_echo == mode || mode == -1)
+        printf("xpg_echo %s\n", shopt->xpg_echo ? "on" : "off");
 }
 
 int builtin_shopt(char **args, size_t size, void *bundle_ptr)
@@ -131,13 +142,13 @@ int builtin_shopt(char **args, size_t size, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     if (size == 1)
     {
-        shopt_print(bundle->shopt);
+        shopt_print(bundle->shopt, -1);
     }
     else if (!strcmp(args[1], "-s"))
     {
         if (size == 2)
         {
-            shopt_print(bundle->shopt);
+            shopt_print(bundle->shopt, 1);
         }
         else if (!strcmp(args[2], "-q"))
         {
@@ -155,7 +166,7 @@ int builtin_shopt(char **args, size_t size, void *bundle_ptr)
     {
         if (size == 2)
         {
-            shopt_print(bundle->shopt);
+            shopt_print(bundle->shopt, 0);
         }
         else if (!strcmp(args[2], "-q"))
         {
