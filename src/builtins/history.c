@@ -1,5 +1,10 @@
 #include "builtins.h"
 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 enum
 {
     SUCCESS,
@@ -14,7 +19,7 @@ static int error_fd( char* file)
 
 
 
-int builtin_history(char **str, size_t size,struct execution_bundle *bundle)
+int builtin_history(char **str, size_t size, void *bundle)
 {
     char *line = NULL;
     size_t sizeline;

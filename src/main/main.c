@@ -7,7 +7,7 @@
 
 void bundle_free(struct execution_bundle *bundle)
 {
-    free(bundle->options);
+    shopt_free(bundle->shopt);
     free(bundle->grammar);
     free_hash_table_func(bundle->hash_table_func);
     free_hash_table_var(bundle->hash_table_var);
@@ -51,10 +51,11 @@ int main(int argc, char **argv)
         return BASH_RETURN_OPTIONS_ERROR;
     }
     //struct grammar *g = grammar_build();
-    struct execution_bundle bundle = { .options = options,
+    struct execution_bundle bundle = {  .options = options,
                                         .grammar = NULL,
                                         .hash_table_var = init_hash_table_var(50),
-                                        .hash_table_func = init_hash_table_func(50)};//g };
+                                        .hash_table_func = init_hash_table_func(50)
+                                        .shopt = shopt_init(options)};//g };
     int execution_val = 0;
     /*if (!options->norc_is_set)
     {

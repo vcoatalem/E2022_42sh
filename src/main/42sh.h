@@ -14,6 +14,19 @@
 #include "../hashtable/hashtablefunc.h"
 #include "../options/options.h"
 
+struct shopt           
+{                      
+    int ast_print;     
+    int dotglob;       
+    int expand_aliases;
+    int extglob;       
+    int nocaseglob;    
+    int nullglob;      
+    int sourcepath;    
+    int xpg_echo;      
+};                     
+
+
 enum BASH_RETURN_VALUES
 {
     BASH_RETURN_OK = 0,
@@ -27,7 +40,7 @@ struct execution_bundle
     struct grammar *grammar;
     struct hash_table_var *hash_table_var;
     struct hash_table_func *hash_table_func;
-
+    struct shopt *shopt;
 };
 
 void appendhistory(char *cmd);
