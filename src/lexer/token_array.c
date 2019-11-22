@@ -86,7 +86,7 @@ int is_separator(char c)
 
 int is_space(char c)
 {
-    return (c == ' ' || c == '\t' || c == '\n');
+    return (c == ' ' || c == '\t');
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
