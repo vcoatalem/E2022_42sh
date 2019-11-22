@@ -38,10 +38,12 @@ char *rule_id_to_string(enum rule_id id)
         return "or_concat";
     case RULE_OR_LINEBREAK:
         return "or_linebreak";
+    case RULE_AND_OR_CONCAT:
+        return "and_or_concat";
     case RULE_PIPELINE:
-        return "|";
+        return "pipeline";
     case RULE_PIPE:
-        return "|";
+        return "pipe";
     case RULE_COMMAND:
         return "command";
     case RULE_SIMPLE_COMMAND:
@@ -74,6 +76,10 @@ char *rule_id_to_string(enum rule_id id)
         return "while";
     case RULE_UNTIL:
         return "until";
+    case RULE_FUNCDEC:
+        return "funcdec";
+    case RULE_FUNCDEC_BODY:
+        return "funcdec_body";
     default:
         return "unknown";
     }

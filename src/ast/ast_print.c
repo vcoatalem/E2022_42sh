@@ -25,6 +25,8 @@ static char *operator_to_string(enum operator_type type)
             return "redir_list";
         case (OPERATOR_GET_VALUE):
             return "value";
+        case (OPERATOR_FUNC_DECLARATION):
+            return "function_declaration";
         // TODO: Add more operator types
 
         default:

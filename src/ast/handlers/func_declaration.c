@@ -8,8 +8,8 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
 
-    struct ast *ast_func_name = find_op_type(ast, OPERATOR_FUNC_NAME);
-    struct ast *ast_func_body = find_op_type(ast, OPERATOR_FUNC_BODY);
+    struct ast *ast_func_name = find_op_type(ast, OPERATOR_GET_VALUE);
+    struct ast *ast_func_body = find_op_type(ast, OPERATOR_AND);
 
     if (ast_func_name == NULL || ast_func_body == NULL)
         return AST_ERROR;

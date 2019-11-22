@@ -10,8 +10,8 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         || id == RULE_AND_OR || id == RULE_AND_OR_CONCAT
         || id == RULE_AND_CONCAT || id == RULE_AND_LINEBREAK
         || id == RULE_OR_CONCAT || id == RULE_OR_LINEBREAK
-        || id == RULE_PIPELINE || id == RULE_PIPE
-        || id == RULE_OR_CONCAT || id == RULE_DO_GROUP)
+        || id == RULE_OR_CONCAT || id == RULE_DO_GROUP
+        || id == RULE_FUNCDEC_BODY)
     {
         return OPERATOR_AND;
     }
@@ -47,6 +47,10 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     if (id == RULE_ELEMENT || id == RULE_REDIR_SYMBOL)
     {
         return OPERATOR_GET_VALUE;
+    }
+    if (id == RULE_FUNCDEC)
+    {
+        return OPERATOR_FUNC_DECLARATION;
     }
     return OPERATOR_NONE;
 }
