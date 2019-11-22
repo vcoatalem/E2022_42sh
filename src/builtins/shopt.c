@@ -76,7 +76,10 @@ void shopt_init_set_shopt(struct shopt *shopt, int val,
 struct shopt *shopt_init(void *options_ptr)
 {
     struct options *options = options_ptr;
-    struct shopt *res = malloc(sizeof(struct shopt));
+    struct shopt *res = calloc(1, sizeof(struct shopt));
+
+    //TODO: setup default values for shopt here
+
     shopt_init_set_shopt(res, 0, options->unset_shopt,
             options->nb_unset_shopt);
     shopt_init_set_shopt(res, 0, options->set_shopt, options->nb_set_shopt);
