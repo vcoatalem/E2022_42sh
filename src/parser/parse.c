@@ -133,5 +133,7 @@ void parse(struct parser *parser, struct analysis_table *table)
         parser->state = stack->size == 0 ?
             PARSER_STATE_SUCCESS : PARSER_STATE_CONTINUE;
     }
+    //post parsing treatment
+    //ast_clean(parser->ast);
     printf("[LL PARSER] done parsing. state: %d\n", parser->state);
 }

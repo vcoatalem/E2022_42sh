@@ -41,7 +41,7 @@ set_target_properties(test_ast_print
 
 ###############
 
-# EXEC PRINT TEST
+# EXEC TEST
 
 add_executable(test_ast_exec tests/ast_execution.test.c)
 
@@ -52,8 +52,6 @@ set_target_properties(test_ast_exec
     RUNTIME_OUTPUT_DIRECTORY "."
     EXCLUDE_FROM_ALL "true"
 )
-
-###############
 
 
 # List all tests
