@@ -63,7 +63,10 @@ enum operator_type
     OPERATOR_FUNC_DECLARATION,
     OPERATOR_FUNC_NAME,
     OPERATOR_FUNC_BODY,
-    //while, until, ..
+    OPERATOR_ARG_LIST,
+    OPERATOR_REDIR,
+    OPERATOR_REDIR_LIST,
+    OPERATOR_GET_VALUE,
 };
 
 /**

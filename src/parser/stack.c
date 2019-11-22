@@ -22,15 +22,10 @@ static void stack_elt_ast_init(struct stack_elt *elt)
     {
         enum operator_type operator = rule_id_to_operator(
                 elt->symbol->rule_id);
-        if (operator == OPERATOR_NONE)
-        {
-            char *node_name = rule_id_to_string(elt->symbol->rule_id);
-            elt->ast = ast_init(NODE_VALUE, node_name, 0);
-        }
-        else
-        {
-            elt->ast = ast_init(NODE_OPERATOR, "", operator);
-        }
+        char *node_name = rule_id_to_string(elt->symbol->rule_id);
+        enum node_type node_type = operator == OPERATOR_NONE ? NODE_VALUE
+                : NODE_OPERATOR;
+        elt->ast = ast_init(node_type, node_name, operator);
     }
 
 }

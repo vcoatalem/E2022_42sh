@@ -9,13 +9,22 @@ static char *operator_to_string(enum operator_type type)
     {
         case (OPERATOR_AND):
             return "&&";
-
         case (OPERATOR_OR):
             return "||";
-
         case (OPERATOR_PIPE):
             return "|";
-
+        case (OPERATOR_COMMAND):
+            return "cmd";
+        case (OPERATOR_IF):
+            return "if";
+        case (OPERATOR_ARG_LIST):
+            return "args";
+        case (OPERATOR_REDIR):
+            return "redir";
+        case (OPERATOR_REDIR_LIST):
+            return "redir_list";
+        case (OPERATOR_GET_VALUE):
+            return "value";
         // TODO: Add more operator types
 
         default:
