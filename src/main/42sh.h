@@ -33,6 +33,7 @@ struct execution_bundle
     struct ast *ast;
     struct token_array *token_array;
 };
+void init_history(void);
 
 void appendhistory(char *cmd);
 
