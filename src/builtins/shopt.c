@@ -28,7 +28,7 @@ void shopt_set_option(struct shopt *shopt, char *str)
         shopt->sourcepath = 1;
     if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 1;
-    warn(1, "%s is not in 42sh option\n", str);
+    warn("%s is not in 42sh option\n", str);
 }
 
 void shopt_unset_option(struct shopt *shopt, char *str)
@@ -50,7 +50,7 @@ void shopt_unset_option(struct shopt *shopt, char *str)
         shopt->sourcepath = 0;
     if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 0;
-    warn(1, "%s is not in 42sh option\n", str);
+    warn("%s is not in 42sh option\n", str);
 }
 
 void shopt_init_set_shopt(struct shopt *shopt, int val,
