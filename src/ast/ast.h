@@ -184,7 +184,7 @@ char **get_arg_list(struct ast *ast);
  *
  * \return command return a new command structure
  */
-struct command *get_command(struct ast *ast);
+struct command *get_command(struct ast *ast, void *bundle_ptr);
 
 
 /**

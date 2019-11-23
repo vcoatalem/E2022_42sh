@@ -14,7 +14,7 @@ int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
     while (ast != NULL)
     {
         struct ast *ast_cmd = find_op_type(ast, OPERATOR_COMMAND);
-        struct command *cmd = get_command(ast_cmd);
+        struct command *cmd = get_command(ast_cmd, bundle_ptr);
 
         pipe_add_command(pipe, cmd);
         ast = find_op_type(ast, OPERATOR_PIPE);

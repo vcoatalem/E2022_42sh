@@ -83,3 +83,42 @@ struct redirection **ast_redirection_list_build(struct ast *ast)
     }
     return redirections;
 }
+
+char **get_arg_list(struct ast *ast)
+{
+    char **arg_list = NULL;
+    size_t index = 0;
+
+    while (ast != NULL)
+    {
+        struct ast *element_list = find_op_type(ast, OPERATOR_ARG_LIST);
+        arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
+        arg_list[index] = get_element_value(ast);
+        arg_list[index + 1] = NULL;
+        index++;
+        ast = element_list;
+    }
+
+    return arg_list;
+}
+
+struct command *get_command(struct ast *ast, void *bundle_ptr)
+{
+    struct ast *simple_cmd = find_op_type(ast, OPERATOR_COMMAND);
+
+    if (simple_cmd != NULL)
+    {
+        struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
+        //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
+
+        char **arg_list = get_arg_list(args);
+        // TODO: Add get redirection_list function
+        //struct redirection **redirs = get_redirs(redir_list);
+
+        struct command *cmd = command_init(arg_list, bundle_ptr);
+
+        return cmd;
+    }
+
+    return NULL;
+}

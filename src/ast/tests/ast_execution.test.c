@@ -7,9 +7,9 @@
 
 static struct ast *ast_arg_list_A(void)
 {
-    struct ast *ast_args = ast_init("args", OPERATOR_ARG_LIST);
-    struct ast *ast_next1 = ast_init("args", OPERATOR_ARG_LIST);
-    struct ast *ast_next2 = ast_init("args", OPERATOR_ARG_LIST);
+    struct ast *ast_args = ast_init("arglist1", OPERATOR_ARG_LIST);
+    struct ast *ast_next1 = ast_init("arglist2", OPERATOR_ARG_LIST);
+    struct ast *ast_next2 = ast_init("arglist3", OPERATOR_ARG_LIST);
     struct ast *ast_arg1 = ast_init("arg1", OPERATOR_GET_VALUE);
     struct ast *ast_arg2 = ast_init("arg2", OPERATOR_GET_VALUE);
     struct ast *ast_arg3 = ast_init("arg3", OPERATOR_GET_VALUE);
@@ -30,8 +30,10 @@ static struct ast *ast_arg_list_A(void)
 static struct ast *ast_arg_list_B(void)
 {
     struct ast *ast_args = ast_init("args", OPERATOR_ARG_LIST);
-    struct ast *arg1 = ast_init("ls", OPERATOR_ARG_LIST);
+    struct ast *arg1 = ast_init("arg1", OPERATOR_GET_VALUE);
+    struct ast *arg = ast_init("ls", OPERATOR_NONE);
     ast_add_child(ast_args, arg1);
+    ast_add_child(arg1, arg);
     return ast_args;
 }
 
@@ -131,14 +133,14 @@ static struct ast *ast_redir_list(void)
 struct ast *ast_command_A(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
-    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
-    ast_add_child(ast_simple_command, ast_simple_command);
+    struct ast *ast_simple_command = ast_init("simple_cmd", OPERATOR_COMMAND);
+    ast_add_child(ast_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_A();
     struct ast *redir_list = ast_redir_list();
 
-    ast_add_child(ast_command, arg_list);
-    ast_add_child(ast_command, redir_list);
+    ast_add_child(ast_simple_command, arg_list);
+    ast_add_child(ast_simple_command, redir_list);
 
     return ast_command;
 }
@@ -146,7 +148,7 @@ struct ast *ast_command_A(void)
 struct ast *ast_command_B(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
-    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("simple_cmd", OPERATOR_COMMAND);
     ast_add_child(ast_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_A();
@@ -158,7 +160,7 @@ struct ast *ast_command_B(void)
 struct ast *ast_command_C(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
-    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("simple_cmd", OPERATOR_COMMAND);
     ast_add_child(ast_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_B();
@@ -248,6 +250,8 @@ int main(int argc, char **argv)
 
     ast_dot_print(root, dot_dest);
     struct execution_bundle bundle;
+    bundle.hash_table_var = init_hash_table_var(50);
+    bundle.hash_table_func = init_hash_table_func(50);
     int return_value = ast_execute(root, &bundle) == 0 ? AST_SUCCESS : AST_ERROR;
     return_value = return_value == expected_values[q] ? 0 : 1;
     ast_free(root);
