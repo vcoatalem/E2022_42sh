@@ -57,9 +57,11 @@ struct command
     int fd_in;
     int fd_out;
     int fd_err;
+    struct ast *ast;
 };
 
 struct command *command_init(char **args, void *bundle_ptr);
+struct command *shell_command_init(struct ast *ast);
 void command_free(struct command *command);
 void command_print(struct command *command);
 void command_add_redirection(struct command *command,

@@ -26,6 +26,13 @@ struct command *command_init(char **args, void *bundle_ptr)
     return cmd;
 }
 
+struct command *shell_command_init(struct ast *ast)
+{
+    struct command *command = calloc(1, sizeof(struct command));
+    command->ast = ast_dup(ast);
+    return command;
+}
+
 static void command_free_fd(struct command *command)
 {
     dup2(command->fd_in, STDIN_FILENO);
@@ -45,6 +52,10 @@ void command_free(struct command *command)
     for (size_t i = 0; i < command->n_redirections; i++)
     {
         redirection_free(*(command->redirections + i));
+    }
+    if (command->ast)
+    {
+        ast_free(command->ast);
     }
     free(command->redirections);
     free(command);
@@ -136,6 +147,10 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
+    if (command->ast)
+    {
+        return ast_execute(command->ast, bundle_ptr);
+    }
     if (command->type == COMMAND_SH)
     {
         return command_execute_sh(command, bundle_ptr);
