@@ -1,6 +1,6 @@
 add_library(execution command.c pipe.c redirection.c)
 
-
+target_link_libraries(execution builtins ast hashtable)
 
 # BASIC EXECUTION TEST
 

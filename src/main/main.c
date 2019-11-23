@@ -25,9 +25,7 @@ void sig_handler(int val)
 {
     if (val == SIGINT)
     {
-        bundle_free(g_bundle);
-        free(g_bundle);
-        exit(SIGINT);
+        
     }
 }
 

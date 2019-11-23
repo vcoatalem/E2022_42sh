@@ -1,9 +1,10 @@
-#include "builtins.h"
-#include "../main/42sh.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <err.h>
+
+#include "builtins.h"
+#include "../main/42sh.h"
 
 enum
 {

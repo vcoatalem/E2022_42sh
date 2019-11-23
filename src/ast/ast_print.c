@@ -15,6 +15,8 @@ static char *operator_to_string(enum operator_type type)
             return "|";
         case (OPERATOR_COMMAND):
             return "cmd";
+        case (OPERATOR_SHELL_COMMAND):
+            return "shell_cmd";
         case (OPERATOR_IF):
             return "if";
         case (OPERATOR_THEN):
@@ -29,6 +31,14 @@ static char *operator_to_string(enum operator_type type)
             return "value";
         case (OPERATOR_FUNC_DECLARATION):
             return "function_declaration";
+        case (OPERATOR_GET_IONUMBER):
+            return "ionumber";
+        case (OPERATOR_GET_REDIR_SYMBOL):
+            return "redir_symbol";
+        case (OPERATOR_GET_REDIR_TO):
+            return "redir_to";
+        case (OPERATOR_VAR_DECLARATION):
+            return "var_declaration";
         // TODO: Add more operator types
 
         default:
@@ -38,24 +48,21 @@ static char *operator_to_string(enum operator_type type)
 
 void _ast_dot_print(struct ast *ast, FILE *file)
 {
+    if (!ast)
+        return;
     void *ast_cast = ast;
-    if (ast->forest == NULL)
+    for (size_t i = 0; i < ast->nb_children; i++)
     {
-        fprintf(file, "\"%s(%s)_%p\";\n\t",
+        void *child_cast = ast->forest[i];
+        fprintf(file, "\"%s(%s)_%p\"",
                 ast->value,
                 operator_to_string(ast->op_type),
                 ast_cast);
-    }
-
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-            fprintf(file, "\"%s(%s)_%p\"",
-                    ast->value,
-                    operator_to_string(ast->op_type),
-                    ast_cast);
-
         fprintf(file, " -> ");
-
+        fprintf(file, "\"%s(%s)_%p\"\n",
+                ast->forest[i]->value,
+                operator_to_string(ast->forest[i]->op_type),
+                child_cast);
         _ast_dot_print(ast->forest[i], file);
     }
 }

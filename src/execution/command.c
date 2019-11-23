@@ -1,37 +1,43 @@
 #include "execution.h"
+#include "../main/42sh.h"
 
-struct command *command_init(char **args, struct redirection **redirections)
+struct command *command_init(char **args, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     struct command *cmd = calloc(1, sizeof(struct command));
     while (*(args + cmd->n_args))
     {
         cmd->n_args++;
+    }
+    char *cmd_name = *args;
+    if (str_to_builtin(cmd_name))
+    {
+        cmd->type = COMMAND_BUILTIN;
+    }
+    else if (get_func(bundle->hash_table_func, cmd_name))
+    {
+        cmd->type = COMMAND_FUNCDEC;
     }
     cmd->args = calloc(cmd->n_args + 1, sizeof(void*));
     for (size_t i = 0; i < cmd->n_args; i++)
     {
         *(cmd->args + i) = strdup(*(args + i));
     }
-
-    if (redirections)
-    {
-        cmd->redirections = redirections;
-        while (*(redirections + cmd->n_redirections))
-        {
-            cmd->n_redirections++;
-        }
-    }
     return cmd;
+}
+
+struct command *shell_command_init(struct ast *ast)
+{
+    struct command *command = calloc(1, sizeof(struct command));
+    command->ast = ast_dup(ast);
+    return command;
 }
 
 static void command_free_fd(struct command *command)
 {
-    if (command->fd_in > 2)
-        close(command->fd_in);
-    if (command->fd_out > 2)
-        close(command->fd_out);
-    if (command->fd_err > 2)
-        close(command->fd_err);
+    dup2(command->fd_in, STDIN_FILENO);
+    dup2(command->fd_out, STDOUT_FILENO);
+    dup2(command->fd_err, STDERR_FILENO);
 }
 
 void command_free(struct command *command)
@@ -46,6 +52,10 @@ void command_free(struct command *command)
     for (size_t i = 0; i < command->n_redirections; i++)
     {
         redirection_free(*(command->redirections + i));
+    }
+    if (command->ast)
+    {
+        ast_free(command->ast);
     }
     free(command->redirections);
     free(command);
@@ -79,8 +89,11 @@ void command_add_redirection(struct command *command,
 }
 
 
-int command_execute(struct command *command)
+static int command_execute_sh(struct command *command, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
+    if (!bundle)
+        return 0;
     int status;
     pid_t pid = fork();
     if (pid == 0)
@@ -98,6 +111,56 @@ int command_execute(struct command *command)
         exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
-    //printf("[LOG] command %s received %d\n", *(command->args), status);
+    printf("[LOG] command %s received %d\n", *(command->args), status);
     return status;
+}
+
+static int command_execute_builtin(struct command *command, void *bundle_ptr)
+{
+    for (size_t i = 0; i < command->n_redirections; i++)
+    {
+        redirection_execute(command, *(command->redirections + i));
+    }
+    //execute command
+    builtin_handler handler = str_to_builtin(*(command->args));
+    int execute_handler = handler(command->args, command->n_args,
+            bundle_ptr);
+    printf("[COMMAND EXECUTION] builtin %s received %d\n", *(command->args),
+            execute_handler);
+    return execute_handler;
+}
+
+static int command_execute_funcdec(struct command *command, void *bundle_ptr)
+{
+    struct execution_bundle *bundle = bundle_ptr;
+    for (size_t i = 0; i < command->n_redirections; i++)
+    {
+        redirection_execute(command, *(command->redirections + i));
+    }
+    //execute command
+    struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
+    int execute_funcdec = ast_execute(func_ast, bundle_ptr);
+    printf("[COMMAND EXECUTION] funcdec %s received %d\n", *(command->args),
+            execute_funcdec);
+    return execute_funcdec;
+}
+
+int command_execute(struct command *command, void *bundle_ptr)
+{
+    if (command->ast)
+    {
+        return ast_execute(command->ast, bundle_ptr);
+    }
+    if (command->type == COMMAND_SH)
+    {
+        return command_execute_sh(command, bundle_ptr);
+    }
+    else if (command->type == COMMAND_BUILTIN)
+    {
+        return command_execute_builtin(command, bundle_ptr);
+    }
+    else //if (commend->type == COMMAND_FUNCDEC)
+    {
+        return command_execute_funcdec(command, bundle_ptr);
+    }
 }

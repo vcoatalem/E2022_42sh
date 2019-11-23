@@ -107,8 +107,11 @@ struct token_array *lex(struct lexer *lexer)
     #endif
     if (index > 0)
     {
-        token_array_add(arr, token_init(
-            token_check(buffer, 0, buffer), buffer));
+        enum token_type tok = token_check(buffer, 0, buffer);
+        if (tok == TOKEN_WORD)
+            check_assignment(buffer, arr);
+        else
+            token_array_add(arr, token_init(tok, buffer));
     }
     if (lexer->state == LEXER_STATE_NONE)
         token_array_add(arr, token_init(TOKEN_EOF, ""));

@@ -16,8 +16,11 @@ EXP_RETURN=0
 OUTPUT_FILE=output
 EXP_OUTPUT_FILE=exp_output
 
-
 CMD_FILE=cmd
+TEST_DIR=tmp
+BIN_FILE=$PWD/$TEST_DIR/bin
+
+mkdir $TEST_DIR 2>/dev/null
 
 clean_temp_files()
 {
@@ -33,7 +36,10 @@ clean_temp_files()
 
 setup()
 {
+    echo $1
     clean_temp_files
+    cp "$1" "$BIN_FILE"
+
     echo "echo \"hello world!\"" >> $CMD_FILE
     echo "cat Makefile" >> $CMD_FILE
     echo "echo \"im in file\" > exp_output" >> $CMD_FILE
@@ -43,23 +49,21 @@ setup()
     echo "catch me if you can" > input
 }
 
-
 run_test()
 {
-    TEST_BIN=$1
     Q_COUNT=0
     while IFS= read -r line;
     do
         clean_temp_files
         ERROR=0
-        $TEST_BIN $Q_COUNT 1> $OUT 2> $ERR; RETURN=$?
+        $BIN_FILE $Q_COUNT 1> $OUT 2> $ERR; RETURN=$?
         echo $line | bash 1> $EXP_OUT 2> $EXP_ERR; EXP_RETURN=$?
 
         #increment q_count for next iteration
         Q_COUNT=$((Q_COUNT + 1))
 
         # remove all logs from output
-        sed -i '/[LOG]/d' $OUT
+        sed -i '/\[.*\]/d' $OUT
 
         ERROR_STDOUT=$(diff $EXP_OUT $OUT)                                          
         [ "$ERROR_STDOUT" != "" ] && ERROR=1 && echo "ERROR in STDOUT: $ERROR_STDOUT"
@@ -78,16 +82,13 @@ run_test()
 
 CURRENT_DIR=$PWD
 
-TEST_DIR=tmp/
 
-mkdir $TEST_DIR 2>/dev/null
 cd $TEST_DIR
 
 setup $1
 
 TEST=$1
-run_test $TEST
+run_test
 
 cd $CURRENT_DIR
 rm -rf $TEST_DIR
-

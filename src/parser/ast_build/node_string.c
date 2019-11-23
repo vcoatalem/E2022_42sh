@@ -82,6 +82,8 @@ char *rule_id_to_string(enum rule_id id)
         return "funcdec";
     case RULE_FUNCDEC_BODY:
         return "funcdec_body";
+    case RULE_VARDEC:
+        return "var_declaration";
     default:
         return "unknown";
     }

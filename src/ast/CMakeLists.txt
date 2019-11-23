@@ -1,7 +1,9 @@
 add_library(ast
     ast.c
+    ast_utils.c
     ast_print.c
     ast_execute.c
+    ast_execute_builders.c
     handlers/and_or.c
     handlers/pipe.c
     handlers/if_then.c
@@ -51,6 +53,12 @@ set_target_properties(test_ast_exec
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "."
     EXCLUDE_FROM_ALL "true"
+)
+
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_ast_exec
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/ast/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/ast/test_ast_exec" "ast_exec"
 )
 
 

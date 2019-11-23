@@ -70,6 +70,7 @@ enum token_type
     TOKEN_ELSE,
     TOKEN_ELIF,
     TOKEN_FUNCTION,
+    TOKEN_ASSIGNMENT
 };
 
 

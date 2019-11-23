@@ -63,10 +63,6 @@ void free_hash_table_var(struct hash_table_var *ht)
     free(ht);
 }
 
-
-
-
-
 void insert_variable(struct hash_table_var *ht, char *name, char *data)
 {
     size_t key = hash(name, ht->size);

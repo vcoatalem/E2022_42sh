@@ -24,10 +24,13 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_PIPE;
     }
-    if (id == RULE_COMMAND || id == RULE_SIMPLE_COMMAND
-            || id == RULE_SHELL_COMMAND)
+    if (id == RULE_COMMAND || id == RULE_SIMPLE_COMMAND)
     {
         return OPERATOR_COMMAND;
+    }
+    if (id == RULE_SHELL_COMMAND)
+    {
+        return OPERATOR_SHELL_COMMAND;
     }
     if (id == RULE_IF)
     {
@@ -53,14 +56,29 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_REDIR_LIST;
     }
-    if (id == RULE_ELEMENT || id == RULE_REDIR_SYMBOL || id == RULE_IONUMBER
-        || id == RULE_REDIR_TO)
+    if (id == RULE_ELEMENT)
     {
         return OPERATOR_GET_VALUE;
+    }
+    if (id == RULE_REDIR_SYMBOL)
+    {
+        return OPERATOR_GET_REDIR_SYMBOL;
+    }
+    if (id == RULE_IONUMBER)
+    {
+        return OPERATOR_GET_IONUMBER;
+    }
+    if (id == RULE_REDIR_TO)
+    {
+        return OPERATOR_GET_REDIR_TO;
     }
     if (id == RULE_FUNCDEC)
     {
         return OPERATOR_FUNC_DECLARATION;
+    }
+    if (id == RULE_VARDEC)
+    {
+        return OPERATOR_VAR_DECLARATION;
     }
     return OPERATOR_NONE;
 }

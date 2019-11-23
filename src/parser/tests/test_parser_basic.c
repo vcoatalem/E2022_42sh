@@ -18,7 +18,9 @@ int main(int argc, char **argv)
         PARSER_STATE_FAILURE,  //5
         PARSER_STATE_SUCCESS,  //6
         PARSER_STATE_FAILURE,  //7
-        PARSER_STATE_SUCCESS   //8
+        PARSER_STATE_SUCCESS,  //8
+        PARSER_STATE_SUCCESS,  //9
+        PARSER_STATE_SUCCESS,  //10
     };
     if (q == 0)
     {
@@ -100,6 +102,24 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_STDIN, "0"));
         token_array_add(exp, token_init(TOKEN_GREAT, ">"));
         token_array_add(exp, token_init(TOKEN_WORD, "output"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 9)
+    {
+        fprintf(stderr, "simple redirection of a flux to a filename named '0'");
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_STDERR, "2"));
+        token_array_add(exp, token_init(TOKEN_GREAT, ">"));
+        token_array_add(exp, token_init(TOKEN_STDIN, "0"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 10)
+    {
+        fprintf(stderr, "simple redirection of a flux to another");
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_STDERR, "2"));
+        token_array_add(exp, token_init(TOKEN_GREAT_AMPERSAND, ">&"));
+        token_array_add(exp, token_init(TOKEN_STDOUT, "1"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct analysis_table *table = table_build();

@@ -51,5 +51,6 @@ struct rule_array *rule_array_build(void)
     sh_rule_do_groups                 (rules);               
     sh_rule_funcdec_groups            (rules);          
     sh_rule_if_groups                 (rules);
+    sh_rule_misc                      (rules);
     return rules;
 }
