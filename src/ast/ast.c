@@ -106,17 +106,23 @@ char **get_arg_list(struct ast *ast)
 
 struct command *get_command(struct ast *ast)
 {
-    struct ast *simple_cmd = get_child_of_name(ast, "simple_command");
-    struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
-    //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
+    struct ast *simple_cmd = find_op_type(ast, OPERATOR_COMMAND);
 
-    char **arg_list = get_arg_list(args);
-    // TODO: Add get redirection_list function
-    //struct redirection **redirs = get_redirs(redir_list);
+    if (simple_cmd != NULL)
+    {
+        struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
+        //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
 
-    struct command *cmd = command_init(arg_list, NULL);
+        char **arg_list = get_arg_list(args);
+        // TODO: Add get redirection_list function
+        //struct redirection **redirs = get_redirs(redir_list);
 
-    return cmd;
+        struct command *cmd = command_init(arg_list, NULL);
+
+        return cmd;
+    }
+
+    return NULL;
 }
 
 //do not use this for now, will need more work later on
