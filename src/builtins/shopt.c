@@ -9,48 +9,57 @@
 #include <err.h>
 #include <errno.h>
 
-void shopt_set_option(struct shopt *shopt, char *str)
+int shopt_set_option(struct shopt *shopt, char *str)
 {
-
     if (strcmp(str, "ast_print") == 0)
         shopt->ast_print = 1;
-    if (strcmp(str, "dotglob") == 0)
+    else if (strcmp(str, "dotglob") == 0)
         shopt->dotglob = 1;
-    if (strcmp(str, "expand_aliases") == 0)
+    else if (strcmp(str, "expand_aliases") == 0)
         shopt->expand_aliases = 1;
-    if (strcmp(str, "extglob") == 0)
+    else if (strcmp(str, "extglob") == 0)
         shopt->extglob = 1;
-    if (strcmp(str, "nocaseglob") == 0)
+    else if (strcmp(str, "nocaseglob") == 0)
         shopt->nocaseglob = 1;
-    if (strcmp(str, "nullglob") == 0)
+    else if (strcmp(str, "nullglob") == 0)
         shopt->nullglob = 1;
-    if (strcmp(str, "sourcepath") == 0)
+    else if (strcmp(str, "sourcepath") == 0)
         shopt->sourcepath = 1;
-    if (strcmp(str, "xpg_echo") == 0)
+    else if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 1;
-    warn("%s is not in 42sh option\n", str);
+    else
+    {
+        warn("%s is not in 42sh option\n", str);
+        return 0;
+    }
+    return 1;
 }
 
-void shopt_unset_option(struct shopt *shopt, char *str)
+int shopt_unset_option(struct shopt *shopt, char *str)
 {
 
     if (strcmp(str, "ast_print") == 0)
         shopt->ast_print = 0;
-    if (strcmp(str, "dotglob") == 0)
+    else if (strcmp(str, "dotglob") == 0)
         shopt->dotglob = 0;
-    if (strcmp(str, "expand_aliases") == 0)
+    else if (strcmp(str, "expand_aliases") == 0)
         shopt->expand_aliases = 0;
-    if (strcmp(str, "extglob") == 0)
+    else if (strcmp(str, "extglob") == 0)
         shopt->extglob = 0;
-    if (strcmp(str, "nocaseglob") == 0)
+    else if (strcmp(str, "nocaseglob") == 0)
         shopt->nocaseglob = 0;
-    if (strcmp(str, "nullglob") == 0)
+    else if (strcmp(str, "nullglob") == 0)
         shopt->nullglob = 0;
-    if (strcmp(str, "sourcepath") == 0)
+    else if (strcmp(str, "sourcepath") == 0)
         shopt->sourcepath = 0;
-    if (strcmp(str, "xpg_echo") == 0)
+    else if (strcmp(str, "xpg_echo") == 0)
         shopt->xpg_echo = 0;
-    warn("%s is not in 42sh option\n", str);
+    else
+    {
+        warn("%s is not in 42sh option\n", str);
+        return 0;
+    }
+    return 1;
 }
 
 void shopt_init_set_shopt(struct shopt *shopt, int val,
@@ -97,7 +106,7 @@ void shopt_free(struct shopt *shopt)
     free(shopt);
 }
 
-int shopt_is_set(struct shopt *shopt, char *str)
+static int shopt_is_set(struct shopt *shopt, char *str)
 {
     if (strcmp(str, "ast_print") == 0)
         return shopt->ast_print;
@@ -136,82 +145,116 @@ void shopt_print(struct shopt *shopt, int mode)
         printf("xpg_echo %s\n", shopt->xpg_echo ? "on" : "off");
 }
 
+
+static int shopt_s(char **args, size_t size, struct execution_bundle *bundle)
+{
+    if (size == 2)
+        shopt_print(bundle->shopt, 1);
+    else if (!strcmp(args[2], "-q"))
+    {
+        int res = 1;
+        for (size_t i = 3; i < size; i++)
+        {
+            res = shopt_set_option(bundle->shopt, args[i]);
+            if (res == 0)
+                return 1;
+        }
+    }
+    else
+    {
+        int res = 1;
+        for (size_t i = 2; i < size; i++)
+        {
+            res = shopt_set_option(bundle->shopt, args[i]);
+            if (res == 0)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+
+static int shopt_u(char **args, size_t size, struct execution_bundle *bundle)
+{
+    if (size == 2)
+    {
+        shopt_print(bundle->shopt, 0);
+    }
+    else if (!strcmp(args[2], "-q"))
+    {
+        int res = 1;
+        for (size_t i = 3; i < size; i++)
+        {
+            res = shopt_unset_option(bundle->shopt, args[i]);
+            if (res == 0)
+                return 1;
+        }
+        return 1;
+    }
+    else
+    {
+        int res = 1;
+        for (size_t i = 2; i < size; i++)
+        {
+            res = shopt_unset_option(bundle->shopt, args[i]);
+            if (res == 0)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+static int shopt_q(char **args, size_t size, struct execution_bundle *bundle)
+{
+    int check = 1;
+    if (size == 2)
+        return 0;
+    else if (!strcmp(args[2], "-u") || !strcmp(args[2], "-s"))
+    {
+        if (!strcmp(args[2], "-u"))
+        {
+            for (size_t i = 3; i < size; i++)
+            {
+                check = shopt_unset_option(bundle->shopt, args[i]);
+                if (check == 0)
+                    return 1;
+            }
+            return 1;
+        }
+        else
+        {
+            for (size_t i = 3; i < size; i++)
+            {
+                check = shopt_set_option(bundle->shopt, args[i]);
+                if (check == 0)
+                    return 1;
+            }
+            return 0;
+        }
+    }
+    else
+    {
+        int res = 0;
+        for (size_t i = 2; i < size; i++)
+        {
+            if (!shopt_is_set(bundle->shopt, args[i]))
+                res = 1;
+        }
+        return res;
+    }
+}
+
 int builtin_shopt(char **args, size_t size, void *bundle_ptr)
 {
     //linit a deja eu lieu auparavant. cherche bundle->shopt et execute dessus
     struct execution_bundle *bundle = bundle_ptr;
     if (size == 1)
-    {
         shopt_print(bundle->shopt, -1);
-    }
     else if (!strcmp(args[1], "-s"))
-    {
-        if (size == 2)
-        {
-            shopt_print(bundle->shopt, 1);
-        }
-        else if (!strcmp(args[2], "-q"))
-        {
-            for (size_t i = 3; i < size; i++)
-                shopt_set_option(bundle->shopt, args[i]);
-        }
-        else
-        {
-            for (size_t i = 2; i < size; i++)
-                shopt_set_option(bundle->shopt, args[i]);
-        }
-        return 0;
-    }
+        return shopt_s(args, size, bundle);
     else if (!strcmp(args[1], "-u"))
-    {
-        if (size == 2)
-        {
-            shopt_print(bundle->shopt, 0);
-        }
-        else if (!strcmp(args[2], "-q"))
-        {
-            for (size_t i = 3; i < size; i++)
-                shopt_unset_option(bundle->shopt, args[i]);
-            return 1;
-        }
-        else
-        {
-            for (size_t i = 2; i < size; i++)
-                shopt_unset_option(bundle->shopt, args[i]);
-        }
-        return 0;
-    }
+        return shopt_u(args, size, bundle);
     else if (!strcmp(args[1],"-q"))
-    {
-        if (size == 2)
-            return 0;
-        else if (!strcmp(args[2], "-u") || !strcmp(args[2], "-s"))
-        {
-            if (!strcmp(args[2], "-u"))
-            {
-                for (size_t i = 3; i < size; i++)
-                {
-                    shopt_unset_option(bundle->shopt, args[i]);
-                }
-                return 1;
-            }
-            else
-            {
-                for (size_t i = 3; i < size; i++)
-                    shopt_set_option(bundle->shopt, args[i]);
-                return 0;
-            }
-        }
-        else
-        {
-            int res = 0;
-            for (size_t i = 2; i < size; i++)
-            {
-                if (!shopt_is_set(bundle->shopt, args[i]))
-                    res = 1;
-            }
-            return res;
-        }
-    }
+        return shopt_q(args, size, bundle);
     return 0;
 }

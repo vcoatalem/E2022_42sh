@@ -3,14 +3,34 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/types.h>
 #include "hashtablevar.h"
 #include "hashtablefunc.h"
+
+static char* gethome(void)
+{
+    uid_t uid = getuid();
+    struct passwd *pw = getpwuid(uid);
+    if (pw == NULL)
+    {
+            return(".");
+    }
+    return pw->pw_dir;
+}
 
 
 static void insert_default_variables(struct hash_table_var *ht)
 {
     insert_variable(ht, "ps1", "42sh$ ");
     insert_variable(ht, "ps2", "> ");
+    insert_variable(ht, "HOME", gethome());
+    char histfile[2048];
+    strcat(histfile, gethome());
+    strcat(histfile, "/");
+    strcat(histfile, ".42sh_history");
+    insert_variable(ht, "HISTFILE", histfile);
 }
 
 struct hash_table_var *init_hash_table_var(size_t size)
