@@ -40,8 +40,16 @@ struct redirection *redirection_dup(struct redirection *redirection);
 
 // COMMAND
 
+enum command_type
+{
+    COMMAND_SH,
+    COMMAND_BUILTIN,
+    COMMAND_FUNCDEC
+};
+
 struct command
 {
+    enum command_type type;
     char **args;
     size_t n_args;
     struct redirection **redirections;
@@ -51,13 +59,13 @@ struct command
     int fd_err;
 };
 
-struct command *command_init(char **args, struct redirection **redirections);
+struct command *command_init(char **args, void *bundle_ptr);
 void command_free(struct command *command);
 void command_print(struct command *command);
 void command_add_redirection(struct command *command,
         struct redirection *redir);
 
-int command_execute(struct command *command);
+int command_execute(struct command *command, void *bundle_ptr);
 
 int redirection_execute(struct command *command,
         struct redirection *redirection);
@@ -72,7 +80,7 @@ struct pipe
 
 struct pipe *pipe_init(void);
 void pipe_add_command(struct pipe *pipe, struct command *command);
-int pipe_execute(struct pipe *pipe);
+int pipe_execute(struct pipe *pipe, void *execution_bundle);
 void pipe_free(struct pipe *p);
 
 #endif /* EXECUTION_H */

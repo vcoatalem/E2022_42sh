@@ -31,12 +31,14 @@ struct redirection *redirection_dup(struct redirection *redirection)
 
 static void redirect(int from, int to)
 {
-    //printf("[LOG] redirect %d to %d\n", from, to);
+    printf("[COMMAND_EXECUTION] redirect %d to %d\n", from, to);
     dup2(to, from);
 }
 
 int redirection_execute(struct command *cmd, struct redirection *redirection)
 {
+    printf("[COMMAND EXECUTION] applying redirection: type: %d; arg: %s\n",
+            redirection->type, redirection->arg ? redirection->arg : "");
     if (redirection->type == STDIN_FROM_ARG)
     {
         int fd = open(redirection->arg, O_RDONLY);

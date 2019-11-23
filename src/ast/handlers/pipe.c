@@ -20,7 +20,7 @@ int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
         ast = find_op_type(ast, OPERATOR_PIPE);
     }
 
-    int result = pipe_execute(pipe);
+    int result = pipe_execute(pipe, bundle_ptr);
     pipe_free(pipe);
     return result;
 }

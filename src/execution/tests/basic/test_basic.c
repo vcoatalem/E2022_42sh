@@ -1,4 +1,5 @@
 #include "../../execution.h"
+#include "../../../main/42sh.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +8,10 @@ int main(int argc, char **argv)
 {
     int q = argc > 1 ? atoi(*(argv + 1)) : 0;
     printf("[LOG] TEST: #%d\n", q);
+    
+    struct execution_bundle bundle;
+    bundle.hash_table_func = init_hash_table_func(50);
+    bundle.hash_table_var = init_hash_table_var(50);
 
     struct pipe *p = pipe_init();
 
@@ -35,34 +40,34 @@ int main(int argc, char **argv)
 
     if (q == 0)
     {
-        struct command *command = command_init(commands[q], NULL);
+        struct command *command = command_init(commands[q], &bundle);
         pipe_add_command(p, command);
     }
     else if (q == 1)
     {
-        struct command *command = command_init(commands[q], NULL);
+        struct command *command = command_init(commands[q], &bundle);
         pipe_add_command(p, command);
     }
     else if (q == 2)
     {
-        struct command *command = command_init(commands[q], NULL);
+        struct command *command = command_init(commands[q], &bundle);
         command_add_redirection(command, redirection_dup(redirect_output));
         pipe_add_command(p, command);
     }
     else if (q == 3)
     {
-        struct command *command = command_init(commands[q], NULL);
+        struct command *command = command_init(commands[q], &bundle);
         command_add_redirection(command, redirection_dup(redirect_input));
         pipe_add_command(p, command);
     }
     else if (q == 4)
     {
-        struct command *c1 = command_init(commands[q], NULL);
-        struct command *c2 = command_init(commands[q + 1], NULL);
+        struct command *c1 = command_init(commands[q], &bundle);
+        struct command *c2 = command_init(commands[q + 1], &bundle);
         pipe_add_command(p, c1);
         pipe_add_command(p, c2);
     }
-    int return_value = pipe_execute(p);
+    int return_value = pipe_execute(p, &bundle);
 
     pipe_free(p);
 
