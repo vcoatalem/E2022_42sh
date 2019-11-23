@@ -54,6 +54,12 @@ set_target_properties(test_ast_exec
     EXCLUDE_FROM_ALL "true"
 )
 
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_ast_exec
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/ast/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/ast/test_ast_exec" "ast_exec"
+)
+
 
 # List all tests
 add_custom_target(ast_check

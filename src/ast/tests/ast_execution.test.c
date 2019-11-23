@@ -5,7 +5,7 @@
 #include "../../main/42sh.h"
 #include "../ast.h"
 
-static struct ast *ast_arg_list(void)
+static struct ast *ast_arg_list_A(void)
 {
     struct ast *ast_args = ast_init("args", OPERATOR_ARG_LIST);
     struct ast *ast_next1 = ast_init("args", OPERATOR_ARG_LIST);
@@ -25,6 +25,52 @@ static struct ast *ast_arg_list(void)
     ast_add_child(ast_arg2, arg2);
     ast_add_child(ast_arg3, arg3);
     return ast_args;
+}
+
+static struct ast *ast_arg_list_B(void)
+{
+    struct ast *ast_args = ast_init("args", OPERATOR_ARG_LIST);
+    struct ast *arg1 = ast_init("ls", OPERATOR_ARG_LIST);
+    ast_add_child(ast_args, arg1);
+    return ast_args;
+}
+
+static struct ast *ast_arg_list_C(void)
+{
+
+    struct ast *ast_arg_list_1 = ast_init("args", OPERATOR_ARG_LIST);
+    struct ast *ast_arg_list_2 = ast_init("args", OPERATOR_ARG_LIST);
+    ast_add_child(ast_arg_list_1, ast_arg_list_2);
+    struct ast *ast_arg_list_3 = ast_init("args", OPERATOR_ARG_LIST);
+    ast_add_child(ast_arg_list_2, ast_arg_list_3);
+    struct ast *ast_arg_list_4 = ast_init("args", OPERATOR_ARG_LIST);
+    ast_add_child(ast_arg_list_3, ast_arg_list_4);
+    struct ast *ast_arg_list_5 = ast_init("args", OPERATOR_ARG_LIST);
+    ast_add_child(ast_arg_list_4, ast_arg_list_5);
+
+    struct ast *ast_arg1 = ast_init("[", OPERATOR_GET_VALUE);
+    struct ast *ast_arg2 = ast_init("1", OPERATOR_GET_VALUE);
+    struct ast *ast_arg3 = ast_init("-eq", OPERATOR_GET_VALUE);
+    struct ast *ast_arg4 = ast_init("2", OPERATOR_GET_VALUE);
+    struct ast *ast_arg5 = ast_init("[", OPERATOR_GET_VALUE);
+    ast_add_child(ast_arg_list_1, ast_arg1);
+    ast_add_child(ast_arg_list_2, ast_arg2);
+    ast_add_child(ast_arg_list_3, ast_arg3);
+    ast_add_child(ast_arg_list_4, ast_arg4);
+    ast_add_child(ast_arg_list_5, ast_arg5);
+
+    struct ast *arg1 = ast_init("[", OPERATOR_GET_VALUE);
+    struct ast *arg2 = ast_init("1", OPERATOR_GET_VALUE);
+    struct ast *arg3 = ast_init("-eq", OPERATOR_GET_VALUE);
+    struct ast *arg4 = ast_init("2", OPERATOR_GET_VALUE);
+    struct ast *arg5 = ast_init("[", OPERATOR_GET_VALUE);
+    ast_add_child(ast_arg1, arg1);
+    ast_add_child(ast_arg2, arg2);
+    ast_add_child(ast_arg3, arg3);
+    ast_add_child(ast_arg4, arg4);
+    ast_add_child(ast_arg5, arg5);
+
+    return ast_arg_list_1;
 }
 
 static struct ast *ast_redir_A(void)
@@ -86,7 +132,7 @@ struct ast *ast_command_A(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
 
-    struct ast *arg_list = ast_arg_list();
+    struct ast *arg_list = ast_arg_list_A();
     struct ast *redir_list = ast_redir_list();
 
     ast_add_child(ast_command, arg_list);
@@ -99,13 +145,31 @@ struct ast *ast_command_B(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
 
-    struct ast *arg_list = ast_arg_list();
+    struct ast *arg_list = ast_arg_list_A();
     ast_add_child(ast_command, arg_list);
 
     return ast_command;
 }
 
-struct ast *ast_pipe(void)
+struct ast *ast_command_C(void)
+{
+    struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+
+    struct ast *arg_list = ast_arg_list_B();
+    ast_add_child(ast_command, arg_list);
+
+    return ast_command;
+}
+
+struct ast *ast_command_D(void)
+{
+    struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *arg_list = ast_arg_list_C();
+    ast_add_child(ast_command, arg_list);
+    return ast_command;
+}
+
+struct ast *ast_pipe_A(void)
 {
     struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
     struct ast *command_1 = ast_command_A();
@@ -113,9 +177,37 @@ struct ast *ast_pipe(void)
 
     struct ast *ast_pipeline = ast_init("pipeline", OPERATOR_PIPE);
     ast_add_child(ast_pipe, ast_pipeline);
-    struct ast *command_2 = ast_command_B();
+    struct ast *command_2 = ast_command_C();
     ast_add_child(ast_pipeline, command_2);
     return ast_pipe;
+}
+
+//contains one command that succeeds
+struct ast *ast_pipe_B(void)
+{
+    struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
+    struct ast *ast_command_1 = ast_command_C();
+    ast_add_child(ast_pipe, ast_command_1);
+    return ast_pipe;
+}
+
+//contains one command that fails
+struct ast *ast_pipe_C(void)
+{
+    struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
+    struct ast *ast_command_1 = ast_command_D();
+    ast_add_child(ast_pipe, ast_command_1);
+    return ast_pipe;
+}
+
+struct ast *ast_or(void)
+{
+    struct ast *ast_or = ast_init("or", OPERATOR_OR);
+    struct ast *ast_pipe1 = ast_pipe_B();
+    struct ast *ast_pipe2 = ast_pipe_C();
+    ast_add_child(ast_or, ast_pipe1);
+    ast_add_child(ast_or, ast_pipe2);
+    return ast_or;
 }
 
 int main(int argc, char **argv)
@@ -123,12 +215,32 @@ int main(int argc, char **argv)
 
     struct ast *root = ast_init("root", OPERATOR_AND);
     int q = argc == 1 ? 0 : atoi(*(argv + 1));
-    if (q == 0)
-        ast_add_child(root, ast_pipe());
+    char *dot_dest = argc < 2 ? "ast.dot" : *(argv + 2);
+    
+    int expected_values[] =
+    {
+        AST_SUCCESS,
+        AST_SUCCESS,
+        AST_ERROR,
+        AST_SUCCESS
+    };
 
-    ast_dot_print(root, "ast.dot");
+    if (q == 0)
+        ast_add_child(root, ast_pipe_A());
+
+    if (q == 1)
+        ast_add_child(root, ast_pipe_B());
+
+    if (q == 2)
+        ast_add_child(root, ast_pipe_C());
+
+    if (q == 3)
+        ast_add_child(root, ast_or());
+
+    ast_dot_print(root, dot_dest);
     struct execution_bundle bundle;
-    printf("%d\n", ast_execute(root, &bundle));
+    int return_value = ast_execute(root, &bundle) == 0 ? AST_SUCCESS : AST_ERROR;
+    return_value = return_value == expected_values[q] ? 0 : 1;
     ast_free(root);
-    return 0;
+    return return_value;
 }
