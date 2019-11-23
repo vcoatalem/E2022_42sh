@@ -29,6 +29,12 @@ static char *operator_to_string(enum operator_type type)
             return "value";
         case (OPERATOR_FUNC_DECLARATION):
             return "function_declaration";
+        case (OPERATOR_GET_IONUMBER):
+            return "ionumber";
+        case (OPERATOR_GET_REDIR_SYMBOL):
+            return "redir_symbol";
+        case (OPERATOR_GET_REDIR_TO):
+            return "redir_to";
         // TODO: Add more operator types
 
         default:

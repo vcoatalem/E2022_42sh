@@ -22,7 +22,7 @@ operator_handler get_operator_handler(enum operator_type type)
 
 int ast_execute(struct ast *ast, void *bundle_ptr)
 {
-    struct execution_bundler *bundle = bundle_ptr;
+    struct execution_bundle *bundle = bundle_ptr;
     if (ast->node_type == NODE_VALUE)
     {
         return AST_SUCCESS;

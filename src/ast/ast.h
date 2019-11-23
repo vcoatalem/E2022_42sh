@@ -59,6 +59,9 @@ enum operator_type
     OPERATOR_REDIR,
     OPERATOR_REDIR_LIST,
     OPERATOR_GET_VALUE,
+    OPERATOR_GET_IONUMBER,
+    OPERATOR_GET_REDIR_SYMBOL,
+    OPERATOR_GET_REDIR_TO
 };
 
 /**
@@ -88,8 +91,7 @@ struct ast
  *
  * \return ast
  */
-struct ast *ast_init(enum node_type type, char *value,
-        enum operator_type op_type);
+struct ast *ast_init(char *value, enum operator_type op_type);
 
 /**
  * \brief add a child to the parent ast

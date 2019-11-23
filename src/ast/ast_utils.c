@@ -21,7 +21,7 @@ void ast_clean(struct ast *ast)
 
 struct ast *ast_dup(struct ast *ast)
 {
-    struct ast *dup = ast_init(ast->node_type, ast->value, ast->op_type);
+    struct ast *dup = ast_init(ast->value, ast->op_type);
 
     for (size_t i = 0; i < ast->nb_children; i++)
     {

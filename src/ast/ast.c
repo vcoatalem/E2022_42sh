@@ -1,20 +1,20 @@
-#include "ast.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <err.h>
 #include <errno.h>
+
+#include "ast.h"
 #include "../execution/execution.h"
 
-struct ast *ast_init(enum node_type type, char *value,
-        enum operator_type op_type)
+struct ast *ast_init(char *value, enum operator_type op_type)
 {
     struct ast *new_ast = malloc(sizeof(struct ast));
 
     if (new_ast == NULL)
         return NULL;
 
-    new_ast->node_type = type;
+    new_ast->node_type = op_type != OPERATOR_NONE ? NODE_OPERATOR : NODE_VALUE;
     new_ast->op_type = op_type;
 
     if (value != NULL)

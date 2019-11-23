@@ -32,12 +32,12 @@ int main(void)
     ast_free(dup1);
     */
 
-    struct ast *ast1 = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
-    struct ast *ast2 = ast_init(NODE_VALUE, "echo", OPERATOR_NONE);
-    struct ast *ast3 = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
-    struct ast *ast4 = ast_init(NODE_VALUE, "Hello", OPERATOR_NONE);
-    struct ast *ast5 = ast_init(NODE_VALUE, "arg_list", OPERATOR_NONE);
-    struct ast *ast6 = ast_init(NODE_VALUE, NULL, OPERATOR_NONE);
+    struct ast *ast1 = ast_init("arg_list", OPERATOR_NONE);
+    struct ast *ast2 = ast_init("echo", OPERATOR_NONE);
+    struct ast *ast3 = ast_init("arg_list", OPERATOR_NONE);
+    struct ast *ast4 = ast_init("Hello", OPERATOR_NONE);
+    struct ast *ast5 = ast_init("arg_list", OPERATOR_NONE);
+    struct ast *ast6 = ast_init(NULL, OPERATOR_NONE);
 
     ast_add_child(ast5, ast6);
     ast_add_child(ast3, ast4);
