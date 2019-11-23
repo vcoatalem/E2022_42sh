@@ -131,6 +131,8 @@ static struct ast *ast_redir_list(void)
 struct ast *ast_command_A(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    ast_add_child(ast_simple_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_A();
     struct ast *redir_list = ast_redir_list();
@@ -144,9 +146,11 @@ struct ast *ast_command_A(void)
 struct ast *ast_command_B(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    ast_add_child(ast_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_A();
-    ast_add_child(ast_command, arg_list);
+    ast_add_child(ast_simple_command, arg_list);
 
     return ast_command;
 }
@@ -154,9 +158,11 @@ struct ast *ast_command_B(void)
 struct ast *ast_command_C(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    ast_add_child(ast_command, ast_simple_command);
 
     struct ast *arg_list = ast_arg_list_B();
-    ast_add_child(ast_command, arg_list);
+    ast_add_child(ast_simple_command, arg_list);
 
     return ast_command;
 }
@@ -164,8 +170,11 @@ struct ast *ast_command_C(void)
 struct ast *ast_command_D(void)
 {
     struct ast *ast_command = ast_init("cmd", OPERATOR_COMMAND);
+    struct ast *ast_simple_command = ast_init("cmd", OPERATOR_COMMAND);
+    ast_add_child(ast_command, ast_simple_command);
+
     struct ast *arg_list = ast_arg_list_C();
-    ast_add_child(ast_command, arg_list);
+    ast_add_child(ast_simple_command, arg_list);
     return ast_command;
 }
 

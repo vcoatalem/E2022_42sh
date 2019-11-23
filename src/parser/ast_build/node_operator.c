@@ -24,10 +24,13 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_PIPE;
     }
-    if (id == RULE_COMMAND || id == RULE_SIMPLE_COMMAND
-            || id == RULE_SHELL_COMMAND)
+    if (id == RULE_COMMAND || id == RULE_SIMPLE_COMMAND)
     {
         return OPERATOR_COMMAND;
+    }
+    if (id == RULE_SHELL_COMMAND)
+    {
+        return OPERATOR_SHELL_COMMAND;
     }
     if (id == RULE_IF)
     {
