@@ -67,7 +67,7 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     }
     if (id == RULE_REDIR_TO)
     {
-        return OPERATOR_REDIR_TO;
+        return OPERATOR_GET_REDIR_TO;
     }
     if (id == RULE_FUNCDEC)
     {

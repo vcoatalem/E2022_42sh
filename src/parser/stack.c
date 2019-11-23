@@ -15,7 +15,7 @@ static void stack_elt_ast_init(struct stack_elt *elt)
     {
         if (token_type_is_value(elt->symbol->token_type))
         {
-            elt->ast = ast_init(NODE_VALUE, "", 0);
+            elt->ast = ast_init("", OPERATOR_NONE);
         }
     }
     else

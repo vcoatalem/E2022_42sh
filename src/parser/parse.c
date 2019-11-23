@@ -32,7 +32,7 @@ struct parser *parser_init(struct token_array *tokens)
 {
     struct parser *parser = calloc(1, sizeof(struct parser));
     parser->input = stamp_init(tokens);
-    parser->ast = ast_init(NODE_OPERATOR, "root", OPERATOR_AND);
+    parser->ast = ast_init("root", OPERATOR_AND);
     parser->stack = stack_init(parser->ast);
     return parser;
 }
