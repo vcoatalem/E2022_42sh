@@ -229,4 +229,6 @@ struct parser *parser_init(struct token_array *tokens);
 void parse(struct parser *parser, struct analysis_table *table);
 void parser_free(struct parser *parser);
 
+int token_type_is_value(enum token_type type);
+
 #endif /* PARSER_H */

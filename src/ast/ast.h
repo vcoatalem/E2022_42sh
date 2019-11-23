@@ -99,6 +99,8 @@ struct ast *ast_init(enum node_type type, char *value,
  */
 void ast_add_child(struct ast *ast, struct ast *children);
 
+void ast_remove_child(struct ast *ast, size_t n);
+
 /**
  * \brief duplicate an ast
  *

@@ -38,24 +38,21 @@ static char *operator_to_string(enum operator_type type)
 
 void _ast_dot_print(struct ast *ast, FILE *file)
 {
+    if (!ast)
+        return;
     void *ast_cast = ast;
-    if (ast->forest == NULL)
+    for (size_t i = 0; i < ast->nb_children; i++)
     {
-        fprintf(file, "\"%s(%s)_%p\";\n\t",
+        void *child_cast = ast->forest[i];
+        fprintf(file, "\"%s(%s)_%p\"",
                 ast->value,
                 operator_to_string(ast->op_type),
                 ast_cast);
-    }
-
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-            fprintf(file, "\"%s(%s)_%p\"",
-                    ast->value,
-                    operator_to_string(ast->op_type),
-                    ast_cast);
-
         fprintf(file, " -> ");
-
+        fprintf(file, "\"%s(%s)_%p\"\n",
+                ast->forest[i]->value,
+                operator_to_string(ast->forest[i]->op_type),
+                child_cast);
         _ast_dot_print(ast->forest[i], file);
     }
 }

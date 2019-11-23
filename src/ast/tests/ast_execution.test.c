@@ -29,7 +29,7 @@ static struct ast *ast_if(void)
 {
     struct ast *ast1 = ast_init(NODE_OPERATOR, NULL, OPERATOR_IF);
 
-    struct ast *ast_if_body = ast_init(NODE_OPERATOR, "if_body", OPERATOR_IF_BODY);
+    struct ast *ast_if_body = ast_init(NODE_OPERATOR, "if_body", OPERATOR_AND);
     struct ast *ast_then = ast_init(NODE_OPERATOR, "then", OPERATOR_THEN);
     struct ast *ast_else = ast_init(NODE_OPERATOR, "else", OPERATOR_ELSE);
     ast_add_child(ast1, ast_if_body);

@@ -13,7 +13,7 @@ static void stack_elt_ast_init(struct stack_elt *elt)
         return;
     if (elt->symbol->type == SYMBOL_TOKEN)
     {
-        if (elt->symbol->token_type == TOKEN_WORD)
+        if (token_type_is_value(elt->symbol->token_type))
         {
             elt->ast = ast_init(NODE_VALUE, "", 0);
         }

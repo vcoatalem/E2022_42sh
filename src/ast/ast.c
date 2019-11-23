@@ -40,16 +40,26 @@ void ast_add_child(struct ast *ast, struct ast *child)
     *(ast->forest + ast->nb_children - 1) = child;
 }
 
-struct ast *ast_dup(struct ast *ast)
+//n points the index to be erased by left_shift procedure
+static void left_shift(struct ast **ast, size_t n, size_t size)
 {
-    struct ast *dup = ast_init(ast->node_type, ast->value, ast->op_type);
-
-    for (size_t i = 0; i < ast->nb_children; i++)
+    if (n > size - 1)
+        return;
+    for (size_t i = n; i < size ; i++)
     {
-        struct ast *dup_child = ast_dup(ast->forest[i]);
-        ast_add_child(dup, dup_child);
+        ast[i] = ast[i + 1];
     }
-    return dup;
+}
+
+void ast_remove_child(struct ast *ast, size_t n)
+{
+    if (!ast || ast->nb_children == 0 || n >= ast->nb_children)
+        return;
+    ast_free(ast->forest[n]);
+    left_shift(ast->forest, n, ast->nb_children);
+    ast->nb_children--;
+    ast->forest = realloc(ast->forest,
+            sizeof(ast->nb_children) * sizeof(void*));
 }
 
 void ast_free(struct ast *ast)
@@ -63,48 +73,6 @@ void ast_free(struct ast *ast)
     if (ast->value)
         free(ast->value);
     free(ast);
-}
-
-void ast_clean(struct ast *ast)
-{
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->node_type == NODE_OPERATOR)
-        {
-            ast_free(ast->forest[i]);
-            ast->nb_children--;
-        }
-
-        else
-            ast_clean(ast->forest[i]);
-    }
-}
-
-struct ast *get_child_of_name(struct ast *ast, const char *name)
-{
-    if (ast == NULL)
-        return NULL;
-
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->node_type == NODE_VALUE
-                && !(strcmp(ast->forest[i]->value, name)))
-        {
-            return ast->forest[i];
-        }
-    }
-    return NULL;
-}
-
-struct ast *find_op_type(struct ast *ast, enum operator_type op_type)
-{
-    for (size_t i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->forest[i]->op_type == op_type)
-            return ast->forest[i];
-    }
-
-    return NULL;
 }
 
 char **get_arg_list(struct ast *ast)

@@ -1,5 +1,6 @@
 add_library(ast
     ast.c
+    ast_utils.c
     ast_print.c
     ast_execute.c
     handlers/and_or.c

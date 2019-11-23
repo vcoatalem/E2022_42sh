@@ -57,6 +57,11 @@ static void set_parsing_ending_status(struct parser *parser,
         parser->state = PARSER_STATE_FAILURE;
 }
 
+int token_type_is_value(enum token_type type)
+{
+    return type == TOKEN_WORD || type == TOKEN_LESS || type == TOKEN_GREAT;
+}
+
 //TODO: refactorize this once figured out. Also, leeks.
 void parse(struct parser *parser, struct analysis_table *table)
 {
@@ -85,7 +90,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                 stack_elt_free(head);
                 break;
             }
-            else if (current->type == TOKEN_WORD)
+            else if (token_type_is_value(current->type))
             {
                 //get current word value into the ast
                 //TODO: give this treatment to more types (eg. excl point)
@@ -134,6 +139,6 @@ void parse(struct parser *parser, struct analysis_table *table)
             PARSER_STATE_SUCCESS : PARSER_STATE_CONTINUE;
     }
     //post parsing treatment
-    //ast_clean(parser->ast);
+    ast_clean(parser->ast);
     printf("[LL PARSER] done parsing. state: %d\n", parser->state);
 }
