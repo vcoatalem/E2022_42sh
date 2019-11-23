@@ -75,17 +75,6 @@ void ast_free(struct ast *ast)
     free(ast);
 }
 
-
-static char *get_element_value(struct ast *ast)
-{
-    struct ast *element_ast = find_op_type(ast, OPERATOR_GET_VALUE);
-
-    if (element_ast == NULL)
-        return NULL;
-
-    return element_ast->forest[0]->value;
-}
-
 char **get_arg_list(struct ast *ast)
 {
     char **arg_list = NULL;

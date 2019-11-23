@@ -37,6 +37,8 @@ static char *operator_to_string(enum operator_type type)
             return "redir_symbol";
         case (OPERATOR_GET_REDIR_TO):
             return "redir_to";
+        case (OPERATOR_VAR_DECLARATION):
+            return "var_declaration";
         // TODO: Add more operator types
 
         default:

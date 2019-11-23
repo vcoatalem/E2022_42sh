@@ -19,6 +19,9 @@ static void sh_rule_simple_command(struct rule_array *rules)
 
 static void sh_rule_shell_command(struct rule_array *rules)
 {
+    struct rule *rule_var_decl = rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_VARDEC),
+            NULL);
     struct rule *rule_if = rule_build(RULE_SHELL_COMMAND,
             symbol_create(0, RULE_IF),
             NULL);
@@ -38,6 +41,7 @@ static void sh_rule_shell_command(struct rule_array *rules)
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(TOKEN_RIGHT_PARENTHESIS, 0),
             NULL);
+    rule_array_add(rules, rule_var_decl);
     rule_array_add(rules, rule_if);
     rule_array_add(rules, rule_while);
     rule_array_add(rules, rule_until);

@@ -20,6 +20,7 @@ add_library(parser
     shell_rules/funcdec.c
     shell_rules/do.c
     shell_rules/input.c
+    shell_rules/misc.c
     ast_build/node_string.c
     ast_build/node_operator.c
 )

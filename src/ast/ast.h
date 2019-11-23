@@ -62,7 +62,8 @@ enum operator_type
     OPERATOR_GET_VALUE,
     OPERATOR_GET_IONUMBER,
     OPERATOR_GET_REDIR_SYMBOL,
-    OPERATOR_GET_REDIR_TO
+    OPERATOR_GET_REDIR_TO,
+    OPERATOR_VAR_DECLARATION
 };
 
 /**
@@ -159,6 +160,15 @@ struct ast *get_child_of_name(struct ast *ast, const char *name);
  */
 struct ast *find_op_type(struct ast *ast, enum operator_type op_type);
 
+
+/**
+ * \brief get the child value from an get_value node
+ *
+ * \param ast get_value to get child value from
+ *
+ */
+char *get_element_value(struct ast *ast);
+
 /**
  * \brief get all arguments from an arg_list node
  *
@@ -175,6 +185,16 @@ char **get_arg_list(struct ast *ast);
  * \return command return a new command structure
  */
 struct command *get_command(struct ast *ast);
+
+
+/**
+ * \brief get all arguments of redir type node
+ *
+ * \param ast ast node to get redirection from
+ *
+ * \return redirection return a new redirection structure
+ */
+struct redirection *ast_redirection_build(struct ast *ast);
 
 /**
  * \brief

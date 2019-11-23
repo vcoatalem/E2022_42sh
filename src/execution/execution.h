@@ -19,12 +19,12 @@
 
 enum REDIRECTION_TYPE
 {
-    REDIRECTION_NONE,
-    STDIN_FROM_ARG,   // < arg
-    STDOUT_TO_ARG,    // 1> arg
-    STDERR_TO_ARG,    // 2> arg
-    STDOUT_TO_STDERR, // 1>&2
-    STDERR_TO_STDOUT, // 2>&1
+    REDIRECTION_NONE = 0,
+    STDIN_FROM_ARG   = 10, // < arg
+    STDOUT_TO_ARG    = 21, // 1> arg
+    STDERR_TO_ARG    = 22, // 2> arg
+    STDERR_TO_STDOUT = 31, // 2>&1
+    STDOUT_TO_STDERR = 32, // 1>&2
 };
 
 struct redirection

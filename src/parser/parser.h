@@ -11,7 +11,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 40
+#define NB_RULES 41
 enum rule_id //MORE RULES TO BE ADDED
 {
     RULE_NONE,                       //0
@@ -53,7 +53,8 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_FOR,                        //36
     RULE_DO_GROUP,                   //37
     RULE_FUNCDEC_BODY,               //38
-    RULE_FUNCDEC                     //39
+    RULE_FUNCDEC,                    //39
+    RULE_VARDEC                      //40
 };
 
 enum symbol_type
@@ -130,6 +131,7 @@ void sh_rule_compound_list_break_groups(struct rule_array *rules);
 void sh_rule_do_groups                 (struct rule_array *rules);
 void sh_rule_funcdec_groups            (struct rule_array *rules);
 void sh_rule_if_groups                 (struct rule_array *rules);
+void sh_rule_misc                      (struct rule_array *rules);
 
 // function initialising all the rules
 struct rule_array *rule_array_build(void);

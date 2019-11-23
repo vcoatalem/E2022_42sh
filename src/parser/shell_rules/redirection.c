@@ -23,11 +23,20 @@ static void sh_rule_redir_symbol_more(struct rule_array *rules)
     struct rule *rule_double_less = rule_build(RULE_REDIR_SYMBOL,
             symbol_create(TOKEN_DOUBLE_LESS, 0),
             NULL);
-    struct rule *rule_double_less_dash = rule_build(RULE_REDIR_SYMBOL,
-            symbol_create(TOKEN_DOUBLE_LESS_DASH, 0),
+    struct rule *rule_double_great = rule_build(RULE_REDIR_SYMBOL,
+            symbol_create(TOKEN_DOUBLE_GREAT, 0),
             NULL);
+    struct rule *rule_great_ampersand = rule_build(RULE_REDIR_SYMBOL,
+            symbol_create(TOKEN_GREAT_AMPERSAND, 0),
+            NULL);
+    struct rule *rule_less_ampersand = rule_build(RULE_REDIR_SYMBOL,
+            symbol_create(TOKEN_LESS_AMPERSAND, 0),
+            NULL);
+
     rule_array_add(rules, rule_double_less);
-    rule_array_add(rules, rule_double_less_dash);
+    rule_array_add(rules, rule_double_great);
+    rule_array_add(rules, rule_great_ampersand);
+    rule_array_add(rules, rule_less_ampersand);
 }
 
 //TODO: add this

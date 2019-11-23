@@ -76,5 +76,9 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     {
         return OPERATOR_FUNC_DECLARATION;
     }
+    if (id == RULE_VARDEC)
+    {
+        return OPERATOR_VAR_DECLARATION;
+    }
     return OPERATOR_NONE;
 }
