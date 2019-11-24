@@ -9,7 +9,8 @@
 enum
 {
     SUCCESS,
-    ERROR_INVALID_FILE
+    ERROR_INVALID_FILE,
+    ERROR_INVALID_ARGS
 };
 
 static int error_fd( char* file)
@@ -40,6 +41,8 @@ static int builtin_historybis(char **str, size_t size, void *bundle_ptr)
         fclose(fdhistoy);
         fclose(fdfile);
     }
+    else
+        return ERROR_INVALID_ARGS;
     return SUCCESS;
 }
 
@@ -70,5 +73,5 @@ int builtin_history(char **str, size_t size, void *bundle_ptr)
     }
     else
         return builtin_historybis(str, size, bundle_ptr);
-    return 0;
+    return SUCCESS;
 }
