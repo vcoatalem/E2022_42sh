@@ -42,7 +42,7 @@ static int builtin_historybis(char **str, size_t size, void *bundle_ptr)
         fclose(fdfile);
     }
     else
-        return ERROR_INVALID_ARGS;
+        return ERROR_INVALID_FILE;
     return SUCCESS;
 }
 
@@ -60,9 +60,14 @@ int builtin_history(char **str, size_t size, void *bundle_ptr)
         FILE *fd = fopen(historyfile, "r");
         if (!fd)
             return error_fd(".42sh_history");
+        int cpt = 1;
         while(getline(&line, &sizeline, fd) != -1)
-            printf("%s", line);
+        {
+            printf("  %d  %s", cpt, line);
+            cpt++;
+        }
         fclose(fd);
+        free(line);
     }
     else if (strcmp(str[1], "-c") == 0)
     {
