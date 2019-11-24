@@ -41,10 +41,10 @@ int main(int argc, char **argv)
     struct execution_bundle bundle =
     {
         .options = options,
+        .shopt = shopt_init(options),
         .parser_table = table_build(),
         .hash_table_var = init_hash_table_var(50),
         .hash_table_func = init_hash_table_func(50),
-        .shopt = shopt_init(options),
         .lexer = NULL,
         .parser = NULL,
         .ast = NULL,

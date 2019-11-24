@@ -4,7 +4,8 @@
 #include <stddef.h>
 
 struct shopt           
-{                      
+{
+    int debug;
     int ast_print;     
     int dotglob;       
     int expand_aliases;

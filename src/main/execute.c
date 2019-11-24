@@ -6,19 +6,19 @@ static int run_lex_parse(struct execution_bundle *bundle)
     if (bundle->token_array)
         token_array_free(bundle->token_array);
     bundle->token_array = lex(bundle->lexer);
-    //printf("[LEXER] done lexing. Got token array: ");
-//    token_array_print(bundle->token_array, stdout);
-
+    if (bundle->shopt && bundle->shopt->debug)
+    {
+        printf("[LEXER] done lexing. Got token array: ");
+        token_array_print(bundle->token_array, stdout);
+    }
     if (bundle->parser)
         parser_free(bundle->parser);
     bundle->parser = parser_init(bundle->token_array);
-
-    parse(bundle->parser, bundle->parser_table);
-
+    //call main parsing function
+    parse(bundle->parser, bundle->parser_table, bundle);
     if (bundle->ast)
         ast_free(bundle->ast);
     bundle->ast = bundle->parser->ast;
-
     int return_value = 0;
     if (bundle->parser->state == PARSER_STATE_SUCCESS)
     {
@@ -34,10 +34,10 @@ static int run_lex_parse(struct execution_bundle *bundle)
         return_value = 1;
         lexer_clear(bundle->lexer);
     }
-    else //if (p->state == PARSER_STATE_CONTINUE)
+    if (bundle->shopt && bundle->shopt->debug)
     {
+        printf("[EXECUTION] lex+parse returning: %d\n", return_value);
     }
-    //printf("[EXECUTION] lexing parsing process returning: %d\n", return_value);
     return return_value;
 }
 
@@ -127,7 +127,7 @@ int execute_script(struct execution_bundle *bundle, char* script)
         warnx("Could not open file `%s` for execution", script);
         return BASH_RETURN_ERROR;
     }
-   // read file line by line, running lexing + parsing along the way
+    // read file line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
     bundle->lexer = lexer_init();

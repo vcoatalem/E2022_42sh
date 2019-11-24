@@ -1,5 +1,0 @@
- - name: break_simple
-   stdin: ""
-
- - name: break_command
-   stdin: "" 

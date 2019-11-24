@@ -114,12 +114,17 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
-//    printf("[LOG] command %s received %d\n", *(command->args), status);
+    if (bundle->shopt && bundle->shopt->debug)
+    {
+        printf("[COMMAND EXECUTION] command %s received %d\n",
+                *(command->args), status);
+    }
     return status;
 }
 
 static int command_execute_builtin(struct command *command, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     for (size_t i = 0; i < command->n_redirections; i++)
     {
         redirection_execute(command, *(command->redirections + i));
@@ -128,8 +133,11 @@ static int command_execute_builtin(struct command *command, void *bundle_ptr)
     builtin_handler handler = str_to_builtin(*(command->args));
     int execute_handler = handler(command->args, command->n_args,
             bundle_ptr);
-  //  printf("[COMMAND EXECUTION] builtin %s received %d\n", *(command->args),
-     //       execute_handler);
+    if (bundle->shopt && bundle->shopt->debug)
+    {
+        printf("[COMMAND EXECUTION] builtin %s received %d\n",
+                *(command->args), execute_handler);
+    }
     return execute_handler;
 }
 
@@ -143,8 +151,12 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
     //execute command
     struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
     int execute_funcdec = ast_execute(func_ast, bundle_ptr);
-    //printf("[COMMAND EXECUTION] funcdec %s received %d\n", *(command->args),
-    //        execute_funcdec);
+    
+    if (bundle->shopt && bundle->shopt->debug)
+    {
+        printf("[COMMAND EXECUTION] funcdec %s received %d\n",
+                *(command->args), execute_funcdec);
+    }
     return execute_funcdec;
 }
 

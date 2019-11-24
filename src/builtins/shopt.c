@@ -1,7 +1,3 @@
-#include "builtins.h"
-#include "../main/42sh.h"
-#include "../options/options.h"
-
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -9,9 +5,15 @@
 #include <err.h>
 #include <errno.h>
 
-int shopt_set_option(struct shopt *shopt, char *str)
+#include "builtins.h"
+#include "../main/42sh.h"
+#include "../options/options.h"
+
+static int shopt_set_option(struct shopt *shopt, char *str)
 {
-    if (strcmp(str, "ast_print") == 0)
+    if (strcmp(str, "debug") == 0)
+        shopt->debug = 1;
+    else if (strcmp(str, "ast_print") == 0)
         shopt->ast_print = 1;
     else if (strcmp(str, "dotglob") == 0)
         shopt->dotglob = 1;
@@ -35,10 +37,11 @@ int shopt_set_option(struct shopt *shopt, char *str)
     return 1;
 }
 
-int shopt_unset_option(struct shopt *shopt, char *str)
+static int shopt_unset_option(struct shopt *shopt, char *str)
 {
-
-    if (strcmp(str, "ast_print") == 0)
+    if (strcmp(str, "debug") == 0)
+        shopt->debug = 0;
+    else if (strcmp(str, "ast_print") == 0)
         shopt->ast_print = 0;
     else if (strcmp(str, "dotglob") == 0)
         shopt->dotglob = 0;
@@ -62,11 +65,13 @@ int shopt_unset_option(struct shopt *shopt, char *str)
     return 1;
 }
 
-void shopt_init_set_shopt(struct shopt *shopt, int val,
+static void shopt_init_set_shopt(struct shopt *shopt, int val,
         char **set_array, size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
+        if (strcmp(set_array[i], "debug") == 0)
+            shopt->debug = val;
         if (strcmp(set_array[i], "ast_print") == 0)
             shopt->ast_print = val;
         if (strcmp(set_array[i], "dotglob") == 0)
@@ -88,6 +93,7 @@ void shopt_init_set_shopt(struct shopt *shopt, int val,
 
 static void shopt_set_default_values(struct shopt *shopt)
 {
+    shopt->debug = 0;
     shopt->dotglob = 1;
     shopt->expand_aliases = 1;
     shopt->extglob = 1;
@@ -109,7 +115,7 @@ struct shopt *shopt_init(void *options_ptr)
         res->ast_print = options->ast_print_is_set;
         shopt_init_set_shopt(res, 0, options->unset_shopt,
                 options->nb_unset_shopt);
-        shopt_init_set_shopt(res, 0, options->set_shopt,
+        shopt_init_set_shopt(res, 1, options->set_shopt,
                 options->nb_set_shopt);
     }
     return res;
@@ -124,6 +130,8 @@ void shopt_free(struct shopt *shopt)
 
 static int shopt_is_set(struct shopt *shopt, char *str)
 {
+    if (strcmp(str, "debug") == 0)
+        return shopt->debug;
     if (strcmp(str, "ast_print") == 0)
         return shopt->ast_print;
     if (strcmp(str, "dotglob") == 0)
@@ -145,6 +153,8 @@ static int shopt_is_set(struct shopt *shopt, char *str)
 
 void shopt_print(struct shopt *shopt, int mode)
 {
+    if (shopt->debug == mode || mode == -1)
+        printf("debug %s\n", shopt->debug ? "on" : "off");
     if (shopt->ast_print == mode || mode == -1)
         printf("ast_print %s\n", shopt->ast_print ? "on" : "off");
     if (shopt->dotglob == mode || mode == -1)
@@ -262,7 +272,6 @@ static int shopt_q(char **args, size_t size, struct execution_bundle *bundle)
 
 int builtin_shopt(char **args, size_t size, void *bundle_ptr)
 {
-    //linit a deja eu lieu auparavant. cherche bundle->shopt et execute dessus
     struct execution_bundle *bundle = bundle_ptr;
     if (size == 1)
         shopt_print(bundle->shopt, -1);

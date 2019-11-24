@@ -427,7 +427,8 @@ struct parser *parser_init(struct token_array *tokens);
 /**
  * \brief run parser procedure and set state accordingly
  */
-void parse(struct parser *parser, struct analysis_table *table);
+void parse(struct parser *parser, struct analysis_table *table,
+        void *bundle_ptr);
 void parser_free(struct parser *parser);
 
 int token_type_is_value(enum token_type type);
