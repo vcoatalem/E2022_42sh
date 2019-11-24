@@ -7,9 +7,6 @@
 #include "hashtablefunc.h"
 #include "hashtablevar.h"
 
-
-
-
 struct hash_table_func *init_hash_table_func(size_t size)
 {
     struct hash_table_func *ht = malloc(sizeof(struct hash_table_func));
@@ -17,7 +14,6 @@ struct hash_table_func *init_hash_table_func(size_t size)
     ht->items = calloc(1, sizeof(struct hashed_func) * size);
     return ht;
 }
-
 
 void free_hash_table_func(struct hash_table_func *ht)
 {
@@ -51,8 +47,6 @@ size_t hash(char *name, size_t ht_size)
     return result % ht_size;
 }
 
-
-
 void insert_func(struct hash_table_func *ht, char *name, struct ast *ast)
 {
     size_t key = hash(name, ht->size);
@@ -75,7 +69,7 @@ void insert_func(struct hash_table_func *ht, char *name, struct ast *ast)
     if (strcmp(items->name, name) == 0) //We change the ast of an existing func
     {
         ast_free(items->ast);
-        items->ast = memcpy(items->ast, ast, sizeof(struct ast));
+        items->ast = ast_dup(ast);
     }
     else
     {

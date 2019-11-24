@@ -24,6 +24,8 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
 {
     if (!p || !p->commands)
         return RETURN_SUCCESS;
+    if (p->n_commands == 1)
+        return command_execute(*(p->commands), bundle_ptr);
     int fd_in = 0;
     int pipe_buffer[2];
     pid_t pid;

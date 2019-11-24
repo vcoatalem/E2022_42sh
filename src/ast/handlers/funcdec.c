@@ -11,7 +11,8 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
     struct ast *ast_func_name = find_op_type(ast, OPERATOR_GET_VALUE);
     struct ast *ast_func_node = find_op_type(ast, OPERATOR_AND);
     struct ast *ast_skip_newlines = ast_func_node;
-    struct ast *ast_func_body = ast_func_node;
+    struct ast *ast_func_body = find_op_type(ast_func_node,
+            OPERATOR_SHELL_COMMAND);
     while (ast_skip_newlines)
     {
         /*
@@ -21,7 +22,7 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
         **until we find the shell_command node which holds the command to be
         **stored in the hash table
         */
-        ast_skip_newlines = find_op_type(ast, OPERATOR_AND);
+        ast_skip_newlines = find_op_type(ast_skip_newlines, OPERATOR_AND);
         if (ast_skip_newlines)
         {
             ast_func_body = find_op_type(ast_skip_newlines,
@@ -34,6 +35,6 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
     if (ast_func_name == NULL || ast_func_body == NULL)
         return AST_ERROR;
     insert_func(bundle->hash_table_func, ast_func_name->forest[0]->value,
-            ast_func_body);
+            ast_func_body->forest[0]);
     return AST_SUCCESS;
 }

@@ -68,5 +68,5 @@ int builtin_history(char **str, size_t size, void *bundle_ptr)
             return error_fd(".42sh_history");
         fclose(fd);
     }
-    return builtin_history2(str, size, &bundle_ptr);
+    return builtin_history2(str, size, bundle_ptr);
 }
