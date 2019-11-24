@@ -1,6 +1,0 @@
- - name: valid_2_cmd_pipe
-   stdin: "echo a | echo b"
-
-
- - name: valid_3_cmd_pipe
-   stdin: "echo a | echo b | echo c"

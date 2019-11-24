@@ -1,0 +1,8 @@
+ - name: funcdec_one_line_simple
+   stdin: "function func() { echo DONE; } && func"
+
+ - name: funcdec_multi_line_simple
+   stdin: "function func()\n{\necho DONE\n}\nfunc"
+ 
+ - name: funcdec_if
+   stdin: "function func()\n{\necho FUNC\nif echo A; then echo B; fi;}\nfunc"

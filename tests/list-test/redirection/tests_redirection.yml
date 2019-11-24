@@ -1,17 +1,23 @@
  - name: redirection_>
-   stdin: "echo Hello World! > ../../toto"
+   stdin: "echo Hello World! > ../../output"
 
  - name: redirection_bracket_>
-   stdin: "{ls ; echo toto ; } > ../../toto"
+   stdin: "{ ls ; echo toto ; } > ../../output"
 
  - name: redirection_>>
-   stdin: "echo Hello from the bottom >> ../../toto"
+   stdin: "echo A > ../../output ; echo B >> ../../output"
 
  - name: redirection_<
-   stdin: "cat < ../../toto"
+   stdin: "cat < ../../input"
 
- - name: redirection_>&
-   stdin: "cat tests_redirection.yml >& ../../toto"
- 
- - name: redirection_<&
-   stdin: 
+ - name: redirection_>&_err_to_out
+   stdin: "{ echo OK; cat KO } 2>&1"
+
+ - name: redirection_>&_out_to_err
+   stdin: "{ echo OK; cat KO } 1>&2"
+
+ - name: redirection_flux_then_file
+   stdin: "cat im out 2>&1 > ../../output" 
+
+ - name: redirection_file_then_flux
+   stdin: "cat im out > ../../output 2>&1" 

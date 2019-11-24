@@ -1,0 +1,23 @@
+ - name: valid_2_cmd_pipe
+   stdin: "echo a | echo b"
+
+ - name: valid_3_cmd_pipe
+   stdin: "echo a | echo b | echo c"
+
+ - name: valid_3_cmd_pipe
+   stdin: "echo a | echo b | echo c"
+
+ - name: pipe_flux_redir
+   stdin: "cat fdgfdg 2>&1 | grep 'No such'"
+
+ - name: pipe_basic_redir
+   stdin: "echo out > ../../output | cat'"
+
+ - name: pipe_basic_builtin
+   stdin: "history | cat"
+
+ - name: pipe_shell_command
+   stdin: "{ echo e; echo f; } | grep 'e'"
+
+ - name: pipe_shell_command_redir
+   stdin: "{ echo e; echo f; } > ../../output | grep 'e'"
