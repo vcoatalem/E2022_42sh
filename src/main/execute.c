@@ -37,7 +37,7 @@ static int run_lex_parse(struct execution_bundle *bundle)
     else //if (p->state == PARSER_STATE_CONTINUE)
     {
     }
-    printf("lexing parsing process returning: %d\n", return_value);
+    printf("[EXECUTION] lexing parsing process returning: %d\n", return_value);
     return return_value;
 }
 
