@@ -8,6 +8,7 @@ import time
 import os
 
 def run_42sh(args, stdin):
+    stdin = stdin + ";"
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
 def remove_bracket(sh):
@@ -24,25 +25,20 @@ def test(binary, tests):
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
     sh = run_42sh([binary], tests["stdin"])
    # sh.stdout = remove_bracket(sh.stdout)
-    for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
-        if check == "stdout":
-            print(tests["name"] + " execution time: %.10s" % (time.time() -
+    print(tests["name"] + " execution time: %.10s" % (time.time() -
                         start_time))
+    for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
+        
+        if check == "stdout":
             assert ref.stdout == sh.stdout, \
                 f"stdout differs:\n{diff(ref.stdout, sh.stdout)}"
         elif check == "stderr":
-            print(tests["name"] + " execution time: %.10s" % (time.time() -
-                        start_time))
             assert ref.stderr == sh.stderr, \
                 f"stderr differs:\n{diff(ref.stderr, sh.stderr)}"
         elif check == "returncode":
-            print(tests["name"] + " execution time: %.10s" % (time.time() -
-                        start_time))
             assert ref.returncode == sh.returncode, \
                 f"Exit with {sh.returncode} , got {ref.returncode}"
         elif check == "has_stderr":
-            print(tests["name"] + " execution time: %.10s" % (time.time() -
-                        start_time))
             assert sh.stderr != "", "Something was expected on stderr"
 
 def diff(ref, sh):
