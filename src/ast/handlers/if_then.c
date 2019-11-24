@@ -11,7 +11,7 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
 
-    struct ast *ast_if_body = find_op_type(ast, OPERATOR_AND);
+    struct ast *ast_if_body = find_op_type(ast, OPERATOR_LIST);
     struct ast *ast_then = find_op_type(ast, OPERATOR_THEN);
     if (ast_if_body == NULL || ast_then == NULL)
         return AST_ERROR;

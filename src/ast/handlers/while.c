@@ -14,7 +14,7 @@ int ast_handle_while(struct ast *ast, void *bundle_ptr)
     int try_execute = AST_SUCCESS;
     int return_value = AST_ERROR;
 
-    struct ast *ast_while_body = find_op_type(ast, OPERATOR_AND);
+    struct ast *ast_while_body = find_op_type(ast, OPERATOR_LIST);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
 
     while (try_execute == AST_SUCCESS)
