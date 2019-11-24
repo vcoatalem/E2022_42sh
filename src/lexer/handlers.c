@@ -18,6 +18,9 @@ int token_single_char(char *str, size_t iterator, char *buffer, enum
         || buffer[0] == ';' || buffer[0] == '<' || buffer[0] == '>')
         && buffer[1] == '\0')
     {
+        printf("str[it] %c\n", str[iterator]);
+        if (buffer[0] == '>' && str[iterator] == '&')
+            return 0;
         if (buffer[0] != str[iterator]
             && token_compare(str, iterator, buffer, type))
             return 1;
