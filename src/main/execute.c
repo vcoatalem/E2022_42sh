@@ -85,6 +85,7 @@ int execute_interactive(struct execution_bundle *bundle)
             lexer_add_string(bundle->lexer, input);
             struct token_array *arr = lex(bundle->lexer);
             token_array_free(arr);
+            free(input);
         }
         token_array_free(try_lex);
         run_lex_parse(bundle);

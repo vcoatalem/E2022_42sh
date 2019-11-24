@@ -126,12 +126,6 @@ struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
             }
         }
         //free arglist
-        size_t i = 0;
-        while (*(arg_list + i))
-        {
-            free(*(arg_list + i));
-            i++;
-        }
         free(arg_list);
         //free redirlist
         free(redirs);
