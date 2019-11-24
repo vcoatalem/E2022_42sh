@@ -61,7 +61,7 @@ int token_type_is_value(enum token_type type)
 
 void parse(struct parser *parser, struct analysis_table *table)
 {
-    printf("[LL PARSER] entered parsing\n");
+    //printf("[LL PARSER] entered parsing\n");
     struct stamp *input = parser->input;
     struct stack *stack = parser->stack;
     while (!stamp_is_over(input))
@@ -123,5 +123,5 @@ void parse(struct parser *parser, struct analysis_table *table)
     }
     //post parsing treatment
     ast_clean(parser->ast);
-    printf("[LL PARSER] done parsing. state: %d\n", parser->state);
+    //printf("[LL PARSER] done parsing. state: %d\n", parser->state);
 }

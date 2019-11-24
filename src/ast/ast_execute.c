@@ -33,8 +33,8 @@ int ast_execute(struct ast *ast, void *bundle_ptr)
     }
     operator_handler handler = get_operator_handler(ast->op_type);
     int return_val = handler(ast, bundle);
-    printf("[AST] ast_execute for ast of operator type %d and value `%s` ",
-            ast->op_type, ast->value);
-    printf("returning: %d\n", return_val);
     return return_val;
+    /*printf("[AST] ast_execute for ast of operator type %d and value `%s` ",
+            ast->op_type, ast->value);
+    printf("returning: %d\n", return_val);*/
 }

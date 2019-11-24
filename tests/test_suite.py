@@ -21,9 +21,10 @@ def remove_bracket(sh):
     return res
 def test(binary, tests):
     start_time = time.time()
+    print(tests["stdin"])
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
     sh = run_42sh([binary], tests["stdin"])
-    sh.stdout = remove_bracket(sh.stdout)
+   # sh.stdout = remove_bracket(sh.stdout)
     for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
         if check == "stdout":
             print(tests["name"] + " execution time: %.10s" % (time.time() -
