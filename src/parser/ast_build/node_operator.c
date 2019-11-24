@@ -1,5 +1,34 @@
 #include "../parser.h"
 
+static enum operator_type rule_id_to_operator2(enum rule_id id)
+{
+    if (id == RULE_UNTIL)
+        return OPERATOR_UNTIL;
+    if (id == RULE_ELSE_CONCAT)
+        return OPERATOR_ELSE;
+    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
+        return OPERATOR_ARG_LIST;
+    if (id == RULE_REDIR)
+        return OPERATOR_REDIR;
+    if (id == RULE_REDIR_LIST)
+        return OPERATOR_REDIR_LIST;
+    if (id == RULE_ELEMENT)
+        return OPERATOR_GET_VALUE;
+    if (id == RULE_REDIR_SYMBOL)
+        return OPERATOR_GET_REDIR_SYMBOL;
+    if (id == RULE_IONUMBER)
+        return OPERATOR_GET_IONUMBER;
+    if (id == RULE_REDIR_TO)
+        return OPERATOR_GET_REDIR_TO;
+    if (id == RULE_FUNCDEC)
+        return OPERATOR_FUNC_DECLARATION;
+    if (id == RULE_VARDEC)
+        return OPERATOR_VAR_DECLARATION;
+    if (id == RULE_DO_GROUP)
+        return OPERATOR_DO;
+    return OPERATOR_NONE;
+}
+
 enum operator_type rule_id_to_operator(enum rule_id id)
 {
     if (id == RULE_INPUT || id == RULE_LIST_DELIM
@@ -29,27 +58,5 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_THEN;
     if (id == RULE_WHILE)
         return OPERATOR_WHILE;
-    if (id == RULE_ELSE_CONCAT)
-        return OPERATOR_ELSE;
-    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
-        return OPERATOR_ARG_LIST;
-    if (id == RULE_REDIR)
-        return OPERATOR_REDIR;
-    if (id == RULE_REDIR_LIST)
-        return OPERATOR_REDIR_LIST;
-    if (id == RULE_ELEMENT)
-        return OPERATOR_GET_VALUE;
-    if (id == RULE_REDIR_SYMBOL)
-        return OPERATOR_GET_REDIR_SYMBOL;
-    if (id == RULE_IONUMBER)
-        return OPERATOR_GET_IONUMBER;
-    if (id == RULE_REDIR_TO)
-        return OPERATOR_GET_REDIR_TO;
-    if (id == RULE_FUNCDEC)
-        return OPERATOR_FUNC_DECLARATION;
-    if (id == RULE_VARDEC)
-        return OPERATOR_VAR_DECLARATION;
-    if (id == RULE_DO_GROUP)
-        return OPERATOR_DO;
-    return OPERATOR_NONE;
+    return rule_id_to_operator2(id);
 }

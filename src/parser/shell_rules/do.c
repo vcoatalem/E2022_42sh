@@ -22,7 +22,7 @@ static void sh_rule_while(struct rule_array *rules)
 
 static void sh_rule_until(struct rule_array *rules)
 {
-    struct rule *rule = rule_build(RULE_UNTIL,
+   struct rule *rule = rule_build(RULE_UNTIL,
             symbol_create(TOKEN_UNTIL, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(0, RULE_DO_GROUP),

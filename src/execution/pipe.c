@@ -25,7 +25,7 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
     if (!p || !p->commands)
         return RETURN_SUCCESS;
     if (p->n_commands == 1)
-        return command_execute(*(p->commands), bundle_ptr);
+        return command_execute(*(p->commands), bundle_ptr) % 255;
     int fd_in = 0;
     int pipe_buffer[2];
     pid_t pid;
@@ -54,14 +54,16 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             {
                 int try_execute =
                         command_execute(*(p->commands + iterator), bundle_ptr);
-                printf("[PIPE] forked command child will return: %d\n", try_execute);
-                exit(try_execute % 255);
+                printf("[PIPE] forked command child will return: %d\n",
+                        try_execute);
+                exit(try_execute);
             }
             else
             {
                 waitpid(sub_pid, &sub_status, 0);
-                printf("[PIPE] forked command child returned: %d\n", sub_status);
-                exit(sub_status % 255);
+                printf("[PIPE] forked command child returned: %d\n",
+                        sub_status);
+                exit(sub_status);
             }
         }
         else

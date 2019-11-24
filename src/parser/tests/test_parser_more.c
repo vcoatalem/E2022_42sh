@@ -20,6 +20,10 @@ int main(int argc, char **argv)
         PARSER_STATE_FAILURE, //7
         PARSER_STATE_SUCCESS, //8
         PARSER_STATE_SUCCESS, //9
+        PARSER_STATE_SUCCESS, //10
+        PARSER_STATE_SUCCESS, //11
+        PARSER_STATE_SUCCESS, //12
+        PARSER_STATE_CONTINUE, //13
     };
     if (q == 0)
     {
@@ -142,11 +146,47 @@ int main(int argc, char **argv)
     }
     else if (q == 10)
     {
-
+        fprintf(stderr, "correct until");
+        token_array_add(exp, token_init(TOKEN_UNTIL, "until"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 11)
     {
-
+        fprintf(stderr, "correct until with tricky functions as children");
+        token_array_add(exp, token_init(TOKEN_WHILE, "until"));
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_WORD, "my_pwd"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "pwd"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 12)
+    {
+    }
+    else if (q == 13)
+    {
+        token_array_add(exp, token_init(TOKEN_WHILE, "while"));
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else
     {
