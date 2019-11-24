@@ -7,6 +7,9 @@ import yaml
 import time
 import os
 
+GREEN =  '\033[32m'
+WHITE = '\033[37m'
+
 def run_42sh(args, stdin):
     stdin = stdin + ";"
     return sp.run(args, capture_output=True, text=True, input=stdin)
@@ -68,11 +71,11 @@ if __name__ == "__main__":
                 try:
                     test(binary, tests)
                 except AssertionError as err:
-                    print(f"[KO]", tests["name"])
+                    print(f"\033[31m[KO]", tests["name"], "\033[m")
                     print(err)
                     fail = fail + 1
                 else:
-                    print(f"[OK]", tests["name"])
+                    print(f"\033[32m[OK]", tests["name"], "\033[m")
                     success = success + 1
         else:
             path_list = []
@@ -87,13 +90,13 @@ if __name__ == "__main__":
                     try:
                         test(binary, tests)
                     except AssertionError as err:
-                        print(f"[KO]", tests["name"])
+                        print(f"\033[31m[KO]", tests["name"], "\033[m")
                         print(err)
                         fail = fail + 1
                     except TimeoutError as err:
                         print(err)
                     else:
-                        print(f"[OK]", tests["name"])
+                        print(f"\033[32m[OK]", tests["name"], "\033[m")
                         success = success + 1
         print("------------ Tests Results -------------")
         print("Numbers of tests:",success + fail)
