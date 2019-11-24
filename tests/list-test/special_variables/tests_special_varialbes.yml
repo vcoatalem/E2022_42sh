@@ -1,0 +1,19 @@
+ - name: echo_$name
+ - stdin: var=hello; echo $var;
+
+ - name: echo_${name}
+ - stdin: var=world; echo ${var}
+
+ - name: echo_$@
+ - stdin: "../../test_variable.sh 1"
+
+ - name: echo_$*
+ - stdin: "../../test_variable.sh 2"
+ - name: echo_$$
+ - stdin: echo $$
+
+ - name: echo_$?
+ - stdin: echo $?
+
+ - name: echo_$@
+ - stdin:  

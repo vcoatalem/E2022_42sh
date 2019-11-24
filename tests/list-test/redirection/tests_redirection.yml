@@ -1,0 +1,17 @@
+ - name: redirection_>
+   stdin: "echo Hello World! > ../../toto"
+
+ - name: redirection_bracket_>
+   stdin: "{ls ; echo toto ; } > ../../toto"
+
+ - name: redirection_>>
+   stdin: "echo Hello from the bottom >> ../../toto"
+
+ - name: redirection_<
+   stdin: "cat < ../../toto"
+
+ - name: redirection_>&
+   stdin: "cat tests_redirection.yml >& ../../toto"
+ 
+ - name: redirection_<&
+   stdin: 
