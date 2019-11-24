@@ -15,4 +15,3 @@
 
  - name: echo_$?
    stdin: "echo $?"
-

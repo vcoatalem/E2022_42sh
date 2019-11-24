@@ -1,18 +1,23 @@
 #!/bin/sh
 
+setup_tmp_files()
+{
+    echo "catch me if you can" > input
+}
+
 clean_tmp_files()
 {
-    rm outut
-    rm input
+    rm -rf output
+    rm -rf input
 }
 
 CURRENT_DIR=$PWD
 TARGET_DIR=$(dirname "$0")
-echo $TARGET_DIR
-
 cd $TARGET_DIR
 
 BIN_FILE=$1
+
+setup_tmp_files
 
 python3 -m venv env
 
