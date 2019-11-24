@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "../parser.h"
+#include "../../main/42sh.h"
 
 int main(int argc, char **argv)
 {
@@ -192,13 +193,17 @@ int main(int argc, char **argv)
     {
         return 0;
     }
-    struct analysis_table *table = table_build();
+    struct execution_bundle bundle;
+    bundle.parser_table = table_build();
+    bundle.shopt = shopt_init(NULL);
+    bundle.shopt->debug = 1;
     struct parser *p = parser_init(exp);
-    parse(p, table);
+    parse(p, bundle.parser_table, &bundle);
     ast_dot_print(p->ast, output_file_name);
     int return_value = (p->state == expected_parser_state[q]) ? 0 : 1;
     printf("[LL PARSER] parser state: %d\n", p->state);
     parser_free(p);
-    table_free(table);
+    table_free(bundle.parser_table);
+    free(bundle.shopt);
     return return_value;
 }
