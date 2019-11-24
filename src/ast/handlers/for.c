@@ -20,7 +20,10 @@ int ast_handle_for(struct ast *ast, void *bundle_ptr)
     while (try_execute == AST_SUCCESS)
     {
         try_execute = ast_execute(ast_for_body, bundle);
-        return_execute = ast_execute(ast_do, bundle);
+        if (try_execute == AST_SUCCESS)
+        {
+            return_execute = ast_execute(ast_do, bundle);
+        }
     }
     return return_execute;
 }
