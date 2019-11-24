@@ -43,9 +43,9 @@ void ast_add_child(struct ast *ast, struct ast *child)
 //n points the index to be erased by left_shift procedure
 static void left_shift(struct ast **ast, size_t n, size_t size)
 {
-    if (n > size - 1)
+    if (n >= size - 1)
         return;
-    for (size_t i = n; i < size ; i++)
+    for (size_t i = n; i < size - 1 ; i++)
     {
         ast[i] = ast[i + 1];
     }

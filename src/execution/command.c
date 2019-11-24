@@ -54,11 +54,11 @@ void command_free(struct command *command)
     {
         redirection_free(*(command->redirections + i));
     }
+    free(command->redirections);
     if (command->ast)
     {
         ast_free(command->ast);
     }
-    free(command->redirections);
     free(command);
 }
 
@@ -84,7 +84,7 @@ void command_add_redirection(struct command *command,
 {
     command->n_redirections++;
     command->redirections = realloc(command->redirections,
-            sizeof(void*) * command->n_redirections + 1);
+            sizeof(void*) * (command->n_redirections + 1));
     *(command->redirections + command->n_redirections - 1) = redir;
     *(command->redirections + command->n_redirections) = NULL;
 }
