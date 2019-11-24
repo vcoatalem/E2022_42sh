@@ -23,11 +23,14 @@ operator_handler get_operator_handler(enum operator_type type)
 int ast_execute(struct ast *ast, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    printf("[AST] entered ast_execute for ast of operator type %d and value `%s`\n", ast->op_type, ast->value);
     if (ast->node_type == NODE_VALUE)
     {
         return AST_SUCCESS;
     }
     operator_handler handler = get_operator_handler(ast->op_type);
-    return handler(ast, bundle);
+    int return_val = handler(ast, bundle);
+    printf("[AST] ast_execute for ast of operator type %d and value `%s`",
+            ast->op_type, ast->value);
+    printf("returning: %d\n", return_val);
+    return return_val;
 }

@@ -26,8 +26,7 @@ static int run_lex_parse(struct execution_bundle *bundle)
         {
             ast_dot_print(bundle->ast, "ast.dot");
         }
-        return_value = 1; //do not try to execute ast for now
-        //return_value = ast_execute(ast, bundle);
+        return_value = ast_execute(bundle->ast, bundle);
         lexer_clear(bundle->lexer);
     }
     else if (bundle->parser->state == PARSER_STATE_FAILURE)
