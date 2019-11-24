@@ -33,12 +33,6 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
     int status = 0;
     while (*(p->commands + iterator))
     {
-        printf("[PIPE] command: %d;", (*(p->commands + iterator))->type);
-        for (size_t i = 0; i < p->commands[iterator]->n_args; i++)
-        {
-            printf(" %s", *(p->commands[iterator]->args + i));
-        }
-        printf("\n");
         pipe(pipe_buffer);
         pid = fork();
         if (pid == 0)
@@ -54,22 +48,24 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             {
                 int try_execute =
                         command_execute(*(p->commands + iterator), bundle_ptr);
-                printf("[PIPE] forked command child will return: %d\n",
-                        try_execute);
                 exit(try_execute);
             }
             else
             {
                 waitpid(sub_pid, &sub_status, 0);
+                #if 0
                 printf("[PIPE] forked command child returned: %d\n",
                         sub_status);
+                #endif
                 exit(sub_status);
             }
         }
         else
         {
             waitpid(pid, &status, 0);
+            #if 0
             printf("[PIPE] pipe received status: %d\n", status);
+            #endif
             if (status != 0)
             {
                 return status % 255;

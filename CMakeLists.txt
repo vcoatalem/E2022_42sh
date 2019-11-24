@@ -10,7 +10,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 #launch test suite
 add_custom_target(tests
     DEPENDS 42sh
-    COMMAND ${CMAKE_SOURCE_DIR}/tests/test_suite.sh ./42sh
+    COMMAND ${CMAKE_SOURCE_DIR}/tests/test_suite.sh ${CMAKE_SOURCE_DIR}/build/42sh
 )
 
 set_target_properties(tests

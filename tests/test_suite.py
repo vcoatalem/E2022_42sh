@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from difflib import unified_diff
-from termcolor import colored
 
 import subprocess as sp
 import yaml
@@ -73,11 +72,11 @@ if __name__ == "__main__":
                 try:
                     test(binary, tests)
                 except AssertionError as err:
-                    print(f"[{colored('KO', 'red')}]", tests["name"])
+                    print(f"[KO]", tests["name"])
                     print(err)
                     fail = fail + 1
                 else:
-                    print(f"[{colored('OK', 'green')}]", tests["name"])
+                    print(f"[OK]", tests["name"])
                     success = success + 1
         else:
             path_list = []
@@ -92,17 +91,17 @@ if __name__ == "__main__":
                     try:
                         test(binary, tests)
                     except AssertionError as err:
-                        print(f"[{colored('KO', 'red')}]", tests["name"])
+                        print(f"[KO]", tests["name"])
                         print(err)
                         fail = fail + 1
                     except TimeoutError as err:
                         print(err)
                     else:
-                        print(f"[{colored('OK', 'green')}]", tests["name"])
+                        print(f"[OK]", tests["name"])
                         success = success + 1
         print("------------ Tests Results -------------")
         print("Numbers of tests:",success + fail)
-        print(f"Tests succeed: {colored(success, 'green')}")
-        print(f"Tests failed: {colored(fail, 'red')}")
+        print(f"Tests succeed" , success)
+        print(f"Tests failed" , fail)
         print("Time to execute all tests: %.s" % (time.time() - test_time))
         print("----------------------------------------")
