@@ -1,9 +1,9 @@
  - name: semi_colon_simple
- - stdin: echo Hello World!;
+   stdin: "echo Hello World!;"
 
  - name: semi_colon_command
- - stdin: "echo Hello; echo World!"
+   stdin: "echo Hello; echo World!"
 
  - name: semi_colon_if
- - stdin: "if true; then echo Hello World!; fi"
+   stdin: "if true; then echo Hello World!; fi"
 

@@ -1,11 +1,11 @@
  - name: funcdec_one_line_simple
- - stdin: "function func() { echo DONE; } && func"
+   stdin: "function func() { echo DONE; } && func"
 
  - name: funcdec_multi_line_simple
- - stdin: "function func()\n{\necho DONE\n}\nfunc"
+   stdin: "function func()\n{\necho DONE\n}\nfunc"
  
  - name: funcdec_if
- - stdin: "function func()\n{\necho FUNC\nif echo A; then echo B; fi;}\nfunc"
+   stdin: "function func()\n{\necho FUNC\nif echo A; then echo B; fi;}\nfunc"
 
  - name: funcdec_redirection
- - stdin: "function func()\n{\necho FUNC;}\nfunc > ../../output"
+   stdin: "function func()\n{\necho FUNC;}\nfunc > ../../output"

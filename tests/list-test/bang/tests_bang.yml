@@ -1,9 +1,9 @@
  - name: bang_simple
- - stdin: "!ls"
+   stdin: "!ls"
 
  - name: bang_history
- - stdin: "!-2"
+   stdin: "!-2"
 
  - name: bang_bang
- - stdin: "!!"
+   stdin: "!!"
 

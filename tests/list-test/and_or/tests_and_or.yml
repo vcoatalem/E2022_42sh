@@ -1,14 +1,14 @@
 - name: and_simple
-- stdin: "echo a && echo b"
+  stdin: "echo Hello && echo World!"
 
 - name: and_concat_simple
-- stdin: "echo a; echo b"
+  stdin: "echo a; echo b"
 
 - name: and_first_fail
-- stdin: "cat a && echo b"
+  stdin: "cat a && echo b"
 
 - name: and_second_fail
-- stdin: "echo a && cat a"
+  stdin: "echo a && cat a"
 
 - name: and_triple_simple
   stdin: "echo a && echo b && echo c"
