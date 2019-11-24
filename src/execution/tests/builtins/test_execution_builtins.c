@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 {
     int q = argc > 1 ? atoi(*(argv + 1)) : 0;
     printf("[LOG] TEST: #%d\n", q);
-    
+
     struct execution_bundle bundle;
     bundle.shopt = shopt_init(NULL);
     bundle.hash_table_func = init_hash_table_func(50);

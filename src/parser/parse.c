@@ -96,7 +96,7 @@ void parse(struct parser *parser, struct analysis_table *table)
             {
                 //get current word value into the ast
                 //TODO: give this treatment to more types (eg. excl point)
-                
+
                 if (head->ast->value)
                     free(head->ast->value);
                 head->ast->value = my_strdup(current->value);
@@ -121,7 +121,7 @@ void parse(struct parser *parser, struct analysis_table *table)
                 else
                 {
                     //current top of stack rule is an epsilon rule, therefore
-                    //can be canceled. 
+                    //can be canceled.
                     symbol_array_free(is_epsilon);
                 }
             }

@@ -57,7 +57,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     int iword = i;
     for (int j = 0; !is_delimiter(text[i + 1]) && text[i] != '}'; ++j, ++i)
         word[j] = text[i];
-    
+
     //printf("text=%s\n", text);
     //printf("i=%d\n", i);
     //printf("c=%c\n", text[i]);

@@ -8,17 +8,17 @@ static int run_lex_parse(struct execution_bundle *bundle)
     bundle->token_array = lex(bundle->lexer);
     printf("[LEXER] done lexing. Got token array: ");
     token_array_print(bundle->token_array, stdout);
-    
+
     if (bundle->parser)
         parser_free(bundle->parser);
     bundle->parser = parser_init(bundle->token_array);
-    
+
     parse(bundle->parser, bundle->parser_table);
-    
+
     if (bundle->ast)
         ast_free(bundle->ast);
     bundle->ast = bundle->parser->ast;
-    
+
     int return_value = 0;
     if (bundle->parser->state == PARSER_STATE_SUCCESS)
     {

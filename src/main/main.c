@@ -25,7 +25,7 @@ void sig_handler(int val)
 {
     if (val == SIGINT)
     {
-        
+
     }
 }
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     }
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
-    {  
+    {
         .options = options,
         .parser_table = table_build(),
         .hash_table_var = init_hash_table_var(50),

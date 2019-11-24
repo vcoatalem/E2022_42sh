@@ -25,7 +25,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "simple correct list");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "carpe"));
-        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";")); 
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "diem"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
@@ -35,8 +35,8 @@ int main(int argc, char **argv)
         fprintf(stderr, "uncorrect list");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "aloe"));
-        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";")); 
-        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&")); 
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "mora"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));

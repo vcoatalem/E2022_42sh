@@ -48,7 +48,7 @@ static void sh_rule_else_concat(struct rule_array *rules)
 
 void sh_rule_if_groups(struct rule_array *rules)
 {
-    sh_rule_if(rules); 
+    sh_rule_if(rules);
     sh_rule_then(rules);
     sh_rule_else_concat(rules);
 }

@@ -42,7 +42,7 @@ struct symbol_array *expr_first(struct rule *rule, struct rule_array *rules)
     printf("\n");
     #endif
     size_t index = 0;
-    
+
     while (index < expression->size)
     {
         struct symbol *s = expression->array[index];
@@ -135,7 +135,7 @@ static void rule_next_find_handle_occurence(enum rule_id rule_id,
                     {
                         //if rule does not have any next, add $ to the list
                         symbol_array_free(next);
-                        symbol_array_add_if_not_in(res, NULL); 
+                        symbol_array_add_if_not_in(res, NULL);
                     }
                     else
                     {

@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     {
         "shopt", NULL
     };
-    char *argv2[] = 
+    char *argv2[] =
     {
         "shopt", "-s", NULL
     };
@@ -51,8 +51,8 @@ int main(int argc, char **argv)
     if (q == 0)
     {
         //traitements sur loption ici
-        return_value = builtin_shopt(args[q], 1, &bundle); 
-    } 
+        return_value = builtin_shopt(args[q], 1, &bundle);
+    }
     else if (q == 1)
     {
         return_value = builtin_shopt(args[4], 5, &bundle);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     }
     else if (q == 2)
 {
-        return_value = builtin_shopt(args[q], 2, &bundle); 
+        return_value = builtin_shopt(args[q], 2, &bundle);
     }
     else if (q == 3)
     {
@@ -79,12 +79,12 @@ int main(int argc, char **argv)
         shopt_print(bundle.shopt, -1);
     }/*
     else if (q == 6)
-    { 
-        return_value = builtin_shopt(args[q], 1, &bundle); 
+    {
+        return_value = builtin_shopt(args[q], 1, &bundle);
     }
     else if (q == 7)
-    { 
-        return_value = builtin_shopt(args[q], 1, &bundle); 
+    {
+        return_value = builtin_shopt(args[q], 1, &bundle);
     }*/
     shopt_free(bundle.shopt);
     options_free(opt);

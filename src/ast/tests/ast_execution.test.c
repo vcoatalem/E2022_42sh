@@ -121,7 +121,7 @@ static struct ast *ast_redir_list(void)
     struct ast *ast_redir_list = ast_init("redir_list", OPERATOR_REDIR_LIST);
     struct ast *ast_redir_1 = ast_redir_A();
     ast_add_child(ast_redir_list, ast_redir_1);
-    
+
     struct ast *ast_redir_next = ast_init("redir_list", OPERATOR_REDIR_LIST);
     ast_add_child(ast_redir_list, ast_redir_next);
     struct ast *ast_redir_2 = ast_redir_B();
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
     struct ast *root = ast_init("root", OPERATOR_AND);
     int q = argc == 1 ? 0 : atoi(*(argv + 1));
     char *dot_dest = argc < 2 ? "ast.dot" : *(argv + 2);
-    
+
     int expected_values[] =
     {
         AST_SUCCESS,
