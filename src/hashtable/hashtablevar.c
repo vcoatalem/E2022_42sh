@@ -82,8 +82,9 @@ void insert_variable(struct hash_table_var *ht, char *name, char *data)
     {
         items = items->next;
     }
-    if (strcmp(items->name, name) == 0) //We change the data of an existing variable
+    if (strcmp(items->name, name) == 0)
     {
+        //We change the data of an existing variable
         free(items->data);
         items->data = strdup(data);
     }
@@ -131,20 +132,3 @@ void print_hash_table_var(struct hash_table_var *ht)
         printf("\n");
     }
 }
-/*
-int main()
-{
-    char *a = "edzeezza";
-    char *b = "CHHHHARGGGEEERRR!!";
-    struct hash_table_var *HT = init_hash_table(5);
-    insert_variable(HT, "lol", "issou");
-    insert_variable(HT, "echo", "2");
-    insert_variable(HT, "echoa", "2");
-    insert_variable(HT, "echo", "42");
-    insert_variable(HT, "edho", "42");
-    insert_variable(HT, a, b);
-    printf("lol :%s\n", get_variable(HT, "edzeezza"));
-    print_hash_table(HT);
-    free_hash_table(HT);
-}
-*/

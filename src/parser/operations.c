@@ -154,6 +154,5 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
         rule_next_find_handle_occurence(rules->rules[i]->rule_id,
                 rules->rules[i], res, rules, path_list);
     }
-    printf("\n");
     return res;
 }
