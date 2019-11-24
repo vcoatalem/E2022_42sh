@@ -3,9 +3,9 @@
 operator_handler get_operator_handler(enum operator_type type)
 {
     if (type == OPERATOR_AND)
-        return ast_handle_and;
-    else if (type == OPERATOR_OR)
-        return ast_handle_or;
+        return ast_handle_and_or;
+    else if (type == OPERATOR_LIST)
+        return ast_handle_list;
     else if (type == OPERATOR_PIPE)
          return ast_handle_pipe;
     else if (type == OPERATOR_IF)

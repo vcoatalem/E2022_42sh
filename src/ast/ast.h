@@ -43,6 +43,7 @@ enum operator_type
     OPERATOR_NONE,
     OPERATOR_COMMAND,
     OPERATOR_SHELL_COMMAND,
+    OPERATOR_LIST,
     OPERATOR_AND,
     OPERATOR_OR,
     OPERATOR_PIPE,
@@ -226,8 +227,7 @@ typedef int (*operator_handler)(struct ast *ast,
  */
 operator_handler get_operator_handler(enum operator_type type);
 
-int ast_handle_and(struct ast *ast, void *bundle);
-int ast_handle_or(struct ast *ast, void *bundle);
+int ast_handle_and_or(struct ast *ast, void *bundle_ptr);
 int ast_handle_pipe(struct ast *ast, void *bundle);
 int ast_handle_if(struct ast *ast, void *bundle);
 int ast_handle_then(struct ast *ast, void *bundle);
@@ -236,6 +236,7 @@ int ast_handle_for(struct ast *ast, void *bundle);
 int ast_handle_until(struct ast *ast, void *bundle);
 int ast_handle_func_declaration(struct ast *ast,
         void *bundle);
+int ast_handle_list(struct ast *ast, void *bundle_ptr);
 
 /**
  * \brief execution function of ast

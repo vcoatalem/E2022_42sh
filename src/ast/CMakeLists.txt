@@ -4,6 +4,7 @@ add_library(ast
     ast_print.c
     ast_execute.c
     ast_execute_builders.c
+    handlers/list.c
     handlers/and_or.c
     handlers/pipe.c
     handlers/if_then.c
