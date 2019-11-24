@@ -16,11 +16,6 @@ struct symbol_array *substitute_rule(enum rule_id rule_id,
         int token_type, struct analysis_table *table)
 {
     struct symbol_array *expr = table->transformation_mat[rule_id][token_type];
-    #if 0
-    printf("substitute_rule %d for token type %d: ", rule_id, token_type);
-    symbol_array_print(expr);
-    printf("\n");
-    #endif
     if (!expr)
     {
         return NULL;
@@ -64,7 +59,6 @@ int token_type_is_value(enum token_type type)
         || type == TOKEN_ASSIGNMENT;
 }
 
-//TODO: refactorize this once figured out. Also, leeks.
 void parse(struct parser *parser, struct analysis_table *table)
 {
     printf("[LL PARSER] entered parsing\n");
@@ -72,20 +66,11 @@ void parse(struct parser *parser, struct analysis_table *table)
     struct stack *stack = parser->stack;
     while (!stamp_is_over(input))
     {
-        #if 0
-        stack_print(stack);
-        stamp_print(input);
-        #endif
-        //in case we just popped an epsilon rule, we dont want to get next
-        //symbol on stamp
         struct token *current = stamp_read(input);
-        #if 0
-        printf("[LL PARSER] current head of stamp: %s\n",
-                token_to_formatted_string(current->type));
-        #endif
         struct stack_elt *head = stack_pop(stack);
         if (head->symbol->type == SYMBOL_TOKEN)
         {
+            //if the symbol popped on the stack is a token...
             if (head->symbol->token_type != current->type)
             {
                 set_parsing_ending_status(parser, current->type);
@@ -95,8 +80,6 @@ void parse(struct parser *parser, struct analysis_table *table)
             else if (token_type_is_value(current->type))
             {
                 //get current word value into the ast
-                //TODO: give this treatment to more types (eg. excl point)
-
                 if (head->ast->value)
                     free(head->ast->value);
                 head->ast->value = my_strdup(current->value);
@@ -105,6 +88,7 @@ void parse(struct parser *parser, struct analysis_table *table)
         }
         else if (head->symbol->type == SYMBOL_RULE)
         {
+            //if the symbol popped on the stack is a rule...
             struct symbol_array *arr = substitute_rule(
                     head->symbol->rule_id, current->type, table);
             if (!arr)
@@ -132,9 +116,6 @@ void parse(struct parser *parser, struct analysis_table *table)
         }
         stack_elt_free(head);
     }
-    #if 0
-    stack_print(stack);
-    #endif
     if (parser->state != PARSER_STATE_FAILURE)
     {
         parser->state = stack->size == 0 ?

@@ -36,11 +36,6 @@ struct symbol_array *expr_first(struct rule *rule, struct rule_array *rules)
 {
     struct symbol_array *res = symbol_array_init();
     struct symbol_array *expression = rule->symbols;
-    #if 0
-    printf("entered expr_first for expr: ");
-    symbol_array_print(expression);
-    printf("\n");
-    #endif
     size_t index = 0;
 
     while (index < expression->size)
@@ -64,20 +59,10 @@ struct symbol_array *expr_first(struct rule *rule, struct rule_array *rules)
         break;
     }
     return res;
-    #if 0
-    printf("[LL PARSER] expr first for ");
-    symbol_array_print(expression);
-    printf(" returning: ");
-    symbol_array_print(res);
-    printf("\n");
-    #endif
 }
 
 struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
 {
-    #if 0
-    printf("[LL PARSER] entered rule_first %d\n", rule_id);
-    #endif
     struct symbol_array *res = symbol_array_init();
     for (size_t i = 0; i < rules->size; i++)
     {
@@ -85,19 +70,9 @@ struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
         //for each rule in rules...
         if (current->rule_id == rule_id)
         {
-            #if 0
-            printf("rule_first %d ; found occcurence in rule #%zu: ", rule_id, i);
-            symbol_array_print(current->symbols);
-            printf("\n");
-            #endif
             symbol_array_merge(res, expr_first(current, rules));
         }
     }
-    #if 0
-    printf("[LL PARSER] rule first for id %d returning: ", rule_id);
-    symbol_array_print(res);
-    printf("\n");
-    #endif
     return res;
 }
 
@@ -160,9 +135,6 @@ static void rule_next_find_handle_occurence(enum rule_id rule_id,
 struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
     int **path_list)
 {
-    #if 0
-    printf("[LL PARSER] entered rule_next(%d)\n", rule_id);
-    #endif
     int new_path_list[NB_RULES] = { 0 };
     int *new_path_list_ptr = new_path_list;
     if (!path_list)
@@ -182,10 +154,6 @@ struct symbol_array *rule_next(enum rule_id rule_id, struct rule_array *rules,
         rule_next_find_handle_occurence(rules->rules[i]->rule_id,
                 rules->rules[i], res, rules, path_list);
     }
-    #if 0
-    printf("[LL PARSER] rule next for id %d returning: ", rule_id);
-    symbol_array_print(res);
     printf("\n");
-    #endif
     return res;
 }
