@@ -84,7 +84,7 @@ struct redirection **ast_redirection_list_build(struct ast *ast)
     return redirections;
 }
 
-char **get_arg_list(struct ast *ast)
+char **ast_arg_list_build(struct ast *ast)
 {
     char **arg_list = NULL;
     size_t index = 0;
@@ -102,21 +102,28 @@ char **get_arg_list(struct ast *ast)
     return arg_list;
 }
 
-struct command *get_command(struct ast *ast, void *bundle_ptr)
+struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
 {
     struct ast *simple_cmd = find_op_type(ast, OPERATOR_COMMAND);
 
     if (simple_cmd != NULL)
     {
         struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
-        //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
+        struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
 
-        char **arg_list = get_arg_list(args);
-        // TODO: Add get redirection_list function
-        //struct redirection **redirs = get_redirs(redir_list);
+        char **arg_list = ast_arg_list_build(args);
+        struct redirection **redirs = ast_redirection_list_build(redir_list);
 
         struct command *cmd = command_init(arg_list, bundle_ptr);
-
+        if (redirs)
+        {
+            size_t n_redirs = 0;
+            while (*(redirs + n_redirs))
+            {
+                command_add_redirection(cmd, *(redirs + n_redirs));
+                n_redirs++;
+            }
+        }
         return cmd;
     }
 
