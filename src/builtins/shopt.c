@@ -93,9 +93,13 @@ struct shopt *shopt_init(void *options_ptr)
 
     //TODO: setup default values for shopt here
 
-    shopt_init_set_shopt(res, 0, options->unset_shopt,
-            options->nb_unset_shopt);
-    shopt_init_set_shopt(res, 0, options->set_shopt, options->nb_set_shopt);
+    if (options)
+    {
+        shopt_init_set_shopt(res, 0, options->unset_shopt,
+                options->nb_unset_shopt);
+        shopt_init_set_shopt(res, 0, options->set_shopt,
+                options->nb_set_shopt);
+    }
     return res;
 }
 

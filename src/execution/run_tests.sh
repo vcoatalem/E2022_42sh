@@ -13,6 +13,9 @@ EXP_ERR=exp_err
 RETURN=0
 EXP_RETURN=0
 
+
+SETUP=$2
+
 OUTPUT_FILE=output
 EXP_OUTPUT_FILE=exp_output
 
@@ -38,14 +41,23 @@ setup()
 {
     echo $1
     clean_temp_files
-    cp "$1" "$BIN_FILE"
+    if [ $SETUP -eq 0 ]; then
+        cp "$1" "$BIN_FILE"
 
-    echo "echo \"hello world!\"" >> $CMD_FILE
-    echo "cat Makefile" >> $CMD_FILE
-    echo "echo \"im in file\" > exp_output" >> $CMD_FILE
-    echo "cat < input" >> $CMD_FILE
-    echo "echo A | echo B" >> $CMD_FILE
-
+        echo "echo \"hello world!\"" >> $CMD_FILE
+        echo "cat Makefile" >> $CMD_FILE
+        echo "echo \"im in file\" > exp_output" >> $CMD_FILE
+        echo "cat < input" >> $CMD_FILE
+        echo "echo A | echo B" >> $CMD_FILE
+    elif [ $SETUP -eq 1 ]; then
+        echo "shopt with no argument" >> $CMD_FILE
+        echo "shopt with an incorrect argument" >> $CMD_FILE
+        echo "shopt with a correct argument but incorrect value" >> $CMD_FILE
+        echo "shopt with a correct argument and correct value" >> $CMD_FILE
+        echo "shopt piped into cat" >> $CMD_FILE
+        echo "shopt piped into grep" >> $CMD_FILE
+    fi
+    
     echo "catch me if you can" > input
 }
 
@@ -64,15 +76,17 @@ run_test()
 
         # remove all logs from output
         sed -i '/\[.*\]/d' $OUT
-
-        ERROR_STDOUT=$(diff $EXP_OUT $OUT)                                          
-        [ "$ERROR_STDOUT" != "" ] && ERROR=1 && echo "ERROR in STDOUT: $ERROR_STDOUT"
         
-        ERROR_STDERR=$(diff $EXP_ERR $ERR)                                          
-        [ "$ERROR_STDERR" != "" ] && ERROR=1 && echo "ERROR in STDERR: $ERROR_STDERR"
+        #builtins execution do not do output comparison
+        if [ $SETUP -ne 1 ]; then
+            ERROR_STDOUT=$(diff $EXP_OUT $OUT)                                          
+            [ "$ERROR_STDOUT" != "" ] && ERROR=1 && echo "ERROR in STDOUT: $ERROR_STDOUT"
+            
+            ERROR_STDERR=$(diff $EXP_ERR $ERR)                                          
+            [ "$ERROR_STDERR" != "" ] && ERROR=1 && echo "ERROR in STDERR: $ERROR_STDERR"
 
-        [ $EXP_RETURN -ne $RETURN ] && ERROR=1 && echo "ERROR in RETURN: $EXP_RETURN ? $RETURN"
-
+            [ $EXP_RETURN -ne $RETURN ] && ERROR=1 && echo "ERROR in RETURN: $EXP_RETURN ? $RETURN"
+        fi
         LINES_PRINTED=$(cat $OUT | wc -l)
         [ $ERROR -eq 0 ] && echo -e "$GREEN OK:  $line $ITALIC ($LINES_PRINTED lines printed) $NC" && continue
         echo "$ORANGE KO:   $line  $NC"
