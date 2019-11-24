@@ -47,7 +47,7 @@ int main(void)
 
     ast_dot_print(ast1, "ast.dot");
 
-    char **arg_list = get_arg_list(ast1);
+    char **arg_list = ast_arg_list_build(ast1);
     for (int i = 0; i < 2; i++)
         printf("%s\n", arg_list[i]);
 
