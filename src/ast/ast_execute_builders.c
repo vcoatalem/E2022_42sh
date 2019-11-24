@@ -6,7 +6,6 @@ char *get_element_value(struct ast *ast)
 
     if (element_ast == NULL)
         return NULL;
-
     return element_ast->forest[0]->value;
 }
 
@@ -15,6 +14,7 @@ enum symbol_value
     SYMBOL_VAL_LESS = 10,
     SYMBOL_VAL_GREAT = 20,
     SYMBOL_VAL_GREAT_AMPERSAND = 30,
+    SYMBOL_VAL_DOUBLE_LESS = 40,
     SYMBOL_VAL_STDIN = 0,
     SYMBOL_VAL_STDOUT = 1,
     SYMBOL_VAL_STDERR = 2
@@ -48,17 +48,19 @@ struct redirection *ast_redirection_build(struct ast *ast)
     char *arg = NULL;
     if (ast_redir_to)
     {
-        if (ast_redir_to->nb_children > 0)
+        if (ast_redir_to->forest[0]->op_type == OPERATOR_GET_IONUMBER)
         {
-            arg = get_element_value(ast_redir_to->forest[0]);
+            //if redir_to is a ionumber
+            arg = ast_redir_to->forest[0]->forest[0]->value;
         }
         else
-            arg = get_element_value(ast_redir_to);
+            arg = ast_redir_to->forest[0]->value;
     }
     enum symbol_value redir_symbol_value = ast_redir_symbol ?
-            get_symbol_value(get_element_value(ast_redir_symbol)) : 0;
+            get_symbol_value(ast_redir_symbol->forest[0]->value) : 0;
     enum symbol_value redir_io_from_value = ast_redir_ionumber ?
-            get_symbol_value(get_element_value(ast_redir_ionumber)) : 0;
+            get_symbol_value(ast_redir_symbol->forest[0]->value) : 1;
+    //by default, redirection is on STDOUT
 
     enum REDIRECTION_TYPE type = redir_symbol_value + redir_io_from_value;
     struct redirection *redir = redirection_init(type, arg);
@@ -76,15 +78,15 @@ struct redirection **ast_redirection_list_build(struct ast *ast)
         struct redirection *redir = ast_redirection_build(ast_redir);
         n_redirections++;
         redirections = realloc(redirections,
-                (n_redirections + 2) * sizeof(void*));
+                (n_redirections + 1) * sizeof(void*));
         *(redirections + n_redirections) = NULL;
-        *(redirections + n_redirections) = redir;
+        *(redirections + n_redirections - 1) = redir;
         ast = ast_list;
     }
     return redirections;
 }
 
-char **get_arg_list(struct ast *ast)
+char **ast_arg_list_build(struct ast *ast)
 {
     char **arg_list = NULL;
     size_t index = 0;
@@ -102,23 +104,48 @@ char **get_arg_list(struct ast *ast)
     return arg_list;
 }
 
-struct command *get_command(struct ast *ast, void *bundle_ptr)
+static struct command *ast_simple_command_build(struct ast *ast,
+        void *bundle_ptr)
+{
+    struct ast *args = find_op_type(ast, OPERATOR_ARG_LIST);
+    struct ast *redir_list = find_op_type(ast, OPERATOR_REDIR_LIST);
+
+    char **arg_list = ast_arg_list_build(args);
+    struct redirection **redirs = ast_redirection_list_build(redir_list);
+
+    struct command *cmd = command_init(arg_list, bundle_ptr);
+    if (redirs)
+    {
+        size_t n_redirs = 0;
+        while (*(redirs + n_redirs))
+        {
+            command_add_redirection(cmd, *(redirs + n_redirs));
+            n_redirs++;
+        }
+    }
+    //free arglist
+    free(arg_list);
+    //free redirlist
+    free(redirs);
+    return cmd;
+}
+
+static struct command *ast_shell_command_build(struct ast *ast)
+{
+    return shell_command_init(ast->forest[0]);
+}
+
+struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
 {
     struct ast *simple_cmd = find_op_type(ast, OPERATOR_COMMAND);
-
     if (simple_cmd != NULL)
     {
-        struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
-        //struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
-
-        char **arg_list = get_arg_list(args);
-        // TODO: Add get redirection_list function
-        //struct redirection **redirs = get_redirs(redir_list);
-
-        struct command *cmd = command_init(arg_list, bundle_ptr);
-
-        return cmd;
+        return ast_simple_command_build(simple_cmd, bundle_ptr);
     }
-
+    struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
+    if (shell_cmd != NULL)
+    {
+        return ast_shell_command_build(shell_cmd);
+    }
     return NULL;
 }

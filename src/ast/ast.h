@@ -175,7 +175,7 @@ char *get_element_value(struct ast *ast);
  * \param ast arg_list node to get argument from
  *
  */
-char **get_arg_list(struct ast *ast);
+char **ast_arg_list_build(struct ast *ast);
 
 /**
  * \brief get all arguments of command type node
@@ -184,7 +184,7 @@ char **get_arg_list(struct ast *ast);
  *
  * \return command return a new command structure
  */
-struct command *get_command(struct ast *ast, void *bundle_ptr);
+struct command *ast_command_build(struct ast *ast, void *bundle_ptr);
 
 
 /**

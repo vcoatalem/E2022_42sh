@@ -14,13 +14,13 @@ int ast_handle_while(struct ast *ast, void *bundle_ptr)
     int try_execute = AST_SUCCESS;
     int return_value = AST_ERROR;
 
-    struct ast *ast_while_body = find_op_type(ast, OPERATOR_WHILE);
+    struct ast *ast_while_body = find_op_type(ast, OPERATOR_AND);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
 
     while (try_execute == AST_SUCCESS)
     {
         try_execute = ast_execute(ast_while_body, bundle_ptr);
-        return_value = ast_execute(ast_do, bundle_ptr);
+        return_value = ast_execute(ast_do->forest[0], bundle_ptr);
     }
 
     return return_value;

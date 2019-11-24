@@ -21,6 +21,10 @@ static char *operator_to_string(enum operator_type type)
             return "if";
         case (OPERATOR_THEN):
             return "then";
+        case (OPERATOR_WHILE):
+            return "while";
+        case (OPERATOR_ELSE):
+            return "else";
         case (OPERATOR_ARG_LIST):
             return "args";
         case (OPERATOR_REDIR):
@@ -39,6 +43,8 @@ static char *operator_to_string(enum operator_type type)
             return "redir_to";
         case (OPERATOR_VAR_DECLARATION):
             return "var_declaration";
+        case (OPERATOR_DO):
+            return "do";
         // TODO: Add more operator types
 
         default:

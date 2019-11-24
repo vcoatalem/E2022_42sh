@@ -15,7 +15,7 @@ static void log_conflict(struct rule *rule, size_t index,
       }
       else
       {
-        printf("%s", token_to_formatted_string(index));    
+        printf("%s", token_to_formatted_string(index));
       }
       printf("` ; ");
       symbol_array_print(in_slot);
@@ -28,7 +28,7 @@ static void log_conflict(struct rule *rule, size_t index,
 
 void fill_line_slot(struct analysis_table *t,
         struct rule *rule, struct rule_array *rules)
-{   
+{
     struct symbol_array **line = t->transformation_mat[rule->rule_id];
     struct symbol_array *firsts = expr_first(rule, rules);
     if (firsts->size > 0)
@@ -43,7 +43,7 @@ void fill_line_slot(struct analysis_table *t,
                 //we opt to reduce always reduce (replace the epsilon expr
                 //with the new one)
                 log_conflict(rule, index, line[index], rule->symbols);
-                symbol_array_free(line[index]); 
+                symbol_array_free(line[index]);
                 line[index] = symbol_array_dup(rule->symbols);
             }
             else if (!line[index])
@@ -70,7 +70,7 @@ void fill_line_slot(struct analysis_table *t,
                 size_t index = b->type == SYMBOL_TOKEN ? b->token_type
                     : t->n_symbols - 1;
                 if (!line[index])
-                {    
+                {
                     line[index] = symbol_array_dup(rule->symbols);
                 }
                 else
@@ -111,11 +111,6 @@ struct analysis_table *table_build(void)
     for (size_t i = 0; i < t->rules->size; i++)
     {
         struct rule *rule = t->rules->rules[i];
-        #if 0
-        printf("[LL PARSER] ---------- [TABLE] setting rule #%zu ; ", i);
-        rule_print(rule);
-        printf("\n");
-        #endif
         fill_line_slot(t, rule, t->rules);
     }
     rule_array_free(t->rules);

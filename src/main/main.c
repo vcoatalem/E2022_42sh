@@ -25,7 +25,7 @@ void sig_handler(int val)
 {
     if (val == SIGINT)
     {
-        
+
     }
 }
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     }
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
-    {  
+    {
         .options = options,
         .parser_table = table_build(),
         .hash_table_var = init_hash_table_var(50),
@@ -53,18 +53,6 @@ int main(int argc, char **argv)
     *g_bundle = bundle;
     int execution_val = 0;
     init_history(&bundle);
-    /*if (!options->norc_is_set)
-    {
-        if (check_file_exist("/etc/42shrc"))
-            execute_script(&bundle, "/etc/42shrc");
-        if (check_file_exist(".42shrc"))
-            execute_script(&bundle, ".42shrc");
-        //execute_script(&bundle, ".42shrc", 1);
-        //execute_script(&bundle, "/etc/42shrc", 1);
-        //execute_script(&bundle, ".42shrc", 1);
-        //execution_val = (execute_script(&bundle, "/42shrc.txt", "r+"));
-    }*/
-
     if (options->script != NULL)
     {
         execution_val = execute_script(g_bundle, options->script);
@@ -81,10 +69,11 @@ int main(int argc, char **argv)
     {
         execution_val = execute_interactive(g_bundle);
     }
+    bundle_free(g_bundle);
     if (execution_val != BASH_RETURN_OK)
     {
+        return execution_val;
         //something went wrong...
     }
-    bundle_free(g_bundle);
     return BASH_RETURN_OK;
 }

@@ -38,18 +38,18 @@ struct rule_array *rule_array_build(void)
     //TODO: merge rule functions in sub categories
     struct rule_array *rules = rule_array_init();
     //add all preconstructed rules here
-    
-    sh_rule_element_groups            (rules);          
-    sh_rule_command_groups            (rules);          
-    sh_rule_redir_groups              (rules);            
-    sh_rule_pipe_groups               (rules);             
-    sh_rule_input                     (rules);                   
-    sh_rule_and_or_groups             (rules);           
-    sh_rule_list_groups               (rules);             
-    sh_rule_compound_list_groups      (rules);    
-    sh_rule_compound_list_break_groups(rules);    
-    sh_rule_do_groups                 (rules);               
-    sh_rule_funcdec_groups            (rules);          
+
+    sh_rule_element_groups            (rules);
+    sh_rule_command_groups            (rules);
+    sh_rule_redir_groups              (rules);
+    sh_rule_pipe_groups               (rules);
+    sh_rule_input                     (rules);
+    sh_rule_and_or_groups             (rules);
+    sh_rule_list_groups               (rules);
+    sh_rule_compound_list_groups      (rules);
+    sh_rule_compound_list_break_groups(rules);
+    sh_rule_do_groups                 (rules);
+    sh_rule_funcdec_groups            (rules);
     sh_rule_if_groups                 (rules);
     sh_rule_misc                      (rules);
     return rules;

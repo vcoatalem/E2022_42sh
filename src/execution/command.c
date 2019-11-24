@@ -1,3 +1,4 @@
+#include <err.h>
 #include "execution.h"
 #include "../main/42sh.h"
 
@@ -30,6 +31,7 @@ struct command *shell_command_init(struct ast *ast)
 {
     struct command *command = calloc(1, sizeof(struct command));
     command->ast = ast_dup(ast);
+    command->type = COMMAND_AST;
     return command;
 }
 
@@ -53,11 +55,11 @@ void command_free(struct command *command)
     {
         redirection_free(*(command->redirections + i));
     }
+    free(command->redirections);
     if (command->ast)
     {
         ast_free(command->ast);
     }
-    free(command->redirections);
     free(command);
 }
 
@@ -83,7 +85,7 @@ void command_add_redirection(struct command *command,
 {
     command->n_redirections++;
     command->redirections = realloc(command->redirections,
-            sizeof(void*) * command->n_redirections + 1);
+            sizeof(void*) * (command->n_redirections + 1));
     *(command->redirections + command->n_redirections - 1) = redir;
     *(command->redirections + command->n_redirections) = NULL;
 }
@@ -106,6 +108,7 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         }
         //execute command
         execvp(*(command->args), command->args);
+        warnx("unknown command: %s", *(command->args));
         //if execution failed
         command_free_fd(command);
         exit(RETURN_ERROR);
@@ -147,7 +150,7 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
-    if (command->ast)
+    if (command->type == COMMAND_AST)
     {
         return ast_execute(command->ast, bundle_ptr);
     }

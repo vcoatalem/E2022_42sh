@@ -39,7 +39,7 @@ char *getword(char *word, struct hash_table_var *ht)
         return value;
     }
     warn("bad formulation of variable: %s", word);
-    return "";
+    return NULL;
 
 }
 
@@ -57,79 +57,48 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     int iword = i;
     for (int j = 0; !is_delimiter(text[i + 1]) && text[i] != '}'; ++j, ++i)
         word[j] = text[i];
-    
-    //printf("text=%s\n", text);
-    //printf("i=%d\n", i);
-    //printf("c=%c\n", text[i]);
     word[strlen(word)] = text[i];
-
-    //word = realloc(word, 8 * strlen(word));
-    //printf("word2=%s\n", word);
     char *value = getword(word, ht);
-    //printf("val=%s\n",value);
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
     char *result = calloc(1, (strlen(text) + strlen(value)) * sizeof(char));
     strcpy(result, text);
-    //printf("dec = %d\n", dec);
     if(strcmp(value, "") == 0)
     {
-        //printf("resssbeaf=%s\n", result);
         for (int i = iword; i < strlen(result); ++i)
         {
-            //printf("x\n");
             result[i] = result[i + lenword];
         }
-        //printf("resssaft=%s\n", result);
     }
-    else if(dec < 0)
+    else if (dec < 0)
+    {
         for (int i = strlen(result) - dec; i >= iword; --i)
             result[i] = result[i + dec];
+    }
     else
+    {
         for (size_t i = iword + dec; i < strlen(result); i++)
         {
             result[i] = result[i + dec];
         }
-    //printf("resss=%s\n", result);
-    if(dec != 0)
+    }
+    if (dec != 0)
+    {
         for (size_t j = 0; j < strlen(value); ++j)
         {
             result[iword] = value[j];
             iword++;
         }
-    //printf("iword=%d\n", iword);
+    }
     if (i >= strlen(text) - 1)
     {
         *did_substitute = 0;
     }
     return result;
 }
-/*
-char *var_substitute(char* text, struct hash_table_var *ht)
-{
-    int did_substitute = 1;
-    char *res = recvar_substitute(text, ht, &did_substitute);
-    printf("res= %s\n", res);
-    //char *res2 = recvar_substitute(res, ht);
-    //printf("res2%s\n", res2);
-    //char *res2 = recvar_substitute(res, ht);
-    char *res2;
-    for (size_t i = 0; i < strlen(res) - 1; ++i)
-    {
-        res2 = strdup(res);
-        if (res[i] == '$' && !is_delimiter(res[i + 1]))
-        {
-            free(res);
-            res = strdup(recvar_substitute(res2, ht, &did_substitute));
-            i = 0;
-        }
-        free(res2);
-    }
-    return res;
-}
-*/
-char *var_substitute(char* text, struct hash_table_var *ht)
+
+char *var_substitute(char *text, struct hash_table_var *ht)
 {
     int did_substitute = 1;
     char *newstr = recvar_substitute(text, ht, &did_substitute);
@@ -143,7 +112,7 @@ char *var_substitute(char* text, struct hash_table_var *ht)
         return newnewstr;
     return newstr;
 }
-
+#if 0
 int main(void)
 {
     struct hash_table_var *ht = init_hash_table_var(50);
@@ -153,3 +122,4 @@ int main(void)
     free(test);
     free_hash_table_var(ht);
 }
+#endif

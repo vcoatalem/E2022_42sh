@@ -37,7 +37,7 @@ int symbol_array_equal(struct symbol_array *s1, struct symbol_array *s2)
         if (s1->array[i]->type == SYMBOL_TOKEN
                 && s1->array[i]->token_type != s2->array[i]->token_type)
         {
-            return 0; 
+            return 0;
         }
         else if (s1->array[i]->type == SYMBOL_RULE
                 && s1->array[i]->rule_id != s2->array[i]->rule_id)

@@ -1,0 +1,5 @@
+echo "hello world!"
+cat Makefile
+echo "im i file" > exp_output
+cat < input
+echo A | echo B

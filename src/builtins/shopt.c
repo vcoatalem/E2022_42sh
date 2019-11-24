@@ -29,7 +29,7 @@ int shopt_set_option(struct shopt *shopt, char *str)
         shopt->xpg_echo = 1;
     else
     {
-        warn("%s is not in 42sh option\n", str);
+        warnx("%s is not in 42sh option", str);
         return 0;
     }
     return 1;
@@ -56,7 +56,7 @@ int shopt_unset_option(struct shopt *shopt, char *str)
         shopt->xpg_echo = 0;
     else
     {
-        warn("%s is not in 42sh option\n", str);
+        warnx("%s is not in 42sh option", str);
         return 0;
     }
     return 1;
@@ -86,16 +86,32 @@ void shopt_init_set_shopt(struct shopt *shopt, int val,
     }
 }
 
+static void shopt_set_default_values(struct shopt *shopt)
+{
+    shopt->dotglob = 1;
+    shopt->expand_aliases = 1;
+    shopt->extglob = 1;
+    shopt->nocaseglob = 0;
+    shopt->nullglob = 0;
+    shopt->sourcepath = 1;
+    shopt->xpg_echo = 0;
+}
+
 struct shopt *shopt_init(void *options_ptr)
 {
     struct options *options = options_ptr;
     struct shopt *res = calloc(1, sizeof(struct shopt));
 
-    //TODO: setup default values for shopt here
+    shopt_set_default_values(res);
 
-    shopt_init_set_shopt(res, 0, options->unset_shopt,
-            options->nb_unset_shopt);
-    shopt_init_set_shopt(res, 0, options->set_shopt, options->nb_set_shopt);
+    if (options)
+    {
+        res->ast_print = options->ast_print_is_set;
+        shopt_init_set_shopt(res, 0, options->unset_shopt,
+                options->nb_unset_shopt);
+        shopt_init_set_shopt(res, 0, options->set_shopt,
+                options->nb_set_shopt);
+    }
     return res;
 }
 

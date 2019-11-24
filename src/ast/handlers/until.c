@@ -20,7 +20,7 @@ int ast_handle_until(struct ast *ast, void *bundle_ptr)
     while (try_execute == AST_ERROR)
     {
         try_execute = ast_execute(ast_until_body, bundle);
-        return_value = ast_execute(ast_do, bundle);
+        return_value = ast_execute(ast_do->forest[0], bundle);
     }
     return return_value;
 }

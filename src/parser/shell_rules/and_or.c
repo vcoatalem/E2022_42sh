@@ -2,7 +2,7 @@
 
 static void sh_rule_or_linebreak(struct rule_array *rules)
 {
-    struct rule *rule_repeat = rule_build(RULE_OR_LINEBREAK, 
+    struct rule *rule_repeat = rule_build(RULE_OR_LINEBREAK,
             symbol_create(TOKEN_EOL, 0),
             symbol_create(0, RULE_OR_LINEBREAK),
             NULL);
@@ -15,7 +15,7 @@ static void sh_rule_or_linebreak(struct rule_array *rules)
 
 static void sh_rule_and_linebreak(struct rule_array *rules)
 {
-    struct rule *rule_repeat = rule_build(RULE_AND_LINEBREAK, 
+    struct rule *rule_repeat = rule_build(RULE_AND_LINEBREAK,
             symbol_create(TOKEN_EOL, 0),
             symbol_create(0, RULE_AND_LINEBREAK),
             NULL);
@@ -33,7 +33,7 @@ static void sh_rule_and_or_concat(struct rule_array *rules)
             NULL);
     struct rule *rule_or = rule_build(RULE_AND_OR_CONCAT,
             symbol_create(0, RULE_OR_CONCAT),
-            NULL);    
+            NULL);
     struct rule *rule_eps = rule_build(RULE_AND_OR_CONCAT,
             symbol_epsilon(),
             NULL);

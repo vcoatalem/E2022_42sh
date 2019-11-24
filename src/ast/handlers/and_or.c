@@ -11,10 +11,11 @@ int ast_handle_and(struct ast *ast, void *bundle_ptr)
         return AST_ERROR;
 
     int try_execute = AST_SUCCESS;
-    for (size_t i = 0; i < ast->nb_children; i++)
+    for (long int i = ast->nb_children - 1; i >= 0; i--)
     {
-        if (ast_execute(ast->forest[i], bundle) == AST_ERROR)
-            try_execute = AST_ERROR;
+        try_execute = ast_execute(ast->forest[i], bundle);
+        if (try_execute != AST_SUCCESS)
+            break;
     }
 
     return try_execute;
@@ -30,10 +31,11 @@ int ast_handle_or(struct ast *ast, void *bundle_ptr)
         return AST_ERROR;
 
     int try_execute = AST_ERROR;
-    for (size_t i = 0; i < ast->nb_children; i++)
+    for (long int i = ast->nb_children; i >= 0; i--)
     {
-        if (ast_execute(ast->forest[i], bundle) == AST_SUCCESS)
-            try_execute = AST_SUCCESS;
+        try_execute = ast_execute(ast->forest[i], bundle);
+        if (try_execute == AST_SUCCESS)
+            break;
     }
 
     return try_execute;

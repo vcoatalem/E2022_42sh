@@ -1,5 +1,5 @@
+#include <err.h>
 #include "42sh.h"
-#include <signal.h>
 
 static int run_lex_parse(struct execution_bundle *bundle)
 {
@@ -8,17 +8,17 @@ static int run_lex_parse(struct execution_bundle *bundle)
     bundle->token_array = lex(bundle->lexer);
     printf("[LEXER] done lexing. Got token array: ");
     token_array_print(bundle->token_array, stdout);
-    
+
     if (bundle->parser)
         parser_free(bundle->parser);
     bundle->parser = parser_init(bundle->token_array);
-    
+
     parse(bundle->parser, bundle->parser_table);
-    
+
     if (bundle->ast)
         ast_free(bundle->ast);
     bundle->ast = bundle->parser->ast;
-    
+
     int return_value = 0;
     if (bundle->parser->state == PARSER_STATE_SUCCESS)
     {
@@ -26,8 +26,7 @@ static int run_lex_parse(struct execution_bundle *bundle)
         {
             ast_dot_print(bundle->ast, "ast.dot");
         }
-        return_value = 1; //do not try to execute ast for now
-        //return_value = ast_execute(ast, bundle);
+        return_value = ast_execute(bundle->ast, bundle);
         lexer_clear(bundle->lexer);
     }
     else if (bundle->parser->state == PARSER_STATE_FAILURE)
@@ -38,7 +37,7 @@ static int run_lex_parse(struct execution_bundle *bundle)
     else //if (p->state == PARSER_STATE_CONTINUE)
     {
     }
-    printf("lexing parsing process returning: %d\n", return_value);
+    printf("[EXECUTION] lexing parsing process returning: %d\n", return_value);
     return return_value;
 }
 
@@ -46,17 +45,20 @@ int execute_stdin(struct execution_bundle *bundle)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
-    //TODO: read stdin line by line, running lexing + parsing along the way
+    //read stdin line by line, running lexing + parsing along the way
+    int return_value = BASH_RETURN_OK;
     char *line = NULL;
     size_t size;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
+        //stripping final EOL from line
+        line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
-        run_lex_parse(bundle);
+        return_value = run_lex_parse(bundle);
     }
     free(line);
-    return BASH_RETURN_OK;
+    return return_value;
 }
 
 int execute_interactive(struct execution_bundle *bundle)
@@ -86,6 +88,7 @@ int execute_interactive(struct execution_bundle *bundle)
             lexer_add_string(bundle->lexer, input);
             struct token_array *arr = lex(bundle->lexer);
             token_array_free(arr);
+            free(input);
         }
         token_array_free(try_lex);
         run_lex_parse(bundle);
@@ -116,26 +119,26 @@ int execute_script(struct execution_bundle *bundle, char* script)
     appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
-    //printf("mode = %s\n", mode);
+    int return_value = BASH_RETURN_ERROR;
     FILE *fd;
     fd = fopen(script, "r");
     if (fd == NULL)
     {
-        printf("Error no such file or directory %s\n", script);
+        warnx("Could not open file `%s` for execution", script);
         return BASH_RETURN_ERROR;
     }
-    //TODO: read stdin line by line, running lexing + parsing along the way
+   // read file line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, fd) != -1)
     {
+        //stripping final EOL from line
+        line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
-        run_lex_parse(bundle);
+        return_value = run_lex_parse(bundle);
     }
     free(line);
     fclose(fd);
-    //run lexer + parser
-    //token_array_print(arr, stdout);
-    return BASH_RETURN_OK;
+    return return_value;
 }

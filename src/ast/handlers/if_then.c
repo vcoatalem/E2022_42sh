@@ -17,22 +17,10 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
         return AST_ERROR;
 
     if (ast_execute(ast_if_body, bundle) == AST_SUCCESS)
-        return ast_execute(ast_then, bundle);
+        return ast_execute(ast_then->forest[0], bundle);
 
-    else
-    {
-        for (size_t i = 0; i < ast->nb_children; i++)
-        {
-            struct ast *ast_elif = ast->forest[i];
-            if (ast_elif->op_type == OPERATOR_AND
-                    && ast_execute(ast_elif, bundle_ptr) == AST_SUCCESS)
-                return ast_execute(ast_then, bundle);
-        }
-
-        struct ast *ast_else = find_op_type(ast, OPERATOR_ELSE);
-        if (ast_else == NULL)
-            return AST_ERROR;
-
-        return ast_execute(ast_else, bundle);
-    }
+    struct ast *ast_else = find_op_type(ast, OPERATOR_ELSE);
+    if (ast_else == NULL)
+        return AST_ERROR;
+    return ast_execute(ast_else->forest[0], bundle);
 }

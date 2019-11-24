@@ -10,22 +10,27 @@ int main(int argc, char **argv)
     struct token_array *exp = token_array_init();
     enum parser_state expected_parser_state[] =
     {
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_FAILURE,
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_SUCCESS,
-        PARSER_STATE_FAILURE,
-        PARSER_STATE_CONTINUE,
-        PARSER_STATE_FAILURE,
-        PARSER_STATE_SUCCESS
+        PARSER_STATE_SUCCESS, //0
+        PARSER_STATE_FAILURE, //1
+        PARSER_STATE_SUCCESS, //2
+        PARSER_STATE_SUCCESS, //3
+        PARSER_STATE_SUCCESS, //4
+        PARSER_STATE_FAILURE, //5
+        PARSER_STATE_CONTINUE,//6
+        PARSER_STATE_FAILURE, //7
+        PARSER_STATE_SUCCESS, //8
+        PARSER_STATE_SUCCESS, //9
+        PARSER_STATE_SUCCESS, //10
+        PARSER_STATE_SUCCESS, //11
+        PARSER_STATE_SUCCESS, //12
+        PARSER_STATE_CONTINUE, //13
     };
     if (q == 0)
     {
         fprintf(stderr, "simple correct list");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "carpe"));
-        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";")); 
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "diem"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
@@ -35,8 +40,8 @@ int main(int argc, char **argv)
         fprintf(stderr, "uncorrect list");
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "aloe"));
-        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";")); 
-        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&")); 
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "mora"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
@@ -127,15 +132,61 @@ int main(int argc, char **argv)
     }
     else if (q == 9)
     {
-
+        fprintf(stderr, "correct while");
+        token_array_add(exp, token_init(TOKEN_WHILE, "while"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 10)
     {
-
+        fprintf(stderr, "correct until");
+        token_array_add(exp, token_init(TOKEN_UNTIL, "until"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 11)
     {
-
+        fprintf(stderr, "correct until with tricky functions as children");
+        token_array_add(exp, token_init(TOKEN_WHILE, "until"));
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_WORD, "my_pwd"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
+        token_array_add(exp, token_init(TOKEN_WORD, "pwd"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_RIGHT_BRACKET, "}"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "b"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 12)
+    {
+    }
+    else if (q == 13)
+    {
+        token_array_add(exp, token_init(TOKEN_WHILE, "while"));
+        token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else
     {

@@ -61,11 +61,11 @@ static struct ast *ast_arg_list_C(void)
     ast_add_child(ast_arg_list_4, ast_arg4);
     ast_add_child(ast_arg_list_5, ast_arg5);
 
-    struct ast *arg1 = ast_init("[", OPERATOR_GET_VALUE);
-    struct ast *arg2 = ast_init("1", OPERATOR_GET_VALUE);
-    struct ast *arg3 = ast_init("-eq", OPERATOR_GET_VALUE);
-    struct ast *arg4 = ast_init("2", OPERATOR_GET_VALUE);
-    struct ast *arg5 = ast_init("[", OPERATOR_GET_VALUE);
+    struct ast *arg1 = ast_init("[", OPERATOR_NONE);
+    struct ast *arg2 = ast_init("1", OPERATOR_NONE);
+    struct ast *arg3 = ast_init("-eq", OPERATOR_NONE);
+    struct ast *arg4 = ast_init("2", OPERATOR_NONE);
+    struct ast *arg5 = ast_init("]", OPERATOR_NONE);
     ast_add_child(ast_arg1, arg1);
     ast_add_child(ast_arg2, arg2);
     ast_add_child(ast_arg3, arg3);
@@ -121,7 +121,7 @@ static struct ast *ast_redir_list(void)
     struct ast *ast_redir_list = ast_init("redir_list", OPERATOR_REDIR_LIST);
     struct ast *ast_redir_1 = ast_redir_A();
     ast_add_child(ast_redir_list, ast_redir_1);
-    
+
     struct ast *ast_redir_next = ast_init("redir_list", OPERATOR_REDIR_LIST);
     ast_add_child(ast_redir_list, ast_redir_next);
     struct ast *ast_redir_2 = ast_redir_B();
@@ -182,23 +182,26 @@ struct ast *ast_command_D(void)
 
 struct ast *ast_pipe_A(void)
 {
-    struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
+    struct ast *ast_pipe_1 = ast_init("pipe", OPERATOR_PIPE);
+    struct ast *ast_pipeline_1 = ast_init("pipeline", OPERATOR_PIPE);
     struct ast *command_1 = ast_command_A();
-    ast_add_child(ast_pipe, command_1);
+    ast_add_child(ast_pipe_1, command_1);
+    ast_add_child(ast_pipe_1, ast_pipeline_1);
 
-    struct ast *ast_pipeline = ast_init("pipeline", OPERATOR_PIPE);
-    ast_add_child(ast_pipe, ast_pipeline);
+    struct ast *ast_pipe_2 = ast_init("pipe", OPERATOR_PIPE);
     struct ast *command_2 = ast_command_C();
-    ast_add_child(ast_pipeline, command_2);
-    return ast_pipe;
+    ast_add_child(ast_pipe_2, command_2);
+
+    ast_add_child(ast_pipeline_1, ast_pipe_2);
+    return ast_pipe_1;
 }
 
 //contains one command that succeeds
 struct ast *ast_pipe_B(void)
 {
     struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
-    struct ast *ast_command_1 = ast_command_C();
-    ast_add_child(ast_pipe, ast_command_1);
+    struct ast *ast_command = ast_command_C();
+    ast_add_child(ast_pipe, ast_command);
     return ast_pipe;
 }
 
@@ -206,8 +209,8 @@ struct ast *ast_pipe_B(void)
 struct ast *ast_pipe_C(void)
 {
     struct ast *ast_pipe = ast_init("pipe", OPERATOR_PIPE);
-    struct ast *ast_command_1 = ast_command_D();
-    ast_add_child(ast_pipe, ast_command_1);
+    struct ast *ast_command = ast_command_D();
+    ast_add_child(ast_pipe, ast_command);
     return ast_pipe;
 }
 
@@ -227,26 +230,42 @@ int main(int argc, char **argv)
     struct ast *root = ast_init("root", OPERATOR_AND);
     int q = argc == 1 ? 0 : atoi(*(argv + 1));
     char *dot_dest = argc < 2 ? "ast.dot" : *(argv + 2);
-    
+
     int expected_values[] =
     {
         AST_SUCCESS,
         AST_SUCCESS,
         AST_ERROR,
+        AST_SUCCESS,
+        AST_SUCCESS,
+        AST_SUCCESS,
+        AST_SUCCESS,
+        AST_SUCCESS,
         AST_SUCCESS
     };
 
     if (q == 0)
+    {
+        fprintf(stderr, "2 piped sh commands");
         ast_add_child(root, ast_pipe_A());
-
+    }
     if (q == 1)
+    {
+        fprintf(stderr, "sh command: ls");
         ast_add_child(root, ast_pipe_B());
+    }
 
     if (q == 2)
+    {
+        fprintf(stderr, "sh `[` that should fail");
         ast_add_child(root, ast_pipe_C());
+    }
 
     if (q == 3)
+    {
+        fprintf(stderr, "0 or'ed commands");
         ast_add_child(root, ast_or());
+    }
 
     ast_dot_print(root, dot_dest);
     struct execution_bundle bundle;
