@@ -8,4 +8,4 @@
  - name: case_*
  - stdin: "case Hello in ls) echo not this; world) echo no; *) echo Ok; esac"
  
- - name: case_
+
