@@ -14,7 +14,7 @@ enum
 
 static int error_fd( char* file)
 {
-    warn("No %s file\n", file);
+    warn("%s", file);
     return ERROR_INVALID_FILE;
 }
 

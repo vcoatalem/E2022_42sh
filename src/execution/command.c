@@ -1,3 +1,4 @@
+#include <err.h>
 #include "execution.h"
 #include "../main/42sh.h"
 
@@ -106,6 +107,7 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         }
         //execute command
         execvp(*(command->args), command->args);
+        warnx("unknown command: %s", *(command->args));
         //if execution failed
         command_free_fd(command);
         exit(RETURN_ERROR);
