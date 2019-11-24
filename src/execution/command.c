@@ -104,7 +104,7 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         //apply redirection
         for (size_t i = 0; i < command->n_redirections; i++)
         {
-            redirection_execute(command, *(command->redirections + i));
+            redirection_execute(command, *(command->redirections + i), bundle);
         }
         //execute command
         execvp(*(command->args), command->args);
@@ -127,7 +127,7 @@ static int command_execute_builtin(struct command *command, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     for (size_t i = 0; i < command->n_redirections; i++)
     {
-        redirection_execute(command, *(command->redirections + i));
+        redirection_execute(command, *(command->redirections + i), bundle);
     }
     //execute command
     builtin_handler handler = str_to_builtin(*(command->args));
@@ -146,12 +146,12 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     for (size_t i = 0; i < command->n_redirections; i++)
     {
-        redirection_execute(command, *(command->redirections + i));
+        redirection_execute(command, *(command->redirections + i), bundle);
     }
     //execute command
     struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
     int execute_funcdec = ast_execute(func_ast, bundle_ptr);
-    
+
     if (bundle->shopt && bundle->shopt->debug)
     {
         printf("[COMMAND EXECUTION] funcdec %s received %d\n",

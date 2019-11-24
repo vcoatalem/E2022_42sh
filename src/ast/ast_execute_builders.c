@@ -14,7 +14,7 @@ enum symbol_value
     SYMBOL_VAL_LESS = 10,
     SYMBOL_VAL_GREAT = 20,
     SYMBOL_VAL_GREAT_AMPERSAND = 30,
-    SYMBOL_VAL_DOUBLE_LESS = 40,
+    SYMBOL_VAL_DOUBLE_GREAT = 40,
     SYMBOL_VAL_STDIN = 0,
     SYMBOL_VAL_STDOUT = 1,
     SYMBOL_VAL_STDERR = 2
@@ -28,6 +28,8 @@ static enum symbol_value get_symbol_value(char *str)
         return SYMBOL_VAL_GREAT;
     if (!strcmp(str, ">&"))
         return SYMBOL_VAL_GREAT_AMPERSAND;
+    if (!strcmp(str, ">>"))
+        return SYMBOL_VAL_DOUBLE_GREAT;
     if (!strcmp(str, "0"))
         return SYMBOL_VAL_STDIN;
     if (!strcmp(str, "1"))

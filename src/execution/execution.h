@@ -73,7 +73,7 @@ void command_add_redirection(struct command *command,
 int command_execute(struct command *command, void *bundle_ptr);
 
 int redirection_execute(struct command *command,
-        struct redirection *redirection);
+        struct redirection *redirection, void *bundle_ptr);
 
 //PIPE
 

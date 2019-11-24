@@ -13,9 +13,6 @@
  - name: pipe_basic_redir
    stdin: "echo out > ../../output | cat'"
 
- - name: pipe_basic_builtin
-   stdin: "history | cat"
-
  - name: pipe_shell_command
    stdin: "{ echo e; echo f; } | grep 'e'"
 

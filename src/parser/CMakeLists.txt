@@ -8,6 +8,7 @@ add_library(parser
     table.c
     stack.c
     parse.c
+    utils.c
     shell_rules/element.c
     shell_rules/command.c
     shell_rules/redirection.c
