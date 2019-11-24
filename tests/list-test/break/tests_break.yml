@@ -1,0 +1,5 @@
+ - name: break_simple
+ - stdin: "while true; do break; done"
+
+ - name: break_command
+ - stdin: "while true; do echo Hello World!; break; done" 

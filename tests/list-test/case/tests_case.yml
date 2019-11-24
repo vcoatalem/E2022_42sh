@@ -1,0 +1,11 @@
+ - name: case_simple
+ - stdin: "case a in a) echo ok; esac"
+
+ - name: case_mult
+ - stdin: "case d in a) echo not this; b) echo False; c) echo not c; d) echo
+ that it; esac"
+
+ - name: case_*
+ - stdin: "case Hello in ls) echo not this; world) echo no; *) echo Ok; esac"
+ 
+ - name: case_

@@ -2,5 +2,4 @@
    stdin: "if echo foo | echo Ok"
 
  - name: if_then
-   stdin: "if echo foo\nthen echo Ok\nfi"
- 
+   stdin: "if echo foo\nthen echo Ok\nfi" 

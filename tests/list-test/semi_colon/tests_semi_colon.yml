@@ -1,0 +1,11 @@
+ - name: semi_colon_simple
+ - stdin: echo Hello World!;
+
+ - name: semi_colon_command
+ - stdin: "echo Hello; echo World!"
+
+ - name: semi_colon_if
+ - stdin: "if true; then echo Hello World!; fi"
+
+ - name: semi_colon_while
+ - stdin: "while [   ]"

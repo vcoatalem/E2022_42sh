@@ -1,0 +1,10 @@
+ - name: bang_simple
+ - checks: "!ls"
+
+ - name: bang_history
+ - checks: "!-2"
+
+ - name: bang_bang
+ - checks: "!!"
+
+ - name: 
