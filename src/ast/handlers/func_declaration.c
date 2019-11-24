@@ -33,9 +33,7 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
 
     if (ast_func_name == NULL || ast_func_body == NULL)
         return AST_ERROR;
-
-    insert_func(bundle->hash_table_func, ast_func_name->value,
+    insert_func(bundle->hash_table_func, ast_func_name->forest[0]->value,
             ast_func_body);
-
     return AST_SUCCESS;
 }
