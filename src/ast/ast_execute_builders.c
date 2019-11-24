@@ -6,7 +6,6 @@ char *get_element_value(struct ast *ast)
 
     if (element_ast == NULL)
         return NULL;
-
     return element_ast->forest[0]->value;
 }
 
@@ -48,17 +47,19 @@ struct redirection *ast_redirection_build(struct ast *ast)
     char *arg = NULL;
     if (ast_redir_to)
     {
-        if (ast_redir_to->nb_children > 0)
+        if (ast_redir_to->forest[0]->op_type == OPERATOR_GET_IONUMBER)
         {
-            arg = get_element_value(ast_redir_to->forest[0]);
+            //if redir_to is a ionumber
+            arg = ast_redir_to->forest[0]->forest[0]->value;
         }
         else
-            arg = get_element_value(ast_redir_to);
+            arg = ast_redir_to->forest[0]->value;
     }
     enum symbol_value redir_symbol_value = ast_redir_symbol ?
-            get_symbol_value(get_element_value(ast_redir_symbol)) : 0;
+            get_symbol_value(ast_redir_symbol->forest[0]->value) : 0;
     enum symbol_value redir_io_from_value = ast_redir_ionumber ?
-            get_symbol_value(get_element_value(ast_redir_ionumber)) : 0;
+            get_symbol_value(ast_redir_symbol->forest[0]->value) : 1; 
+    //by default, redirection is on STDOUT
 
     enum REDIRECTION_TYPE type = redir_symbol_value + redir_io_from_value;
     struct redirection *redir = redirection_init(type, arg);
@@ -76,9 +77,9 @@ struct redirection **ast_redirection_list_build(struct ast *ast)
         struct redirection *redir = ast_redirection_build(ast_redir);
         n_redirections++;
         redirections = realloc(redirections,
-                (n_redirections + 2) * sizeof(void*));
+                (n_redirections + 1) * sizeof(void*));
         *(redirections + n_redirections) = NULL;
-        *(redirections + n_redirections) = redir;
+        *(redirections + n_redirections - 1) = redir;
         ast = ast_list;
     }
     return redirections;

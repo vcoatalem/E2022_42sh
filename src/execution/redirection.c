@@ -56,6 +56,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection)
         if (redirection->type == STDOUT_TO_ARG)
         {
             redirect(STDOUT_FILENO, fd);
+            cmd->fd_out = fd;
         }
         else
         {
