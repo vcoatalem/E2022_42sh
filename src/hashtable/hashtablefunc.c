@@ -28,7 +28,7 @@ void free_hash_table_func(struct hash_table_func *ht)
         {
             struct hashed_func *itemtofree = items;
             free(itemtofree->name);
-            free(itemtofree->ast);
+            ast_free(itemtofree->ast);
             //free(itemtofree->next);
             items = items->next;
             free(itemtofree);
@@ -40,7 +40,7 @@ void free_hash_table_func(struct hash_table_func *ht)
 }
 
 //add together each char of name by multiplying each char by is index
-size_t hash(char *name, size_t sizeHT)
+size_t hash(char *name, size_t ht_size)
 {
     size_t result = 0;
     int i = 0;
@@ -48,7 +48,7 @@ size_t hash(char *name, size_t sizeHT)
     {
         result += name[i] * i;
     }
-    return result % sizeHT;
+    return result % ht_size;
 }
 
 
@@ -62,7 +62,7 @@ void insert_func(struct hash_table_func *ht, char *name, struct ast *ast)
     {
         struct hashed_func *newitem = calloc(1, sizeof(struct hashed_func));
         newitem->name = strdup(name);
-        newitem->ast = memcpy(newitem->ast, ast, sizeof(struct ast));
+        newitem->ast = ast_dup(ast);
         newitem->next = NULL;
         ht->items[key] = newitem;
         return;
@@ -81,7 +81,7 @@ void insert_func(struct hash_table_func *ht, char *name, struct ast *ast)
     {
         struct hashed_func *newitem = calloc(1, sizeof(struct hashed_func));
         newitem->name = strdup(name);
-        newitem->ast = memcpy(newitem->ast, ast, sizeof(struct ast));
+        newitem->ast = ast_dup(ast);
         newitem->next = NULL;
         items->next = newitem;
     }
@@ -121,20 +121,3 @@ void print_hash_table_func(struct hash_table_func *ht)
         printf("\n");
     }
 }
-
-/*int main()
-{
-    char *a = "edzeezza";
-    char *b = "CHHHHARGGGEEERRR!!";
-    struct hash_table_func *HT = init_hash_table(5);
-    insert_func(HT, "lol", "issou");
-    insert_func(HT, "echo", "2");
-    insert_func(HT, "echoa", "2");
-    insert_func(HT, "echo", "42");
-    insert_func(HT, "edho", "42");
-    insert_func(HT, a, b);
-    printf("lol :%s\n", get_variable(HT, "edzeezza"));
-    print_hash_table(HT);
-    free_hash_table(HT);
-}*/
-

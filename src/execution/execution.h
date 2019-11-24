@@ -44,7 +44,8 @@ enum command_type
 {
     COMMAND_SH,
     COMMAND_BUILTIN,
-    COMMAND_FUNCDEC
+    COMMAND_FUNCDEC,
+    COMMAND_AST
 };
 
 struct command

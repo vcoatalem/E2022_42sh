@@ -103,34 +103,48 @@ char **ast_arg_list_build(struct ast *ast)
     return arg_list;
 }
 
+static struct command *ast_simple_command_build(struct ast *ast,
+        void *bundle_ptr)
+{
+    struct ast *args = find_op_type(ast, OPERATOR_ARG_LIST);
+    struct ast *redir_list = find_op_type(ast, OPERATOR_REDIR_LIST);
+
+    char **arg_list = ast_arg_list_build(args);
+    struct redirection **redirs = ast_redirection_list_build(redir_list);
+
+    struct command *cmd = command_init(arg_list, bundle_ptr);
+    if (redirs)
+    {
+        size_t n_redirs = 0;
+        while (*(redirs + n_redirs))
+        {
+            command_add_redirection(cmd, *(redirs + n_redirs));
+            n_redirs++;
+        }
+    }
+    //free arglist
+    free(arg_list);
+    //free redirlist
+    free(redirs);
+    return cmd;
+}
+
+static struct command *ast_shell_command_build(struct ast *ast)
+{
+    return shell_command_init(ast->forest[0]);
+}
+
 struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
 {
     struct ast *simple_cmd = find_op_type(ast, OPERATOR_COMMAND);
-
     if (simple_cmd != NULL)
     {
-        struct ast *args = find_op_type(simple_cmd, OPERATOR_ARG_LIST);
-        struct ast *redir_list = find_op_type(simple_cmd, OPERATOR_REDIR_LIST);
-
-        char **arg_list = ast_arg_list_build(args);
-        struct redirection **redirs = ast_redirection_list_build(redir_list);
-
-        struct command *cmd = command_init(arg_list, bundle_ptr);
-        if (redirs)
-        {
-            size_t n_redirs = 0;
-            while (*(redirs + n_redirs))
-            {
-                command_add_redirection(cmd, *(redirs + n_redirs));
-                n_redirs++;
-            }
-        }
-        //free arglist
-        free(arg_list);
-        //free redirlist
-        free(redirs);
-        return cmd;
+        return ast_simple_command_build(simple_cmd, bundle_ptr);
     }
-
+    struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
+    if (shell_cmd != NULL)
+    {
+        return ast_shell_command_build(shell_cmd);
+    }
     return NULL;
 }

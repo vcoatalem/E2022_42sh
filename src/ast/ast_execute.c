@@ -16,12 +16,16 @@ operator_handler get_operator_handler(enum operator_type type)
         return ast_handle_for;
     else if (type == OPERATOR_UNTIL)
         return ast_handle_until;
+    else if (type == OPERATOR_FUNC_DECLARATION)
+        return ast_handle_func_declaration;
     else
         return NULL;
 }
 
 int ast_execute(struct ast *ast, void *bundle_ptr)
 {
+    if(!ast || !bundle_ptr)
+        return AST_ERROR;
     struct execution_bundle *bundle = bundle_ptr;
     if (ast->node_type == NODE_VALUE)
     {

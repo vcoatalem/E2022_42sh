@@ -1,5 +1,5 @@
+#include <err.h>
 #include "42sh.h"
-#include <signal.h>
 
 static int run_lex_parse(struct execution_bundle *bundle)
 {
@@ -45,17 +45,20 @@ int execute_stdin(struct execution_bundle *bundle)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
-    //TODO: read stdin line by line, running lexing + parsing along the way
+    //read stdin line by line, running lexing + parsing along the way
+    int return_value = BASH_RETURN_OK;
     char *line = NULL;
     size_t size;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
+        //stripping final EOL from line
+        line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
-        run_lex_parse(bundle);
+        return_value = run_lex_parse(bundle);
     }
     free(line);
-    return BASH_RETURN_OK;
+    return return_value;
 }
 
 int execute_interactive(struct execution_bundle *bundle)
@@ -116,26 +119,26 @@ int execute_script(struct execution_bundle *bundle, char* script)
     appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
-    //printf("mode = %s\n", mode);
+    int return_value = BASH_RETURN_ERROR;
     FILE *fd;
     fd = fopen(script, "r");
     if (fd == NULL)
     {
-        printf("Error no such file or directory %s\n", script);
+        warnx("Could not open file `%s` for execution", script);
         return BASH_RETURN_ERROR;
     }
-    //TODO: read stdin line by line, running lexing + parsing along the way
+   // read file line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, fd) != -1)
     {
+        //stripping final EOL from line
+        line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
-        run_lex_parse(bundle);
+        return_value = run_lex_parse(bundle);
     }
     free(line);
     fclose(fd);
-    //run lexer + parser
-    //token_array_print(arr, stdout);
-    return BASH_RETURN_OK;
+    return return_value;
 }

@@ -31,6 +31,7 @@ struct command *shell_command_init(struct ast *ast)
 {
     struct command *command = calloc(1, sizeof(struct command));
     command->ast = ast_dup(ast);
+    command->type = COMMAND_AST;
     return command;
 }
 
@@ -149,7 +150,7 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
-    if (command->ast)
+    if (command->type == COMMAND_AST)
     {
         return ast_execute(command->ast, bundle_ptr);
     }
