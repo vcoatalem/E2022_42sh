@@ -78,9 +78,9 @@ int token_diff_char(char *str, size_t iterator, char *buffer, enum
 int token_terminal_char(char *str, size_t iterator, char *buffer,
         enum token_type type)
 {
-    if ((buffer[0] == '0' && (buffer[1] == '>' || buffer[1] == '<'))
-        || (buffer[1] == '1' && (buffer[1] == '>' || buffer[1] == '<'))
-        || (buffer[1] == '2' && (buffer[1] == '>' || buffer[1] == '<')))
+    if ((buffer[0] == '0' && (str[iterator] == '>' || str[iterator] == '<'))
+        || (buffer[0] == '1' && (str[iterator] == '>' || str[iterator] == '<'))
+        || (buffer[0] == '2' && (str[iterator] == '>' || str[iterator] == '<')))
     {
         return token_compare(str, iterator, buffer, type);
     }
