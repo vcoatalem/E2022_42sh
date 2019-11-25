@@ -53,14 +53,19 @@ enum command_type
 struct command
 {
     enum command_type type;
+    //commands have either a NULL terminated argv or an ast to execute
     char **args;
     size_t n_args;
+    struct ast *ast;
+
     struct redirection **redirections;
     size_t n_redirections;
+    int save_in;
+    int save_out;
+    int save_err;
     int fd_in;
     int fd_out;
     int fd_err;
-    struct ast *ast;
 };
 
 struct command *command_init(char **args, void *bundle_ptr);
@@ -71,6 +76,9 @@ void command_add_redirection(struct command *command,
         struct redirection *redir);
 
 int command_execute(struct command *command, void *bundle_ptr);
+
+void command_apply_redirections(struct command *command, void *bundle_ptr);
+void command_restore_flux(struct command *command);
 
 int redirection_execute(struct command *command,
         struct redirection *redirection, void *bundle_ptr);

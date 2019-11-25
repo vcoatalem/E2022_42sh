@@ -35,13 +35,6 @@ struct command *shell_command_init(struct ast *ast)
     return command;
 }
 
-static void command_free_fd(struct command *command)
-{
-    dup2(command->fd_in, STDIN_FILENO);
-    dup2(command->fd_out, STDOUT_FILENO);
-    dup2(command->fd_err, STDERR_FILENO);
-}
-
 void command_free(struct command *command)
 {
     if (!command)
@@ -90,7 +83,6 @@ void command_add_redirection(struct command *command,
     *(command->redirections + command->n_redirections) = NULL;
 }
 
-
 static int command_execute_sh(struct command *command, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
@@ -102,15 +94,10 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
     {
         ////child
         //apply redirection
-        for (size_t i = 0; i < command->n_redirections; i++)
-        {
-            redirection_execute(command, *(command->redirections + i), bundle);
-        }
         //execute command
         execvp(*(command->args), command->args);
         warnx("unknown command: %s", *(command->args));
         //if execution failed
-        command_free_fd(command);
         exit(RETURN_ERROR);
     }
     waitpid(pid, &status, 0);
@@ -125,10 +112,6 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
 static int command_execute_builtin(struct command *command, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    for (size_t i = 0; i < command->n_redirections; i++)
-    {
-        redirection_execute(command, *(command->redirections + i), bundle);
-    }
     //execute command
     builtin_handler handler = str_to_builtin(*(command->args));
     int execute_handler = handler(command->args, command->n_args,
@@ -144,11 +127,6 @@ static int command_execute_builtin(struct command *command, void *bundle_ptr)
 static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    for (size_t i = 0; i < command->n_redirections; i++)
-    {
-        redirection_execute(command, *(command->redirections + i), bundle);
-    }
-    //execute command
     struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
     int execute_funcdec = ast_execute(func_ast, bundle_ptr);
 
@@ -162,20 +140,24 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
+    int return_value = AST_ERROR;
+    command_apply_redirections(command, bundle_ptr);
     if (command->type == COMMAND_AST)
     {
-        return ast_execute(command->ast, bundle_ptr);
+        return_value = ast_execute(command->ast, bundle_ptr);
     }
     if (command->type == COMMAND_SH)
     {
-        return command_execute_sh(command, bundle_ptr);
+        return_value = command_execute_sh(command, bundle_ptr);
     }
     else if (command->type == COMMAND_BUILTIN)
     {
-        return command_execute_builtin(command, bundle_ptr);
+        return_value = command_execute_builtin(command, bundle_ptr);
     }
-    else //if (commend->type == COMMAND_FUNCDEC)
+    else if (command->type == COMMAND_FUNCDEC)
     {
-        return command_execute_funcdec(command, bundle_ptr);
+        return_value = command_execute_funcdec(command, bundle_ptr);
     }
+    command_restore_flux(command);
+    return return_value;
 }

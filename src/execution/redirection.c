@@ -31,29 +31,23 @@ struct redirection *redirection_dup(struct redirection *redirection)
     return redirection_init(redirection->type, redirection->arg);
 }
 
-static void redirect(int from, int to)
-{
-    //printf("[COMMAND_EXECUTION] redirect %d to %d\n", from, to);
-    dup2(to, from);
-}
-
 static int redirection_execute_std_to_arg(struct command *cmd,
         struct redirection *redirection)
 {
     if (redirection->type == STDOUT_TO_ARG
         || redirection->type == STDERR_TO_ARG)
     {
-        int fd = open(redirection->arg, O_WRONLY | O_CREAT, 0644);
+        int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
             return RETURN_ERROR;
         if (redirection->type == STDOUT_TO_ARG)
         {
-            redirect(STDOUT_FILENO, fd);
+            dup2(fd, STDOUT_FILENO);
             cmd->fd_out = fd;
         }
         else
         {
-            redirect(STDERR_FILENO, fd);
+            dup2(fd, STDERR_FILENO);
             cmd->fd_err = fd;
         }
     }
@@ -65,12 +59,12 @@ static int redirection_execute_std_to_arg(struct command *cmd,
             return RETURN_ERROR;
         if (redirection->type == STDOUT_APPEND_TO_ARG)
         {
-            redirect(STDOUT_FILENO, fd);
+            dup2(fd, STDOUT_FILENO);
             cmd->fd_out = fd;
         }
         else
         {
-            redirect(STDERR_FILENO, fd);
+            dup2(fd, STDERR_FILENO);
             cmd->fd_err = fd;
         }
     }
@@ -91,7 +85,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
         int fd = open(redirection->arg, O_RDONLY);
         if (fd == -1)
             return RETURN_ERROR;
-        redirect(STDIN_FILENO, fd);
+        dup2(fd, cmd->save_in);
         cmd->fd_in = fd;
     }
     else if (redirection->type == STDOUT_TO_ARG
@@ -105,13 +99,13 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     }
     else if (redirection->type == STDOUT_TO_STDERR)
     {
-        redirect(STDOUT_FILENO, STDERR_FILENO);
-        cmd->fd_out = STDERR_FILENO;
+        cmd->fd_out = dup(STDERR_FILENO);
+        dup2(cmd->save_out, cmd->fd_out);
     }
     else if (redirection->type == STDERR_TO_STDOUT)
     {
-        redirect(STDERR_FILENO, STDOUT_FILENO);
-        cmd->fd_err = STDOUT_FILENO;
+        cmd->fd_err = dup(STDOUT_FILENO);
+        dup2(cmd->save_err, cmd->fd_err);
     }
     return RETURN_SUCCESS;
 }
