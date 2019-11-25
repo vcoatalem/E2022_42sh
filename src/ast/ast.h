@@ -17,6 +17,7 @@
 
 #define AST_SUCCESS 0
 #define AST_ERROR 1
+#define AST_MISSING_ARG 2
 
 /**
  * \enum node_type
