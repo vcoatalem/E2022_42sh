@@ -44,6 +44,7 @@ struct redirection *redirection_dup(struct redirection *redirection);
 
 enum command_type
 {
+    COMMAND_NONE,
     COMMAND_SH,
     COMMAND_BUILTIN,
     COMMAND_FUNCDEC,

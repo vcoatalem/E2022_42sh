@@ -6,18 +6,23 @@ struct command *command_init(char **args, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
     struct command *cmd = calloc(1, sizeof(struct command));
-    while (*(args + cmd->n_args))
+    while (args && *(args + cmd->n_args))
     {
         cmd->n_args++;
     }
-    char *cmd_name = *args;
-    if (str_to_builtin(cmd_name))
+    if (!args)
+        cmd->type = COMMAND_NONE;
+    else if (str_to_builtin(*args))
     {
         cmd->type = COMMAND_BUILTIN;
     }
-    else if (get_func(bundle->hash_table_func, cmd_name))
+    else if (get_func(bundle->hash_table_func, *args))
     {
         cmd->type = COMMAND_FUNCDEC;
+    }
+    else
+    {
+        cmd->type = COMMAND_SH;
     }
     cmd->args = calloc(cmd->n_args + 1, sizeof(void*));
     for (size_t i = 0; i < cmd->n_args; i++)
@@ -157,6 +162,10 @@ int command_execute(struct command *command, void *bundle_ptr)
     else if (command->type == COMMAND_FUNCDEC)
     {
         return_value = command_execute_funcdec(command, bundle_ptr);
+    }
+    else //redirections without command
+    {
+        return_value = AST_SUCCESS;
     }
     command_restore_flux(command);
     return return_value;
