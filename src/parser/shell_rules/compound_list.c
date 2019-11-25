@@ -1,5 +1,17 @@
 #include "../parser.h"
 
+static void sh_rule_compound_list_next(struct rule_array *rules)
+{
+    struct rule *rule_a = rule_build(RULE_COMPOUND_LIST_NEXT,
+            symbol_create(0, RULE_COMPOUND_LIST),
+            NULL);
+    struct rule *rule_eps = rule_build(RULE_COMPOUND_LIST_NEXT,
+            symbol_epsilon(),
+            NULL);
+    rule_array_add(rules, rule_a);
+    rule_array_add(rules, rule_eps);
+}
+
 static void sh_rule_compound_list_delim(struct rule_array *rules)
 {
     struct rule *rule_a = rule_build(RULE_COMPOUND_LIST_DELIM,
@@ -20,7 +32,7 @@ static void sh_rule_compound_list_concat(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_COMPOUND_LIST_CONCAT,
             symbol_create(0, RULE_COMPOUND_LIST_DELIM),
-            symbol_create(0, RULE_COMPOUND_LIST),
+            symbol_create(0, RULE_COMPOUND_LIST_NEXT),
             NULL);
     struct rule *rule_eps = rule_build(RULE_COMPOUND_LIST_CONCAT,
             symbol_epsilon(),
@@ -48,4 +60,5 @@ void sh_rule_compound_list_groups(struct rule_array *rules)
     sh_rule_compound_list(rules);
     sh_rule_compound_list_concat(rules);
     sh_rule_compound_list_delim(rules);
+    sh_rule_compound_list_next(rules);
 }

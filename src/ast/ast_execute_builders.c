@@ -124,17 +124,31 @@ static struct command *ast_simple_command_build(struct ast *ast,
             command_add_redirection(cmd, *(redirs + n_redirs));
             n_redirs++;
         }
+        free(redirs);
     }
     //free arglist
     free(arg_list);
     //free redirlist
-    free(redirs);
     return cmd;
 }
 
 static struct command *ast_shell_command_build(struct ast *ast)
 {
-    return shell_command_init(ast->forest[0]);
+    struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
+    struct ast *redir_list = find_op_type(ast, OPERATOR_REDIR_LIST);
+    struct redirection **redirs = ast_redirection_list_build(redir_list);
+    struct command *cmd = shell_command_init(shell_cmd->forest[0]);
+    if (redirs)
+    {
+        size_t n_redirs = 0;
+        while (*(redirs + n_redirs))
+        {
+            command_add_redirection(cmd, *(redirs + n_redirs));
+            n_redirs++;
+        }
+        free(redirs);
+    }
+    return cmd;
 }
 
 struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
@@ -147,7 +161,10 @@ struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
     struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
     if (shell_cmd != NULL)
     {
-        return ast_shell_command_build(shell_cmd);
+        //in the case of a shell command, the redirection ast is connected to
+        //the command ast (not the shell command ast) hence we pass
+        //ast (not shell_cmd)
+        return ast_shell_command_build(ast);
     }
     return NULL;
 }
