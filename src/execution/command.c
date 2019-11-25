@@ -61,23 +61,6 @@ void command_free(struct command *command)
     free(command);
 }
 
-
-void command_print(struct command *command)
-{
-    printf("command:");
-    for (size_t i = 0; i < command->n_args; i++)
-    {
-        printf(" %s", *(command->args + i));
-    }
-    printf (" ||");
-    for (size_t i = 0; i < command->n_redirections; i++)
-    {
-        printf(" | ");
-        redirection_print(*(command->redirections + i));
-    }
-    printf("\n");
-}
-
 void command_add_redirection(struct command *command,
         struct redirection *redir)
 {

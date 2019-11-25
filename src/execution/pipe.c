@@ -1,7 +1,7 @@
 #include "execution.h"
 
-#define PIPE_IN 0
-#define PIPE_OUT 1
+#define PIPE_READ 0
+#define PIPE_WRITE 1
 
 struct pipe *pipe_init(void)
 {
@@ -29,7 +29,7 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
         int cmd_exec = command_execute(*(p->commands), bundle_ptr) % 255;
         return cmd_exec;
     }
-    int fd_in = 0;
+    int fd_in = STDIN_FILENO;
     int pipe_buffer[2];
     pid_t pid;
     size_t iterator = 0;
@@ -42,8 +42,8 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
         {
             dup2(fd_in, STDIN_FILENO);
             if (iterator + 1 < p->n_commands)
-                dup2(pipe_buffer[PIPE_OUT], STDOUT_FILENO);
-            close(pipe_buffer[PIPE_IN]);
+                dup2(pipe_buffer[PIPE_WRITE], STDOUT_FILENO);
+            close(pipe_buffer[PIPE_READ]);
 
             pid_t sub_pid = fork();
             int sub_status = 0;
@@ -73,8 +73,8 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             {
                 return status % 255;
             }
-            close(pipe_buffer[PIPE_OUT]);
-            fd_in = pipe_buffer[PIPE_IN];
+            close(pipe_buffer[PIPE_WRITE]);
+            fd_in = pipe_buffer[PIPE_READ];
             iterator++;
         }
     }

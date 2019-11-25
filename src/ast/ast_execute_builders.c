@@ -61,7 +61,7 @@ struct redirection *ast_redirection_build(struct ast *ast)
     enum symbol_value redir_symbol_value = ast_redir_symbol ?
             get_symbol_value(ast_redir_symbol->forest[0]->value) : 0;
     enum symbol_value redir_io_from_value = ast_redir_ionumber ?
-            get_symbol_value(ast_redir_symbol->forest[0]->value) : 1;
+            get_symbol_value(ast_redir_ionumber->forest[0]->value) : 1;
     //by default, redirection is on STDOUT
 
     enum REDIRECTION_TYPE type = redir_symbol_value + redir_io_from_value;

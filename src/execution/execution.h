@@ -20,7 +20,7 @@
 enum REDIRECTION_TYPE
 {
     REDIRECTION_NONE = 0,
-    STDIN_FROM_ARG   = 10,      // < arg
+    STDIN_FROM_ARG   = 11,      // < arg
     STDOUT_TO_ARG    = 21,      // 1> arg
     STDERR_TO_ARG    = 22,      // 2> arg
     STDERR_TO_STDOUT = 31,      // 2>&1
