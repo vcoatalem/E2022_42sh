@@ -42,7 +42,7 @@ enum operator_type rule_id_to_operator(enum rule_id id)
         return OPERATOR_LIST;
     }
     if (id == RULE_AND_CONCAT || id == RULE_AND_LINEBREAK
-        || id == RULE_AND_OR || id == RULE_AND_OR_CONCAT)
+        || id == RULE_AND_OR || id == RULE_AND_OR_CONCAT || id == RULE_OR)
         return OPERATOR_AND;
     if (id == RULE_OR_CONCAT || id == RULE_OR_LINEBREAK)
         return OPERATOR_OR;

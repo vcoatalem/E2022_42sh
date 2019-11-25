@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 41
+#define NB_RULES 42
 
 
 /**
@@ -49,34 +49,35 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_COMPOUND_LIST_CONCAT,       //10
     RULE_COMPOUND_LIST,              //11
     RULE_AND_OR,                     //12
-    RULE_AND_OR_CONCAT,              //13
-    RULE_AND_CONCAT,                 //14
-    RULE_AND_LINEBREAK,              //15
-    RULE_OR_CONCAT,                  //16
-    RULE_OR_LINEBREAK,               //17
-    RULE_PIPELINE,                   //18
-    RULE_PIPE,                       //19
-    RULE_COMMAND,                    //20
-    RULE_SIMPLE_COMMAND,             //21
-    RULE_SHELL_COMMAND,              //22
-    RULE_REDIR_LIST,                 //23
-    RULE_REDIR,                      //24
-    RULE_REDIR_SYMBOL,               //25
-    RULE_REDIR_TO,                   //26
-    RULE_IONUMBER,                   //27
-    RULE_ELEMENT,                    //28
-    RULE_ELEMENT_LIST,               //29
-    RULE_ARG_LIST,                   //30
-    RULE_IF,                         //31
-    RULE_THEN,                       //32
-    RULE_ELSE_CONCAT,                //33
-    RULE_WHILE,                      //34
-    RULE_UNTIL,                      //35
-    RULE_FOR,                        //36
-    RULE_DO_GROUP,                   //37
-    RULE_FUNCDEC_BODY,               //38
-    RULE_FUNCDEC,                    //39
-    RULE_VARDEC                      //40
+    RULE_OR,                         //13
+    RULE_AND_OR_CONCAT,              //14
+    RULE_AND_CONCAT,                 //15
+    RULE_AND_LINEBREAK,              //16
+    RULE_OR_CONCAT,                  //17
+    RULE_OR_LINEBREAK,               //18
+    RULE_PIPELINE,                   //19
+    RULE_PIPE,                       //20
+    RULE_COMMAND,                    //21
+    RULE_SIMPLE_COMMAND,             //22
+    RULE_SHELL_COMMAND,              //23
+    RULE_REDIR_LIST,                 //24
+    RULE_REDIR,                      //25
+    RULE_REDIR_SYMBOL,               //26
+    RULE_REDIR_TO,                   //27
+    RULE_IONUMBER,                   //28
+    RULE_ELEMENT,                    //29
+    RULE_ELEMENT_LIST,               //30
+    RULE_ARG_LIST,                   //31
+    RULE_IF,                         //32
+    RULE_THEN,                       //33
+    RULE_ELSE_CONCAT,                //34
+    RULE_WHILE,                      //35
+    RULE_UNTIL,                      //36
+    RULE_FOR,                        //37
+    RULE_DO_GROUP,                   //38
+    RULE_FUNCDEC_BODY,               //39
+    RULE_FUNCDEC,                    //40
+    RULE_VARDEC,                     //41
 };
 
 /**

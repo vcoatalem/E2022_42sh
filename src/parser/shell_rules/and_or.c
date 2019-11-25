@@ -26,20 +26,13 @@ static void sh_rule_and_linebreak(struct rule_array *rules)
     rule_array_add(rules, rule_pass);
 }
 
-static void sh_rule_and_or_concat(struct rule_array *rules)
-{
-    struct rule *rule_and = rule_build(RULE_AND_OR_CONCAT,
-            symbol_create(0, RULE_AND_CONCAT),
-            NULL);
-    struct rule *rule_or = rule_build(RULE_AND_OR_CONCAT,
+static void sh_rule_or(struct rule_array *rules)
+{ 
+    struct rule *rule = rule_build(RULE_OR,
+            symbol_create(0, RULE_PIPELINE),
             symbol_create(0, RULE_OR_CONCAT),
             NULL);
-    struct rule *rule_eps = rule_build(RULE_AND_OR_CONCAT,
-            symbol_epsilon(),
-            NULL);
-    rule_array_add(rules, rule_and);
-    rule_array_add(rules, rule_or);
-    rule_array_add(rules, rule_eps);
+    rule_array_add(rules, rule);
 }
 
 static void sh_rule_or_concat(struct rule_array *rules)
@@ -47,9 +40,13 @@ static void sh_rule_or_concat(struct rule_array *rules)
     struct rule *rule = rule_build(RULE_OR_CONCAT,
             symbol_create(TOKEN_DOUBLE_PIPE, 0),
             symbol_create(0, RULE_OR_LINEBREAK),
-            symbol_create(0, RULE_AND_OR),
+            symbol_create(0, RULE_OR),
+            NULL);
+    struct rule *rule_eps = rule_build(RULE_OR_CONCAT,
+            symbol_epsilon(),
             NULL);
     rule_array_add(rules, rule);
+    rule_array_add(rules, rule_eps);
 }
 
 static void sh_rule_and_concat(struct rule_array *rules)
@@ -59,24 +56,29 @@ static void sh_rule_and_concat(struct rule_array *rules)
             symbol_create(0, RULE_AND_LINEBREAK),
             symbol_create(0, RULE_AND_OR),
             NULL);
+    struct rule *rule_eps = rule_build(RULE_AND_CONCAT,
+            symbol_epsilon(),
+            NULL);
     rule_array_add(rules, rule);
+    rule_array_add(rules, rule_eps);
 }
 
 static void sh_rule_and_or(struct rule_array *rules)
 {
     struct rule *rule = rule_build(RULE_AND_OR,
             symbol_create(0, RULE_PIPELINE),
-            symbol_create(0, RULE_AND_OR_CONCAT),
+            symbol_create(0, RULE_OR_CONCAT),
+            symbol_create(0, RULE_AND_CONCAT),
             NULL);
     rule_array_add(rules, rule);
 }
 
 void sh_rule_and_or_groups(struct rule_array *rules)
 {
+    sh_rule_or(rules);
     sh_rule_and_or(rules);
     sh_rule_and_concat(rules);
     sh_rule_or_concat(rules);
-    sh_rule_and_or_concat(rules);
     sh_rule_and_linebreak(rules);
     sh_rule_or_linebreak(rules);
 }

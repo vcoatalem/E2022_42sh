@@ -30,6 +30,8 @@ char *rule_id_to_string(enum rule_id id)
         return "list";
     case RULE_AND_OR:
         return "and|or";
+    case RULE_OR:
+        return "or";
     case RULE_AND_CONCAT:
         return "and_concat";
     case RULE_AND_LINEBREAK:
