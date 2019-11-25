@@ -5,6 +5,7 @@ static void sh_rule_then(struct rule_array *rules)
     struct rule *rule = rule_build(RULE_THEN,
             symbol_create(TOKEN_THEN, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
+            symbol_create(0, RULE_ELSE_CONCAT),
             NULL);
     rule_array_add(rules, rule);
 }
@@ -16,7 +17,6 @@ static void sh_rule_if(struct rule_array *rules)
             symbol_create(TOKEN_IF, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(0, RULE_THEN),
-            symbol_create(0, RULE_ELSE_CONCAT),
             symbol_create(TOKEN_FI, 0),
             NULL);
     rule_array_add(rules, rule);
@@ -34,9 +34,7 @@ static void sh_rule_else_concat(struct rule_array *rules)
     struct rule *rule_elif = rule_build(RULE_ELSE_CONCAT,
             symbol_create(TOKEN_ELIF, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(TOKEN_THEN, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(0, RULE_ELSE_CONCAT),
+            symbol_create(0, RULE_THEN),
             NULL);
     struct rule *rule_eps = rule_build(RULE_ELSE_CONCAT,
             symbol_epsilon(),
