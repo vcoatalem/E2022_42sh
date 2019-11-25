@@ -17,6 +17,9 @@ int ast_handle_until(struct ast *ast, void *bundle_ptr)
     struct ast *ast_until_body = find_op_type(ast, OPERATOR_UNTIL);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
 
+    if (ast_until_body == NULL || ast_do == NULL)
+        return AST_MISSING_ARG;
+
     while (try_execute == AST_ERROR)
     {
         try_execute = ast_execute(ast_until_body, bundle);

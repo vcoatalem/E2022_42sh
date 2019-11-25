@@ -17,6 +17,9 @@ int ast_handle_while(struct ast *ast, void *bundle_ptr)
     struct ast *ast_while_body = find_op_type(ast, OPERATOR_LIST);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
 
+    if (ast_while_body == NULL || ast_do == NULL)
+        return AST_MISSING_ARG;
+
     while (try_execute == AST_SUCCESS)
     {
         try_execute = ast_execute(ast_while_body, bundle_ptr);
