@@ -16,10 +16,13 @@ struct shopt
     int xpg_echo;      
 };
 
-typedef int (*builtin_handler)(char **str, size_t size, void *bundle);
+typedef int (*builtin_handler)(char **str, size_t size, void *bundle_ptr);
 
 builtin_handler str_to_builtin(char *name);
-int builtin_history(char **str, size_t size, void *bundle);
+
+int builtin_cd(char **str, size_t size, void *bundle_ptr);
+
+int builtin_history(char **str, size_t size, void *bundle_ptr);
 
 /**
  * \brief Execute the builtin shopt
@@ -33,7 +36,7 @@ int builtin_history(char **str, size_t size, void *bundle);
  * \return 0 , 1 if failed
  *
  */
-int builtin_shopt(char **str, size_t size, void *bundle);
+int builtin_shopt(char **str, size_t size, void *bundle_ptr);
 void shopt_print(struct shopt *shopt, int mode);
 struct shopt *shopt_init(void *options_ptr);
 void shopt_free(struct shopt *shopt);

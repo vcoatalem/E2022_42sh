@@ -13,6 +13,11 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
     struct ast *ast_skip_newlines = ast_func_node;
     struct ast *ast_func_body = find_op_type(ast_func_node,
             OPERATOR_SHELL_COMMAND);
+
+    if (ast_func_name == NULL || ast_func_node == NULL
+            || ast_func_body == NULL)
+        return AST_MISSING_ARG;
+
     while (ast_skip_newlines)
     {
         /*
@@ -32,8 +37,6 @@ int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
         }
     }
 
-    if (ast_func_name == NULL || ast_func_body == NULL)
-        return AST_ERROR;
     insert_func(bundle->hash_table_func, ast_func_name->forest[0]->value,
             ast_func_body->forest[0]);
     return AST_SUCCESS;
