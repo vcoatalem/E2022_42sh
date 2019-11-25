@@ -8,5 +8,7 @@ builtin_handler str_to_builtin(char *name)
         return builtin_history;
     else if (!strcmp(name, "shopt"))
         return builtin_shopt;
+    else if (!strcmp(name, "cd"))
+        return builtin_cd;
     return NULL;
 }
