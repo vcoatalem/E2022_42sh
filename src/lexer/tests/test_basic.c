@@ -119,11 +119,11 @@ int main(int argc, char **argv)
     else if (q == 7)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "blabla"));
-        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\n"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "1"));
+        token_array_add(exp, token_init(TOKEN_STDIN, "1"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_GREAT, ">>"));
-        token_array_add(exp, token_init(TOKEN_WORD, "2"));
+        token_array_add(exp, token_init(TOKEN_STDERR, "2"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 8)

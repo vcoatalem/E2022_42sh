@@ -22,7 +22,6 @@ void token_array_free(struct token_array *arr)
         return;
     for(size_t i = 0; i < arr->size; i++)
     {
-        //TODO add free for token
         token_free(arr->tok_array[i]);
     }
     free(arr->tok_array);
