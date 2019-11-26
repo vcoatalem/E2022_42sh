@@ -14,7 +14,7 @@ int is_delimiter(char c)
 
 char *getword(char *word, struct hash_table_var *ht)
 {
-    //printf("word=%s\n", word);
+    printf("word=%s\n", word);
     if (word[0] != '$' || strlen(word) == 1)
         return word;
     if (word[1] == '{' && word[strlen(word) - 1] == '}')
@@ -57,14 +57,18 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     }
     int iword = i;
     for (int j = 0; !is_delimiter(text[i + 1]) && text[i] != '}'; ++j, ++i)
+    {
         word[j] = text[i];
+    }
     word[strlen(word)] = text[i];
     char *value = getword(word, ht);
+    //printf("value:%s\n", value);
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
     char *result = calloc(1, (strlen(text) + strlen(value) + 1));
     strcpy(result, text);
+    //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
     {
         for (size_t i = iword; i < strlen(result); ++i)
@@ -79,11 +83,13 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     }
     else
     {
-        for (size_t i = iword + dec; i < strlen(result); i++)
+        //printf("YOLO%d\n", dec);
+        for (size_t i = iword; i < strlen(result) + dec; i++)
         {
             result[i] = result[i + dec];
         }
     }
+    //printf("result2=%s\n",result );
     if (lenword >= 1)
     {
         for (size_t j = 0; j < strlen(value); ++j)
@@ -91,7 +97,9 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
             result[iword] = value[j];
             iword++;
         }
-        result[iword] = 0;
+
+        //if (lenword >= iword)
+        //    result[iword] = 0;
     }
     if (i >= strlen(text) - 1)
     {
@@ -102,6 +110,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
 
 char *var_substitute(char *text, struct hash_table_var *ht)
 {
+    //printf("text=%s\n", text);
     int did_substitute = 1;
     char *newstr = recvar_substitute(text, ht, &did_substitute);
     char *newnewstr;
