@@ -1,8 +1,5 @@
 #include "execution.h"
 
-#define PIPE_READ 0
-#define PIPE_WRITE 1
-
 struct pipe *pipe_init(void)
 {
     struct pipe *pipe = calloc(1, sizeof(struct pipe));
