@@ -63,7 +63,7 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         if (redirection->type == STDOUT_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -78,7 +78,7 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         if (redirection->type == STDOUT_APPEND_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -104,7 +104,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     {
         int fd = open(redirection->arg, O_RDONLY);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         redirect(&cmd->fd_in, fd, STDIN_FILENO);
     }
     else if (redirection->type == STDOUT_TO_ARG
@@ -113,7 +113,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
         || redirection->type == STDERR_APPEND_TO_ARG)
     {
         int try_redirect = redirection_execute_std_to_arg(cmd, redirection);
-        if (try_redirect == RETURN_ERROR)
+        if (try_redirect == RETURN_REDIRECTION_ERROR)
             warnx("could not open `%s` for redirection", redirection->arg);
     }
     else if (redirection->type == STDOUT_TO_STDERR)

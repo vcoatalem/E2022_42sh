@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     struct options *options = options_build(argc, argv);
     if (!options)
     {
-        return BASH_RETURN_OPTIONS_ERROR;
+        return BASH_RETURN_ERROR;
     }
     g_bundle = calloc(1, sizeof(struct execution_bundle));
     struct execution_bundle bundle =
@@ -70,10 +70,5 @@ int main(int argc, char **argv)
         execution_val = execute_interactive(g_bundle);
     }
     bundle_free(g_bundle);
-    if (execution_val != BASH_RETURN_OK)
-    {
-        return execution_val;
-        //something went wrong...
-    }
-    return BASH_RETURN_OK;
+    return execution_val;
 }

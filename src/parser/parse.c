@@ -1,3 +1,5 @@
+#include <err.h>
+
 #include "parser.h"
 #include "../main/42sh.h"
 
@@ -46,13 +48,15 @@ void parser_free(struct parser *parser)
 
 //if the only token left after an error is a token EOF
 //set parser_state_continue instrad of parser_state_error
-static void set_parsing_ending_status(struct parser *parser,
-        enum token_type current_token_type)
+static void set_parsing_ending_status(struct parser *parser, struct token *t)
 {
-    if (current_token_type == TOKEN_EOF)
+    if (t->type == TOKEN_EOF)
         parser->state = PARSER_STATE_CONTINUE;
     else
+    {
+        warnx("error near unexpected token: `%s`",  t->value);
         parser->state = PARSER_STATE_FAILURE;
+    }
 }
 
 static int parse_token(struct parser *parser, struct token *current,
@@ -61,7 +65,7 @@ static int parse_token(struct parser *parser, struct token *current,
     //if the symbol popped on the stack is a token...
     if (head->symbol->token_type != current->type)
     {
-        set_parsing_ending_status(parser, current->type);
+        set_parsing_ending_status(parser, current);
         stack_elt_free(head);
         return -1;
     }
@@ -90,7 +94,7 @@ static int parse_rule(struct parser *parser, struct token *current,
             parser->table);
         if (!is_epsilon)
         {
-            set_parsing_ending_status(parser, current->type);
+            set_parsing_ending_status(parser, current);
             stack_elt_free(head);
             //could not find correspondance in analysis table
             return -1;
