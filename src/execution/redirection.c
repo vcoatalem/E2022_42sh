@@ -1,5 +1,3 @@
-#define _POSIX_C_SOURCE 200809L
-
 #include <err.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -33,14 +31,12 @@ static void redirect(int *to_ptr, int to, int from)
     dup2(to, from);
 }
 
-//TODO: test this
-#define HEREDOC_SIZE 8192
 static void redirection_execute_heredoc(struct command *cmd,
         struct redirection *redirection, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    char *buffer = calloc(1, HEREDOC_SIZE);
-    FILE *f_virtual = fmemopen(buffer, HEREDOC_SIZE, "r+");
+    int p[2];
+    pipe(p);
     char *limit = redirection->arg;
     char *ps2 = get_variable(bundle->hash_table_var, "PS2");
     char *input = NULL;
@@ -51,10 +47,12 @@ static void redirection_execute_heredoc(struct command *cmd,
             break;
         if (!input)
             continue;
-        fwrite(input, strlen(input), 1, f_virtual);
+        write(p[PIPE_WRITE], input, strlen(input));
+        write(p[PIPE_WRITE], "\n", 1);
+        free(input);
     }
-    redirect(&cmd->fd_in, dup(fileno(f_virtual)), STDIN_FILENO);
-    fclose(f_virtual);
+    redirect(&cmd->fd_in, p[PIPE_READ], STDIN_FILENO);
+    close(p[PIPE_WRITE]);
 }
 
 static int redirection_execute_std_to_arg(struct command *cmd,
@@ -65,7 +63,7 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         if (redirection->type == STDOUT_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -80,7 +78,7 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         if (redirection->type == STDOUT_APPEND_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -106,7 +104,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     {
         int fd = open(redirection->arg, O_RDONLY);
         if (fd == -1)
-            return RETURN_ERROR;
+            return RETURN_REDIRECTION_ERROR;
         redirect(&cmd->fd_in, fd, STDIN_FILENO);
     }
     else if (redirection->type == STDOUT_TO_ARG
@@ -115,7 +113,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
         || redirection->type == STDERR_APPEND_TO_ARG)
     {
         int try_redirect = redirection_execute_std_to_arg(cmd, redirection);
-        if (try_redirect == RETURN_ERROR)
+        if (try_redirect == RETURN_REDIRECTION_ERROR)
             warnx("could not open `%s` for redirection", redirection->arg);
     }
     else if (redirection->type == STDOUT_TO_STDERR)

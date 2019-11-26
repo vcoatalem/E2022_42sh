@@ -33,9 +33,9 @@ static enum symbol_value get_symbol_value(char *str)
     if (!strcmp(str, ">>"))
         return SYMBOL_VAL_DOUBLE_GREAT;
     if (!strcmp(str, "<<"))
-        return SYMBOL_VAL_DOUBLE_GREAT;
+        return SYMBOL_VAL_DOUBLE_LESS;
     if (!strcmp(str, "<<-"))
-        return SYMBOL_VAL_DOUBLE_GREAT;
+        return SYMBOL_VAL_DOUBLE_LESS_DASH;
     if (!strcmp(str, "0"))
         return SYMBOL_VAL_STDIN;
     if (!strcmp(str, "1"))

@@ -35,7 +35,7 @@ static int run_lex_parse(struct execution_bundle *bundle)
     }
     else if (bundle->parser->state == PARSER_STATE_FAILURE)
     {
-        return_value = 1;
+        return_value = BASH_RETURN_ERROR;
         lexer_clear(bundle->lexer);
     }
     if (bundle->shopt && bundle->shopt->debug)
@@ -114,8 +114,8 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     //and return regardless of lexing state
     bundle->lexer = lexer_init();
     lexer_add_string(bundle->lexer, cmd);
-    run_lex_parse(bundle);
-    return BASH_RETURN_OK;
+    int try_execute = run_lex_parse(bundle);
+    return try_execute;
 }
 
 int execute_script(struct execution_bundle *bundle, char* script)

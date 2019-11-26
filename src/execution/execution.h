@@ -13,22 +13,28 @@
 #include <sys/wait.h>
 #include <string.h>
 
+
+#define PIPE_READ 0
+#define PIPE_WRITE 1
+
+
 // REDIRECTION
 #define RETURN_SUCCESS 0
-#define RETURN_ERROR -1
+#define RETURN_REDIRECTION_ERROR 1
+#define RETURN_UNKNOWN_COMMAND 127
 
 enum REDIRECTION_TYPE
 {
-    REDIRECTION_NONE = 0,
-    STDIN_FROM_ARG   = 11,      // < arg
-    STDOUT_TO_ARG    = 21,      // 1> arg
-    STDERR_TO_ARG    = 22,      // 2> arg
-    STDERR_TO_STDOUT = 31,      // 2>&1
-    STDOUT_TO_STDERR = 32,      // 1>&2
+    REDIRECTION_NONE     = 0,
+    STDIN_FROM_ARG       = 11,      // < arg
+    STDOUT_TO_ARG        = 21,      // 1> arg
+    STDERR_TO_ARG        = 22,      // 2> arg
+    STDERR_TO_STDOUT     = 31,      // 2>&1
+    STDOUT_TO_STDERR     = 32,      // 1>&2
     STDOUT_APPEND_TO_ARG = 41,  // 1>> arg
     STDERR_APPEND_TO_ARG = 42,  // 2>> arg
-    HEREDOC              = 50,  // <<
-    HEREDOC_DASH         = 60,  // <<-
+    HEREDOC              = 51,  // << arg
+    HEREDOC_DASH         = 62,  // <<- arg
 };
 
 struct redirection

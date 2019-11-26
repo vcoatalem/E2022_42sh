@@ -157,7 +157,7 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         execvp(*(command->args), command->args);
         warnx("unknown command: %s", *(command->args));
         //if execution failed
-        exit(RETURN_ERROR);
+        exit(RETURN_UNKNOWN_COMMAND);
     }
     waitpid(pid, &status, 0);
     if (bundle->shopt && bundle->shopt->debug)
@@ -199,7 +199,7 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
-    int return_value = AST_ERROR;
+    int return_value = RETURN_UNKNOWN_COMMAND;
     command_apply_redirections(command, bundle_ptr);
     if (command->type == COMMAND_AST)
     {

@@ -14,12 +14,8 @@
 #include "../hashtable/hashtablefunc.h"
 #include "../options/options.h"
 
-enum BASH_RETURN_VALUES
-{
-    BASH_RETURN_OK = 0,
-    BASH_RETURN_ERROR = 1,
-    BASH_RETURN_OPTIONS_ERROR = 2
-};
+#define BASH_RETURN_OK 0
+#define BASH_RETURN_ERROR 2
 
 struct execution_bundle
 {
@@ -83,8 +79,8 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd);
  * \param struct execution_bundle *bundle bundle
  * \param char *script path of the script
  *
- * \return int the return of bash
- *
+ U* \return int the return of bash
+ R*
  */
 int execute_script(struct execution_bundle *bundle, char* script);
 
