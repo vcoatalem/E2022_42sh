@@ -6,13 +6,14 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_UNTIL;
     if (id == RULE_ELSE_CONCAT)
         return OPERATOR_ELSE;
-    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
+    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST
+            || id == RULE_ELEMENT_ANY_LIST)
         return OPERATOR_ARG_LIST;
     if (id == RULE_REDIR)
         return OPERATOR_REDIR;
     if (id == RULE_REDIR_LIST)
         return OPERATOR_REDIR_LIST;
-    if (id == RULE_ELEMENT)
+    if (id == RULE_ELEMENT || id == RULE_ELEMENT_ANY)
         return OPERATOR_GET_VALUE;
     if (id == RULE_REDIR_SYMBOL)
         return OPERATOR_GET_REDIR_SYMBOL;
