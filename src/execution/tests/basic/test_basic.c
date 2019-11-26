@@ -52,13 +52,13 @@ int main(int argc, char **argv)
     else if (q == 2)
     {
         struct command *command = command_init(commands[q], &bundle);
-        command_add_redirection(command, redirection_dup(redirect_output));
+        command_add_redirection(command, redirect_output);
         pipe_add_command(p, command);
     }
     else if (q == 3)
     {
         struct command *command = command_init(commands[q], &bundle);
-        command_add_redirection(command, redirection_dup(redirect_input));
+        command_add_redirection(command, redirect_input);
         pipe_add_command(p, command);
     }
     else if (q == 4)
