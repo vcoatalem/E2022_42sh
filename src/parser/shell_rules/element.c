@@ -58,6 +58,12 @@ static void sh_rule_element_any(struct rule_array *rules)
             symbol_create(TOKEN_CASE, 0), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_ESAC, 0), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(TOKEN_EXCLAMATION_POINT, 0), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(TOKEN_WHILE, 0), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(TOKEN_UNTIL, 0), NULL));
 }
 
 static void sh_rule_element_any_list(struct rule_array *rules)
