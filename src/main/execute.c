@@ -13,9 +13,9 @@ static int run_lex_parse(struct execution_bundle *bundle)
     }
     if (bundle->parser)
         parser_free(bundle->parser);
-    bundle->parser = parser_init(bundle->token_array);
-    //call main parsing function
-    parse(bundle->parser, bundle->parser_table, bundle);
+    bundle->parser = parser_init(bundle->token_array, bundle->parser_table);
+    //call main parsing function here
+    parse(bundle->parser, bundle);
     if (bundle->shopt && bundle->shopt->debug)
     {
         printf("[PARSER] parser state: %d\n", bundle->parser->state);

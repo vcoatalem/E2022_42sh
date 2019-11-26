@@ -24,9 +24,11 @@ struct symbol_array *substitute_rule(enum rule_id rule_id,
     return symbol_array_dup(expr);
 }
 
-struct parser *parser_init(struct token_array *tokens)
+struct parser *parser_init(struct token_array *tokens,
+        struct analysis_table *table)
 {
     struct parser *parser = calloc(1, sizeof(struct parser));
+    parser->table = table;
     parser->input = stamp_init(tokens);
     parser->ast = ast_init("root", OPERATOR_LIST);
     parser->stack = stack_init(parser->ast);
@@ -53,8 +55,61 @@ static void set_parsing_ending_status(struct parser *parser,
         parser->state = PARSER_STATE_FAILURE;
 }
 
-void parse(struct parser *parser, struct analysis_table *table,
-        void *bundle_ptr)
+static int parse_token(struct parser *parser, struct token *current,
+        struct stack_elt *head)
+{
+    //if the symbol popped on the stack is a token...
+    if (head->symbol->token_type != current->type)
+    {
+        set_parsing_ending_status(parser, current->type);
+        stack_elt_free(head);
+        return -1;
+    }
+    else if (token_type_is_value(current->type))
+    {
+        //get current word value into the ast
+        if (head->ast->value)
+            free(head->ast->value);
+        head->ast->value = my_strdup(current->value);
+    }
+    stamp_continue(parser->input);
+    return 0;
+}
+
+static int parse_rule(struct parser *parser, struct token *current,
+        struct stack_elt *head)
+{
+    //if the symbol popped on the stack is a rule...
+    struct symbol_array *arr = substitute_rule(
+            head->symbol->rule_id, current->type, parser->table);
+    if (!arr)
+    {
+        struct symbol_array *is_epsilon = substitute_rule(
+            head->symbol->rule_id,
+            parser->table->n_symbols - 1,
+            parser->table);
+        if (!is_epsilon)
+        {
+            set_parsing_ending_status(parser, current->type);
+            stack_elt_free(head);
+            //could not find correspondance in analysis table
+            return -1;
+        }
+        else
+        {
+            //current top of stack rule is an epsilon rule, therefore
+            //can be canceled.
+            symbol_array_free(is_epsilon);
+        }
+    }
+    else
+    {
+        stack_push_array(parser->stack, arr, head->ast);
+    }
+    return 0;
+}
+
+void parse(struct parser *parser, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
     struct stamp *input = parser->input;
@@ -65,49 +120,15 @@ void parse(struct parser *parser, struct analysis_table *table,
         struct stack_elt *head = stack_pop(stack);
         if (head->symbol->type == SYMBOL_TOKEN)
         {
-            //if the symbol popped on the stack is a token...
-            if (head->symbol->token_type != current->type)
-            {
-                set_parsing_ending_status(parser, current->type);
-                stack_elt_free(head);
+            int try_parse_token = parse_token(parser, current, head);
+            if (try_parse_token == -1)
                 break;
-            }
-            else if (token_type_is_value(current->type))
-            {
-                //get current word value into the ast
-                if (head->ast->value)
-                    free(head->ast->value);
-                head->ast->value = my_strdup(current->value);
-            }
-            stamp_continue(input);
         }
         else if (head->symbol->type == SYMBOL_RULE)
         {
-            //if the symbol popped on the stack is a rule...
-            struct symbol_array *arr = substitute_rule(
-                    head->symbol->rule_id, current->type, table);
-            if (!arr)
-            {
-                struct symbol_array *is_epsilon = substitute_rule(
-                    head->symbol->rule_id, table->n_symbols - 1, table);
-                if (!is_epsilon)
-                {
-                    set_parsing_ending_status(parser, current->type);
-                    stack_elt_free(head);
-                    //could not find correspondance in analysis table
-                    return;
-                }
-                else
-                {
-                    //current top of stack rule is an epsilon rule, therefore
-                    //can be canceled.
-                    symbol_array_free(is_epsilon);
-                }
-            }
-            else
-            {
-                stack_push_array(stack, arr, head->ast);
-            }
+            int try_parse_rule = parse_rule(parser, current, head);
+            if (try_parse_rule == -1)
+                return;
         }
         stack_elt_free(head);
     }

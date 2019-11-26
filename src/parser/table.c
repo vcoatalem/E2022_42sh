@@ -115,7 +115,7 @@ struct analysis_table *table_build(void)
     }
     rule_array_free(t->rules);
     #if 0
-    printf("[LL PARSER] Built analysis table." );
+    printf("[LL PARSER] Built analysis table.\n" );
     printf("[LL PARSER] Found #%d conflicts in grammar\n", g_n_conflicts);
     #endif
     return t;

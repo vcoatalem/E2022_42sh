@@ -417,19 +417,20 @@ struct parser
     struct stamp *input;
     struct stack *stack;
     struct ast *ast;
+    struct analysis_table *table;
 };
 
 /**
  * \brief initialises a root ast, a stack whose first element points toward
  * \brief that ast as well a stamp on the token_array provided
  */
-struct parser *parser_init(struct token_array *tokens);
+struct parser *parser_init(struct token_array *tokens,
+        struct analysis_table *table);
 
 /**
  * \brief run parser procedure and set state accordingly
  */
-void parse(struct parser *parser, struct analysis_table *table,
-        void *bundle_ptr);
+void parse(struct parser *parser, void *bundle_ptr);
 void parser_free(struct parser *parser);
 
 int token_type_is_value(enum token_type type);

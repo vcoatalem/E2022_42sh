@@ -197,8 +197,8 @@ int main(int argc, char **argv)
     bundle.parser_table = table_build();
     bundle.shopt = shopt_init(NULL);
     bundle.shopt->debug = 1;
-    struct parser *p = parser_init(exp);
-    parse(p, bundle.parser_table, &bundle);
+    struct parser *p = parser_init(exp, bundle.parser_table);
+    parse(p, &bundle);
     ast_dot_print(p->ast, output_file_name);
     int return_value = (p->state == expected_parser_state[q]) ? 0 : 1;
     printf("[LL PARSER] parser state: %d\n", p->state);
