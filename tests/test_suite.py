@@ -11,22 +11,17 @@ GREEN =  '\033[32m'
 WHITE = '\033[37m'
 
 def run_42sh(args, stdin):
-    stdin = stdin + ";"
+    print(args)
+    print(stdin)
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
-def remove_bracket(sh):
-    res = ""
-    for i in range (len(sh)):
-        if (sh[i] == '['):
-            break;
-        else:
-            res = res + sh[i]
-    return res
+
 def test(binary, tests):
     start_time = time.time()
-    print(tests["stdin"])
+    print("STDIN: ", tests["stdin"])
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
     sh = run_42sh([binary], tests["stdin"])
+    print(sh)
    # sh.stdout = remove_bracket(sh.stdout)
     print(tests["name"] + " execution time: %.10s" % (time.time() -
                         start_time))
