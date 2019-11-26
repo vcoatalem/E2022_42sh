@@ -126,8 +126,11 @@ static struct command *ast_simple_command_build(struct ast *ast,
         }
         free(redirs);
     }
-    //free arglist
-    free(arg_list);
+    //free arglist 
+    if (arg_list)
+    {
+        free(arg_list);
+    }
     //free redirlist
     return cmd;
 }
