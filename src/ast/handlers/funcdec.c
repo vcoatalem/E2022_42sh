@@ -2,7 +2,7 @@
 #include "../../main/42sh.h"
 #include "../../hashtable/hashtablefunc.h"
 
-int ast_handle_func_declaration(struct ast *ast, void *bundle_ptr)
+int ast_handle_funcdec(struct ast *ast, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
     if (ast == NULL || ast->nb_children == 0)

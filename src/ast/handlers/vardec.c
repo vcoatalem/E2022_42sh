@@ -23,8 +23,8 @@ static void set_variable_name_value(char *str, char* varname, char *varvalue)
             }
             else
             {
-                *(varvalue + value_it) = *(str + it);
-                value_it++;
+                *(varvalue + val_it) = *(str + it);
+                val_it++;
             }
         }
         it++;
@@ -41,7 +41,7 @@ int ast_handle_vardec(struct ast *ast, void *bundle_ptr)
         return AST_ERROR;
     char buffer_name[2048] = { 0 };
     char buffer_value[2048] = { 0 };
-    set_variable_name_value(ast->value, buffer_name, buffer_value);
+    set_variable_name_value(ast->forest[0]->value, buffer_name, buffer_value);
     insert_variable(bundle->hash_table_var, buffer_name, buffer_value);
     return AST_SUCCESS;
 }

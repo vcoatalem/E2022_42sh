@@ -18,7 +18,9 @@ operator_handler get_operator_handler(enum operator_type type)
     else if (type == OPERATOR_UNTIL)
         return ast_handle_until;
     else if (type == OPERATOR_FUNC_DECLARATION)
-        return ast_handle_func_declaration;
+        return ast_handle_funcdec;
+    else if (type == OPERATOR_VAR_DECLARATION)
+        return ast_handle_vardec;
     else
         return NULL;
 }

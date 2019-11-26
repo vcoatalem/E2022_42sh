@@ -70,8 +70,8 @@ int execute_interactive(struct execution_bundle *bundle)
     if (!bundle)
         return BASH_RETURN_ERROR;
     bundle->lexer = lexer_init();
-    char *ps1 = get_variable(bundle->hash_table_var, "ps1");
-    char *ps2 = get_variable(bundle->hash_table_var, "ps2");
+    char *ps1 = get_variable(bundle->hash_table_var, "PS1");
+    char *ps2 = get_variable(bundle->hash_table_var, "PS2");
     char *prompt = ps1;
     while (1)
     {

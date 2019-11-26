@@ -23,8 +23,8 @@ static char* gethome(void)
 
 static void insert_default_variables(struct hash_table_var *ht)
 {
-    insert_variable(ht, "ps1", "42sh$ ");
-    insert_variable(ht, "ps2", "> ");
+    insert_variable(ht, "PS1", "42sh$ ");
+    insert_variable(ht, "PS2", "> ");
     insert_variable(ht, "HOME", gethome());
     char histfile[2048] = { 0 };
     strcat(histfile, gethome());
@@ -67,7 +67,6 @@ void insert_variable(struct hash_table_var *ht, char *name, char *data)
 {
     size_t key = hash(name, ht->size);
     struct hashed_var *items = ht->items[key];
-
     if (!items)
     {
         struct hashed_var *newitem = calloc(1, sizeof(struct hashed_var));

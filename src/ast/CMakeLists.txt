@@ -12,7 +12,9 @@ add_library(ast
     handlers/until.c
     handlers/while.c
     handlers/case.c
-    handlers/funcdec.c)
+    handlers/funcdec.c
+    handlers/vardec.c
+)
 
 target_link_libraries(ast execution)
 

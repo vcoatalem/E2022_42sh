@@ -15,7 +15,6 @@ static char **str_split_spaces(char *str, size_t *n_words)
         first = 0;
         if (!token)
             break;
-        printf("%s\n", token);
         *n_words = *n_words + 1;
         argv = realloc(argv, (*n_words + 1) * sizeof(char*));
         *(argv + *n_words - 1) = strdup(token);
@@ -25,13 +24,19 @@ static char **str_split_spaces(char *str, size_t *n_words)
 }
 
 static char **build_substituted_arg_list(char **args, size_t *n_args, 
-        struct hash_table_var *ht)
+        struct hash_table_var *ht, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     char **argv = NULL;
     size_t iterator = 0;
     while (*(args + iterator))
     {
         char *substituted = var_substitute(*(args + iterator), ht);
+        if (bundle && bundle->shopt->debug)
+        {
+            printf("applied substitution on '%s' --> '%s'\n",
+                    *(args + iterator), substituted);
+        }
         if (strcmp(substituted, *(args + iterator)))
         {
             //if a substitution did happen, we split the resulting string
@@ -57,12 +62,15 @@ static char **build_substituted_arg_list(char **args, size_t *n_args,
         }
         iterator++;
     }
-    printf("[COMMAND] built arg list: ");
-    for (size_t i = 0; i < *n_args; i++)
+    if (bundle && bundle->shopt->debug)
     {
-        printf(" `%s`,", *(argv + i));
+        printf("[COMMAND] built arg list: ");
+        for (size_t i = 0; i < *n_args; i++)
+        {
+            printf(" `%s`,", *(argv + i));
+        }
+        printf("\n");
     }
-    printf("\n");
     return argv;
 }
 
@@ -77,7 +85,7 @@ struct command *command_init(char **args, void *bundle_ptr)
     }
     size_t n_args = 0;
     cmd->args = build_substituted_arg_list(args, &n_args,
-            bundle->hash_table_var);
+            bundle->hash_table_var, bundle_ptr);
     cmd->n_args = n_args;
     char *cmd_name = *(cmd->args);
     if (str_to_builtin(cmd_name))
