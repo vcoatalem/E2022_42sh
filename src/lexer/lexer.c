@@ -17,6 +17,7 @@ struct lexer *lexer_init(void)
 
 void lexer_add_string(struct lexer *lexer, char *str)
 {
+    lexer->state = LEXER_STATE_NONE;
     size_t len_str = strlen(str);
     if (!lexer->str)
     {
