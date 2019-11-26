@@ -1,6 +1,7 @@
 add_library(execution command.c pipe.c redirection.c apply_redirections)
 
 target_link_libraries(execution builtins ast hashtable variables)
+target_link_libraries(execution -lreadline)
 
 ### BASIC EXECUTION TEST
 

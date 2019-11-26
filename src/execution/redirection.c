@@ -1,4 +1,11 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <err.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
 #include "execution.h"
 #include "../main/42sh.h"
 
@@ -20,17 +27,34 @@ void redirection_free(struct redirection *redirection)
     free(redirection);
 }
 
-// command
-// save_in    //copy of stdin
-// save_out   //copy of stdout
-// save_err   //copy of stderr
-// actual_in  //initialise this as save_in
-// acual_out  //initialise this as save_out
-// actual_err //initialise this as save_err
 static void redirect(int *to_ptr, int to, int from)
 {
     *to_ptr = to;
     dup2(to, from);
+}
+
+//TODO: test this
+#define HEREDOC_SIZE 8192
+static void redirection_execute_heredoc(struct command *cmd,
+        struct redirection *redirection, void *bundle_ptr)
+{
+    struct execution_bundle *bundle = bundle_ptr;
+    char *buffer = calloc(1, HEREDOC_SIZE);
+    FILE *f_virtual = fmemopen(buffer, HEREDOC_SIZE, "r+");
+    char *limit = redirection->arg;
+    char *ps2 = get_variable(bundle->hash_table_var, "PS2");
+    char *input = NULL;
+    while (1)
+    {
+        input = readline(ps2);
+        if (!strcmp(input, limit))
+            break;
+        if (!input)
+            continue;
+        fwrite(input, strlen(input), 1, f_virtual);
+    }
+    redirect(&cmd->fd_in, dup(fileno(f_virtual)), STDIN_FILENO);
+    fclose(f_virtual);
 }
 
 static int redirection_execute_std_to_arg(struct command *cmd,
@@ -101,6 +125,10 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     else if (redirection->type == STDERR_TO_STDOUT)
     {
         redirect(&cmd->fd_out, dup(STDERR_FILENO), STDOUT_FILENO);
+    }
+    else if (redirection->type == HEREDOC)
+    {
+        redirection_execute_heredoc(cmd, redirection, bundle_ptr);
     }
     return RETURN_SUCCESS;
 }
