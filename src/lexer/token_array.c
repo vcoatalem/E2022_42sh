@@ -108,10 +108,12 @@ static int search_unique_equal(char *buffer)
     return index;
 }
 
-static int is_assignment(char *buffer, int equal)
+static int is_assignment(char *buffer, int equal, int is_string)
 {
     if (isdigit(buffer[0]))
         return 0;
+    if (is_string)
+        return 1;
     for (int i = 0; i < equal; i++)
     {
         if (is_separator(buffer[i])
@@ -128,13 +130,13 @@ static int is_assignment(char *buffer, int equal)
     return 1;
 }
 
-void check_assignment(char *buffer, struct token_array *arr)
+void check_assignment(char *buffer, struct token_array *arr, int is_string)
 {
     int assignment = 0;
     int tmp = search_unique_equal(buffer);
     if (tmp)
     {
-        assignment = is_assignment(buffer, tmp);
+        assignment = is_assignment(buffer, tmp, is_string);
     }
     if (assignment)
         token_array_add(arr, token_init(TOKEN_ASSIGNMENT, buffer));
@@ -147,7 +149,7 @@ void handle_separators(char *str, size_t *iterator, char *buffer,
 {
     if (*index > 0)
     {
-        check_assignment(buffer, arr);
+        check_assignment(buffer, arr, 0);
         *index = 0;
     }
     if (is_space(str[*iterator]))
@@ -207,7 +209,7 @@ struct token_array *token_array_create(char *str)
     {
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok == TOKEN_WORD)
-            check_assignment(buffer, arr);
+            check_assignment(buffer, arr, 0);
         else
             token_array_add(arr, token_init(tok,buffer));
     }

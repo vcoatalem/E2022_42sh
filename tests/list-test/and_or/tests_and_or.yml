@@ -23,10 +23,10 @@
   stdin: "echo a || echo b || echo c"
 
 - name: and_or_simple
-  stdin: "echo a && echo b || echo c"
+  stdin: echo a && echo b || echo c
 
 - name: and_or_priority_matters
-  stdin: "echo a && cat b || echo c"
+  stdin: echo a && cat b || echo c
 
 - name: and_or_advanced
-  stdin: "echo a && echo b || echo c && cat d || cat e"
+  stdin: echo a && echo b || echo c && echo d  

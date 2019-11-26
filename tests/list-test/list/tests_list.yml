@@ -1,11 +1,11 @@
  - name: list_simple
-   stdin: "echo Hello World;"
+   stdin: echo "Hello World";
 
  - name: list_command
-   stdin: "echo Hello; echo World"
+   stdin: echo "Hello"; echo "World"
 
  - name: list_break_command
-   stdin: "echo Hello; echo World;"
+   stdin: echo "Hello"; echo "World";
 
  - name: list_if
    stdin: "if [ 1 -eq 1 ]; then { echo Hello World; echo Mr President; }; fi"

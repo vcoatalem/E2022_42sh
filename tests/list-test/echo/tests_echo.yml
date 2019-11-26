@@ -1,11 +1,11 @@
  - name: echo_simple
-   stdin: echo "Hello World!" 
+   stdin: echo "Hello World!"
 
  - name: echo_arg-n
-   stdin: echo -n "Hello World!" 
- 
+   stdin: echo -n "Hello World!"
+
  - name: echo_arg-tab
-   stdin: echo -e "\tHello Wolrd!" 
+   stdin: echo -e "\tHello Wolrd!"
 
  - name: echo_arg-back
    stdin: echo -e "Hello Wor\bld!" 

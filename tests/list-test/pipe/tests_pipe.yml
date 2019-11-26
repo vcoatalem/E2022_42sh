@@ -11,7 +11,7 @@
    stdin: "cat fdgfdg 2>&1 | grep 'No such'"
 
  - name: pipe_basic_redir
-   stdin: "echo out > ../../output | cat'"
+   stdin: "echo out > ../../output | cat"
 
  - name: pipe_shell_command
    stdin: "{ echo e; echo f; } | grep 'e'"
