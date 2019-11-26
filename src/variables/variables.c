@@ -83,7 +83,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
             result[i] = result[i + dec];
         }
     }
-    if (dec != 0)
+    if (lenword >= 1)
     {
         for (size_t j = 0; j < strlen(value); ++j)
         {
@@ -112,14 +112,15 @@ char *var_substitute(char *text, struct hash_table_var *ht)
         return newnewstr;
     return newstr;
 }
-#if 0
+/*
 int main(void)
 {
     struct hash_table_var *ht = init_hash_table_var(50);
-    char *line = "$lol$HOME non$klzea";
+    insert_variable(ht, "lol", "baba");
+    char *line = " $ $lol$HOME non$klzea";
     char *test = var_substitute(line, ht);
     printf("%s\n", test);
     free(test);
     free_hash_table_var(ht);
 }
-#endif
+*/
