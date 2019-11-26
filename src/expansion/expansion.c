@@ -130,8 +130,10 @@ int check_brackets(char *path, size_t *index, size_t size, char *brackets)
 
     char *characters = malloc(sizeof(char *));
     size_t char_index = 0;
-    for (size_t i = 1; brackets[i] != ']'; i++)
+    for (size_t i = 1; brackets[i] != '\0'; i++)
     {
+        if (brackets[i] == ']')
+            break;
         if (brackets[i] == ',')
             continue;
         if (brackets[i + 1] == '-')
@@ -142,11 +144,52 @@ int check_brackets(char *path, size_t *index, size_t size, char *brackets)
         characters[char_index++] = brackets[i];
     }
 
-    printf("%s\n", characters);
     if (result == EXPANSION_FAILURE)
         result = _check_brackets(path, index, char_index, characters);
 
     return is_not == 0 ? result : is_not_result(result);
+}
+
+int check_pattern(char *path, size_t *index_path, char *pattern, size_t size)
+{
+    int result = EXPANSION_FAILURE;
+    //size_t index_path = 0;
+    size_t index_pattern = 0;
+    for (; path[*index_path] != '\0'; index_path++)
+    {
+        if (result == EXPANSION_SUCCESS)
+            break;
+
+        if (pattern[index_pattern] == '*')
+            result = check_star(path, index_path,
+                                size, pattern[index_pattern + 1]);
+
+        else if (pattern[index_pattern] == '?')
+            result = check_question_mark(index_path, size);
+
+        else if (pattern[index_pattern] == '[')
+        {
+            char *brackets = malloc(sizeof(char *));
+            size_t index_brackets = 0;
+            while (pattern[index_pattern] != '\0')
+            {
+                if (pattern[index_pattern] == ']')
+                {
+                    brackets[index_pattern] = ']';
+                    break;
+                }
+                brackets[index_brackets] = pattern[index_pattern];
+                index_pattern++;
+                index_brackets++;
+            }
+
+            printf("%s\n", brackets);
+            result = check_brackets(path, index_path, size, brackets);
+            free(brackets);
+        }
+    }
+
+    return result;
 }
 
 // ### TEST
@@ -156,7 +199,7 @@ int main(void)
     char *path = "dir2/dir22";
 
     size_t i = 0;
-    printf("%d\n", check_brackets(path, &i, 10, "[0-9abcd]"));
+    printf("%d\n", check_pattern(path, &i, "[0-9abcd]", 10));
     printf("i = %ld\n", i);
 
     return 0;
