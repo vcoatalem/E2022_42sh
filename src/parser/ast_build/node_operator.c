@@ -27,6 +27,8 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_VAR_DECLARATION;
     if (id == RULE_DO_GROUP)
         return OPERATOR_DO;
+    if (id == RULE_COMMAND_NOT)
+        return OPERATOR_NOT;
     return OPERATOR_NONE;
 }
 

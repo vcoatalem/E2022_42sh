@@ -24,8 +24,7 @@ static void sh_rule_pipeline(struct rule_array *rules)
             symbol_create(0, RULE_PIPE),
             NULL);
     struct rule *rule_b = rule_build(RULE_PIPELINE,
-            symbol_create(TOKEN_EXCLAMATION_POINT, 0),
-            symbol_create(0, RULE_COMMAND),
+            symbol_create(0, RULE_COMMAND_NOT),
             symbol_create(0, RULE_PIPE),
             NULL);
     rule_array_add(rules, rule_a);

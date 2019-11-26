@@ -15,6 +15,8 @@ static char *operator_to_string(enum operator_type type)
         return "||";
     case (OPERATOR_PIPE):
         return "|";
+    case (OPERATOR_NOT):
+        return "!";
     case (OPERATOR_COMMAND):
         return "cmd";
     case (OPERATOR_SHELL_COMMAND):

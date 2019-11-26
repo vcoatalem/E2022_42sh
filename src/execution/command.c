@@ -151,5 +151,9 @@ int command_execute(struct command *command, void *bundle_ptr)
         return_value = AST_SUCCESS;
     }
     command_restore_flux(command);
+    if (command->invert_value)
+    {
+        return_value = return_value != AST_SUCCESS ? 0 : AST_ERROR;
+    }
     return return_value;
 }

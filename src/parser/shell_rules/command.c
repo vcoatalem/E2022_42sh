@@ -67,9 +67,18 @@ static void sh_rule_command(struct rule_array *rules)
     rule_array_add(rules, rule_b);
 }
 
+static void sh_rule_command_not(struct rule_array *rules)
+{
+    rule_array_add(rules, rule_build(RULE_COMMAND_NOT,
+            symbol_create(TOKEN_EXCLAMATION_POINT, 0),
+            symbol_create(0, RULE_COMMAND),
+            NULL));
+}
+
 void sh_rule_command_groups(struct rule_array *rules)
 {
     sh_rule_command(rules);
     sh_rule_shell_command(rules);
     sh_rule_simple_command(rules);
+    sh_rule_command_not(rules);
 }

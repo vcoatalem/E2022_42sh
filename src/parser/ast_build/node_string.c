@@ -48,6 +48,8 @@ char *rule_id_to_string(enum rule_id id)
         return "pipe";
     case RULE_COMMAND:
         return "command";
+    case RULE_COMMAND_NOT:
+        return "command_not";
     case RULE_SIMPLE_COMMAND:
         return "simple_command";
     case RULE_SHELL_COMMAND:

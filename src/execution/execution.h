@@ -55,6 +55,8 @@ struct command
 {
     enum command_type type;
     //commands have either a NULL terminated argv or an ast to execute
+    int invert_value;
+    //
     char **args;
     size_t n_args;
     struct ast *ast;

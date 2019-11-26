@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 44
+#define NB_RULES 46
 
 
 /**
@@ -57,29 +57,31 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_OR_LINEBREAK,                  //18
     RULE_PIPELINE,                      //19
     RULE_PIPE,                          //20
-    RULE_COMMAND,                       //21
-    RULE_SIMPLE_COMMAND,                //22
-    RULE_SHELL_COMMAND,                 //23
-    RULE_REDIR_LIST,                    //24
-    RULE_REDIR,                         //25
-    RULE_REDIR_SYMBOL,                  //26
-    RULE_REDIR_TO,                      //27
-    RULE_IONUMBER,                      //28
-    RULE_ELEMENT,                       //29
-    RULE_ELEMENT_LIST,                  //30
-    RULE_ELEMENT_ANY,                   //31
-    RULE_ELEMENT_ANY_LIST,              //32
-    RULE_ARG_LIST,                      //33
-    RULE_IF,                            //34
-    RULE_THEN,                          //35
-    RULE_ELSE_CONCAT,                   //36
-    RULE_WHILE,                         //37
-    RULE_UNTIL,                         //38
-    RULE_FOR,                           //39
-    RULE_DO_GROUP,                      //40
-    RULE_FUNCDEC_BODY,                  //41
-    RULE_FUNCDEC,                       //42
-    RULE_VARDEC,                        //43
+    RULE_NOT,                           //21
+    RULE_COMMAND,                       //22
+    RULE_COMMAND_NOT,                   //23
+    RULE_SIMPLE_COMMAND,                //24
+    RULE_SHELL_COMMAND,                 //25
+    RULE_REDIR_LIST,                    //26
+    RULE_REDIR,                         //27
+    RULE_REDIR_SYMBOL,                  //28
+    RULE_REDIR_TO,                      //29
+    RULE_IONUMBER,                      //30
+    RULE_ELEMENT,                       //31
+    RULE_ELEMENT_LIST,                  //32
+    RULE_ELEMENT_ANY,                   //33
+    RULE_ELEMENT_ANY_LIST,              //34
+    RULE_ARG_LIST,                      //35
+    RULE_IF,                            //36
+    RULE_THEN,                          //37
+    RULE_ELSE_CONCAT,                   //38
+    RULE_WHILE,                         //39
+    RULE_UNTIL,                         //40
+    RULE_FOR,                           //41
+    RULE_DO_GROUP,                      //42
+    RULE_FUNCDEC_BODY,                  //43
+    RULE_FUNCDEC,                       //44
+    RULE_VARDEC,                        //45
 };
 
 /**
