@@ -14,7 +14,6 @@ int is_delimiter(char c)
 
 char *getword(char *word, struct hash_table_var *ht)
 {
-    printf("word=%s\n", word);
     if (word[0] != '$' || strlen(word) == 1)
         return word;
     if (word[1] == '{' && word[strlen(word) - 1] == '}')
@@ -101,9 +100,15 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
         //if (lenword >= iword)
         //    result[iword] = 0;
     }
-    if (i >= strlen(text) - 1)
+    if (strcmp(text, "") == 0 || i >= strlen(text) - 1)
     {
         *did_substitute = 0;
+        if (strlen(text) > 0)
+            for (size_t j = 0; j < strlen(text) - 1; ++j)
+            {
+                if (text[j] == '$' && !is_delimiter(text[j + 1]))
+                    *did_substitute = 1;
+            }
     }
     return result;
 }
