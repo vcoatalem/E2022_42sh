@@ -23,6 +23,7 @@ add_custom_target(check
     DEPENDS execution_check
     DEPENDS options_check
     DEPENDS parser_check
+    DEPENDS variables_check
     # DEPENDS ast_check
     DEPENDS lexer_check
 )

@@ -15,6 +15,8 @@ enum symbol_value
     SYMBOL_VAL_GREAT = 20,
     SYMBOL_VAL_GREAT_AMPERSAND = 30,
     SYMBOL_VAL_DOUBLE_GREAT = 40,
+    SYMBOL_VAL_DOUBLE_LESS = 50,
+    SYMBOL_VAL_DOUBLE_LESS_DASH = 60,
     SYMBOL_VAL_STDIN = 0,
     SYMBOL_VAL_STDOUT = 1,
     SYMBOL_VAL_STDERR = 2
@@ -29,6 +31,10 @@ static enum symbol_value get_symbol_value(char *str)
     if (!strcmp(str, ">&"))
         return SYMBOL_VAL_GREAT_AMPERSAND;
     if (!strcmp(str, ">>"))
+        return SYMBOL_VAL_DOUBLE_GREAT;
+    if (!strcmp(str, "<<"))
+        return SYMBOL_VAL_DOUBLE_GREAT;
+    if (!strcmp(str, "<<-"))
         return SYMBOL_VAL_DOUBLE_GREAT;
     if (!strcmp(str, "0"))
         return SYMBOL_VAL_STDIN;
@@ -61,7 +67,7 @@ struct redirection *ast_redirection_build(struct ast *ast)
     enum symbol_value redir_symbol_value = ast_redir_symbol ?
             get_symbol_value(ast_redir_symbol->forest[0]->value) : 0;
     enum symbol_value redir_io_from_value = ast_redir_ionumber ?
-            get_symbol_value(ast_redir_symbol->forest[0]->value) : 1;
+            get_symbol_value(ast_redir_ionumber->forest[0]->value) : 1;
     //by default, redirection is on STDOUT
 
     enum REDIRECTION_TYPE type = redir_symbol_value + redir_io_from_value;
@@ -124,17 +130,34 @@ static struct command *ast_simple_command_build(struct ast *ast,
             command_add_redirection(cmd, *(redirs + n_redirs));
             n_redirs++;
         }
+        free(redirs);
     }
-    //free arglist
-    free(arg_list);
+    //free arglist 
+    if (arg_list)
+    {
+        free(arg_list);
+    }
     //free redirlist
-    free(redirs);
     return cmd;
 }
 
 static struct command *ast_shell_command_build(struct ast *ast)
 {
-    return shell_command_init(ast->forest[0]);
+    struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
+    struct ast *redir_list = find_op_type(ast, OPERATOR_REDIR_LIST);
+    struct redirection **redirs = ast_redirection_list_build(redir_list);
+    struct command *cmd = shell_command_init(shell_cmd->forest[0]);
+    if (redirs)
+    {
+        size_t n_redirs = 0;
+        while (*(redirs + n_redirs))
+        {
+            command_add_redirection(cmd, *(redirs + n_redirs));
+            n_redirs++;
+        }
+        free(redirs);
+    }
+    return cmd;
 }
 
 struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
@@ -147,7 +170,10 @@ struct command *ast_command_build(struct ast *ast, void *bundle_ptr)
     struct ast *shell_cmd = find_op_type(ast, OPERATOR_SHELL_COMMAND);
     if (shell_cmd != NULL)
     {
-        return ast_shell_command_build(shell_cmd);
+        //in the case of a shell command, the redirection ast is connected to
+        //the command ast (not the shell command ast) hence we pass
+        //ast (not shell_cmd)
+        return ast_shell_command_build(ast);
     }
     return NULL;
 }

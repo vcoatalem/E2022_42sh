@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <err.h>
 #include "variables.h"
@@ -49,8 +50,8 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     //printf("text=%s\n", text);
     char *word = calloc(1, strlen(text) * sizeof(char));
     //word = strdup(text);
-    int i = 0;
-    for (; text[i] && text[i] != '$'
+    size_t i = 0;
+    for (; (text[i] && text[i] != '$')
         || (text[i] == '$' && is_delimiter(text[i + 1])); ++i)
     {
     }
@@ -64,9 +65,9 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     free(word);
     char *result = calloc(1, (strlen(text) + strlen(value)) * sizeof(char));
     strcpy(result, text);
-    if(strcmp(value, "") == 0)
+    if (strcmp(value, "") == 0)
     {
-        for (int i = iword; i < strlen(result); ++i)
+        for (size_t i = iword; i < strlen(result); ++i)
         {
             result[i] = result[i + lenword];
         }
@@ -112,15 +113,3 @@ char *var_substitute(char *text, struct hash_table_var *ht)
         return newnewstr;
     return newstr;
 }
-/*
-int main(void)
-{
-    struct hash_table_var *ht = init_hash_table_var(50);
-    insert_variable(ht, "lol", "baba");
-    char *line = " $ $lol$HOME non$klzea";
-    char *test = var_substitute(line, ht);
-    printf("%s\n", test);
-    free(test);
-    free_hash_table_var(ht);
-}
-*/

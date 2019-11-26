@@ -13,13 +13,12 @@ static int run_lex_parse(struct execution_bundle *bundle)
     }
     if (bundle->parser)
         parser_free(bundle->parser);
-    bundle->parser = parser_init(bundle->token_array);
-    //call main parsing function
-    parse(bundle->parser, bundle->parser_table, bundle);
+    bundle->parser = parser_init(bundle->token_array, bundle->parser_table);
+    //call main parsing function here
+    parse(bundle->parser, bundle);
     if (bundle->shopt && bundle->shopt->debug)
     {
         printf("[PARSER] parser state: %d\n", bundle->parser->state);
-        token_array_print(bundle->token_array, stdout);
     }
     if (bundle->ast)
         ast_free(bundle->ast);
@@ -71,8 +70,8 @@ int execute_interactive(struct execution_bundle *bundle)
     if (!bundle)
         return BASH_RETURN_ERROR;
     bundle->lexer = lexer_init();
-    char *ps1 = get_variable(bundle->hash_table_var, "ps1");
-    char *ps2 = get_variable(bundle->hash_table_var, "ps2");
+    char *ps1 = get_variable(bundle->hash_table_var, "PS1");
+    char *ps2 = get_variable(bundle->hash_table_var, "PS2");
     char *prompt = ps1;
     while (1)
     {

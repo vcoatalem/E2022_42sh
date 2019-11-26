@@ -1,5 +1,8 @@
 #ifndef VARIABLES_H
 #define VARIABLES_H
-#include "../main/42sh.h"
 
-#endif
+#include "../hashtable/hashtablevar.h"
+
+char *var_substitute(char *text, struct hash_table_var *ht);
+
+#endif /* VARIABLES_H */

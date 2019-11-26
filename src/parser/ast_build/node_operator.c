@@ -6,13 +6,14 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_UNTIL;
     if (id == RULE_ELSE_CONCAT)
         return OPERATOR_ELSE;
-    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST)
+    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST
+            || id == RULE_ELEMENT_ANY_LIST)
         return OPERATOR_ARG_LIST;
     if (id == RULE_REDIR)
         return OPERATOR_REDIR;
     if (id == RULE_REDIR_LIST)
         return OPERATOR_REDIR_LIST;
-    if (id == RULE_ELEMENT)
+    if (id == RULE_ELEMENT || id == RULE_ELEMENT_ANY)
         return OPERATOR_GET_VALUE;
     if (id == RULE_REDIR_SYMBOL)
         return OPERATOR_GET_REDIR_SYMBOL;
@@ -26,23 +27,23 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_VAR_DECLARATION;
     if (id == RULE_DO_GROUP)
         return OPERATOR_DO;
+    if (id == RULE_COMMAND_NOT)
+        return OPERATOR_NOT;
     return OPERATOR_NONE;
 }
 
 enum operator_type rule_id_to_operator(enum rule_id id)
 {
     if (id == RULE_INPUT || id == RULE_LIST_DELIM
-        || id == RULE_LIST || id == RULE_COMPOUND_LIST_BREAK
-        || id == RULE_LIST_DELIM || id == RULE_COMPOUND_LIST_BREAK_DELIM
-        || id == RULE_LIST_CONCAT || id == RULE_COMPOUND_LIST_BREAK_CONCAT
-        || id == RULE_COMPOUND_LIST_BREAK_LINE
-        || id == RULE_LIST_DELIM || id == RULE_LIST_CONCAT
+        || id == RULE_LIST || id == RULE_LIST_DELIM || id == RULE_LIST_CONCAT
+        || id == RULE_COMPOUND_LIST_BREAK || id == RULE_COMPOUND_LIST_BREAK_DELIM || id == RULE_COMPOUND_LIST_BREAK_CONCAT || id == RULE_COMPOUND_LIST_BREAK_LINE
+        || id == RULE_COMPOUND_LIST || id == RULE_COMPOUND_LIST_CONCAT || id == RULE_COMPOUND_LIST_DELIM || id == RULE_COMPOUND_LIST_NEXT
         || id == RULE_FUNCDEC_BODY)
     {
         return OPERATOR_LIST;
     }
     if (id == RULE_AND_CONCAT || id == RULE_AND_LINEBREAK
-        || id == RULE_AND_OR || id == RULE_AND_OR_CONCAT)
+        || id == RULE_AND_OR)
         return OPERATOR_AND;
     if (id == RULE_OR_CONCAT || id == RULE_OR_LINEBREAK || id == RULE_OR)
         return OPERATOR_OR;

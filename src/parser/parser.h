@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 42
+#define NB_RULES 46
 
 
 /**
@@ -36,48 +36,52 @@
  */
 enum rule_id //MORE RULES TO BE ADDED
 {
-    RULE_NONE,                       //0
-    RULE_INPUT,                      //1
-    RULE_LIST_DELIM,                 //2
-    RULE_LIST_CONCAT,                //3
-    RULE_LIST,                       //4
-    RULE_COMPOUND_LIST_BREAK_DELIM,  //5
-    RULE_COMPOUND_LIST_BREAK_LINE,   //6
-    RULE_COMPOUND_LIST_BREAK_CONCAT, //7
-    RULE_COMPOUND_LIST_BREAK,        //8
-    RULE_COMPOUND_LIST_DELIM,        //9
-    RULE_COMPOUND_LIST_CONCAT,       //10
-    RULE_COMPOUND_LIST,              //11
-    RULE_AND_OR,                     //12
-    RULE_OR,                         //13
-    RULE_AND_OR_CONCAT,              //14
-    RULE_AND_CONCAT,                 //15
-    RULE_AND_LINEBREAK,              //16
-    RULE_OR_CONCAT,                  //17
-    RULE_OR_LINEBREAK,               //18
-    RULE_PIPELINE,                   //19
-    RULE_PIPE,                       //20
-    RULE_COMMAND,                    //21
-    RULE_SIMPLE_COMMAND,             //22
-    RULE_SHELL_COMMAND,              //23
-    RULE_REDIR_LIST,                 //24
-    RULE_REDIR,                      //25
-    RULE_REDIR_SYMBOL,               //26
-    RULE_REDIR_TO,                   //27
-    RULE_IONUMBER,                   //28
-    RULE_ELEMENT,                    //29
-    RULE_ELEMENT_LIST,               //30
-    RULE_ARG_LIST,                   //31
-    RULE_IF,                         //32
-    RULE_THEN,                       //33
-    RULE_ELSE_CONCAT,                //34
-    RULE_WHILE,                      //35
-    RULE_UNTIL,                      //36
-    RULE_FOR,                        //37
-    RULE_DO_GROUP,                   //38
-    RULE_FUNCDEC_BODY,               //39
-    RULE_FUNCDEC,                    //40
-    RULE_VARDEC,                     //41
+    RULE_NONE,                          //0
+    RULE_INPUT,                         //1
+    RULE_LIST_DELIM,                    //2
+    RULE_LIST_CONCAT,                   //3
+    RULE_LIST,                          //4
+    RULE_COMPOUND_LIST_BREAK_DELIM,     //5
+    RULE_COMPOUND_LIST_BREAK_LINE,      //6
+    RULE_COMPOUND_LIST_BREAK_CONCAT,    //7
+    RULE_COMPOUND_LIST_BREAK,           //8
+    RULE_COMPOUND_LIST_DELIM,           //9
+    RULE_COMPOUND_LIST_CONCAT,          //10
+    RULE_COMPOUND_LIST_NEXT,            //11
+    RULE_COMPOUND_LIST,                 //12
+    RULE_AND_OR,                        //13
+    RULE_OR,                            //14
+    RULE_AND_CONCAT,                    //15
+    RULE_AND_LINEBREAK,                 //16
+    RULE_OR_CONCAT,                     //17
+    RULE_OR_LINEBREAK,                  //18
+    RULE_PIPELINE,                      //19
+    RULE_PIPE,                          //20
+    RULE_NOT,                           //21
+    RULE_COMMAND,                       //22
+    RULE_COMMAND_NOT,                   //23
+    RULE_SIMPLE_COMMAND,                //24
+    RULE_SHELL_COMMAND,                 //25
+    RULE_REDIR_LIST,                    //26
+    RULE_REDIR,                         //27
+    RULE_REDIR_SYMBOL,                  //28
+    RULE_REDIR_TO,                      //29
+    RULE_IONUMBER,                      //30
+    RULE_ELEMENT,                       //31
+    RULE_ELEMENT_LIST,                  //32
+    RULE_ELEMENT_ANY,                   //33
+    RULE_ELEMENT_ANY_LIST,              //34
+    RULE_ARG_LIST,                      //35
+    RULE_IF,                            //36
+    RULE_THEN,                          //37
+    RULE_ELSE_CONCAT,                   //38
+    RULE_WHILE,                         //39
+    RULE_UNTIL,                         //40
+    RULE_FOR,                           //41
+    RULE_DO_GROUP,                      //42
+    RULE_FUNCDEC_BODY,                  //43
+    RULE_FUNCDEC,                       //44
+    RULE_VARDEC,                        //45
 };
 
 /**
@@ -417,19 +421,20 @@ struct parser
     struct stamp *input;
     struct stack *stack;
     struct ast *ast;
+    struct analysis_table *table;
 };
 
 /**
  * \brief initialises a root ast, a stack whose first element points toward
  * \brief that ast as well a stamp on the token_array provided
  */
-struct parser *parser_init(struct token_array *tokens);
+struct parser *parser_init(struct token_array *tokens,
+        struct analysis_table *table);
 
 /**
  * \brief run parser procedure and set state accordingly
  */
-void parse(struct parser *parser, struct analysis_table *table,
-        void *bundle_ptr);
+void parse(struct parser *parser, void *bundle_ptr);
 void parser_free(struct parser *parser);
 
 int token_type_is_value(enum token_type type);

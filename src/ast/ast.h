@@ -43,6 +43,7 @@ enum operator_type
 {
     OPERATOR_NONE,
     OPERATOR_COMMAND,
+    OPERATOR_NOT,
     OPERATOR_SHELL_COMMAND,
     OPERATOR_LIST,
     OPERATOR_AND,
@@ -235,8 +236,8 @@ int ast_handle_then(struct ast *ast, void *bundle);
 int ast_handle_while(struct ast *ast, void *bundle);
 int ast_handle_for(struct ast *ast, void *bundle);
 int ast_handle_until(struct ast *ast, void *bundle);
-int ast_handle_func_declaration(struct ast *ast,
-        void *bundle);
+int ast_handle_funcdec(struct ast *ast, void *bundle);
+int ast_handle_vardec(struct ast *ast, void *bundle_ptr);
 int ast_handle_list(struct ast *ast, void *bundle_ptr);
 
 /**

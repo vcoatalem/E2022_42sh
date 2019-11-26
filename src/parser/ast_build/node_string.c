@@ -28,6 +28,8 @@ char *rule_id_to_string(enum rule_id id)
         return "list_concat";
     case RULE_COMPOUND_LIST:
         return "list";
+    case RULE_COMPOUND_LIST_NEXT:
+        return "list_next";
     case RULE_AND_OR:
         return "and|or";
     case RULE_OR:
@@ -40,14 +42,14 @@ char *rule_id_to_string(enum rule_id id)
         return "or_concat";
     case RULE_OR_LINEBREAK:
         return "or_linebreak";
-    case RULE_AND_OR_CONCAT:
-        return "and_or_concat";
     case RULE_PIPELINE:
         return "pipeline";
     case RULE_PIPE:
         return "pipe";
     case RULE_COMMAND:
         return "command";
+    case RULE_COMMAND_NOT:
+        return "command_not";
     case RULE_SIMPLE_COMMAND:
         return "simple_command";
     case RULE_SHELL_COMMAND:
@@ -64,7 +66,11 @@ char *rule_id_to_string(enum rule_id id)
         return "ionumber";
     case RULE_ELEMENT:
         return "element";
+    case RULE_ELEMENT_ANY:
+        return "element";
     case RULE_ELEMENT_LIST:
+        return "element list";
+    case RULE_ELEMENT_ANY_LIST:
         return "element list";
     case RULE_ARG_LIST:
         return "args";
