@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "expansion.h"
+#include "fnmatch.h"
 
 static void left_shift(char *pattern, size_t index)
 {
@@ -150,14 +151,28 @@ int check_brackets(char *path, size_t *index, size_t size, char *brackets)
     return is_not == 0 ? result : is_not_result(result);
 }
 
+int check_character(char *path, size_t *index, char c)
+{
+    if (path[*index] == c)
+    {
+        (*index)++;
+        return EXPANSION_SUCCESS;
+    }
+
+    else
+        return EXPANSION_FAILURE;
+}
+
 int check_pattern(char *path, size_t *index_path, char *pattern, size_t size)
 {
-    int result = EXPANSION_FAILURE;
-    //size_t index_path = 0;
+    int result = EXPANSION_SUCCESS;
     size_t index_pattern = 0;
-    for (; path[*index_path] != '\0'; index_path++)
+    while (path[*index_path] != '\0')
     {
-        if (result == EXPANSION_SUCCESS)
+        printf("path[%ld] = %c\n", *index_path, path[*index_path]);
+        printf("pattern[%ld] = %c\n", index_pattern, pattern[index_pattern]);
+
+        if (result == EXPANSION_FAILURE)
             break;
 
         if (pattern[index_pattern] == '*')
@@ -183,10 +198,13 @@ int check_pattern(char *path, size_t *index_path, char *pattern, size_t size)
                 index_brackets++;
             }
 
-            printf("%s\n", brackets);
             result = check_brackets(path, index_path, size, brackets);
             free(brackets);
         }
+
+        else
+            result = check_character(path, index_path, pattern[index_pattern]);
+        index_pattern++;
     }
 
     return result;
@@ -195,11 +213,12 @@ int check_pattern(char *path, size_t *index_path, char *pattern, size_t size)
 // ### TEST
 int main(void)
 {
-    //char *pattern = "*/[d]*";
+    char *pattern = "*/*[3-9]";
     char *path = "dir2/dir22";
 
     size_t i = 0;
-    printf("%d\n", check_pattern(path, &i, "[0-9abcd]", 10));
+    printf("%d\n", check_pattern(path, &i, pattern, 10));
+    printf("fnmatch = %d\n", fnmatch(pattern, path, 0));
     printf("i = %ld\n", i);
 
     return 0;
