@@ -28,6 +28,7 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     if (size == 1)
     {
+        insert_variable(bundle->hash_table_var, "OLDPWD", getcurrent());
         char *home = get_variable(bundle->hash_table_var, "HOME");
         int res = chdir(home);
         if (res == -1)
@@ -36,7 +37,17 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
     }
     if (size == 2)
     {
-        int res = chdir(str[1]);
+        int res;
+        if (strcmp(str[1], "-") == 0)
+        {
+            printf("%s\n", get_variable(bundle->hash_table_var, "OLDPWD"));
+            res = chdir(get_variable(bundle->hash_table_var, "OLDPWD"));
+        }
+        else
+        {
+            insert_variable(bundle->hash_table_var, "OLDPWD", getcurrent());
+            res = chdir(str[1]);
+        }
         if (res == -1)
             return errordir(str[1]);
         /*printf("lastel=%c\n", str[1][strlen(str[1]) - 1]);
