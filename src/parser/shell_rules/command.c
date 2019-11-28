@@ -31,6 +31,9 @@ static void sh_rule_shell_command(struct rule_array *rules)
     struct rule *rule_until = rule_build(RULE_SHELL_COMMAND,
             symbol_create(0, RULE_UNTIL),
             NULL);
+    struct rule *rule_case = rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_CASE),
+            NULL);
     struct rule *rule_brackets = rule_build(RULE_SHELL_COMMAND,
             symbol_create(TOKEN_LEFT_BRACKET, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
@@ -46,6 +49,7 @@ static void sh_rule_shell_command(struct rule_array *rules)
             NULL);
     rule_array_add(rules, rule_var_decl);
     rule_array_add(rules, rule_if);
+    rule_array_add(rules, rule_case);
     rule_array_add(rules, rule_while);
     rule_array_add(rules, rule_until);
     rule_array_add(rules, rule_brackets);

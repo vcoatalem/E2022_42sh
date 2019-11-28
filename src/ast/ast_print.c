@@ -49,6 +49,8 @@ static char *operator_to_string(enum operator_type type)
         return "var_declaration";
     case (OPERATOR_DO):
         return "do";
+    case (OPERATOR_CASE):
+        return "case";
     // TODO: Add more operator types
 
     default:
