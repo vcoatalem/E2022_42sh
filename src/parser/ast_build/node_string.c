@@ -92,6 +92,16 @@ char *rule_id_to_string(enum rule_id id)
         return "funcdec_body";
     case RULE_VARDEC:
         return "var_declaration";
+    case RULE_CASE:
+        return "case";
+    case RULE_CASE_ITEM:
+        return "case_item";
+    case RULE_CASE_ITEM_CONCAT:
+        return "case_item_concat";
+    case RULE_CASE_CLAUSE:
+        return "case_clause";
+    case RULE_CASE_CLAUSE_CONCAT:
+        return "case_clause";
     default:
         return "unknown";
     }
