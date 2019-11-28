@@ -13,7 +13,7 @@
 
 #include <stddef.h>
 
-void get_subdirectories(const char *pattern, char *path,
+void get_find(const char *pattern, char *path,
                             char ***arguments, size_t *nb);
 
 #endif
