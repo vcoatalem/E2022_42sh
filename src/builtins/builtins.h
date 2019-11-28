@@ -22,6 +22,8 @@ builtin_handler str_to_builtin(char *name);
 
 int builtin_cd(char **str, size_t size, void *bundle_ptr);
 
+int builtin_export(char **str, size_t size, void *bundle_ptr);
+
 int builtin_history(char **str, size_t size, void *bundle_ptr);
 
 /**
