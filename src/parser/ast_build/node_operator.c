@@ -13,7 +13,7 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_REDIR;
     if (id == RULE_REDIR_LIST)
         return OPERATOR_REDIR_LIST;
-    if (id == RULE_ELEMENT || id == RULE_ELEMENT_ANY)
+    if (id == RULE_ELEMENT || id == RULE_ELEMENT_ANY || id == RULE_CASE_ITEM)
         return OPERATOR_GET_VALUE;
     if (id == RULE_REDIR_SYMBOL)
         return OPERATOR_GET_REDIR_SYMBOL;
@@ -29,6 +29,10 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_DO;
     if (id == RULE_COMMAND_NOT)
         return OPERATOR_NOT;
+    if (id == RULE_CASE || id == RULE_CASE_CLAUSE || id == RULE_CASE_LINEBREAK
+            || id == RULE_CASE_CLAUSE_CONCAT || id == RULE_CASE_DELIM
+            || id == RULE_CASE_ITEM_CONCAT)
+        return OPERATOR_CASE;
     return OPERATOR_NONE;
 }
 

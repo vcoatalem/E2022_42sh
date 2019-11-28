@@ -21,6 +21,8 @@ operator_handler get_operator_handler(enum operator_type type)
         return ast_handle_funcdec;
     else if (type == OPERATOR_VAR_DECLARATION)
         return ast_handle_vardec;
+    else if (type == OPERATOR_CASE)
+        return ast_handle_case;
     else
         return NULL;
 }
