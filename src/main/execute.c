@@ -118,8 +118,14 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     return try_execute;
 }
 
-int execute_script(struct execution_bundle *bundle, char* script)
+int execute_script(struct execution_bundle *bundle, char *script, char **args)
 {
+    for (int i = 0; args[i]; ++i)
+    {
+        char el[64];
+        sprintf(el, "%d", i);
+        insert_variable(bundle->hash_table_var, el, args[i]);
+    }
     appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
@@ -138,7 +144,7 @@ int execute_script(struct execution_bundle *bundle, char* script)
     while (getline(&line, &size, fd) != -1)
     {
         //stripping final EOL from line
-        line[strlen(line)] = 0;
+        line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
         return_value = run_lex_parse(bundle);
     }
