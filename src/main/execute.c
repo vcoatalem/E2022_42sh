@@ -138,7 +138,7 @@ int execute_script(struct execution_bundle *bundle, char* script)
     while (getline(&line, &size, fd) != -1)
     {
         //stripping final EOL from line
-        line[strlen(line) - 1] = 0;
+        line[strlen(line)] = 0;
         lexer_add_string(bundle->lexer, line);
         return_value = run_lex_parse(bundle);
     }
