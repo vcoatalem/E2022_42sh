@@ -72,11 +72,15 @@ struct token_array *lex(struct lexer *lexer)
     struct token_array *arr = token_array_init();
     size_t index = 0;
     enum token_type type = TOKEN_EOF;
+    int is_string = 0;
     while (lexer->str[lexer->iterator] != 0)
     {
         if (lexer->str[lexer->iterator] == '"'
             || lexer->str[lexer->iterator] == '\'')
+        {
             change_lexer_state(lexer);
+            is_string = 1;
+        }
         else if (is_separator(lexer->str[lexer->iterator])
             && lexer->state == LEXER_STATE_NONE)
         {
@@ -110,7 +114,7 @@ struct token_array *lex(struct lexer *lexer)
     {
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok == TOKEN_WORD)
-            check_assignment(buffer, arr);
+            check_assignment(buffer, arr, is_string);
         else
             token_array_add(arr, token_init(tok, buffer));
     }

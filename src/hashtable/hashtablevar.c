@@ -20,11 +20,23 @@ static char* gethome(void)
     return pw->pw_dir;
 }
 
+char* getcurrent(void)
+{
+    char result[2048];
+    if (getcwd(result, 2048) == NULL)
+        return(".");
+    //char *res = calloc(sizeof(char) * 2048);
+    return strdup(result);
+}
+
+
+
 
 static void insert_default_variables(struct hash_table_var *ht)
 {
     insert_variable(ht, "PS1", "42sh$ ");
     insert_variable(ht, "PS2", "> ");
+    insert_variable(ht, "OLDPWD", getcurrent());
     insert_variable(ht, "HOME", gethome());
     char histfile[2048] = { 0 };
     strcat(histfile, gethome());

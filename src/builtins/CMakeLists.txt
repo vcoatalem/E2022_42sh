@@ -1,4 +1,4 @@
-add_library(builtins builtins.c cd.c history.c shopt.c)
+add_library(builtins builtins.c cd.c export.c history.c shopt.c)
 
 target_link_libraries(builtins options)
 

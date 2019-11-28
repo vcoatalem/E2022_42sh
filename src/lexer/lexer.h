@@ -188,7 +188,7 @@ int is_separator(char c);
  */
 int is_space(char c);
 
-void check_assignment(char *buffer, struct token_array *arr);
+void check_assignment(char *buffer, struct token_array *arr, int is_string);
 
 
 /**

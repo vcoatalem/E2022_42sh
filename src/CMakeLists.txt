@@ -7,6 +7,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hashtable)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/builtins)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/variables)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/main)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/expansion)
 
 
 add_subdirectory(ast/)
@@ -18,3 +19,4 @@ add_subdirectory(options/)
 add_subdirectory(hashtable/)
 add_subdirectory(builtins/)
 add_subdirectory(main/)
+add_subdirectory(expansion/)
