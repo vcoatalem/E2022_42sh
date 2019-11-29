@@ -22,6 +22,7 @@ struct options *options_init(void)
     new_options->set_shopt = NULL;
     new_options->nb_unset_shopt = 0;
     new_options->unset_shopt = NULL;
+    new_options->begargs = 0;
     new_options->script = NULL;
 
     return new_options;
@@ -116,6 +117,8 @@ int get_option_type(struct options *options, int argc, char *argv[])
         if (!is_flag(s) && options->command == NULL)
         {
             options->script = s;
+            options->args = argv;
+            options->begargs = i + 1;
             break;
         }
 

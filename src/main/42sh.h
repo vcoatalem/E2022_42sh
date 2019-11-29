@@ -82,7 +82,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd);
  U* \return int the return of bash
  R*
  */
-int execute_script(struct execution_bundle *bundle, char* script, char** args);
+int execute_script(struct execution_bundle *bundle, char* script);
 
 
 
