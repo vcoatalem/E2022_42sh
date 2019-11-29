@@ -16,7 +16,7 @@ global html
 
 
 def run_42sh(args, stdin):
-# stdin = stdin + ';'
+#    stdin = stdin + ';'
     print(stdin)
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
