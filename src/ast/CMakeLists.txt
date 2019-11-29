@@ -3,7 +3,9 @@ add_library(ast
     ast_utils.c
     ast_print.c
     ast_execute.c
-    ast_execute_builders.c
+    builders/arglist.c
+    builders/redirections.c
+    builders/commands.c
     handlers/list.c
     handlers/and_or.c
     handlers/pipe.c
@@ -16,7 +18,7 @@ add_library(ast
     handlers/vardec.c
 )
 
-target_link_libraries(ast execution)
+target_link_libraries(ast execution expansion)
 
 # BASIC INIT TEST
 

@@ -37,6 +37,12 @@ static char *operator_to_string(enum operator_type type)
         return "redir_list";
     case (OPERATOR_GET_VALUE):
         return "value";
+    case (OPERATOR_GET_EXPAND_VALUE):
+        return "value_expand";
+    case (OPERATOR_GET_SUBSHELL_VALUE):
+        return "value_subshell";
+    case (OPERATOR_GET_ARITHMETIC_VALUE):
+        return "value_arithmetic";
     case (OPERATOR_FUNC_DECLARATION):
         return "function_declaration";
     case (OPERATOR_GET_IONUMBER):
