@@ -85,5 +85,25 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd);
 int execute_script(struct execution_bundle *bundle, char* script);
 
 
+// ADVANCED PROMPT
+
+/**
+ * \brief compare which type of variable it is
+ *
+ * \param char *var
+ * \param size_t *index
+ *
+ * \return char * output corresponding to var
+ */
+char *case_var(char *var, size_t *index);
+
+/**
+ * \brief replace all variable in prompt
+ *
+ * \param char *prompt
+ *
+ * \return char * replaced prompt
+ */
+char *replace_prompt(char *prompt);
 
 #endif /* BASH_H */
