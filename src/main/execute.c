@@ -42,6 +42,9 @@ static int run_lex_parse(struct execution_bundle *bundle)
     {
         printf("[EXECUTION] lex+parse returning: %d\n", return_value);
     }
+    char el[8];
+    sprintf(el, "%d",return_value);
+    insert_variable(bundle->hash_table_var, "?", el);
     return return_value;
 }
 
@@ -53,23 +56,16 @@ int execute_stdin(struct execution_bundle *bundle)
     int return_value = BASH_RETURN_OK;
     char *line = NULL;
     size_t size;
-    char *lines[8192] = { 0 };
-    size_t n_lines = 0;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
         //stripping final EOL from line
         if (line[strlen(line) - 1] == '\n')
             line[strlen(line) - 1] = 0;
-        lines[n_lines] = line;
-        n_lines++;
-    }
-    for (size_t i = 0; i < n_lines; i++)
-    {
-        lexer_add_string(bundle->lexer, lines[i]);
+        lexer_add_string(bundle->lexer, line);
         return_value = run_lex_parse(bundle);
-        free(lines[i]);
     }
+    free(line);
     return return_value;
 }
 
@@ -126,17 +122,50 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
     return try_execute;
 }
 
-int execute_script(struct execution_bundle *bundle, char *script, char **args)
+static void set_hash_var_args(struct execution_bundle *bundle)
 {
-    for (int i = 0; args[i]; ++i)
+    if (bundle->options->begargs)
     {
+        for (int i = 0; bundle->options->args[i]; ++i)
+        {
+            char el[64];
+            sprintf(el, "%d", i);
+            insert_variable(bundle->hash_table_var, el,
+                strdup(bundle->options->args[i]));
+        }
+
+        char allparams[2048] = {0};
+        int cpt = 0;
+        int i = bundle->options->begargs;
+        for (; bundle->options->args[i]; ++i)
+        {
+            int cptarg = 0;
+            while(bundle->options->args[i][cptarg])
+            {
+                allparams[cpt] = bundle->options->args[i][cptarg];
+                cptarg++;
+                cpt++;
+            }
+            allparams[cpt] = ' ';
+            cpt++;
+        }
+        insert_variable(bundle->hash_table_var, "@", allparams);
+        insert_variable(bundle->hash_table_var, "*", allparams);
         char el[64];
-        sprintf(el, "%d", i);
-        insert_variable(bundle->hash_table_var, el, args[i]);
+        sprintf(el, "%d", i - bundle->options->begargs);
+        insert_variable(bundle->hash_table_var, "#", el);
     }
+}
+
+
+int execute_script(struct execution_bundle *bundle, char *script)
+{
     appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
+
+    set_hash_var_args(bundle);
+
     int return_value = BASH_RETURN_ERROR;
     FILE *fd;
     fd = fopen(script, "r");

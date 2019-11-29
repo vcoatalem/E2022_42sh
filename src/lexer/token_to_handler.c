@@ -17,6 +17,10 @@ token_handler token_to_handler5(enum token_type type)
         return token_terminal_char;
     case (TOKEN_STDERR):
         return token_terminal_char;
+    case (TOKEN_SUBSHELL):
+        return token_subshell;
+    case (TOKEN_ARITHMETIC):
+        return token_arithmetic;
     default:
         //warn("wrong token type");
         return NULL;
