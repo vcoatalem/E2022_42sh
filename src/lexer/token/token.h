@@ -20,7 +20,7 @@
 
 #include <stddef.h>
 
-#define NB_TOKENS 41
+#define NB_TOKENS 44
 /**
  * \enum token_type
  * \brief enum contain all type of token
