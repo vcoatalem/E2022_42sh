@@ -60,7 +60,8 @@ int execute_stdin(struct execution_bundle *bundle)
     while (getline(&line, &size, stdin) != -1)
     {
         //stripping final EOL from line
-        line[strlen(line) - 1] = 0;
+        if (line[strlen(line) - 1] == '\n')
+            line[strlen(line) - 1] = 0;
         lexer_add_string(bundle->lexer, line);
         return_value = run_lex_parse(bundle);
     }
