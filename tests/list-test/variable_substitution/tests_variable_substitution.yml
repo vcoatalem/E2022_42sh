@@ -1,0 +1,8 @@
+ - name: variable_speciale
+   stdin: ../../variable_special.sh
+
+ - name: variable_substitution
+   stdin: var=toto; echo $var
+
+ - name: vaiable_substitution
+   stdin: var=toto; echo $var; var=tata; echo $var
