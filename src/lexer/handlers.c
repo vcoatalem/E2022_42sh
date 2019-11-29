@@ -87,10 +87,34 @@ int token_terminal_char(char *str, size_t iterator, char *buffer,
     return 0;
 }
 
+int token_subshell(char *str, size_t iterator, char *buffer,
+        enum token_type type)
+{
+    if (!type && !str && iterator == 0)
+        return 0;
+    if (strlen(buffer) > 3 && buffer[0] == '$' && buffer[1] == '('
+        && buffer[2] != '(' && buffer[strlen(buffer) - 1] == ')')
+        return 1;
+    return 0;
+}
+
+
+int token_arithmetic(char *str, size_t iterator, char *buffer,
+        enum token_type type)
+{
+    if (!type && !str && iterator == 0)
+        return 0;
+    if (strlen(buffer) > 3 && buffer[0] == '$' && buffer[1] == '('
+        && buffer[2] == '(' && buffer[strlen(buffer) - 1] == ')')
+        return 1;
+    return 0;
+}
+
+
 //return token_type in buffer else return TOKEN_WORD if it's not a token
 enum token_type token_check(char *str, size_t iterator, char *buffer)
 {
-    for (enum token_type i = TOKEN_EOL; i <= TOKEN_FUNCTION; ++i)
+    for (enum token_type i = TOKEN_EOL; i <= TOKEN_ARITHMETIC; ++i)
     {
         token_handler func = token_to_handler(i);
         if (func(str, iterator, buffer, i) == 1)

@@ -31,6 +31,7 @@
 enum token_type
 {
     TOKEN_WORD,
+    TOKEN_ASSIGNMENT,
     TOKEN_EOF,
     TOKEN_EOL,
     TOKEN_SEMI_COLON,
@@ -70,7 +71,8 @@ enum token_type
     TOKEN_ELSE,
     TOKEN_ELIF,
     TOKEN_FUNCTION,
-    TOKEN_ASSIGNMENT,
+    TOKEN_SUBSHELL,
+    TOKEN_ARITHMETIC,
     TOKEN_WORD_W_STAR
 };
 
@@ -172,6 +174,34 @@ int token_diff_char(char *str, size_t iterator, char *buffer, enum
  *
  */
 int token_terminal_char(char *str, size_t iterator, char *buffer,
+        enum token_type type);
+
+/**
+ * \brief Function for token ( "$( blabla )")
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
+int token_subshell(char *str, size_t iterator, char *buffer,
+        enum token_type type);
+
+/**
+ * \brief Function for token ("$(( blabla ))")
+ *
+ * \param *str string in the input,
+ * \param iterator where the program is in the string
+ * \param *buffer buffer where tokens are stocked
+ * \param *token_type type token_type to compare
+ *
+ * \return int 1->true 0->false
+ *
+ */
+int token_arithmetic(char *str, size_t iterator, char *buffer,
         enum token_type type);
 
 token_handler token_to_handler(enum token_type type);
