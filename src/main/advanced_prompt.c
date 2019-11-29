@@ -1,11 +1,15 @@
 #define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <libgen.h>
 
 #include "42sh.h"
+
+#define PATH_MAX 1024
 
 static char *case_a()
 {
@@ -20,8 +24,8 @@ static char *case_d()
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
 
-    char *result = calloc(1024, sizeof(char));
-    size_t nb = strftime(result, 1024, "%A %B %d", tm);
+    char *result = calloc(PATH_MAX, sizeof(char));
+    size_t nb = strftime(result, PATH_MAX, "%A %B %d", tm);
     result = realloc(result, nb * sizeof(char) + 1);
     result[nb] = '\0';
 
@@ -52,8 +56,8 @@ static char *case_D(char *format)
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
 
-    char *result = calloc(1024, sizeof(char));
-    size_t nb = strftime(result, 1024, format, tm);
+    char *result = calloc(PATH_MAX, sizeof(char));
+    size_t nb = strftime(result, PATH_MAX, format, tm);
     result = realloc(result, nb * sizeof(char) + 1);
     result[nb] = '\0';
 
@@ -70,18 +74,16 @@ static char *case_e()
 
 static char *case_h()
 {
-    char *hostname = calloc(1024, sizeof(char));
+    char *hostname = calloc(PATH_MAX, sizeof(char));
     gethostname(hostname, 1023);
+    hostname = strtok(hostname, ".");
 
-    struct hostent *h = gethostbyname(hostname);
-
-    return h->h_name;
+    return hostname;
 }
 
-// TODO
 static char *case_H()
 {
-    char *hostname = calloc(1024, sizeof(char));
+    char *hostname = calloc(PATH_MAX, sizeof(char));
     gethostname(hostname, 1023);
 
     return hostname;
@@ -103,36 +105,60 @@ static char *case_r()
     return result;
 }
 
-// TODO
 static char *case_s()
 {
-    return NULL;
+    char *result = calloc(PATH_MAX, sizeof(char));
+    result = strcat(result, basename(getenv("SHELL")));
+
+    return result;
 }
 
 static char *case_u()
 {
-    char *result = calloc(1024, sizeof(char));
+    char *result = calloc(PATH_MAX, sizeof(char));
     getlogin_r(result, 1023);
 
     return result;
 }
 
-// TODO
 static char *case_w()
 {
-    return NULL;
+    char *result = calloc(PATH_MAX, sizeof(char));
+    result = getcwd(result, 1023);
+
+    if (strcmp(result, getenv("HOME")) == 0)
+    {
+        result = realloc(result, 2 * sizeof(char));
+        result[0] = '~';
+        result[1] = '\0';
+    }
+
+    return result;
 }
 
-// TODO
 static char *case_W()
 {
-    return NULL;
+    char *result = calloc(PATH_MAX, sizeof(char));
+    result = getcwd(result, 1023);
+
+    if (strcmp(result, getenv("HOME")) == 0)
+    {
+        result = realloc(result, 2 * sizeof(char));
+        result[0] = '~';
+        result[1] = '\0';
+    }
+
+    result = basename(result);
+
+    return result;
 }
 
-// TODO
 static char *case_dollar_sign()
 {
-    return NULL;
+    char *result = calloc(PATH_MAX, sizeof(char));
+    sprintf(result, "%d", getuid());
+
+    return result;
 }
 
 static char *case_nnn()
@@ -270,8 +296,7 @@ char *replace_prompt(char *prompt)
 /*
 int main(void)
 {
-    printf("%s\n", replace_prompt("\\u"));
-    printf("%s\n", replace_prompt("\\H"));
+    printf("%s\n", replace_prompt("\\W"));
 
     return 0;
 }
