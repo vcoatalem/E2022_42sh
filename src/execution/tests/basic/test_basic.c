@@ -63,8 +63,8 @@ int main(int argc, char **argv)
     }
     else if (q == 4)
     {
-        struct command *c1 = command_init(commands[q], &bundle);
-        struct command *c2 = command_init(commands[q + 1], &bundle);
+        struct command *c1 = command_init(commands[4], &bundle);
+        struct command *c2 = command_init(commands[5], &bundle);
         pipe_add_command(p, c1);
         pipe_add_command(p, c2);
     }
