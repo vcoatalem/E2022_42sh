@@ -30,6 +30,14 @@ void token_array_free(struct token_array *arr)
 
 void token_array_add(struct token_array *arr, struct token *token)
 {
+    for (size_t i = 0; i < strlen(token->value); ++i)
+    {
+        if (token->value[i] == '*')
+        {
+            token->type = TOKEN_WORD_W_STAR;
+        }
+    }
+
     arr->tok_array[arr->size] = token;
     arr->size++;
     if (arr->size == arr->capacity)
