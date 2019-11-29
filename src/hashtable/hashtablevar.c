@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <time.h>
 #include <sys/types.h>
 #include "hashtablevar.h"
 #include "hashtablefunc.h"
@@ -111,6 +112,15 @@ void insert_variable(struct hash_table_var *ht, char *name, char *data)
 
 char *get_variable(struct hash_table_var *ht, char *name)
 {
+    if (strcmp(name, "RANDOM") == 0)
+    {
+        time_t t;
+        srand((unsigned) time(&t));
+        char el[64];
+        sprintf(el, "%d", rand() % 32768);
+        return strdup(el);
+    }
+
     size_t key = hash(name, ht->size);
     struct hashed_var *items = ht->items[key];
     if (!items)

@@ -108,6 +108,6 @@ int pipe_execute(struct pipe *pipe, void *execution_bundle);
 void pipe_free(struct pipe *p);
 
 
-char *substitute_shell(char **args);
+char *substitute_shell(char *command);
 
 #endif /* EXECUTION_H */

@@ -14,6 +14,7 @@
 
 #include <stddef.h>
 #include "../execution/execution.h"
+#include "../expansion/expansion.h"
 
 #define AST_SUCCESS 0
 #define AST_ERROR 1
@@ -63,6 +64,9 @@ enum operator_type
     OPERATOR_REDIR,
     OPERATOR_REDIR_LIST,
     OPERATOR_GET_VALUE,
+    OPERATOR_GET_EXPAND_VALUE,
+    OPERATOR_GET_SUBSHELL_VALUE,
+    OPERATOR_GET_ARITHMETIC_VALUE,
     OPERATOR_GET_IONUMBER,
     OPERATOR_GET_REDIR_SYMBOL,
     OPERATOR_GET_REDIR_TO,
@@ -198,6 +202,9 @@ struct command *ast_command_build(struct ast *ast, void *bundle_ptr);
  * \return redirection return a new redirection structure
  */
 struct redirection *ast_redirection_build(struct ast *ast);
+
+
+struct redirection **ast_redirection_list_build(struct ast *ast);
 
 /**
  * \brief

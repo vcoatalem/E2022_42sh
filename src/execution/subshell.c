@@ -2,35 +2,41 @@
 
 #include "execution.h"
 
-// echo $(seq 0 1 10)
-// -> args= { exec, ./42sh, -c, "seq 0 1 10", NULL }
+#define SUBSHELL_MAX_SIZE 8192
 
-char *substitute_shell(char **args)
+
+//args: { "42sh", "-c", "[subshell content]", NULL }
+
+char *substitute_shell(char *command)
 {
+    char *args[] =
+    {
+        "42sh",
+        "-c",
+        command,
+        NULL
+    };
+    char *env[] =
+    {
+        NULL
+    };
     int p[2];
     pipe(p);
     pid_t pid = fork();
     int status;
     if (pid == 0)
     {
-        //dup2(p[PIPE_WRITE], STDOUT_FILENO);
-        //char *env[] = { NULL };
-        
-        printf("yoooo %s\n", *args);
-        //execve("./42sh", args, env);
+        dup2(p[PIPE_WRITE], STDOUT_FILENO);
+        execve("./42sh", args, env);
         //somthing went wrong..
+        warnx("could not initialise subshell...");
         exit (RETURN_UNKNOWN_COMMAND);
     }
     else
     {
         waitpid(pid, &status, 0);
     }
-    char buffer[8092] = { 0 };
-    size_t buffer_iterator = 0;
-    while (read(p[PIPE_READ], buffer + buffer_iterator, 1))
-    {
-        warnx("read");
-        buffer_iterator++;
-    }
+    char buffer[SUBSHELL_MAX_SIZE] = { 0 };
+    read(p[PIPE_READ], buffer, SUBSHELL_MAX_SIZE - 1);
     return strdup(buffer);
 }

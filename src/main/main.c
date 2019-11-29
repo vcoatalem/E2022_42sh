@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     init_history(&bundle);
     if (options->script != NULL)
     {
-        execution_val = execute_script(g_bundle, options->script, NULL);
+        execution_val = execute_script(g_bundle, options->script);
     }
     else if (options->command)
     {

@@ -32,12 +32,18 @@ int ast_handle_and_or(struct ast *ast, void *bundle_ptr)
     }
     if (or && return_value != AST_SUCCESS)
     {
-        printf("[AST EXECUTION] AND trying to execute OR child\n");
+        if (bundle->shopt->debug)
+        {
+            printf("[AST EXECUTION] AND trying to execute OR child\n");
+        }
         return_value = ast_handle_or(or, bundle_ptr);
     }
     if (and_or && return_value == AST_SUCCESS)
     {
-        printf("[AST EXECUTION] AND trying to execute AND child\n");
+        if (bundle->shopt->debug)
+        {
+            printf("[AST EXECUTION] AND trying to execute AND child\n");
+        }
         return_value = ast_handle_and_or(and_or, bundle_ptr);
     }
     return return_value;
