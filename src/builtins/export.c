@@ -25,11 +25,11 @@ int builtin_export(char **str, size_t size, void *bundle_ptr)
             unsetenv(str[i]);
         }
     }
-    else if (size > 2)
+    else if (size >= 2)
     {
-        for (size_t i = 2; i < size; ++i)
+        for (size_t i = 1; i < size; ++i)
         {
-            putenv(str[i]);
+            putenv(strdup(str[i]));
         }
     }
 
