@@ -15,6 +15,12 @@ char *token_to_string5(enum token_type type)
         return "2";
     case (TOKEN_ASSIGNMENT):
         return "word_assignment";
+    case (TOKEN_WORD_W_STAR):
+        return "word_with_star";
+    case (TOKEN_SUBSHELL):
+        return "subshell";
+    case (TOKEN_ARITHMETIC):
+        return "arithmetic";
     default:
         return "word";
     }

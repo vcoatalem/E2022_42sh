@@ -30,6 +30,14 @@ void token_array_free(struct token_array *arr)
 
 void token_array_add(struct token_array *arr, struct token *token)
 {
+    for (size_t i = 0; i < strlen(token->value); ++i)
+    {
+        if (token->value[i] == '*')
+        {
+            token->type = TOKEN_WORD_W_STAR;
+        }
+    }
+
     arr->tok_array[arr->size] = token;
     arr->size++;
     if (arr->size == arr->capacity)
@@ -82,7 +90,7 @@ void token_array_print(struct token_array *arr, FILE *out)
 int is_separator(char c)
 {
     return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
-            || c == '(' || c == ')' || c == '\0' || c == '<' || c == '>'
+            || c == '\0' || c == '<' || c == '>'
             || c == ';');
 }
 

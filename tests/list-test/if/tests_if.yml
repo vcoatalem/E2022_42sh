@@ -1,5 +1,5 @@
  - name: if_simple
-   stdin: if echo foo;then echo ok;fi
+   stdin: "if echo foo;then echo ok;fi"
 
  - name: if_then
-   stdin: "if echo foo\nthen echo Ok\nfi"
+   stdin: "if false; then echo not ok; else echo ok_else; fi"

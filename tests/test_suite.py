@@ -16,7 +16,7 @@ global html
 
 
 def run_42sh(args, stdin):
-#stdin = stdin + ';'
+# stdin = stdin + ';'
     print(stdin)
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
@@ -29,10 +29,24 @@ def remove_bracket(sh):
             res = res + sh[i]
     return res
 
+def put_in_file_sh(out):
+    new_file = open("shout.txt", "a")
+    new_file.write(out.stdout)
+    new_file.write("\n")
+    new_file.close()
+
+def put_in_file_ref(out):
+    new_file = open("refout.txt", "a")
+    new_file.write(out.stdout)
+    new_file.write("\n")
+    new_file.close()
+
 def test(binary, tests):
     start_time = time.time()
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
     sh = run_42sh([binary], tests["stdin"])
+    put_in_file_sh(sh)
+    put_in_file_ref(ref)
    # sh.stdout = remove_bracket(sh.stdout)
     print(tests["name"] + " execution time: %.10s" % (time.time() -
                         start_time))
@@ -64,6 +78,8 @@ def diff(ref, sh):
 
 if __name__ == "__main__":
     test_time = time.time()
+    open("refout.txt", "w").close()
+    open("shout.txt", "w").close()
     parser = ArgumentParser(description = "42sh TestSuite")
     parser.add_argument('bin', metavar='BIN')
     parser.add_argument("-l", "--list", action="store_true")
@@ -90,19 +106,25 @@ if __name__ == "__main__":
                     print(f"\033[32m[OK]", tests["name"], "\033[m")
                     success = success + 1
         else:
-                with open("tests_and_or.yml", "r") as tests_files:
+            path_list = []
+            for (directories, _, sub_files) in os.walk("list-test/"):
+                for files in sub_files:
+                    path_file = directories + '/' + files
+                    path_list.append(path_file)
+            for elmt in path_list:
+                with open(elmt, "r") as tests_files:
                     test_case = yaml.safe_load(tests_files)
                 for tests in test_case:
                     try:
                         test(binary, tests)
                     except AssertionError as err:
-                        print(f"\033[31m[KO]", tests["name"], "\033[m")
+                        print(f"\033[31m[KO]", tests["name"], "\033[m\n")
                         print(err)
                         fail = fail + 1
                     except TimeoutError as err:
                         print(err)
                     else:
-                        print(f"\033[32m[OK]", tests["name"], "\033[m")
+                        print(f"\033[32m[OK]", tests["name"], "\033[m\n")
                         success = success + 1
         print("------------ Tests Results -------------")
         print("Numbers of tests:",success + fail)
