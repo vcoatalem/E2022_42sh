@@ -176,12 +176,6 @@ static char *case_backslash()
     return result;
 }
 
-// TODO
-static char *case_open_bracket()
-{
-    return NULL;
-}
-
 char *case_var(char *var, size_t *index)
 {
     // ASCII bell character
@@ -255,10 +249,6 @@ char *case_var(char *var, size_t *index)
     else if (var[*index] == '\\')
         return case_backslash();
 
-    // Begin sequence of non-printing characters
-    else if (var[*index] == '[')
-        return case_open_bracket();
-
     return NULL;
 }
 
@@ -281,7 +271,10 @@ char *replace_prompt(char *prompt)
             }
 
             else
+            {
+                --i;
                 new_prompt[i] = prompt[i];
+            }
         }
         else
             new_prompt[i] = prompt[i];
@@ -291,13 +284,3 @@ char *replace_prompt(char *prompt)
 
     return new_prompt;
 }
-
-// TESTS
-/*
-int main(void)
-{
-    printf("%s\n", replace_prompt("\\W"));
-
-    return 0;
-}
-*/
