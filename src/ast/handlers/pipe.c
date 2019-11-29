@@ -34,7 +34,15 @@ int ast_handle_pipe(struct ast *ast, void *bundle_ptr)
             ast = find_op_type(ast, OPERATOR_PIPE);
         }
     }
+    if (bundle->shopt->debug)
+    {
+        printf("[AST EXECUTION] built pipe; entering pipe execution\n");
+    }
     int result = pipe_execute(pipe, bundle_ptr);
+    if (bundle->shopt->debug)
+    {
+        printf("[AST EXECUTION] pipe execution returned: %d\n", result);
+    }
     pipe_free(pipe);
     return result;
 }

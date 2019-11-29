@@ -12,6 +12,7 @@ CMakeLists/
 doc/html/
 doc/latex/
 a.out
+out
 .gdb_history
 tests/env
 *.html

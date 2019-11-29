@@ -1,3 +1,5 @@
+#include <fnmatch.h>
+
 #include "../ast.h"
 #include "../../main/42sh.h"
 #include "../../execution/execution.h"
@@ -10,21 +12,22 @@ int ast_handle_case(struct ast *ast, void *bundle_ptr)
 
     if (ast == NULL)
         return AST_ERROR;
-#if 0
-    for (size_t i = 0; i < ast->nb_children; i++)
+    
+    struct ast *val_a = find_op_type(ast, OPERATOR_GET_VALUE);
+    struct ast *clause = find_op_type(ast, OPERATOR_CASE);
+    while (clause && clause->nb_children > 1)
     {
-        if (ast->forest[i]->op_type == OPERATOR_PATTERN)
+        //while clause is not ESAC...
+        struct ast *item = find_op_type(clause, OPERATOR_GET_VALUE);
+        struct ast *val_b = find_op_type(item, OPERATOR_GET_VALUE);
+        struct ast *list = find_op_type(item, OPERATOR_LIST);
+        if (fnmatch(val_a->forest[0]->value,
+                    val_b->forest[0]->value,
+                    0) == 0)
         {
-            struct ast *ast_pattern = ast->forest[i];
-            // Pattern matching
-            if (strcmp(ast_pattern->value, ast->value) == 0)
-            {
-                struct ast *ast_compound = find_op_type(ast_pattern,
-                        OPERATOR_AND);
-                return ast_execute(ast_compound, bundle_ptr);
-            }
+            return ast_execute(list, bundle_ptr);
         }
+        clause = find_op_type(clause, OPERATOR_CASE);
     }
-#endif
-    return AST_ERROR;
+    return AST_SUCCESS;
 }

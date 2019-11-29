@@ -22,6 +22,7 @@ add_library(parser
     shell_rules/do.c
     shell_rules/input.c
     shell_rules/misc.c
+    shell_rules/case.c
     ast_build/node_string.c
     ast_build/node_operator.c
 )

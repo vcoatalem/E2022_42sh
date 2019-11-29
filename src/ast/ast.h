@@ -239,6 +239,8 @@ int ast_handle_until(struct ast *ast, void *bundle);
 int ast_handle_funcdec(struct ast *ast, void *bundle);
 int ast_handle_vardec(struct ast *ast, void *bundle_ptr);
 int ast_handle_list(struct ast *ast, void *bundle_ptr);
+int ast_handle_case(struct ast *ast, void *bundle_ptr);
+
 
 /**
  * \brief execution function of ast

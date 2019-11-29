@@ -21,7 +21,7 @@ void command_restore_flux(struct command *command)
 */
     if (command->fd_in > 2)
     {
-        close(command->fd_in);
+        //close(command->fd_in);
     }
     if (command->fd_out > 2)
     {
@@ -32,7 +32,7 @@ void command_restore_flux(struct command *command)
         close(command->fd_err);
     }
     dup2(command->save_in, STDIN_FILENO);
-    dup2(command->save_in, STDOUT_FILENO);
+    dup2(command->save_out, STDOUT_FILENO);
     dup2(command->save_err, STDERR_FILENO);
     close(command->save_in);
     close(command->save_out);

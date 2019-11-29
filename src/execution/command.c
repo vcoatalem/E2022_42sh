@@ -34,7 +34,7 @@ static char **build_substituted_arg_list(char **args, size_t *n_args,
         char *substituted = var_substitute(*(args + iterator), ht);
         if (bundle && bundle->shopt->debug)
         {
-            printf("applied substitution on '%s' --> '%s'\n",
+            printf("[COMMAND EXECUTION] applied substitution on '%s' --> '%s'\n",
                     *(args + iterator), substituted);
         }
         if (strcmp(substituted, *(args + iterator)))
@@ -64,7 +64,7 @@ static char **build_substituted_arg_list(char **args, size_t *n_args,
     }
     if (bundle && bundle->shopt->debug)
     {
-        printf("[COMMAND] built arg list: ");
+        printf("[COMMAND EXECUTION] built arg list: ");
         for (size_t i = 0; i < *n_args; i++)
         {
             printf(" `%s`,", *(argv + i));
@@ -144,8 +144,7 @@ void command_add_redirection(struct command *command,
 
 static int command_execute_sh(struct command *command, void *bundle_ptr)
 {
-    struct execution_bundle *bundle = bundle_ptr;
-    if (!bundle)
+    if (!bundle_ptr)
         return 0;
     int status;
     pid_t pid = fork();
@@ -160,26 +159,15 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         exit(RETURN_UNKNOWN_COMMAND);
     }
     waitpid(pid, &status, 0);
-    if (bundle->shopt && bundle->shopt->debug)
-    {
-        printf("[COMMAND EXECUTION] command %s received %d\n",
-                *(command->args), status);
-    }
     return status;
 }
 
 static int command_execute_builtin(struct command *command, void *bundle_ptr)
 {
-    struct execution_bundle *bundle = bundle_ptr;
     //execute command
     builtin_handler handler = str_to_builtin(*(command->args));
     int execute_handler = handler(command->args, command->n_args,
             bundle_ptr);
-    if (bundle->shopt && bundle->shopt->debug)
-    {
-        printf("[COMMAND EXECUTION] builtin %s received %d\n",
-                *(command->args), execute_handler);
-    }
     return execute_handler;
 }
 
@@ -188,24 +176,23 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
     int execute_funcdec = ast_execute(func_ast, bundle_ptr);
-
-    if (bundle->shopt && bundle->shopt->debug)
-    {
-        printf("[COMMAND EXECUTION] funcdec %s received %d\n",
-                *(command->args), execute_funcdec);
-    }
     return execute_funcdec;
 }
 
 int command_execute(struct command *command, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
+    if (bundle->shopt->debug)
+    {
+        printf("[COMMAND EXECUTION] entered command_execute\n");
+    }
     int return_value = RETURN_UNKNOWN_COMMAND;
     command_apply_redirections(command, bundle_ptr);
     if (command->type == COMMAND_AST)
     {
         return_value = ast_execute(command->ast, bundle_ptr);
     }
-    if (command->type == COMMAND_SH)
+    else if (command->type == COMMAND_SH)
     {
         return_value = command_execute_sh(command, bundle_ptr);
     }
@@ -225,6 +212,11 @@ int command_execute(struct command *command, void *bundle_ptr)
     if (command->invert_value)
     {
         return_value = return_value != AST_SUCCESS ? 0 : AST_ERROR;
+    }
+    if (bundle->shopt->debug)
+    {
+        printf("[COMMAND EXECUTION] exiting command_execute with code: %d\n",
+                return_value);
     }
     return return_value;
 }

@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 46
+#define NB_RULES 54
 
 
 /**
@@ -82,6 +82,14 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_FUNCDEC_BODY,                  //43
     RULE_FUNCDEC,                       //44
     RULE_VARDEC,                        //45
+    RULE_CASE,                          //46
+    RULE_CASE_LINEBREAK,                //47
+    RULE_CASE_CLAUSE,                   //48
+    RULE_CASE_DELIM,                    //49
+    RULE_CASE_CLAUSE_CONCAT,            //50
+    RULE_CASE_ITEM,                     //51
+    RULE_CASE_ITEM_CONCAT,              //52
+    RULE_CASE_END                       //53
 };
 
 /**
@@ -261,6 +269,7 @@ void sh_rule_do_groups                 (struct rule_array *rules);
 void sh_rule_funcdec_groups            (struct rule_array *rules);
 void sh_rule_if_groups                 (struct rule_array *rules);
 void sh_rule_misc                      (struct rule_array *rules);
+void sh_rule_case_groups               (struct rule_array *rules);
 
 /**
  * \brief initialises the LL grammar

@@ -107,4 +107,7 @@ void pipe_add_command(struct pipe *pipe, struct command *command);
 int pipe_execute(struct pipe *pipe, void *execution_bundle);
 void pipe_free(struct pipe *p);
 
+
+char *substitute_shell(char **args);
+
 #endif /* EXECUTION_H */
