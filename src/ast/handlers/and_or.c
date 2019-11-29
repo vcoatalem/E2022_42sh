@@ -26,12 +26,18 @@ int ast_handle_and_or(struct ast *ast, void *bundle_ptr)
     struct ast *and_or = and_concat ?
             find_op_type(and_concat, OPERATOR_AND) : NULL;
     int return_value = ast_execute(ast_pipe, bundle_ptr);
+    if (bundle->shopt->debug)
+    {
+        printf("[AST EXECUTION] AND node received: %d\n", return_value);
+    }
     if (or && return_value != AST_SUCCESS)
     {
+        printf("[AST EXECUTION] AND trying to execute OR child\n");
         return_value = ast_handle_or(or, bundle_ptr);
     }
     if (and_or && return_value == AST_SUCCESS)
     {
+        printf("[AST EXECUTION] AND trying to execute AND child\n");
         return_value = ast_handle_and_or(and_or, bundle_ptr);
     }
     return return_value;

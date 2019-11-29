@@ -40,9 +40,9 @@ int ast_execute(struct ast *ast, void *bundle_ptr)
     int return_val = handler(ast, bundle);
     if (bundle->shopt && bundle->shopt->debug)
     {
-        printf("[AST] ast_execute for ast of operator type %d and value `%s` ",
-                ast->op_type, ast->value);
-        printf("returning: %d\n", return_val);
+        printf("[AST EXECUTION] ast_execute for ast of operator type");
+        printf("%d and value `%s` returning: %d\n",
+                ast->op_type, ast->value, return_val);
     }
     return return_val;
 }

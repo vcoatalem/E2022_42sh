@@ -1,4 +1,3 @@
-#define _DEFAULT_SOURCE
 #include <stddef.h>
 #include <stdlib.h>
 #include <ctype.h>

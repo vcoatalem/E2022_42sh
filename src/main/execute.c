@@ -53,15 +53,23 @@ int execute_stdin(struct execution_bundle *bundle)
     int return_value = BASH_RETURN_OK;
     char *line = NULL;
     size_t size;
+    char *lines[8192] = { 0 };
+    size_t n_lines = 0;
     bundle->lexer = lexer_init();
     while (getline(&line, &size, stdin) != -1)
     {
         //stripping final EOL from line
-        line[strlen(line) - 1] = 0;
-        lexer_add_string(bundle->lexer, line);
-        return_value = run_lex_parse(bundle);
+        if (line[strlen(line) - 1] == '\n')
+            line[strlen(line) - 1] = 0;
+        lines[n_lines] = line;
+        n_lines++;
     }
-    free(line);
+    for (size_t i = 0; i < n_lines; i++)
+    {
+        lexer_add_string(bundle->lexer, lines[i]);
+        return_value = run_lex_parse(bundle);
+        free(lines[i]);
+    }
     return return_value;
 }
 
