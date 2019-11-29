@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 54
+#define NB_RULES 57
 
 
 /**
@@ -68,28 +68,31 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_REDIR_TO,                      //29
     RULE_IONUMBER,                      //30
     RULE_ELEMENT,                       //31
-    RULE_ELEMENT_LIST,                  //32
-    RULE_ELEMENT_ANY,                   //33
-    RULE_ELEMENT_ANY_LIST,              //34
-    RULE_ARG_LIST,                      //35
-    RULE_IF,                            //36
-    RULE_THEN,                          //37
-    RULE_ELSE_CONCAT,                   //38
-    RULE_WHILE,                         //39
-    RULE_UNTIL,                         //40
-    RULE_FOR,                           //41
-    RULE_DO_GROUP,                      //42
-    RULE_FUNCDEC_BODY,                  //43
-    RULE_FUNCDEC,                       //44
-    RULE_VARDEC,                        //45
-    RULE_CASE,                          //46
-    RULE_CASE_LINEBREAK,                //47
-    RULE_CASE_CLAUSE,                   //48
-    RULE_CASE_DELIM,                    //49
-    RULE_CASE_CLAUSE_CONCAT,            //50
-    RULE_CASE_ITEM,                     //51
-    RULE_CASE_ITEM_CONCAT,              //52
-    RULE_CASE_END                       //53
+    RULE_ELEMENT_EXPAND,                //32
+    RULE_ELEMENT_SUBSHELL,              //33
+    RULE_ELEMENT_ARITHMETIC,            //34
+    RULE_ELEMENT_LIST,                  //35
+    RULE_ELEMENT_ANY,                   //36
+    RULE_ELEMENT_ANY_LIST,              //37
+    RULE_ARG_LIST,                      //38
+    RULE_IF,                            //39
+    RULE_THEN,                          //40
+    RULE_ELSE_CONCAT,                   //41
+    RULE_WHILE,                         //42
+    RULE_UNTIL,                         //43
+    RULE_FOR,                           //44
+    RULE_DO_GROUP,                      //45
+    RULE_FUNCDEC_BODY,                  //46
+    RULE_FUNCDEC,                       //47
+    RULE_VARDEC,                        //48
+    RULE_CASE,                          //49
+    RULE_CASE_LINEBREAK,                //50
+    RULE_CASE_CLAUSE,                   //51
+    RULE_CASE_DELIM,                    //52
+    RULE_CASE_CLAUSE_CONCAT,            //53
+    RULE_CASE_ITEM,                     //54
+    RULE_CASE_ITEM_CONCAT,              //55
+    RULE_CASE_END                       //56
 };
 
 /**

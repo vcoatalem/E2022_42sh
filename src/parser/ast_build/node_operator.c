@@ -6,15 +6,24 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_UNTIL;
     if (id == RULE_ELSE_CONCAT)
         return OPERATOR_ELSE;
-    if (id == RULE_ARG_LIST || id == RULE_ELEMENT_LIST
-            || id == RULE_ELEMENT_ANY_LIST)
+    if (id == RULE_ARG_LIST
+        || id == RULE_ELEMENT_LIST
+        || id == RULE_ELEMENT_ANY_LIST)
         return OPERATOR_ARG_LIST;
     if (id == RULE_REDIR)
         return OPERATOR_REDIR;
     if (id == RULE_REDIR_LIST)
         return OPERATOR_REDIR_LIST;
-    if (id == RULE_ELEMENT || id == RULE_ELEMENT_ANY || id == RULE_CASE_ITEM)
+    if (id == RULE_ELEMENT
+        || id == RULE_ELEMENT_ANY
+        || id == RULE_CASE_ITEM)
         return OPERATOR_GET_VALUE;
+    if (id == RULE_ELEMENT_EXPAND)
+        return OPERATOR_GET_EXPAND_VALUE;
+    if (id == RULE_ELEMENT_SUBSHELL)
+        return OPERATOR_GET_SUBSHELL_VALUE;
+    if (id == RULE_ELEMENT_ARITHMETIC)
+        return OPERATOR_GET_ARITHMETIC_VALUE;
     if (id == RULE_REDIR_SYMBOL)
         return OPERATOR_GET_REDIR_SYMBOL;
     if (id == RULE_IONUMBER)
@@ -29,32 +38,57 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_DO;
     if (id == RULE_COMMAND_NOT)
         return OPERATOR_NOT;
-    if (id == RULE_CASE || id == RULE_CASE_CLAUSE || id == RULE_CASE_LINEBREAK
-            || id == RULE_CASE_CLAUSE_CONCAT || id == RULE_CASE_DELIM
-            || id == RULE_CASE_ITEM_CONCAT)
+    if (id == RULE_CASE
+        || id == RULE_CASE_CLAUSE
+        || id == RULE_CASE_LINEBREAK
+        || id == RULE_CASE_CLAUSE_CONCAT
+        || id == RULE_CASE_DELIM
+        || id == RULE_CASE_ITEM_CONCAT)
         return OPERATOR_CASE;
     return OPERATOR_NONE;
 }
 
 enum operator_type rule_id_to_operator(enum rule_id id)
 {
-    if (id == RULE_INPUT || id == RULE_LIST_DELIM
-        || id == RULE_LIST || id == RULE_LIST_DELIM || id == RULE_LIST_CONCAT
-        || id == RULE_COMPOUND_LIST_BREAK || id == RULE_COMPOUND_LIST_BREAK_DELIM || id == RULE_COMPOUND_LIST_BREAK_CONCAT || id == RULE_COMPOUND_LIST_BREAK_LINE
-        || id == RULE_COMPOUND_LIST || id == RULE_COMPOUND_LIST_CONCAT || id == RULE_COMPOUND_LIST_DELIM || id == RULE_COMPOUND_LIST_NEXT
+    if (id == RULE_INPUT
+        || id == RULE_LIST_DELIM
+        || id == RULE_LIST
+        || id == RULE_LIST_DELIM
+        || id == RULE_LIST_CONCAT
+        || id == RULE_COMPOUND_LIST_BREAK
+        || id == RULE_COMPOUND_LIST_BREAK_DELIM
+        || id == RULE_COMPOUND_LIST_BREAK_CONCAT
+        || id == RULE_COMPOUND_LIST_BREAK_LINE
+        || id == RULE_COMPOUND_LIST
+        || id == RULE_COMPOUND_LIST_CONCAT
+        || id == RULE_COMPOUND_LIST_DELIM
+        || id == RULE_COMPOUND_LIST_NEXT
         || id == RULE_FUNCDEC_BODY)
     {
         return OPERATOR_LIST;
     }
-    if (id == RULE_AND_CONCAT || id == RULE_AND_LINEBREAK
+    if (id == RULE_AND_CONCAT
+        || id == RULE_AND_LINEBREAK
         || id == RULE_AND_OR)
+    {
         return OPERATOR_AND;
-    if (id == RULE_OR_CONCAT || id == RULE_OR_LINEBREAK || id == RULE_OR)
+    }
+    if (id == RULE_OR_CONCAT
+        || id == RULE_OR_LINEBREAK
+        || id == RULE_OR)
+    {
         return OPERATOR_OR;
-    if (id == RULE_PIPELINE || id == RULE_PIPE)
+    }
+    if (id == RULE_PIPELINE
+        || id == RULE_PIPE)
+    {
         return OPERATOR_PIPE;
-    if (id == RULE_COMMAND || id == RULE_SIMPLE_COMMAND)
+    }
+    if (id == RULE_COMMAND
+        || id == RULE_SIMPLE_COMMAND)
+    {
         return OPERATOR_COMMAND;
+    }
     if (id == RULE_SHELL_COMMAND)
         return OPERATOR_SHELL_COMMAND;
     if (id == RULE_IF)
