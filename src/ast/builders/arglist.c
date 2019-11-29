@@ -24,6 +24,23 @@ static void arg_list_get_expand_arg(char **arg_list, size_t *index,
         free(expanded_args);
 }
 
+static void arg_list_get_subshell(char **arg_list, size_t *index,
+                                            struct ast *ast)
+{
+    arg_list[*index] = substitute_shell(ast->forest[0]->value);
+    arg_list[*index + 1] = NULL;
+    *index = *index + 1;
+}
+
+static void arg_list_get_arithmetic_value(char **arg_list, size_t *index,
+                                            struct ast *ast)
+{
+    //TODO: implement arithmetic expression substitution
+    arg_list[*index] = substitute_shell(ast->forest[0]->value);
+    arg_list[*index + 1] = NULL;
+    *index = *index + 1;
+}
+
 char **ast_arg_list_build(struct ast *ast)
 {
     char **arg_list = NULL;
@@ -47,11 +64,11 @@ char **ast_arg_list_build(struct ast *ast)
         }
         else if (sub_value)
         {
-            arg_list[index] = substitute_shell(sub_value->forest[0]->value);
+            arg_list_get_subshell(arg_list, &index, sub_value);
         }
         else if (arithmetic_value)
         {
-
+            arg_list_get_arithmetic_value(arg_list, &index, sub_value);
         }
         ast = element_list;
     }
