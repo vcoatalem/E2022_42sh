@@ -1,6 +1,9 @@
+#define _DEFAULT_SOURCE
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
+#include <netdb.h>
 
 #include "42sh.h"
 
@@ -8,6 +11,7 @@ static char *case_a()
 {
     char *result = calloc(2, sizeof(char));
     result[0] = '\a';
+
     return result;
 }
 
@@ -24,13 +28,23 @@ static char *case_d()
     return result;
 }
 
-// TODO
 static char *get_format(char *var, size_t *index)
 {
-    if (!var && index)
-        return NULL;
+    char *format = NULL;
+    size_t nb = 0;
 
-    return NULL;
+    for (; var[*index] != '\0'; (*index)++)
+    {
+        if (var[*index] == '}')
+            break;
+
+        format = realloc(format, (nb + 1) + sizeof(char));
+        format[nb] = var[*index];
+        format[nb + 1] = '\0';
+        nb++;
+    }
+
+    return format;
 }
 
 static char *case_D(char *format)
@@ -50,25 +64,34 @@ static char *case_e()
 {
     char *result = calloc(2, sizeof(char));
     result[0] = 27;
+
     return result;
 }
 
-// TODO
 static char *case_h()
 {
-    return NULL;
+    char *hostname = calloc(1024, sizeof(char));
+    gethostname(hostname, 1023);
+
+    struct hostent *h = gethostbyname(hostname);
+
+    return h->h_name;
 }
 
 // TODO
 static char *case_H()
 {
-    return NULL;
+    char *hostname = calloc(1024, sizeof(char));
+    gethostname(hostname, 1023);
+
+    return hostname;
 }
 
 static char *case_n()
 {
     char *result = calloc(2, sizeof(char));
     result[0] = '\n';
+
     return result;
 }
 
@@ -76,6 +99,7 @@ static char *case_r()
 {
     char *result = calloc(2, sizeof(char));
     result[0] = '\r';
+
     return result;
 }
 
@@ -85,10 +109,12 @@ static char *case_s()
     return NULL;
 }
 
-// TODO
 static char *case_u()
 {
-    return NULL;
+    char *result = calloc(1024, sizeof(char));
+    getlogin_r(result, 1023);
+
+    return result;
 }
 
 // TODO
@@ -120,6 +146,7 @@ static char *case_backslash()
 {
     char *result = calloc(2, sizeof(char));
     result[0] = '\\';
+
     return result;
 }
 
@@ -129,7 +156,7 @@ static char *case_open_bracket()
     return NULL;
 }
 
-char *replace_prompt_var(char *var, size_t *index)
+char *case_var(char *var, size_t *index)
 {
     // ASCII bell character
     if (var[*index] == 'a')
@@ -142,7 +169,15 @@ char *replace_prompt_var(char *var, size_t *index)
     // D{format}: format is passed to strftime and result is inserted
     //              into prompt
     else if (var[*index] == 'D')
-        return case_D(get_format(var, index));
+    {
+        if (var[(*index) + 1] == '{')
+        {
+            (*index) += 2;
+            return case_D(get_format(var, index));
+        }
+
+        return NULL;
+    }
 
     // ASCII escape character
     else if (var[*index] == 'e')
@@ -200,3 +235,44 @@ char *replace_prompt_var(char *var, size_t *index)
 
     return NULL;
 }
+
+char *replace_prompt(char *prompt)
+{
+    char *new_prompt = calloc(1, sizeof(char));
+    size_t i = 0;
+
+    while (prompt[i] != '\0')
+    {
+        if (prompt[i] == '\\')
+        {
+            i++;
+            char *var = case_var(prompt, &i);
+            if (var != NULL)
+            {
+                new_prompt = realloc(new_prompt,
+                        (strlen(var) + strlen(new_prompt)) * sizeof(char));
+                new_prompt = strcat(new_prompt, var);
+            }
+
+            else
+                new_prompt[i] = prompt[i];
+        }
+        else
+            new_prompt[i] = prompt[i];
+
+        i++;
+    }
+
+    return new_prompt;
+}
+
+// TESTS
+/*
+int main(void)
+{
+    printf("%s\n", replace_prompt("\\u"));
+    printf("%s\n", replace_prompt("\\H"));
+
+    return 0;
+}
+*/
