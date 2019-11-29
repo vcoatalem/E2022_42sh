@@ -1,32 +1,32 @@
-- name: and_simple
-  stdin: "echo Hello && echo World!"
+ - name: and_simple
+   stdin: echo Hello && echo World!
 
-- name: and_first_fail
-  stdin: "false && echo b"
+ - name: and_first_fail
+   stdin: false && echo b
 
-- name: and_second_fail
-  stdin: "echo a && cat a"
+ - name: and_second_fail
+   stdin: echo a && cat a
 
-- name: and_triple_simple
-  stdin: "echo a && echo b && echo c"
+ - name: and_triple_simple
+   stdin: echo a && echo b && echo c
 
-- name: or_simple
-  stdin: "echo a || echo b"
+ - name: or_simple
+   stdin: echo a || echo b
 
-- name: or_first_fail
-  stdin: "cat a || echo b"
+ - name: or_first_fail
+   stdin: cat a || echo b
 
-- name: or_second_fail
-  stdin: "echo a || cat a"
+ - name: or_second_fail
+   stdin: echo a || cat a
 
-- name: and_triple_simple
-  stdin: "echo a || echo b || echo c"
+ - name: and_triple_simple
+   stdin: echo a || echo b || echo c
 
-- name: and_or_simple
-  stdin: echo a && echo b || echo c
+ - name: and_or_simple
+   stdin: echo a && echo b || echo c
 
-- name: and_or_priority_matters
-  stdin: echo a && cat b || echo c
+ - name: and_or_priority_matters
+   stdin: echo a && cat b || echo c
 
-- name: and_or_advanced
-  stdin: echo a && echo b || echo c && echo d  
+ - name: and_or_advanced
+   stdin: echo a && echo b || echo c && echo d

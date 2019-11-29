@@ -1,5 +1,5 @@
  - name: echo_simple
-   stdin: echo "Hello World!"
+   stdin: echo "Hello World!";
 
  - name: echo_arg-n
    stdin: echo -n "Hello World!"
@@ -8,22 +8,22 @@
    stdin: echo -e "\tHello Wolrd!"
 
  - name: echo_arg-back
-   stdin: echo -e "Hello Wor\bld!" 
+   stdin: echo -e "Hello Wor\bld!"
 
  - name: echo_EOL
-   stdin: echo -e "Hello\nWorld!" 
+   stdin: echo -e "Hello\nWorld!"
 
  - name: echo_arg-from_begin
-   stdin: echo -e "Hello \rWorld!" 
+   stdin: echo -e "Hello \rWorld!"
 
  - name: echo_backslash
-   stdin: echo "\\" 
- 
+   stdin: echo "\\"
+
  - name: echo_hexa
-   stdin: echo -e "\x40" 
+   stdin: echo -e "\x40"
 
  - name: echo_ASCII
-   stdin: echo -e "\0176" 
+   stdin: echo -e "\0176"
  
  - name: echo_no_special
-   stdin: echo -E "Hello\nWorld!" 
+   stdin: echo -E "Hello\nWorld!"

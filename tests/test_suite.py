@@ -2,6 +2,8 @@ from argparse import ArgumentParser
 from pathlib import Path
 from difflib import unified_diff
 
+import difflib
+
 import subprocess as sp
 import yaml
 import time
@@ -9,22 +11,32 @@ import os
 
 GREEN =  '\033[32m'
 WHITE = '\033[37m'
+global html
+
+
 
 def run_42sh(args, stdin):
-    print(args)
+#stdin = stdin + ';'
     print(stdin)
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
+def remove_bracket(sh):
+    res = ""
+    for i in range (len(sh)):
+        if (sh[i] == '['):
+            break;
+        else:
+            res = res + sh[i]
+    return res
 
 def test(binary, tests):
     start_time = time.time()
-    print("STDIN: ", tests["stdin"])
     ref = run_42sh(["bash", "--posix"], tests["stdin"])
     sh = run_42sh([binary], tests["stdin"])
-    print(sh)
    # sh.stdout = remove_bracket(sh.stdout)
     print(tests["name"] + " execution time: %.10s" % (time.time() -
                         start_time))
+    print(sh.stdout)
     for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
         
         if check == "stdout":
@@ -42,6 +54,11 @@ def test(binary, tests):
 def diff(ref, sh):
     ref = ref.splitlines(keepends=True)
     sh = sh.splitlines(keepends=True)
+    differ = difflib.HtmlDiff( tabsize=4, wrapcolumn=40 )
+    html = differ.make_file( ref, sh, context=False )
+    outfile = open( 'test.html', 'w' )
+    outfile.write(html)
+    outfile.close() 
 
     return ''.join(unified_diff(ref, sh, fromfile="ref", tofile="42sh"))
 
@@ -73,13 +90,7 @@ if __name__ == "__main__":
                     print(f"\033[32m[OK]", tests["name"], "\033[m")
                     success = success + 1
         else:
-            path_list = []
-            for (directories, _, sub_files) in os.walk("list-test/"):
-                for files in sub_files:
-                    path_file = directories + '/' + files
-                    path_list.append(path_file)
-            for elmt in path_list:
-                with open(elmt, "r") as tests_files:
+                with open("tests_and_or.yml", "r") as tests_files:
                     test_case = yaml.safe_load(tests_files)
                 for tests in test_case:
                     try:
@@ -97,5 +108,5 @@ if __name__ == "__main__":
         print("Numbers of tests:",success + fail)
         print(f"Tests succeed" , success)
         print(f"Tests failed" , fail)
-        print("Time to execute all tests: %.s" % (time.time() - test_time))
+        print("Time to execute all tests: %.10s" % (time.time() - test_time))
         print("----------------------------------------")
