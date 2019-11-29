@@ -1,5 +1,5 @@
  - name: echo_simple
-   stdin: echo "Hello World!";
+   stdin: echo "Hello World!"
 
  - name: echo_arg-n
    stdin: echo -n "Hello World!"
