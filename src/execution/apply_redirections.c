@@ -21,7 +21,7 @@ void command_restore_flux(struct command *command)
 */
     if (command->fd_in > 2)
     {
-        //close(command->fd_in);
+        close(command->fd_in);
     }
     if (command->fd_out > 2)
     {
