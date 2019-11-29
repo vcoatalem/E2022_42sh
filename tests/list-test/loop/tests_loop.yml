@@ -19,7 +19,11 @@
  - name: for_break
    stdin: for i in $(seq 1 5); do break 2; done
 
- - name: while_simple
-   stdin: w=1; while [w -lt 5] ;do w=5; done
+ - name: for_continue
+   stdin: for i in $(seq 1 5); do if [ i -eq 2]; then continue 4; fi; echo hello; done
 
+# - name: while_simple
+#  stdin: w=1; while [ "$w" -lt 5 ] ; do w=6 ; done
 
+#- name: until_simple
+#  stdin: x=3 until [ "$x" -lt 2 ]; do x=2; done

@@ -4,5 +4,5 @@
  - name: variable_substitution
    stdin: var=toto; echo $var
 
- - name: vaiable_substitution
+ - name: variable_substitution
    stdin: var=toto; echo $var; var=tata; echo $var
