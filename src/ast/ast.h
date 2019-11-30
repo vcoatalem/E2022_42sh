@@ -20,6 +20,13 @@
 #define AST_ERROR 1
 #define AST_MISSING_ARG 2
 
+struct ast_traversal_context
+{
+    int loop_depth;
+    int found_break;
+    int found_continue;
+};
+
 /**
  * \enum node_type
  * \brief enum contain type of nodes

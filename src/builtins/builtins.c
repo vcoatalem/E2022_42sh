@@ -12,5 +12,9 @@ builtin_handler str_to_builtin(char *name)
         return builtin_cd;
     else if (!strcmp(name, "export"))
         return builtin_export;
+    else if (!strcmp(name, "break"))
+        return builtin_break;
+    else if (!strcmp(name, "continue"))
+        return builtin_continue;
     return NULL;
 }

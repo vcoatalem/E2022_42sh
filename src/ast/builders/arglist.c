@@ -7,21 +7,29 @@ static void arg_list_get_arg(char **arg_list, size_t *index, struct ast *ast)
     *index = *index + 1;
 }
 
-static void arg_list_get_expand_arg(char **arg_list, size_t *index,
+static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
                                             struct ast *ast)
 {
-    char **expanded_args = NULL;
-    size_t n_args = 0;
-    get_find(ast->forest[0]->value, ".",
-            &expanded_args, &n_args);
-    for (size_t i = 0; i < n_args; i++)
+    char **expanded_args = expand_file_pattern(ast->forest[0]->value);
+    if (!expanded_args)
     {
-        arg_list[*index] = expanded_args[i];
+        *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+        (*arg_list)[*index] = strdup(ast->forest[0]->value);
+        //printf("%zu: %s\n", *index, (*arg_list)[*index]);
         *index = *index + 1;
     }
-    arg_list[*index] = NULL;
-    if (expanded_args)
+    else
+    {
+        for (size_t i = 0; *(expanded_args + i); i++)
+        {
+            *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+            (*arg_list)[*index] = strdup(expanded_args[i]);
+            //printf("%zu: %s\n", *index, (*arg_list)[*index]);
+            *index = *index + 1;
+        }
+        (*arg_list)[*index] = NULL;
         free(expanded_args);
+    }
 }
 
 static void arg_list_get_subshell(char **arg_list, size_t *index,
@@ -48,19 +56,18 @@ char **ast_arg_list_build(struct ast *ast)
 
     while (ast != NULL)
     {
-        struct ast *element_list = find_op_type(ast, OPERATOR_ARG_LIST);
         arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
+        struct ast *element_list = find_op_type(ast, OPERATOR_ARG_LIST);
         struct ast *value = find_op_type(ast, OPERATOR_GET_VALUE);
-        struct ast *expand_value = find_op_type(ast, OPERATOR_GET_EXPAND_VALUE);
-        struct ast *sub_value = find_op_type(ast, OPERATOR_GET_SUBSHELL_VALUE);
-        struct ast *arithmetic_value = find_op_type(ast, OPERATOR_GET_ARITHMETIC_VALUE);
-        if (value)
+        struct ast *expand_value = find_op_type(value,
+                OPERATOR_GET_EXPAND_VALUE);
+        struct ast *sub_value = find_op_type(value,
+                OPERATOR_GET_SUBSHELL_VALUE);
+        struct ast *arithmetic_value = find_op_type(value,
+                OPERATOR_GET_ARITHMETIC_VALUE);
+        if (expand_value)
         {
-            arg_list_get_arg(arg_list, &index, value);
-        }
-        else if (expand_value)
-        {
-            arg_list_get_expand_arg(arg_list, &index, expand_value);
+            arg_list_get_expand_arg(&arg_list, &index, expand_value);
         }
         else if (sub_value)
         {
@@ -69,6 +76,10 @@ char **ast_arg_list_build(struct ast *ast)
         else if (arithmetic_value)
         {
             arg_list_get_arithmetic_value(arg_list, &index, sub_value);
+        }
+        else
+        {
+            arg_list_get_arg(arg_list, &index, value);
         }
         ast = element_list;
     }

@@ -28,6 +28,7 @@ struct execution_bundle
     struct parser *parser;
     struct ast *ast;
     struct token_array *token_array;
+    struct ast_traversal_context ast_traversal_context;
 };
 void init_history(struct execution_bundle *bundle);
 

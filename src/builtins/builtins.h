@@ -26,6 +26,10 @@ int builtin_export(char **str, size_t size, void *bundle_ptr);
 
 int builtin_history(char **str, size_t size, void *bundle_ptr);
 
+int builtin_break(char **str, size_t size, void *bundle_ptr);
+
+int builtin_continue(char **str, size_t size, void *bundle_ptr);
+
 /**
  * \brief Execute the builtin shopt
  *
