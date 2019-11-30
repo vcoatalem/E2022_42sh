@@ -107,7 +107,7 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
                 if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
                     break;
             }
-            buffer[strlen(buffer) - 2] = 0;
+            buffer[strlen(buffer) - 1] = 0;
             token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
             *index = 0;
         }
