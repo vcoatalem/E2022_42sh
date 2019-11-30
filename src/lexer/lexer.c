@@ -88,17 +88,16 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
             while((state == LEXER_STATE_SUBSHELL_DOL) 
                 || state == LEXER_STATE_SUBSHELL_QUOTE)
             {
-                
+                buffer[*index] = str[*iterator];
+                buffer[*index + 1] = 0;
+                *index = *index + 1;
+                *iterator = *iterator + 1;
                 if (buffer[strlen(buffer) - 1] == '(')
                     cptparentesis++;
                 if (buffer[strlen(buffer) - 1] == ')')
                 {
                     cptparentesis--;
                 }
-                buffer[*index] = str[*iterator];
-                buffer[*index + 1] = 0;
-                *index = *index + 1;
-                *iterator = *iterator + 1;
                 if (buffer[strlen(buffer) - 1] == '`'
                     && state == LEXER_STATE_SUBSHELL_QUOTE)
                 {
@@ -107,7 +106,10 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
                 if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
                     break;
             }
-            buffer[strlen(buffer) - 1] = 0;
+            if (buffer[strlen(buffer) - 1] == ')')
+                buffer[strlen(buffer) - 1] = 0;
+            else
+                buffer[strlen(buffer) - 2] = 0;
             token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
             *index = 0;
         }
