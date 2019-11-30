@@ -71,16 +71,16 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
         {
             int cptparentesis = 0;
             enum lexer_state state = LEXER_STATE_SUBSHELL_QUOTE;
-            if (strcmp(buffer, "$(") == 0)
+            if (buffer[0] == '$' && buffer[1] == '(')
             {
                 cptparentesis++;
                 state = LEXER_STATE_SUBSHELL_DOL;
-                *index = 0;
+                *index = 1;
                 buffer[0] = 0;
+                buffer[0] = buffer[2];
             }
             if (strcmp(buffer, "`") == 0)
             {
-                printf("LOL\n");
                 state = LEXER_STATE_SUBSHELL_QUOTE;
                 *index = 0;
                 buffer[0] = 0;
@@ -107,7 +107,7 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
                 if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
                     break;
             }
-            buffer[strlen(buffer) - 1] = 0;
+            buffer[strlen(buffer) - 2] = 0;
             token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
             *index = 0;
         }
@@ -121,10 +121,9 @@ struct token_array *lex(struct lexer *lexer)
     int is_string = 0;
     while (lexer->str[lexer->iterator] != 0)
     {
-        if (strcmp(buffer, "$(") == 0
-            || strcmp(buffer, "`") == 0)
+        if ((strlen(buffer) >= 3) && ((buffer[0] == '$' && buffer[1] == '('
+            && buffer[2] != '(') || strcmp(buffer, "`") == 0))
         {
-            printf("YOLO\n");
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
 
