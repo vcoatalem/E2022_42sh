@@ -33,6 +33,7 @@ char* getcurrent(void)
 
 
 
+
 static void insert_default_variables(struct hash_table_var *ht)
 {
     insert_variable(ht, "PS1", "42sh$ ");
@@ -47,6 +48,9 @@ static void insert_default_variables(struct hash_table_var *ht)
     strcat(histfile, "/");
     strcat(histfile, ".42sh_history");
     insert_variable(ht, "HISTFILE", histfile);
+    char el[64];
+    sprintf(el, "%d", getuid());
+    insert_variable(ht, "UID", el);
 }
 
 struct hash_table_var *init_hash_table_var(size_t size)

@@ -15,6 +15,7 @@ struct shopt
     int sourcepath;    
     int xpg_echo;      
 };
+char *shopt_SHELLOPTS(struct shopt *shopt);
 
 typedef int (*builtin_handler)(char **str, size_t size, void *bundle_ptr);
 
