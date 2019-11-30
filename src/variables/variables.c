@@ -65,7 +65,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
-    char *result = calloc(1, (strlen(text) + strlen(value) + 1));
+    char *result = calloc(1, (strlen(text) + strlen(value) + 2));
     strcpy(result, text);
     //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
@@ -82,7 +82,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     }
     else
     {
-        //printf("YOLO%d\n", dec);
         for (size_t i = iword; i < strlen(result) + dec; i++)
         {
             result[i] = result[i + dec];

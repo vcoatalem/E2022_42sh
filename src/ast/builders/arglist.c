@@ -14,14 +14,14 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
     size_t n_args = 0;
     get_find(ast->forest[0]->value, "./",
             &expanded_args, &n_args);
-    //printf("n_args: %zu\n", n_args);
+    *arg_list = realloc(*arg_list, (*index + n_args + 2) * sizeof(char *));
     for (size_t i = 0; i < n_args; i++)
     {
-        *arg_list = realloc(*arg_list, (*index + 3) * sizeof(char *));
-        (*arg_list)[*index] = expanded_args[i];
+        (*arg_list)[*index] = strdup(expanded_args[i]);
+        //printf("%zu: %s\n", *index, (*arg_list)[*index]);
         *index = *index + 1;
     }
-    *arg_list[*index] = NULL;
+    (*arg_list)[*index] = NULL;
     if (expanded_args)
         free(expanded_args);
 }
