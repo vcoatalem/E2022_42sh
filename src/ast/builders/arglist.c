@@ -10,13 +10,12 @@ static void arg_list_get_arg(char **arg_list, size_t *index, struct ast *ast)
 static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
                                             struct ast *ast)
 {
-    char **expanded_args = NULL;
-    size_t n_args = 0;
-    get_find(ast->forest[0]->value, "./",
-            &expanded_args, &n_args);
-    *arg_list = realloc(*arg_list, (*index + n_args + 2) * sizeof(char *));
-    for (size_t i = 0; i < n_args; i++)
+    char **expanded_args = expand_file_pattern(ast->forest[0]->value);
+    if (!expanded_args)
+        return;
+    for (size_t i = 0; *(expanded_args + i); i++)
     {
+        *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
         (*arg_list)[*index] = strdup(expanded_args[i]);
         //printf("%zu: %s\n", *index, (*arg_list)[*index]);
         *index = *index + 1;
