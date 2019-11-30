@@ -189,7 +189,7 @@ char *get_element_value(struct ast *ast);
  * \param ast arg_list node to get argument from
  *
  */
-char **ast_arg_list_build(struct ast *ast);
+char **ast_arg_list_build(struct ast *ast, void *bundle_ptr);
 
 /**
  * \brief get all arguments of command type node

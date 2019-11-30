@@ -6,7 +6,7 @@ static struct command *ast_simple_command_build(struct ast *ast,
     struct ast *args = find_op_type(ast, OPERATOR_ARG_LIST);
     struct ast *redir_list = find_op_type(ast, OPERATOR_REDIR_LIST);
 
-    char **arg_list = ast_arg_list_build(args);
+    char **arg_list = ast_arg_list_build(args, bundle_ptr);
     struct redirection **redirs = ast_redirection_list_build(redir_list);
 
     struct command *cmd = command_init(arg_list, bundle_ptr);

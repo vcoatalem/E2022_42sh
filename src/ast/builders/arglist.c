@@ -32,12 +32,24 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
     }
 }
 
-static void arg_list_get_subshell(char **arg_list, size_t *index,
-                                            struct ast *ast)
+static void arg_list_get_subshell(char ***arg_list, size_t *index,
+                                        struct ast *ast, void *bundle_ptr)
 {
-    arg_list[*index] = substitute_shell(ast->forest[0]->value);
-    arg_list[*index + 1] = NULL;
-    *index = *index + 1;
+    char *substitute = substitute_shell(ast->forest[0]->value);
+    //split substitute using IFS
+    char **fields = split_fields(substitute, bundle_ptr);
+    free(substitute);
+    if (fields)
+    {
+        for (size_t i = 0; fields[i]; i++)
+        {
+            *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+            (*arg_list)[*index] = fields[i];
+            (*arg_list)[*index + 1] = NULL;
+            *index = *index + 1;
+        }
+    }
+    free(fields);
 }
 
 static void arg_list_get_arithmetic_value(char **arg_list, size_t *index,
@@ -49,7 +61,7 @@ static void arg_list_get_arithmetic_value(char **arg_list, size_t *index,
     *index = *index + 1;
 }
 
-char **ast_arg_list_build(struct ast *ast)
+char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
 {
     char **arg_list = NULL;
     size_t index = 0;
@@ -71,7 +83,7 @@ char **ast_arg_list_build(struct ast *ast)
         }
         else if (sub_value)
         {
-            arg_list_get_subshell(arg_list, &index, sub_value);
+            arg_list_get_subshell(&arg_list, &index, sub_value, bundle_ptr);
         }
         else if (arithmetic_value)
         {

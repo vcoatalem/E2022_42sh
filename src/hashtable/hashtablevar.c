@@ -39,6 +39,7 @@ static void insert_default_variables(struct hash_table_var *ht)
     insert_variable(ht, "PS2", "> ");
     insert_variable(ht, "OLDPWD", getcurrent());
     insert_variable(ht, "HOME", gethome());
+    insert_variable(ht, "IFS", " \t\n");
     char histfile[2048] = { 0 };
     strcat(histfile, gethome());
     strcat(histfile, "/");
