@@ -2,12 +2,12 @@
 #include "parser.h"
 #include "utils/xalloc.h"
 
-static bool token_is_sop(struct token *token)
+static bool token_is_sop(struct arithmetic_token *token)
 {
     return token->type == TOKEN_MULTIPLY || token->type == TOKEN_DIVIDE;
 }
 
-static bool token_is_eop(struct token *token)
+static bool token_is_eop(struct arithmetic_token *token)
 {
     return token->type == TOKEN_PLUS || token->type == TOKEN_MINUS;
 }
@@ -23,22 +23,25 @@ static bool token_is_eop(struct token *token)
 ** this means at least one function must be declares before the 3 are
 ** defined.
 */
-static bool parse_exp(struct lexer *lexer, struct ast **ast);
+static bool parse_exp(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast);
 
-static bool parse_parenthesis(struct lexer *lexer, struct ast **ast)
+static bool parse_parenthesis(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast)
 {
     bool res = parse_exp(lexer, ast);
 
-    struct token *token = lexer_pop(lexer);
+    struct arithmetic_token *token = arithmetic_lexer_pop(lexer);
     res = res && token && token->type == TOKEN_RIGHT_PARENTHESIS;
 
-    token_free(token);
+    arithmetic_token_free(token);
     return res;
 }
 
-static bool parse_texp(struct lexer *lexer, struct ast **ast)
+static bool parse_texp(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast)
 {
-    struct token *token = lexer_pop(lexer);
+    struct arithmetic_token *token = arithmetic_lexer_pop(lexer);
     if (!token)
         return false;
 
@@ -46,36 +49,37 @@ static bool parse_texp(struct lexer *lexer, struct ast **ast)
     if (token->type == TOKEN_LEFT_PARENTHESIS)
         res = parse_parenthesis(lexer, ast);
     else if (token->type == TOKEN_NUMBER)
-        *ast  = ast_alloc_number(token->value);
+        *ast  = arithmetic_ast_alloc_number(token->value);
     else if (token->type == TOKEN_MINUS)
     {
-        token_free(token);
-        token = lexer_pop(lexer);
+        arithmetic_token_free(token);
+        token = arithmetic_lexer_pop(lexer);
 
         if (token && token->type == TOKEN_NUMBER)
-            *ast = ast_alloc_number(-token->value);
+            *ast = arithmetic_ast_alloc_number(-token->value);
         else
             res = false;
     }
     else
         res = false;
 
-    token_free(token);
+    arithmetic_token_free(token);
     return res;
 }
 
-static bool parse_sexp(struct lexer *lexer, struct ast **ast)
+static bool parse_sexp(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast)
 {
     if (!parse_texp(lexer, ast))
         return false;
 
     bool res = true;
-    struct token *token = lexer_peek(lexer);
+    struct arithmetic_token *token = arithmetic_lexer_peek(lexer);
     while (res && token && token_is_sop(token))
     {
-        token = lexer_pop(lexer);
+        token = arithmetic_lexer_pop(lexer);
 
-        struct ast *tmp = ast_alloc();
+        struct arithmetic_ast *tmp = arithmetic_ast_alloc();
         switch (token->type)
         {
         case TOKEN_MULTIPLY:
@@ -91,25 +95,26 @@ static bool parse_sexp(struct lexer *lexer, struct ast **ast)
         res = parse_texp(lexer, &tmp->data.children.right);
         tmp->data.children.left = *ast;
         *ast = tmp;
-        token_free(token);
-        token = lexer_peek(lexer);
+        arithmetic_token_free(token);
+        token = arithmetic_lexer_peek(lexer);
     };
 
     return res;
 }
 
-static bool parse_exp(struct lexer *lexer, struct ast **ast)
+static bool parse_exp(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast)
 {
     if (!parse_sexp(lexer, ast))
         return false;
 
     bool res = true;
-    struct token *token = lexer_peek(lexer);
+    struct arithmetic_token *token = arithmetic_lexer_peek(lexer);
     while (res && token && token_is_eop(token))
     {
-        token = lexer_pop(lexer);
+        token = arithmetic_lexer_pop(lexer);
 
-        struct ast *tmp = ast_alloc();
+        struct arithmetic_ast *tmp = arithmetic_ast_alloc();
         switch (token->type)
         {
         case TOKEN_PLUS:
@@ -125,22 +130,23 @@ static bool parse_exp(struct lexer *lexer, struct ast **ast)
         res = parse_sexp(lexer, &tmp->data.children.right);
         tmp->data.children.left = *ast;
         *ast = tmp;
-        token_free(token);
-        token = lexer_peek(lexer);
+        arithmetic_token_free(token);
+        token = arithmetic_lexer_peek(lexer);
     };
 
     return res;
 }
 
-bool parse_expression(struct lexer *lexer, struct ast **ast)
+bool parse_expression(struct arithmetic_lexer *lexer,
+        struct arithmetic_ast **ast)
 {
-    struct token *token = lexer_peek(lexer);
+    struct arithmetic_token *token = arithmetic_lexer_peek(lexer);
     if (!token || token->type == TOKEN_EOF)
         return false;
 
     if (!parse_exp(lexer, ast))
         return false;
 
-    token = lexer_peek(lexer);
+    token = arithmetic_lexer_peek(lexer);
     return token && token->type == TOKEN_EOF;
 }

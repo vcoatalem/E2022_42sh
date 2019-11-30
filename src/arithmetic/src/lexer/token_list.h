@@ -3,16 +3,16 @@
 
 #include "lexer.h"
 
-struct token_list
+struct arithmetic_token_list
 {
-    struct token *token;
-    struct token_list *next;
+    struct arithmetic_token *token;
+    struct arithmetic_token_list *next;
 };
 
-struct lexer
+struct arithmetic_lexer
 {
-    struct token_list *head;
-    struct token_list *tail;
+    struct arithmetic_token_list *head;
+    struct arithmetic_token_list *tail;
     size_t size;
 };
 

@@ -9,20 +9,20 @@
 ** You should not edit this struct declaration but define one with the
 ** same name in another header file.
 */
-struct lexer;
+struct arithmetic_lexer;
 
 /**
 ** \brief Lexer allocator and initialiser
 ** \param str the string to use as input stream.
 */
-struct lexer *lexer_alloc(const char *str);
+struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str);
 
 /**
 ** \brief Wrapper to release every resources still held in a lexer.
 **
 ** \param lexer the lexer to free
 */
-void lexer_free(struct lexer *lexer);
+void arithmetic_lexer_free(struct arithmetic_lexer *lexer);
 
 /**
 ** \brief Return the first token from the input stream without consuming it.
@@ -30,7 +30,7 @@ void lexer_free(struct lexer *lexer);
 ** \return the next token from the input stream
 ** \param lexer the lexer to lex from
 */
-struct token *lexer_peek(struct lexer *lexer);
+struct arithmetic_token *arithmetic_lexer_peek(struct arithmetic_lexer *lexer);
 
 /** 
 ** \brief Return and consume the next token from the input stream.
@@ -38,6 +38,6 @@ struct token *lexer_peek(struct lexer *lexer);
 ** \return the next token from the input stream
 ** \param lexer the lexer to lex from
 */
-struct token *lexer_pop(struct lexer *lexer);
+struct arithmetic_token *arithmetic_lexer_pop(struct arithmetic_lexer *lexer);
 
-#endif /* ! LEXER_H */
+#endif /* ! ARITHMETIC_LEXER_H */

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char *token_str(struct token *token)
+const char *arithmetic_token_str(struct arithmetic_token *token)
 {
     static const char *token_strs[] = { "+", "-", "*", "/", "(", ")", "EOF" };
     static char number_str[11];
@@ -16,16 +16,16 @@ const char *token_str(struct token *token)
     return number_str;
 }
 
-struct token *token_alloc(void)
+struct arithmetic_token *arithmetic_token_alloc(void)
 {
-    struct token *res = xmalloc(sizeof(*res));
+    struct arithmetic_token *res = xmalloc(sizeof(*res));
     res->type = TOKEN_EOF;
     res->value = 0;
 
     return res;
 }
 
-void token_free(struct token *token)
+void arithmetic_token_free(struct arithmetic_token *token)
 {
     free(token);
 }

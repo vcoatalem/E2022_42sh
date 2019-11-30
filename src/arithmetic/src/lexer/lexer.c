@@ -9,9 +9,10 @@
 #include "lexer.h"
 #include "token_list.h"
 
-struct token *token_init(enum token_type type, int value)
+struct arithmetic_token *arithmetic_token_init(
+        enum arithmetic_token_type type, int value)
 {
-    struct token *res = malloc(sizeof(struct token));
+    struct arithmetic_token *res = malloc(sizeof(struct arithmetic_token));
     if (!res)
         return NULL;
     res->type = type;
@@ -19,9 +20,11 @@ struct token *token_init(enum token_type type, int value)
     return res;
 }
 
-struct token_list *token_list_init(struct token *token)
+struct arithmetic_token_list *arithmetic_token_list_init(
+        struct arithmetic_token *token)
 {
-    struct token_list *tok_list = malloc(sizeof(struct token_list));
+    struct arithmetic_token_list *tok_list = malloc(
+            sizeof(struct arithmetic_token_list));
     if (!tok_list)
     {
         return NULL;
@@ -31,9 +34,9 @@ struct token_list *token_list_init(struct token *token)
     return tok_list;
 }
 
-enum token_type get_type(char c)
+enum arithmetic_token_type get_type(char c)
 {
-    enum token_type type;
+    enum arithmetic_token_type type;
     switch (c)
     {
     case '+':
@@ -64,9 +67,10 @@ enum token_type get_type(char c)
     return type;
 }
 
-void token_list_append(struct lexer *lexer, struct token *tok)
+void arithmetic_token_list_append(struct arithmetic_lexer *lexer,
+        struct arithmetic_token *tok)
 {
-    struct token_list *res = token_list_init(tok);
+    struct arithmetic_token_list *res = arithmetic_token_list_init(tok);
     if (lexer->size == 0)
     {
         lexer->head = res;
@@ -80,20 +84,21 @@ void token_list_append(struct lexer *lexer, struct token *tok)
     lexer->size++;
 }
 
-void add_number_token(char *buff, size_t *index, struct lexer *lexer)
+void add_number_token(char *buff, size_t *index,
+        struct arithmetic_lexer *lexer)
 {
     if (*index == 0)
         return;
     buff[*index] = '\0';
     int val = atoi(buff);
     *index = 0;
-    struct token *tok = token_init(TOKEN_NUMBER, val);
-    token_list_append(lexer, tok);
+    struct arithmetic_token *tok = arithmetic_token_init(TOKEN_NUMBER, val);
+    arithmetic_token_list_append(lexer, tok);
 }
 
-struct lexer *lexer_alloc(const char *str)
+struct arithmetic_lexer *lexer_alloc(const char *str)
 {
-    struct lexer *res = calloc(1, sizeof(struct lexer));
+    struct arithmetic_lexer *res = calloc(1, sizeof(struct arithmetic_lexer));
     if (!res)
     {
         return NULL;
@@ -104,14 +109,14 @@ struct lexer *lexer_alloc(const char *str)
     for (size_t i = 0; str[i] != '\0'; i++)
     {
         char c = str[i];
-        enum token_type type = get_type(c);
+        enum arithmetic_token_type type = get_type(c);
         if (type != TOKEN_NUMBER || c == ' ')
         {
             add_number_token(buff, &index, res);
             if (c != ' ')
             {
-                struct token *tok = token_init(type, 0);
-                token_list_append(res, tok);
+                struct arithmetic_token *tok = arithmetic_token_init(type, 0);
+                arithmetic_token_list_append(res, tok);
             }
         }
         else
@@ -121,30 +126,30 @@ struct lexer *lexer_alloc(const char *str)
         }
     }
     add_number_token(buff, &index, res);
-    token_list_append(res, token_init(TOKEN_EOF, 0));
+    arithmetic_token_list_append(res, arithmetic_token_init(TOKEN_EOF, 0));
     return res;
 }
 
-void lexer_free(struct lexer *lexer)
+void arithmetic_lexer_free(struct arithmetic_lexer *lexer)
 {
     free(lexer);
 }
 
-struct token *lexer_peek(struct lexer *lexer)
+struct arithmetic_token *lexer_peek(struct arithmetic_lexer *lexer)
 {
     return lexer->head->token;
 }
 
-struct token *lexer_pop(struct lexer *lexer)
+struct arithmetic_token *lexer_pop(struct arithmetic_lexer *lexer)
 {
     if (!lexer->head)
     {
         return NULL;
     }
-    struct token_list *head = lexer->head;
+    struct arithmetic_token_list *head = lexer->head;
     lexer->head = lexer->head->next;
     lexer->size--;
-    struct token *tok = head->token;
+    struct arithmetic_token *tok = head->token;
     free(head);
     return tok;
 }

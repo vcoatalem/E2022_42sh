@@ -1,10 +1,10 @@
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef ARITHMETIC_TOKEN_H
+#define ARITHMETIC_TOKEN_H
 
 /**
 ** \brief Type of a token (operators, value, ...)
 */
-enum token_type
+enum arithmetic_token_type
 {
     TOKEN_PLUS = 0,
     TOKEN_MINUS,
@@ -19,10 +19,10 @@ enum token_type
 /**
 ** \brief Token struct declaration
 */
-struct token
+struct arithmetic_token
 {
     /* type of the token */
-    enum token_type type;
+    enum arithmetic_token_type type;
     /* hold the number (only used when type == TOKEN_NUMBER) */
     int value;
 };
@@ -33,20 +33,20 @@ struct token
 ** \return a string describing the given token
 ** \param token to stringify
 */
-const char *token_str(struct token *token);
+const char *arithmetic_token_str(struct arithmetic_token *token);
 
 /**
 ** \brief Token allocator and initialiser
 **
 ** \return a pointer to the allocated token
 */
-struct token *token_alloc(void);
+struct arithmetic_token *arithmetic_token_alloc(void);
 
 /**
 ** \brief Wrapper to release memory of a token
 **
 ** \param token the token to free
 */
-void token_free(struct token *token);
+void arithmetic_token_free(struct arithmetic_token *token);
 
-#endif /* ! TOKEN_H */
+#endif /* ! ARITHMETIC_TOKEN_H */
