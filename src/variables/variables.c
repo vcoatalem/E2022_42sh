@@ -59,13 +59,13 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     {
         word[j] = text[i];
     }
-    word[strlen(word)] = text[i];
+    if (strlen(word))
+        word[strlen(word)] = text[i];
     char *value = getword(word, ht);
-    //printf("value:%s\n", value);
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
-    char *result = calloc(1, (strlen(text) + strlen(value) + 2));
+    char *result = calloc(1, (strlen(text) + strlen(value) + 1));
     strcpy(result, text);
     //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
