@@ -12,17 +12,24 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
 {
     char **expanded_args = expand_file_pattern(ast->forest[0]->value);
     if (!expanded_args)
-        return;
-    for (size_t i = 0; *(expanded_args + i); i++)
     {
         *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
-        (*arg_list)[*index] = strdup(expanded_args[i]);
+        (*arg_list)[*index] = strdup(ast->forest[0]->value);
         //printf("%zu: %s\n", *index, (*arg_list)[*index]);
         *index = *index + 1;
     }
-    (*arg_list)[*index] = NULL;
-    if (expanded_args)
+    else
+    {
+        for (size_t i = 0; *(expanded_args + i); i++)
+        {
+            *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+            (*arg_list)[*index] = strdup(expanded_args[i]);
+            //printf("%zu: %s\n", *index, (*arg_list)[*index]);
+            *index = *index + 1;
+        }
+        (*arg_list)[*index] = NULL;
         free(expanded_args);
+    }
 }
 
 static void arg_list_get_subshell(char **arg_list, size_t *index,
