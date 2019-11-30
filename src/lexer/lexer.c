@@ -46,6 +46,7 @@ void lexer_clear(struct lexer *lexer)
 
 void change_lexer_state(struct lexer *lex)
 {
+
     if ((lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
         && lex->str[lex->iterator] == '\'')
         || (lex->state == LEXER_STATE_LEXING_QUOTES
@@ -65,6 +66,51 @@ void change_lexer_state(struct lexer *lex)
         lex->state = LEXER_STATE_NONE;
     lex->iterator++;
 }
+static void state_subshell(char *str, size_t *iterator, char *buffer,
+        size_t *index, struct token_array *arr)
+        {
+            int cptparentesis = 0;
+            enum lexer_state state = LEXER_STATE_SUBSHELL_QUOTE;
+            if (strcmp(buffer, "$(") == 0)
+            {
+                cptparentesis++;
+                state = LEXER_STATE_SUBSHELL_DOL;
+                *index = 0;
+                buffer[0] = 0;
+            }
+            if (strcmp(buffer, "`") == 0)
+            {
+                printf("LOL\n");
+                state = LEXER_STATE_SUBSHELL_QUOTE;
+                *index = 0;
+                buffer[0] = 0;
+            }
+            while((state == LEXER_STATE_SUBSHELL_DOL) 
+                || state == LEXER_STATE_SUBSHELL_QUOTE)
+            {
+                
+                if (buffer[strlen(buffer) - 1] == '(')
+                    cptparentesis++;
+                if (buffer[strlen(buffer) - 1] == ')')
+                {
+                    cptparentesis--;
+                }
+                buffer[*index] = str[*iterator];
+                buffer[*index + 1] = 0;
+                *index = *index + 1;
+                *iterator = *iterator + 1;
+                if (buffer[strlen(buffer) - 1] == '`'
+                    && state == LEXER_STATE_SUBSHELL_QUOTE)
+                {
+                    break;
+                }
+                if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
+                    break;
+            }
+            buffer[strlen(buffer) - 1] = 0;
+            token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
+            *index = 0;
+        }
 
 struct token_array *lex(struct lexer *lexer)
 {
@@ -75,6 +121,13 @@ struct token_array *lex(struct lexer *lexer)
     int is_string = 0;
     while (lexer->str[lexer->iterator] != 0)
     {
+        if (strcmp(buffer, "$(") == 0
+            || strcmp(buffer, "`") == 0)
+        {
+            printf("YOLO\n");
+            state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
+        }
+
         if (lexer->str[lexer->iterator] == '"'
             || lexer->str[lexer->iterator] == '\'')
         {

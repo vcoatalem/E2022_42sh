@@ -54,8 +54,9 @@ int main(int argc, char **argv)
         "echo \'test\'",
         "ec\"ho\"",
         "echo \"\'\"",
-        "echo '\"'"
-
+        "echo '\"'",
+        "foo $(toto) $((toto2))",
+        "echo to*to*"
     };
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -229,10 +230,23 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "\'"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    else if (q >= 20)
+    else if (q == 20)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "\""));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 21)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "foo"));
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "toto"));
+        token_array_add(exp, token_init(TOKEN_ARITHMETIC, "toto2"));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q >= 22)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD_W_STAR, "to*to*"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     struct token_array *array = token_array_create(cmds[q]);

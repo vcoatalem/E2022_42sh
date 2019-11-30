@@ -94,7 +94,7 @@ int token_subshell(char *str, size_t iterator, char *buffer,
         return 0;
     if (strlen(buffer) > 3 && buffer[0] == '$' && buffer[1] == '('
         && buffer[2] != '(' && buffer[strlen(buffer) - 1] == ')')
-        return 1;
+        return token_compare(str, iterator, buffer, type);
     return 0;
 }
 
