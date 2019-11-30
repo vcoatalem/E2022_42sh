@@ -89,6 +89,7 @@ char *substitute_shell(char *command)
         waitpid(pid, &status, 0);
     }
     char buffer[SUBSHELL_MAX_SIZE] = { 0 };
-    read(p[PIPE_READ], buffer, SUBSHELL_MAX_SIZE - 1);
+    if (status == 0)
+        read(p[PIPE_READ], buffer, SUBSHELL_MAX_SIZE - 1);
     return strdup(buffer);
 }
