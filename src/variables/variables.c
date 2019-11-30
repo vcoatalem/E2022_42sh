@@ -51,17 +51,18 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     //word = strdup(text);
     size_t i = 0;
     for (; (text[i] && text[i] != '$')
-        || (text[i] == '$' && is_delimiter(text[i + 1])); ++i)
+        || (text[i] == '$' && (is_delimiter(text[i + 1]))); ++i)
     {
     }
     int iword = i;
-    for (int j = 0; !is_delimiter(text[i + 1]) && text[i] != '}'; ++j, ++i)
+    for (int j = 0; (text[i] && text[i + 1] && !is_delimiter(text[i + 1])
+        && text[i] != '}'); ++j, ++i)
     {
         word[j] = text[i];
     }
     if (strlen(word))
         word[strlen(word)] = text[i];
-    char *value = getword(word, ht);
+    char *value = strdup(getword(word, ht));
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
@@ -78,7 +79,10 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     else if (dec < 0)
     {
         for (int i = strlen(result) - dec; i >= iword; --i)
-            result[i] = result[i + dec];
+        {
+            if (i + dec >= 0)
+                result[i] = result[i + dec];
+        }
     }
     else
     {
@@ -109,6 +113,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
                     *did_substitute = 1;
             }
     }
+    free(value);
     return result;
 }
 
