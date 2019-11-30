@@ -1,4 +1,3 @@
-#define _DEFAULT_SOURCE
 #include <ctype.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -53,6 +52,15 @@ static void get_find(const char *pattern, char *path,
     closedir(dir);
 }
 
+/*
+static void case_dotglob(char *dir_name, char ***arguments, char *path)
+{
+    if (strcmp(dir_name, ".") == 0 || strcmp(dir_name, "..") == 0)
+    {
+
+    }
+}
+
 static void get_find_dotglob(const char *pattern, char *path,
                                 char ***arguments, size_t nb)
 {
@@ -90,6 +98,7 @@ static void get_find_dotglob(const char *pattern, char *path,
     }
     closedir(dir);
 }
+*/
 
 char **expand_file_pattern(const char *pattern)
 {
