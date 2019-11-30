@@ -66,53 +66,54 @@ void change_lexer_state(struct lexer *lex)
         lex->state = LEXER_STATE_NONE;
     lex->iterator++;
 }
+
 static void state_subshell(char *str, size_t *iterator, char *buffer,
         size_t *index, struct token_array *arr)
+{
+    int cptparentesis = 0;
+    enum lexer_state state = LEXER_STATE_SUBSHELL_QUOTE;
+    if (buffer[0] == '$' && buffer[1] == '(')
+    {
+        cptparentesis++;
+        state = LEXER_STATE_SUBSHELL_DOL;
+        *index = 1;
+        buffer[0] = 0;
+        buffer[0] = buffer[2];
+    }
+    if (strcmp(buffer, "`") == 0)
+    {
+        state = LEXER_STATE_SUBSHELL_QUOTE;
+        *index = 0;
+        buffer[0] = 0;
+    }
+    while((state == LEXER_STATE_SUBSHELL_DOL) 
+        || state == LEXER_STATE_SUBSHELL_QUOTE)
+    {
+        buffer[*index] = str[*iterator];
+        buffer[*index + 1] = 0;
+        *index = *index + 1;
+        *iterator = *iterator + 1;
+        if (buffer[strlen(buffer) - 1] == '(')
+            cptparentesis++;
+        if (buffer[strlen(buffer) - 1] == ')')
         {
-            int cptparentesis = 0;
-            enum lexer_state state = LEXER_STATE_SUBSHELL_QUOTE;
-            if (buffer[0] == '$' && buffer[1] == '(')
-            {
-                cptparentesis++;
-                state = LEXER_STATE_SUBSHELL_DOL;
-                *index = 1;
-                buffer[0] = 0;
-                buffer[0] = buffer[2];
-            }
-            if (strcmp(buffer, "`") == 0)
-            {
-                state = LEXER_STATE_SUBSHELL_QUOTE;
-                *index = 0;
-                buffer[0] = 0;
-            }
-            while((state == LEXER_STATE_SUBSHELL_DOL) 
-                || state == LEXER_STATE_SUBSHELL_QUOTE)
-            {
-                buffer[*index] = str[*iterator];
-                buffer[*index + 1] = 0;
-                *index = *index + 1;
-                *iterator = *iterator + 1;
-                if (buffer[strlen(buffer) - 1] == '(')
-                    cptparentesis++;
-                if (buffer[strlen(buffer) - 1] == ')')
-                {
-                    cptparentesis--;
-                }
-                if (buffer[strlen(buffer) - 1] == '`'
-                    && state == LEXER_STATE_SUBSHELL_QUOTE)
-                {
-                    break;
-                }
-                if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
-                    break;
-            }
-            if (buffer[strlen(buffer) - 1] == ')')
-                buffer[strlen(buffer) - 1] = 0;
-            else
-                buffer[strlen(buffer) - 2] = 0;
-            token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
-            *index = 0;
+            cptparentesis--;
         }
+        if (buffer[strlen(buffer) - 1] == '`'
+            && state == LEXER_STATE_SUBSHELL_QUOTE)
+        {
+            break;
+        }
+        if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
+            break;
+    }
+    if (buffer[strlen(buffer) - 1] == ')')
+        buffer[strlen(buffer) - 1] = 0;
+    else
+        buffer[strlen(buffer) - 2] = 0;
+    token_array_add(arr, token_init(TOKEN_SUBSHELL, buffer));
+    *index = 0;
+}
 
 struct token_array *lex(struct lexer *lexer)
 {
