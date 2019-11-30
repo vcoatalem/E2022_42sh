@@ -3,12 +3,21 @@
 
 static int ast_handle_or(struct ast *ast, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     struct ast *ast_pipe = find_op_type(ast, OPERATOR_PIPE);
     struct ast *ast_or = find_op_type(ast, OPERATOR_OR);
 
     int return_value = ast_execute(ast_pipe, bundle_ptr);
     if (return_value == AST_ERROR && ast_or)
     {
+        if (bundle->ast_traversal_context.loop_depth
+            && (bundle->ast_traversal_context.found_break
+                || bundle->ast_traversal_context.found_continue))
+        {
+            //break / continue
+            return return_value;
+        }
+        //compute next node
         return_value = ast_handle_or(ast_or, bundle_ptr);
     }
     return return_value;
@@ -32,19 +41,20 @@ int ast_handle_and_or(struct ast *ast, void *bundle_ptr)
     }
     if (or && return_value != AST_SUCCESS)
     {
-        if (bundle->shopt->debug)
-        {
-            printf("[AST EXECUTION] AND trying to execute OR child\n");
-        }
         return_value = ast_handle_or(or, bundle_ptr);
+        //TODO: add break/continue there ?
     }
     if (and_or && return_value == AST_SUCCESS)
     {
-        if (bundle->shopt->debug)
+        return_value = ast_handle_and_or(and_or, bundle_ptr); 
+        if (bundle->ast_traversal_context.loop_depth
+            && (bundle->ast_traversal_context.found_break
+                || bundle->ast_traversal_context.found_continue))
         {
-            printf("[AST EXECUTION] AND trying to execute AND child\n");
+            printf("found break\n");
+            //break / continue
+            return return_value;
         }
-        return_value = ast_handle_and_or(and_or, bundle_ptr);
     }
     return return_value;
 }
