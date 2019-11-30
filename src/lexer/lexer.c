@@ -115,6 +115,57 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
     *index = 0;
 }
 
+static char match_regular_expr(char a)
+{
+    if (a == 'a')
+        return '\a';
+    if (a == 'b')
+        return '\b';
+    if (a == 't')
+        return '\t';
+    if (a == 'r')
+        return '\r';
+    if (a == 'v')
+        return '\v';
+    if (a == 'f')
+        return '\f';
+    if (a == 'n')
+        return '\n';
+return a;
+}
+
+static void handle_backslash(char *str, size_t *iterator, enum lexer_state *state,
+    char *buffer, size_t *index, struct token_array *arr)
+{
+    if (!arr)
+        return;
+    if (*state == LEXER_STATE_NONE)
+    {
+        if (!str[*iterator + 1])
+        {
+            *state = LEXER_STATE_LEXING_SLASH;
+            return;
+        }
+        buffer[*index] = str[*iterator + 1];
+        buffer[*index + 1] = 0;
+        *index = *index + 1;
+        *iterator += 2;
+    }
+    if (*state == LEXER_STATE_LEXING_QUOTES
+        || *state == LEXER_STATE_LEXING_DOUBLE_QUOTES)
+    {
+        if (!str[*iterator + 1])
+        {
+            return;
+        }
+        buffer[*index] = match_regular_expr(str[*iterator + 1]);
+        buffer[*index + 1] = 0;
+        *index = *index + 1;
+        *iterator += 2;
+    }
+    return;
+}
+
 struct token_array *lex(struct lexer *lexer)
 {
     char buffer[2048] = { 0 };
@@ -129,12 +180,16 @@ struct token_array *lex(struct lexer *lexer)
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
-
-        if (lexer->str[lexer->iterator] == '"'
+        else if (lexer->str[lexer->iterator] == '"'
             || lexer->str[lexer->iterator] == '\'')
         {
             change_lexer_state(lexer);
             is_string = 1;
+        }
+        else if (lexer->str[lexer->iterator] == '\\')
+        {
+            handle_backslash(lexer->str, &lexer->iterator, &lexer->state,
+                buffer, &index, arr);
         }
         else if (is_separator(lexer->str[lexer->iterator])
             && lexer->state == LEXER_STATE_NONE)
