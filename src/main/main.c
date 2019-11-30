@@ -48,7 +48,7 @@ int main(int argc, char **argv)
         .lexer = NULL,
         .parser = NULL,
         .ast = NULL,
-        .token_array = NULL
+        .token_array = NULL,
     };
     *g_bundle = bundle;
     int execution_val = 0;

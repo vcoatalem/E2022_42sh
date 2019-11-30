@@ -20,10 +20,25 @@ int ast_handle_until(struct ast *ast, void *bundle_ptr)
     if (ast_until_body == NULL || ast_do == NULL)
         return AST_MISSING_ARG;
 
+    bundle->ast_traversal_context.loop_depth++;
     while (try_execute == AST_ERROR)
     {
         try_execute = ast_execute(ast_until_body, bundle);
-        return_value = ast_execute(ast_do->forest[0], bundle);
+        return_value = ast_execute(find_op_type(ast_do, OPERATOR_LIST),
+                bundle);
+
+        //loop break/continue handlers
+        if (bundle->ast_traversal_context.found_break)
+        {
+            bundle->ast_traversal_context.found_break = 0;
+            break;
+        }
+        if (bundle->ast_traversal_context.found_continue)
+        {
+            bundle->ast_traversal_context.found_continue = 0;
+            continue;
+        }
     }
+    bundle->ast_traversal_context.loop_depth--;
     return return_value;
 }

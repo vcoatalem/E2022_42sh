@@ -1,12 +1,37 @@
 #include "../parser.h"
 
+// ELEMENT_EXPAND -> expand word
+static void sh_rule_element_expand(struct rule_array *rules)
+{
+    rule_array_add(rules, rule_build(RULE_ELEMENT_EXPAND,
+            symbol_create(TOKEN_WORD_W_STAR, 0), NULL));
+}
+
+// ELEMENT_SUBSHELL -> subshell word
+static void sh_rule_element_subshell(struct rule_array *rules)
+{
+    rule_array_add(rules, rule_build(RULE_ELEMENT_SUBSHELL,
+            symbol_create(TOKEN_SUBSHELL, 0), NULL));
+}
+
+// ELEMENT ARITHMETIC -> arithmetic word
+static void sh_rule_element_arithmetic(struct rule_array *rules)
+{ 
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(TOKEN_ARITHMETIC, 0), NULL));
+}
+
 // ELEMENT -> `word`
 static void sh_rule_element(struct rule_array *rules)
 {
-    struct rule *rule = rule_build(RULE_ELEMENT,
-            symbol_create(TOKEN_WORD, 0),
-            NULL);
-    rule_array_add(rules, rule);
+    rule_array_add(rules, rule_build(RULE_ELEMENT,
+            symbol_create(TOKEN_WORD, 0), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT,
+            symbol_create(0, RULE_ELEMENT_EXPAND), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT,
+            symbol_create(0, RULE_ELEMENT_SUBSHELL), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT,
+            symbol_create(0, RULE_ELEMENT_ARITHMETIC), NULL));
 }
 
 // ELEMENT_LIST -> ELEMENT ELEMENT_LIST
@@ -41,6 +66,14 @@ static void sh_rule_element_any(struct rule_array *rules)
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_WORD, 0), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(0, RULE_ELEMENT_SUBSHELL), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(0, RULE_ELEMENT_ARITHMETIC), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(0, RULE_ELEMENT_EXPAND), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(TOKEN_WORD, 0), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_IF, 0), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_ELSE, 0), NULL));
@@ -66,6 +99,7 @@ static void sh_rule_element_any(struct rule_array *rules)
             symbol_create(TOKEN_UNTIL, 0), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_ASSIGNMENT, 0), NULL));
+
 }
 
 static void sh_rule_element_any_list(struct rule_array *rules)
@@ -84,6 +118,9 @@ static void sh_rule_element_any_list(struct rule_array *rules)
 void sh_rule_element_groups(struct rule_array *rules)
 {
     sh_rule_element(rules);
+    sh_rule_element_expand(rules);
+    sh_rule_element_subshell(rules);
+    sh_rule_element_arithmetic(rules);
     sh_rule_element_list(rules);
     sh_rule_arg_list(rules);
     sh_rule_element_any(rules);

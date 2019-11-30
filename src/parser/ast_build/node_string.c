@@ -66,6 +66,12 @@ char *rule_id_to_string(enum rule_id id)
         return "ionumber";
     case RULE_ELEMENT:
         return "element";
+    case RULE_ELEMENT_SUBSHELL:
+        return "element_subshell";
+    case RULE_ELEMENT_EXPAND:
+        return "element_expand";
+    case RULE_ELEMENT_ARITHMETIC:
+        return "element_arithmetic";
     case RULE_ELEMENT_ANY:
         return "element";
     case RULE_ELEMENT_LIST:
