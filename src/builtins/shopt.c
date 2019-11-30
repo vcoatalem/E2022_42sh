@@ -9,6 +9,30 @@
 #include "../main/42sh.h"
 #include "../options/options.h"
 
+char *shopt_SHELLOPTS(struct shopt *shopt)
+{
+    char result[1024] = "";
+    if (shopt->debug == 1)
+        strcat(result, "debug:");
+    if (shopt->ast_print == 1)
+        strcat(result, "ast_print:");
+    if (shopt->dotglob == 1)
+        strcat(result, "dotglob:");
+    if (shopt->expand_aliases == 1)
+        strcat(result, "expand_aliases:");
+    if (shopt->extglob == 1)
+        strcat(result, "extglob:");
+    if (shopt->nullglob == 1)
+        strcat(result, "nullglob:");
+    if (shopt->sourcepath == 1)
+        strcat(result, "sourcepath:");
+    if (shopt->xpg_echo == 1)
+        strcat(result, "xpg_echo:");
+    result[strlen(result) - 1] = 0;
+    return strdup(result);
+}
+
+
 static int shopt_set_option(struct shopt *shopt, char *str)
 {
     if (strcmp(str, "debug") == 0)
@@ -172,6 +196,8 @@ void shopt_print(struct shopt *shopt, int mode)
 }
 
 
+
+
 static int shopt_s(char **args, size_t size, struct execution_bundle *bundle)
 {
     if (size == 2)
@@ -183,7 +209,11 @@ static int shopt_s(char **args, size_t size, struct execution_bundle *bundle)
         {
             res = shopt_set_option(bundle->shopt, args[i]);
             if (res == 0)
-                return 1;
+                {
+                    insert_variable(bundle->hash_table_var, "SHELLOPTS",
+                    shopt_SHELLOPTS(bundle->shopt));
+                    return 1;
+                }
         }
     }
     else
@@ -193,9 +223,15 @@ static int shopt_s(char **args, size_t size, struct execution_bundle *bundle)
         {
             res = shopt_set_option(bundle->shopt, args[i]);
             if (res == 0)
+            {
+                insert_variable(bundle->hash_table_var, "SHELLOPTS",
+                shopt_SHELLOPTS(bundle->shopt));
                 return 1;
+            }
         }
     }
+    insert_variable(bundle->hash_table_var, "SHELLOPTS",
+    shopt_SHELLOPTS(bundle->shopt));
     return 0;
 }
 
@@ -213,7 +249,11 @@ static int shopt_u(char **args, size_t size, struct execution_bundle *bundle)
         {
             res = shopt_unset_option(bundle->shopt, args[i]);
             if (res == 0)
+            {
+                insert_variable(bundle->hash_table_var, "SHELLOPTS",
+                shopt_SHELLOPTS(bundle->shopt));
                 return 1;
+            }
         }
         return 1;
     }
@@ -224,9 +264,15 @@ static int shopt_u(char **args, size_t size, struct execution_bundle *bundle)
         {
             res = shopt_unset_option(bundle->shopt, args[i]);
             if (res == 0)
+            {
+                insert_variable(bundle->hash_table_var, "SHELLOPTS",
+                shopt_SHELLOPTS(bundle->shopt));
                 return 1;
+            }
         }
     }
+    insert_variable(bundle->hash_table_var, "SHELLOPTS",
+    shopt_SHELLOPTS(bundle->shopt));
     return 0;
 }
 

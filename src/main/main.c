@@ -1,7 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include <signal.h>
-
+#include <time.h>
 #include "42sh.h"
 
 void bundle_free(struct execution_bundle *bundle)
@@ -31,6 +31,8 @@ void sig_handler(int val)
 
 int main(int argc, char **argv)
 {
+    time_t t;
+    srand((unsigned) time(&t));
     signal(SIGINT, sig_handler);
     struct options *options = options_build(argc, argv);
     if (!options)
@@ -41,15 +43,17 @@ int main(int argc, char **argv)
     struct execution_bundle bundle =
     {
         .options = options,
-        .shopt = shopt_init(options),
         .parser_table = table_build(),
         .hash_table_var = init_hash_table_var(50),
         .hash_table_func = init_hash_table_func(50),
+        .shopt = shopt_init(options),
         .lexer = NULL,
         .parser = NULL,
         .ast = NULL,
         .token_array = NULL,
     };
+    insert_variable(bundle.hash_table_var, "SHELLOPTS",
+        shopt_SHELLOPTS(bundle.shopt));
     *g_bundle = bundle;
     int execution_val = 0;
     init_history(&bundle);
