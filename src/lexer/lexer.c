@@ -226,7 +226,6 @@ struct token_array *lex(struct lexer *lexer)
 
     if (index > 0)
     {
-        //printf("BUFF=%s\n", buffer);
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok != TOKEN_WORD && is_string)
             token_array_add(arr, token_init(TOKEN_WORD, buffer));

@@ -147,8 +147,11 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
     }
     if (assignment)
         token_array_add(arr, token_init(TOKEN_ASSIGNMENT, buffer));
+    else if (strcmp(buffer, "$()") == 0)
+        token_array_add(arr, token_init(TOKEN_SUBSHELL, ""));
     else
         token_array_add(arr, token_init(TOKEN_WORD, buffer));
+
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
