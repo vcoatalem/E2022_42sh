@@ -59,7 +59,7 @@ void change_lexer_state(struct lexer *lex)
         && lex->state != LEXER_STATE_LEXING_DOUBLE_QUOTES)
         lex->state = LEXER_STATE_LEXING_DOUBLE_QUOTES;
     else if (lex->str[lex->iterator] == '\''
-        && lex->state == LEXER_STATE_NONE)
+        && lex->state == LEXER_STATE_LEXING_QUOTES)
         lex->state = LEXER_STATE_NONE;
     else if (lex->str[lex->iterator] == '"'
         && lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES)
