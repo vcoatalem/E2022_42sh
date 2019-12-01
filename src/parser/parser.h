@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 57
+#define NB_RULES 56
 
 
 /**
@@ -92,7 +92,6 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_CASE_CLAUSE_CONCAT,            //53
     RULE_CASE_ITEM,                     //54
     RULE_CASE_ITEM_CONCAT,              //55
-    RULE_CASE_END                       //56
 };
 
 /**

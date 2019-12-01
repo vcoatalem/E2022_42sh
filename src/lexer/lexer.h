@@ -32,10 +32,12 @@ enum lexer_state
     LEXER_STATE_NONE,                   //regular
     LEXER_STATE_LEXING_QUOTES,          //in a '. asking for more input
     LEXER_STATE_LEXING_DOUBLE_QUOTES,   //in a ". asking for more input
+    LEXER_STATE_LEXING_SLASH,
     LEXER_STATE_UNFINISHED,             /*string could be parsed to a valid
                                           expression if given more characters*/
     LEXER_STATE_SUBSHELL_DOL,
     LEXER_STATE_SUBSHELL_QUOTE,
+    LEXER_STATE_FINISH_LEXING_WORD,
 
     LEXER_STATE_FINISHED,               /*lexer successfully lexed string and
                                           parser returned a valid expression*/

@@ -25,6 +25,7 @@ struct ast_traversal_context
     int loop_depth;
     int found_break;
     int found_continue;
+    int found_exit;
 };
 
 /**

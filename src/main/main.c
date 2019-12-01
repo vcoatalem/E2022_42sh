@@ -25,7 +25,6 @@ void sig_handler(int val)
 {
     if (val == SIGINT)
     {
-
     }
 }
 
@@ -52,8 +51,10 @@ int main(int argc, char **argv)
         .ast = NULL,
         .token_array = NULL,
     };
+    char *shellsopt = shopt_SHELLOPTS(bundle.shopt);
     insert_variable(bundle.hash_table_var, "SHELLOPTS",
-        shopt_SHELLOPTS(bundle.shopt));
+        shellsopt);
+    free(shellsopt);
     *g_bundle = bundle;
     int execution_val = 0;
     init_history(&bundle);

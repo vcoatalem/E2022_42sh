@@ -127,6 +127,12 @@ char *get_variable(struct hash_table_var *ht, char *name)
         sprintf(el, "%d", rand() % 32768);
         return strdup(el);
     }
+    if (strcmp(name, "$") == 0)
+    {
+        char el[64];
+        sprintf(el, "%d", getpid());
+        return strdup(el);
+    }
 
     size_t key = hash(name, ht->size);
     struct hashed_var *items = ht->items[key];

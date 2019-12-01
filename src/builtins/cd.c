@@ -10,13 +10,13 @@
 
 int errordir(char *dir)
 {
-    printf("42sh: cd: %s: no such file or directory", dir);
+    printf("42sh: cd: %s: no such file or directory\n", dir);
     return 1;
 }
 
 int errortoomuch(void)
 {
-    printf("42sh: cd: too much args");
+    printf("42sh: cd: too much args\n");
     return 1;
 }
 
