@@ -66,7 +66,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
-    char *result = calloc(1, (strlen(text) + strlen(value) + 1));
+    char *result = calloc(1, (strlen(text) + strlen(value) + 4));
     strcpy(result, text);
     //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
@@ -127,8 +127,7 @@ char *var_substitute(char *text, struct hash_table_var *ht)
     {
         newnewstr = var_substitute(newstr, ht);
         free(newstr);
-    }
-    if (did_substitute)
         return newnewstr;
+    }
     return newstr;
 }
