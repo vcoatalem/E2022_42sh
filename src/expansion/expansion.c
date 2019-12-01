@@ -20,7 +20,6 @@ struct expansion_args
     char *pattern;
     char ***arguments;
     size_t *nb;
-    size_t depth;
 };
 
 static int case_dotglob(char *file, char *path, char *pattern)
@@ -101,9 +100,10 @@ static int check_shopt_options(void *bundle_ptr,
    return 1;
 }
 
-static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
+static void get_find(struct expansion_args *args, char *path,
+                        void *bundle_ptr, size_t depth)
 {
-    if (args->depth == 0)
+    if (depth == 0)
         return;
     struct dirent *dirent = NULL;
     DIR *dir = opendir(!strcmp(path, "") ? "." : path);
@@ -138,8 +138,7 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
         if (S_ISDIR(st.st_mode))
         {
             new_path = strcat(new_path, "/");
-            args->depth--;
-            get_find(args, new_path, bundle_ptr);
+            get_find(args, new_path, bundle_ptr, depth - 1);
         }
 
         free(new_path);
@@ -163,9 +162,8 @@ char **expand_file_pattern(char *pattern, void *bundle_ptr)
     args->pattern = pattern;
     args->arguments = &expanded_args;
     args->nb = &n_args;
-    args->depth = depth;
 
-    get_find(args, "", bundle_ptr);
+    get_find(args, "", bundle_ptr, depth);
 
     if (bundle->shopt->failglob == 1 && args->nb == 0)
         err(1, "42sh: no match");
