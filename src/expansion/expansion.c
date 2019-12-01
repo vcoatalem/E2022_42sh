@@ -170,6 +170,6 @@ char **expand_file_pattern(char *pattern, void *bundle_ptr)
 
     if (bundle->shopt->nullglob == 1 && args->nb == 0)
         pattern = "";
-
-    return *(args->arguments);
+    free(args);
+    return expanded_args;
 }

@@ -23,7 +23,7 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
     }
     else
     {
-        for (size_t i = 0; *(expanded_args + i); i++)
+        for (size_t i = 0; expanded_args[i]; i++)
         {
             *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
             (*arg_list)[*index] = strdup(expanded_args[i]);
