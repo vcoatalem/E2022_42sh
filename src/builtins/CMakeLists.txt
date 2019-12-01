@@ -4,7 +4,7 @@ add_library(builtins
     export.c
     history.c
     shopt.c
-    break_continue.c)
+    break_continue_exit.c)
 
 target_link_libraries(builtins options)
 
