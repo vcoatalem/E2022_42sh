@@ -1,9 +1,11 @@
 #include "../ast.h"
 
-static void arg_list_get_arg(char **arg_list, size_t *index, struct ast *ast)
+static void arg_list_get_arg(char ***arg_list, size_t *index, struct ast *ast)
 {
-    arg_list[*index] = strdup(ast->forest[0]->value);
-    arg_list[*index + 1] = NULL;
+
+    *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+    (*arg_list)[*index] = strdup(ast->forest[0]->value);
+    (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
 }
 
@@ -37,6 +39,13 @@ static void arg_list_get_subshell(char ***arg_list, size_t *index,
 {
     char *substitute = substitute_shell(ast->forest[0]->value);
     //split substitute using IFS
+    if (!substitute)
+        return;
+    if (!*substitute)
+    {
+        free(substitute);
+        return;
+    }
     char **fields = split_fields(substitute, bundle_ptr);
     free(substitute);
     if (fields)
@@ -52,12 +61,13 @@ static void arg_list_get_subshell(char ***arg_list, size_t *index,
     free(fields);
 }
 
-static void arg_list_get_arithmetic_value(char **arg_list, size_t *index,
+static void arg_list_get_arithmetic_value(char ***arg_list, size_t *index,
                                             struct ast *ast)
 {
+    *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
     //TODO: implement arithmetic expression substitution
-    arg_list[*index] = substitute_shell(ast->forest[0]->value);
-    arg_list[*index + 1] = NULL;
+    (*arg_list)[*index] = substitute_shell(ast->forest[0]->value);
+    (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
 }
 
@@ -68,7 +78,6 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
 
     while (ast != NULL)
     {
-        arg_list = realloc(arg_list, (index + 2) * sizeof(char *));
         struct ast *element_list = find_op_type(ast, OPERATOR_ARG_LIST);
         struct ast *value = find_op_type(ast, OPERATOR_GET_VALUE);
         struct ast *expand_value = find_op_type(value,
@@ -87,11 +96,11 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
         }
         else if (arithmetic_value)
         {
-            arg_list_get_arithmetic_value(arg_list, &index, sub_value);
+            arg_list_get_arithmetic_value(&arg_list, &index, sub_value);
         }
         else
         {
-            arg_list_get_arg(arg_list, &index, value);
+            arg_list_get_arg(&arg_list, &index, value);
         }
         ast = element_list;
     }

@@ -78,7 +78,7 @@ struct command *command_init(char **args, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
     struct command *cmd = calloc(1, sizeof(struct command));
-    if (!args || !*args)
+    if (!args || !args[0] || !strcmp(args[0], ""))
     {
         cmd->type = COMMAND_NONE;
         return cmd;
