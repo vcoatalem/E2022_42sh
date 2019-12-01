@@ -1,4 +1,3 @@
-#define _DEFAULT_SOURCE
 #include <ctype.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -13,6 +12,7 @@
 #include "expansion.h"
 #include "fnmatch.h"
 #include "string.h"
+#include "42sh.h"
 
 struct expansion_args
 {
