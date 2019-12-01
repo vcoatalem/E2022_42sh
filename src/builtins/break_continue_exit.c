@@ -13,7 +13,6 @@ int builtin_break(char **argv, size_t size, void *bundle_ptr)
 {
     if (!bundle_ptr || (!argv && size))
         return 1;
-    printf("entered break\n");
     struct execution_bundle *bundle = bundle_ptr;
     if (bundle->ast_traversal_context.loop_depth == 0)
     {

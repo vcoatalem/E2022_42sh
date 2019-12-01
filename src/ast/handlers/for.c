@@ -5,30 +5,29 @@
 int ast_handle_for(struct ast *ast, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    if (!bundle)
-        return AST_ERROR;
 
-    if (ast == NULL)
-        return AST_ERROR;
+    int return_execute = AST_SUCCESS;
 
-    int try_execute = AST_SUCCESS;
-    int return_execute = AST_ERROR;
+    struct ast *ast_for_element = find_op_type(ast, OPERATOR_GET_VALUE);
+    char *element_name = ast_for_element->forest[0]->value;
 
-    struct ast *ast_for_body = find_op_type(ast, OPERATOR_AND);
+    struct ast *ast_for_clause = find_op_type(ast, OPERATOR_ARG_LIST);
     struct ast *ast_do = find_op_type(ast, OPERATOR_DO);
+    struct ast *ast_do_list = find_op_type(ast_do, OPERATOR_LIST);
 
-    if (ast_for_body == NULL || ast_do == NULL)
-        return AST_MISSING_ARG;
+    if (!ast_for_clause || !ast_do)
+        return AST_SUCCESS;
 
+    struct ast *ast_for_element_list = find_op_type(ast_for_clause,
+                OPERATOR_ARG_LIST);
+    char **args = ast_arg_list_build(ast_for_element_list, bundle_ptr);
     bundle->ast_traversal_context.loop_depth++;
-    while (try_execute == AST_SUCCESS)
+    for (size_t i = 0; args[i]; i++)
     {
-        try_execute = ast_execute(ast_for_body, bundle);
-        if (try_execute == AST_SUCCESS)
+        insert_variable(bundle->hash_table_var, element_name, args[i]);
+        return_execute = ast_execute(ast_do_list, bundle);
+        if (return_execute == AST_SUCCESS)
         {
-            return_execute = ast_execute(find_op_type(ast_do, OPERATOR_LIST),
-                    bundle);
-            
             //loop break/continue handlers
             if (bundle->ast_traversal_context.found_break)
             {
@@ -41,7 +40,12 @@ int ast_handle_for(struct ast *ast, void *bundle_ptr)
                 continue;
             }
         }
+        else
+            break;
     }
+    for (size_t i = 0; args[i]; i++)
+        free(args[i]);
+    free(args);
     bundle->ast_traversal_context.loop_depth--;
     return return_execute;
 }

@@ -1,5 +1,30 @@
 #include "../parser.h"
 
+static enum operator_type rule_id_to_operator3(enum rule_id id)
+{
+
+    if (id == RULE_FUNCDEC)
+        return OPERATOR_FUNC_DECLARATION;
+    if (id == RULE_VARDEC)
+        return OPERATOR_VAR_DECLARATION;
+    if (id == RULE_DO_GROUP)
+        return OPERATOR_DO;
+    if (id == RULE_COMMAND_NOT)
+        return OPERATOR_NOT;
+    if (id == RULE_CASE
+        || id == RULE_CASE_CLAUSE
+        || id == RULE_CASE_LINEBREAK
+        || id == RULE_CASE_CLAUSE_CONCAT
+        || id == RULE_CASE_DELIM
+        || id == RULE_CASE_ITEM_CONCAT)
+        return OPERATOR_CASE;
+    if (id == RULE_FOR
+        || id == RULE_FOR_LINEBREAK
+        || id == RULE_FOR_DELIM)
+        return OPERATOR_FOR;
+    return OPERATOR_NONE;
+}
+
 static enum operator_type rule_id_to_operator2(enum rule_id id)
 {
     if (id == RULE_UNTIL)
@@ -8,7 +33,9 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_ELSE;
     if (id == RULE_ARG_LIST
         || id == RULE_ELEMENT_LIST
-        || id == RULE_ELEMENT_ANY_LIST)
+        || id == RULE_ELEMENT_ANY_LIST
+        || id == RULE_FOR_ELEMENT_LIST
+        || id == RULE_FOR_CLAUSE)
         return OPERATOR_ARG_LIST;
     if (id == RULE_REDIR)
         return OPERATOR_REDIR;
@@ -30,22 +57,13 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_GET_IONUMBER;
     if (id == RULE_REDIR_TO)
         return OPERATOR_GET_REDIR_TO;
-    if (id == RULE_FUNCDEC)
-        return OPERATOR_FUNC_DECLARATION;
-    if (id == RULE_VARDEC)
-        return OPERATOR_VAR_DECLARATION;
-    if (id == RULE_DO_GROUP)
-        return OPERATOR_DO;
-    if (id == RULE_COMMAND_NOT)
-        return OPERATOR_NOT;
-    if (id == RULE_CASE
-        || id == RULE_CASE_CLAUSE
-        || id == RULE_CASE_LINEBREAK
-        || id == RULE_CASE_CLAUSE_CONCAT
-        || id == RULE_CASE_DELIM
-        || id == RULE_CASE_ITEM_CONCAT)
-        return OPERATOR_CASE;
-    return OPERATOR_NONE;
+    if (id == RULE_IF)
+        return OPERATOR_IF;
+    if (id == RULE_THEN)
+        return OPERATOR_THEN;
+    if (id == RULE_WHILE)
+        return OPERATOR_WHILE;
+    return rule_id_to_operator3(id);
 }
 
 enum operator_type rule_id_to_operator(enum rule_id id)
@@ -91,11 +109,5 @@ enum operator_type rule_id_to_operator(enum rule_id id)
     }
     if (id == RULE_SHELL_COMMAND)
         return OPERATOR_SHELL_COMMAND;
-    if (id == RULE_IF)
-        return OPERATOR_IF;
-    if (id == RULE_THEN)
-        return OPERATOR_THEN;
-    if (id == RULE_WHILE)
-        return OPERATOR_WHILE;
     return rule_id_to_operator2(id);
 }
