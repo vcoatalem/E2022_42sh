@@ -151,7 +151,9 @@ int main(int argc, char **argv)
     {
         return 1;
     }
-    struct token_array *array = token_array_create(cmds[q]);
+    struct lexer *lexer = lexer_init();
+    lexer_add_string(lexer, cmds[q]);
+    struct token_array *array = lex(lexer);
     int eq = token_array_are_equal(array, exp);
     if (!eq)
     {
@@ -161,6 +163,7 @@ int main(int argc, char **argv)
         token_array_print(exp, stderr);
         //dump both token arrays
     }
+    lexer_free(lexer);
     token_array_free(array);
     token_array_free(exp);
     return eq == 1 ? 0 : 1;
