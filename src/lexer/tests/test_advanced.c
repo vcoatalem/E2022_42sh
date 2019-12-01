@@ -6,7 +6,7 @@
 
 static int token_are_equal(struct token *t1, struct token *t2)
 {
-    return (t1->type == t2->type && t1->value && t2->value);
+    return (t1->type == t2->type && !strcmp(t1->value, t2->value));
 }
 
 static int token_array_are_equal(struct token_array *a1, struct token_array *a2)
@@ -46,11 +46,13 @@ int main(int argc, char **argv)
         "\'if\'else",                               //9
         "echo \"  d\"",                             //10
         "$(sub\nshell)",                            //11
-        "ec\'ho\'",                                //12
+        "ec\'ho\'",                                 //12
         "if ()",                                    //13
         "$()",                                      //14
         "()",                                       //15
     };
+    if (q > 15)
+        return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
     if (q == 0)
@@ -74,16 +76,16 @@ int main(int argc, char **argv)
     else if (q == 3)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "subshell b"));
+        token_array_add(exp, token_init(TOKEN_WORD, "$(subshell b)"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 4)
     {
         token_array_add(exp, token_init(TOKEN_IF, "if"));
-        token_array_add(exp, token_init(TOKEN_SUBSHELL, "$(subshell)"));
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_THEN, "then"));
-        token_array_add(exp, token_init(TOKEN_SUBSHELL, "$(subshell)"));
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_FI, "fi"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
@@ -121,7 +123,7 @@ int main(int argc, char **argv)
     }
     else if (q == 11)
     {
-        token_array_add(exp, token_init(TOKEN_SUBSHELL, "echo $(sub\nshell)"));
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "sub\nshell"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 12)
@@ -133,7 +135,7 @@ int main(int argc, char **argv)
     {
         token_array_add(exp, token_init(TOKEN_IF, "if"));
         token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
-        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 14)
@@ -144,12 +146,8 @@ int main(int argc, char **argv)
     else if (q == 15)
     {
         token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
-        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
-    }
-    else
-    {
-        return 1;
     }
     struct lexer *lexer = lexer_init();
     lexer_add_string(lexer, cmds[q]);
