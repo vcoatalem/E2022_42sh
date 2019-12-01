@@ -34,19 +34,22 @@ int main(int argc, char **argv)
 
     char *cmds[] =
     {
-        "echo $(subshell)",
-        "echo $(subshell a)",
-        "echo \"$(subshell b)\"",
-        "echo \'$(subshell b)\'",
-        "if $(subshell); then \"$(subshell)\"; fi",
-        "'echo $(subshell)'",
-        "\"if\"",
-        "\'if\'",
-        "\"if\"else",
-        "\'if\'else",
-        "echo \"  d\"",
-        "$(sub\nshell)",
-        "'ec\'ho\'",
+        "echo $(subshell)",                         //0
+        "echo $(subshell a)",                       //1
+        "echo \"$(subshell b)\"",                   //2
+        "echo \'$(subshell b)\'",                   //3
+        "if $(subshell); then \"$(subshell)\"; fi", //4
+        "'echo $(subshell)'",                       //5
+        "\"if\"",                                   //6
+        "\'if\'",                                   //7
+        "\"if\"else",                               //8
+        "\'if\'else",                               //9
+        "echo \"  d\"",                             //10
+        "$(sub\nshell)",                            //11
+        "'ec\'ho\'",                                //12
+        "if ()",                                    //13
+        "$()",                                      //14
+        "()",                                       //15
     };
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -126,7 +129,25 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
-    else if (q >= 13)
+    else if (q == 13)
+    {
+        token_array_add(exp, token_init(TOKEN_IF, "if"));
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 14)
+    {
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, ""));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else if (q == 15)
+    {
+        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, "("));
+        token_array_add(exp, token_init(TOKEN_EOF, ""));
+    }
+    else
     {
         return 1;
     }
