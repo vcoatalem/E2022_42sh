@@ -37,6 +37,7 @@ enum lexer_state
                                           expression if given more characters*/
     LEXER_STATE_SUBSHELL_DOL,
     LEXER_STATE_SUBSHELL_QUOTE,
+    LEXER_STATE_FINISH_LEXING_WORD,
 
     LEXER_STATE_FINISHED,               /*lexer successfully lexed string and
                                           parser returned a valid expression*/

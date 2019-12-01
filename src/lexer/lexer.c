@@ -46,7 +46,7 @@ void lexer_clear(struct lexer *lexer)
 
 void change_lexer_state(struct lexer *lex)
 {
-
+    //printf("IM HERE=%ld\n", lex->iterator);
     if ((lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
         && lex->str[lex->iterator] == '\'')
         || (lex->state == LEXER_STATE_LEXING_QUOTES
@@ -175,7 +175,8 @@ struct token_array *lex(struct lexer *lexer)
     int is_string = 0;
     while (lexer->str[lexer->iterator] != 0)
     {
-        if ((strlen(buffer) >= 3) && ((buffer[0] == '$' && buffer[1] == '('
+        if (lexer->state != LEXER_STATE_LEXING_QUOTES && (strlen(buffer) >= 3)
+            && ((buffer[0] == '$' && buffer[1] == '('
             && buffer[2] != '(') || strcmp(buffer, "`") == 0))
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
@@ -193,7 +194,7 @@ struct token_array *lex(struct lexer *lexer)
                 buffer, &index, arr);
         }
         else if (is_separator(lexer->str[lexer->iterator])
-            && lexer->state == LEXER_STATE_NONE)
+            && (lexer->state == LEXER_STATE_NONE))
         {
             handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
@@ -221,10 +222,14 @@ struct token_array *lex(struct lexer *lexer)
         buffer[index] = 0;
     }
     #endif
+
     if (index > 0)
     {
+        //printf("BUFF=%s\n", buffer);
         enum token_type tok = token_check(buffer, 0, buffer);
-        if (tok == TOKEN_WORD)
+        if (tok != TOKEN_WORD && is_string)
+            token_array_add(arr, token_init(TOKEN_WORD, buffer));
+        else if (tok == TOKEN_WORD)
             check_assignment(buffer, arr, is_string);
         else
             token_array_add(arr, token_init(tok, buffer));

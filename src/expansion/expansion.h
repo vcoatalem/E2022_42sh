@@ -19,6 +19,6 @@
  * \param const char *pattern
  */
 
-char **expand_file_pattern(const char *pattern);
+char **expand_file_pattern(char *pattern, void *bundle_ptr);
 
 #endif
