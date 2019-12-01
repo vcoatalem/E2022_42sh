@@ -12,7 +12,7 @@
 #include "expansion.h"
 #include "fnmatch.h"
 #include "string.h"
-#include "42sh.h"
+#include "../main/42sh.h"
 
 struct expansion_args
 {
@@ -33,10 +33,13 @@ static int case_dotglob(char *file, char *path, char *pattern)
     return 1;
 }
 
-void to_lowercase(char *s)
+char *to_lowercase(char *s)
 {
+    char *cpy = calloc(1, strlen(s) * sizeof(char));
     for (size_t i = 0; s[i] != '\0'; i++)
-        s[i] = tolower(s[i]);
+        cpy[i] = tolower(s[i]);
+
+    return cpy;
 }
 
 static int case_nocaseglob(char *file, char *path, char *pattern)
@@ -44,10 +47,27 @@ static int case_nocaseglob(char *file, char *path, char *pattern)
     if (file[0] == '.' || strcmp(file, "..") == 0)
         return 1;
 
-    to_lowercase(path);
-    to_lowercase(pattern);
+    char *cpy_path = to_lowercase(path);
+    char *cpy_pattern = to_lowercase(pattern);
 
-    if (fnmatch(pattern, path, 0) == 0)
+    if (fnmatch(cpy_pattern, cpy_path, 0) == 0)
+    {
+        free(cpy_path);
+        free(cpy_pattern);
+        return 0;
+    }
+
+    free(cpy_path);
+    free(cpy_pattern);
+    return 1;
+}
+
+static int case_extglob(char *file, char *path, char *pattern)
+{
+    if (file[0] == '.' || strcmp(file, "..") == 0)
+        return 1;
+
+    if (fnmatch(pattern, path, FNM_EXTMATCH) == 0)
         return 0;
 
     return 1;
@@ -60,11 +80,44 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
         return;
     struct dirent *dirent = NULL;
     DIR *dir = opendir(!strcmp(path, "") ? "." : path);
+
     while ((dirent = readdir(dir)) != NULL)
     {
         char *new_path = calloc(1, strlen(path) + strlen(dirent->d_name) + 2);
         strcat(new_path, path);
         strcat(new_path, dirent->d_name);
+
+        if ((bundle->shopt->dotglob == 1
+                    && case_dotglob(dirent->d_name,
+                        new_path, args->pattern) == 0)
+                || (bundle->shopt->nocaseglob == 1
+                    && case_nocaseglob(dirent->d_name,
+                        new_path, args->pattern) == 0)
+                || (bundle->shopt->extglob == 1
+                    && case_extglob(dirent->d_name,
+                        new_path, args->pattern) == 0))
+        {
+            *(args->arguments) = realloc(*(args->arguments),
+                                        (*(args->nb) + 2) * sizeof(char *));
+            (*(args->arguments))[*(args->nb)] = strdup(new_path);
+            (*(args->arguments))[*(args->nb) + 1] = NULL;
+            (*(args->nb))++;
+        }
+
+        else if (dirent->d_name[0] ==  '.' || strcmp(dirent->d_name, "..") == 0)
+        {
+            free(new_path);
+            continue;
+        }
+
+        else if (fnmatch(args->pattern, new_path, 0) == 0)
+        {
+            *(args->arguments) = realloc(*(args->arguments),
+                                        (*(args->nb) + 2) * sizeof(char *));
+            (*(args->arguments))[*(args->nb)] = strdup(new_path);
+            (*(args->arguments))[*(args->nb) + 1] = NULL;
+            (*(args->nb))++;
+        }
 
         struct stat st;
         if (stat(new_path, &st) != 0)
@@ -80,19 +133,6 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
             get_find(args, new_path, bundle);
         }
 
-        if ((bundle->shopt->dotglob
-                    && case_dotglob(dirent->d_name,
-                        new_path, args->pattern) == 0)
-                || (bundle->shopt->nocaseglob
-                    && case_nocaseglob(dirent->d_name,
-                        new_path, args->pattern) == 0))
-        {
-            *(args->arguments) = realloc(*(args->arguments),
-                                        (*(args->nb) + 2) * sizeof(char *));
-            (*(args->arguments))[*(args->nb)] = strdup(new_path);
-            (*(args->arguments))[*(args->nb) + 1] = NULL;
-            (*(args->nb))++;
-        }
         free(new_path);
     }
     closedir(dir);
