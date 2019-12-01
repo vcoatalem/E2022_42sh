@@ -9,7 +9,8 @@ struct shopt
     int ast_print;     
     int dotglob;       
     int expand_aliases;
-    int extglob;       
+    int extglob;
+    int failglob;
     int nocaseglob;    
     int nullglob;      
     int sourcepath;    

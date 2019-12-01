@@ -1,54 +1,67 @@
 #include "../parser.h"
 
-static void sh_rule_then(struct rule_array *rules)
+static void sh_rule_for_element_list(struct rule_array *rules)
 {
-    struct rule *rule = rule_build(RULE_THEN,
-            symbol_create(TOKEN_THEN, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            NULL);
-    rule_array_add(rules, rule);
-}
-
-// IF -> `if` LIST `then` LIST ELSE_CONCAT `fi`
-static void sh_rule_if(struct rule_array *rules)
-{
-    struct rule *rule = rule_build(RULE_IF,
-            symbol_create(TOKEN_IF, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(0, RULE_THEN),
-            symbol_create(0, RULE_ELSE_CONCAT),
-            symbol_create(TOKEN_FI, 0),
-            NULL);
-    rule_array_add(rules, rule);
-}
-
-// ELSE_CLAUSE -> `else` LIST
-// ELSE_CLAUSE -> `elif` LIST `then` LIST ELSE_CLAUSE
-// ELSE_CLAUSE -> epsilon
-static void sh_rule_else_concat(struct rule_array *rules)
-{
-    struct rule *rule = rule_build(RULE_ELSE_CONCAT,
-            symbol_create(TOKEN_ELSE, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            NULL);
-    struct rule *rule_elif = rule_build(RULE_ELSE_CONCAT,
-            symbol_create(TOKEN_ELIF, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(TOKEN_THEN, 0),
-            symbol_create(0, RULE_COMPOUND_LIST_BREAK),
-            symbol_create(0, RULE_ELSE_CONCAT),
-            NULL);
-    struct rule *rule_eps = rule_build(RULE_ELSE_CONCAT,
+    rule_array_add(rules, rule_build(RULE_FOR_ELEMENT_LIST,
+            symbol_create(0, RULE_ELEMENT_ANY),
+            symbol_create(0, RULE_FOR_ELEMENT_LIST),
+            NULL));
+    rule_array_add(rules, rule_build(RULE_FOR_ELEMENT_LIST,
             symbol_epsilon(),
-            NULL);
-    rule_array_add(rules, rule);
-    rule_array_add(rules, rule_elif);
-    rule_array_add(rules, rule_eps);
+            NULL));
 }
 
-void sh_rule_if_groups(struct rule_array *rules)
+static void sh_rule_for_linebreak(struct rule_array *rules)
 {
-    sh_rule_if(rules);
-    sh_rule_then(rules);
-    sh_rule_else_concat(rules);
+    rule_array_add(rules, rule_build(RULE_FOR_LINEBREAK,
+            symbol_create(TOKEN_EOL, 0),
+            symbol_create(0, RULE_FOR_LINEBREAK),
+            NULL));
+    rule_array_add(rules, rule_build(RULE_FOR_LINEBREAK,
+            symbol_epsilon(),
+            NULL));
+}
+
+static void sh_rule_for_delim(struct rule_array *rules)
+{ 
+    rule_array_add(rules, rule_build(RULE_FOR_DELIM,
+            symbol_create(TOKEN_SEMI_COLON, 0),
+            NULL));
+    rule_array_add(rules, rule_build(RULE_FOR_DELIM,
+            symbol_create(TOKEN_EOL, 0),
+            NULL));
+}
+
+static void sh_rule_for_clause(struct rule_array *rules)
+{
+    rule_array_add(rules, rule_build(RULE_FOR_CLAUSE,
+            symbol_create(TOKEN_SEMI_COLON, 0),
+            NULL));
+    rule_array_add(rules, rule_build(RULE_FOR_CLAUSE,
+            symbol_create(0, RULE_FOR_LINEBREAK),
+            symbol_create(TOKEN_IN, 0),
+            symbol_create(0, RULE_FOR_ELEMENT_LIST),
+            symbol_create(0, RULE_FOR_DELIM),
+            NULL));
+}
+
+static void sh_rule_for(struct rule_array *rules)
+{
+    rule_array_add(rules, rule_build(RULE_FOR,
+            symbol_create(TOKEN_FOR, 0),
+            symbol_create(0, RULE_ELEMENT),
+            symbol_create(0, RULE_FOR_CLAUSE),
+            symbol_create(0, RULE_FOR_LINEBREAK),
+            symbol_create(0, RULE_DO_GROUP),
+            NULL));
+}
+
+
+void sh_rule_for_groups(struct rule_array *rules)
+{
+    sh_rule_for(rules);
+    sh_rule_for_clause(rules);
+    sh_rule_for_element_list(rules);
+    sh_rule_for_delim(rules);
+    sh_rule_for_linebreak(rules);
 }

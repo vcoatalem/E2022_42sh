@@ -10,9 +10,10 @@ static void arg_list_get_arg(char ***arg_list, size_t *index, struct ast *ast)
 }
 
 static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
-                                            struct ast *ast)
+                                            struct ast *ast, void *bundle_ptr)
 {
-    char **expanded_args = expand_file_pattern(ast->forest[0]->value);
+    char **expanded_args = expand_file_pattern(ast->forest[0]->value,
+            bundle_ptr);
     if (!expanded_args)
     {
         *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
@@ -26,7 +27,7 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
         {
             *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
             (*arg_list)[*index] = strdup(expanded_args[i]);
-            //printf("%zu: %s\n", *index, (*arg_list)[*index]);
+            free(expanded_args[i]);
             *index = *index + 1;
         }
         (*arg_list)[*index] = NULL;
@@ -88,7 +89,8 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
                 OPERATOR_GET_ARITHMETIC_VALUE);
         if (expand_value)
         {
-            arg_list_get_expand_arg(&arg_list, &index, expand_value);
+            arg_list_get_expand_arg(&arg_list, &index, expand_value,
+                    bundle_ptr);
         }
         else if (sub_value)
         {

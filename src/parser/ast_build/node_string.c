@@ -108,6 +108,16 @@ char *rule_id_to_string(enum rule_id id)
         return "case_clause";
     case RULE_CASE_CLAUSE_CONCAT:
         return "case_clause";
+    case RULE_FOR:
+        return "for";
+    case RULE_FOR_CLAUSE:
+        return "for_clause";
+    case RULE_FOR_DELIM:
+        return "for_delim";
+    case RULE_FOR_LINEBREAK:
+        return "for_linebreak";
+    case RULE_FOR_ELEMENT_LIST:
+        return "for_element_list";
     default:
         return "unknown";
     }

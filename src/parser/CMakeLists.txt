@@ -20,6 +20,7 @@ add_library(parser
     shell_rules/compound_list_break.c
     shell_rules/funcdec.c
     shell_rules/do.c
+    shell_rules/for.c
     shell_rules/input.c
     shell_rules/misc.c
     shell_rules/case.c
