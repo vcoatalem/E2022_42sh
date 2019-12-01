@@ -2,7 +2,7 @@
 
 static void arg_list_get_arg(char **arg_list, size_t *index, struct ast *ast)
 {
-    arg_list[*index] = ast->forest[0]->value;
+    arg_list[*index] = strdup(ast->forest[0]->value);
     arg_list[*index + 1] = NULL;
     *index = *index + 1;
 }
