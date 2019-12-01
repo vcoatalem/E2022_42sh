@@ -46,7 +46,6 @@ char *getword(char *word, struct hash_table_var *ht)
 char *recvar_substitute(char* text, struct hash_table_var *ht,
     int *did_substitute)
 {
-    //printf("text=%s\n", text);
     char *word = calloc(1, strlen(text) + 1);
     //word = strdup(text);
     size_t i = 0;
