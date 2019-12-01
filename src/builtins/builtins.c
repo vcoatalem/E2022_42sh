@@ -16,5 +16,7 @@ builtin_handler str_to_builtin(char *name)
         return builtin_break;
     else if (!strcmp(name, "continue"))
         return builtin_continue;
+    else if (!strcmp(name, "exit"))
+        return builtin_exit;
     return NULL;
 }
