@@ -1,0 +1,129 @@
+
+
+
+
+
+
+
+`ls`
+
+Hello World!
+
+Hello World!
+	Hello Wolrd!
+
+Hello World!
+
+Hello
+World!
+
+Hello 
+World!
+
+\
+
+x40
+
+0176
+
+Hello
+World!
+
+foo
+ok
+
+ok_else
+
+b
+
+c
+
+c
+
+cat: fdgfdg: No such file or directory
+
+
+e
+
+
+Hello World!
+
+Hello
+World!
+
+Hello
+World!
+
+Hello World!
+Mr President
+
+Hello
+
+
+
+
+
+
+
+
+
+Hello
+World!
+
+
+a
+
+a
+b
+c
+
+a
+
+b
+
+a
+
+a
+
+a
+b
+
+a
+c
+
+a
+b
+d
+
+
+
+
+
+toto
+
+toto
+tata
+
+Hello World!
+
+Hello
+World!
+
+Hello
+World!
+
+Hello World!
+Mr President
+
+
+
+
+
+OK
+cat: KO: No such file or directory
+
+
+cat: im: No such file or directory
+cat: out: No such file or directory
+
+

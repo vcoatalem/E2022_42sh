@@ -11,10 +11,10 @@
    stdin: "cat < ../../input"
 
  - name: redirection_>&_err_to_out
-   stdin: "{ echo OK; cat KO } 2>&1"
+   stdin: "{ echo OK; cat KO; } 2>&1"
 
  - name: redirection_>&_out_to_err
-   stdin: "{ echo OK; cat KO } 1>&2"
+   stdin: "{ echo OK; cat KO; } 1>&2"
 
  - name: redirection_flux_then_file
    stdin: "cat im out 2>&1 > ../../output"
