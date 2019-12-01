@@ -195,7 +195,7 @@ struct token_array *lex(struct lexer *lexer)
                 buffer, &index, arr);
         }
         else if (is_separator(lexer->str[lexer->iterator])
-            && (lexer->state == LEXER_STATE_NONE))
+            && (lexer->state == LEXER_STATE_NONE) && buffer[0] != '$')
         {
             handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
