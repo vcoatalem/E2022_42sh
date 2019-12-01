@@ -30,14 +30,11 @@ char* getcurrent(void)
     return strdup(result);
 }
 
-
-
-
-
 static void insert_default_variables(struct hash_table_var *ht)
 {
     insert_variable(ht, "PS1", "42sh$ ");
     insert_variable(ht, "PS2", "> ");
+    insert_variable(ht, "?", "0");
     char *current_pwd = getcurrent();
     insert_variable(ht, "OLDPWD", current_pwd);
     free(current_pwd);
