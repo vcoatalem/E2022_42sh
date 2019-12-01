@@ -73,9 +73,33 @@ static int case_extglob(char *file, char *path, char *pattern)
     return 1;
 }
 
-static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
+static void add_arg(struct expansion_args *args, char *new_path)
+{
+    *(args->arguments) = realloc(*(args->arguments),
+                                (*(args->nb) + 2) * sizeof(char *));
+    (*(args->arguments))[*(args->nb)] = strdup(new_path);
+    (*(args->arguments))[*(args->nb) + 1] = NULL;
+    (*(args->nb))++;
+}
+
+static void check_shopt_options(void *bundle_ptr,
+                        char *name, char *path, struct expansion_args *args)
 {
     struct execution_bundle *bundle = bundle_ptr;
+
+   if ((bundle->shopt->dotglob == 1
+           && case_dotglob(name, path, args->pattern) == 0)
+       || (bundle->shopt->nocaseglob == 1
+           && case_nocaseglob(name, path, args->pattern) == 0)
+       || (bundle->shopt->extglob == 1
+           && case_extglob(name, path, args->pattern) == 0))
+   {
+       add_arg(args, path);
+   }
+}
+
+static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
+{
     if (args->depth == 0)
         return;
     struct dirent *dirent = NULL;
@@ -87,24 +111,10 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
         strcat(new_path, path);
         strcat(new_path, dirent->d_name);
 
-        if ((bundle->shopt->dotglob == 1
-                    && case_dotglob(dirent->d_name,
-                        new_path, args->pattern) == 0)
-                || (bundle->shopt->nocaseglob == 1
-                    && case_nocaseglob(dirent->d_name,
-                        new_path, args->pattern) == 0)
-                || (bundle->shopt->extglob == 1
-                    && case_extglob(dirent->d_name,
-                        new_path, args->pattern) == 0))
-        {
-            *(args->arguments) = realloc(*(args->arguments),
-                                        (*(args->nb) + 2) * sizeof(char *));
-            (*(args->arguments))[*(args->nb)] = strdup(new_path);
-            (*(args->arguments))[*(args->nb) + 1] = NULL;
-            (*(args->nb))++;
-        }
+        check_shopt_options(bundle_ptr, dirent->d_name, new_path, args);
 
-        else if (dirent->d_name[0] ==  '.' || strcmp(dirent->d_name, "..") == 0)
+        if (dirent->d_name[0] ==  '.'
+                    || strcmp(dirent->d_name, "..") == 0)
         {
             free(new_path);
             continue;
@@ -112,11 +122,7 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
 
         else if (fnmatch(args->pattern, new_path, 0) == 0)
         {
-            *(args->arguments) = realloc(*(args->arguments),
-                                        (*(args->nb) + 2) * sizeof(char *));
-            (*(args->arguments))[*(args->nb)] = strdup(new_path);
-            (*(args->arguments))[*(args->nb) + 1] = NULL;
-            (*(args->nb))++;
+            add_arg(args, new_path);
         }
 
         struct stat st;
@@ -130,7 +136,7 @@ static void get_find(struct expansion_args *args, char *path, void *bundle_ptr)
         {
             new_path = strcat(new_path, "/");
             args->depth--;
-            get_find(args, new_path, bundle);
+            get_find(args, new_path, bundle_ptr);
         }
 
         free(new_path);
