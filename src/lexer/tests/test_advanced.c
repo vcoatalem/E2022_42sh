@@ -46,7 +46,7 @@ int main(int argc, char **argv)
         "\'if\'else",                               //9
         "echo \"  d\"",                             //10
         "$(sub\nshell)",                            //11
-        "'ec\'ho\'",                                //12
+        "ec\'ho\'",                                //12
         "if ()",                                    //13
         "$()",                                      //14
         "()",                                       //15
