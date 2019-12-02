@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 54
+#define NB_RULES 60
 
 
 /**
@@ -68,28 +68,34 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_REDIR_TO,                      //29
     RULE_IONUMBER,                      //30
     RULE_ELEMENT,                       //31
-    RULE_ELEMENT_LIST,                  //32
-    RULE_ELEMENT_ANY,                   //33
-    RULE_ELEMENT_ANY_LIST,              //34
-    RULE_ARG_LIST,                      //35
-    RULE_IF,                            //36
-    RULE_THEN,                          //37
-    RULE_ELSE_CONCAT,                   //38
-    RULE_WHILE,                         //39
-    RULE_UNTIL,                         //40
-    RULE_FOR,                           //41
-    RULE_DO_GROUP,                      //42
-    RULE_FUNCDEC_BODY,                  //43
-    RULE_FUNCDEC,                       //44
-    RULE_VARDEC,                        //45
-    RULE_CASE,                          //46
-    RULE_CASE_LINEBREAK,                //47
-    RULE_CASE_CLAUSE,                   //48
-    RULE_CASE_DELIM,                    //49
-    RULE_CASE_CLAUSE_CONCAT,            //50
-    RULE_CASE_ITEM,                     //51
-    RULE_CASE_ITEM_CONCAT,              //52
-    RULE_CASE_END                       //53
+    RULE_ELEMENT_EXPAND,                //32
+    RULE_ELEMENT_SUBSHELL,              //33
+    RULE_ELEMENT_ARITHMETIC,            //34
+    RULE_ELEMENT_LIST,                  //35
+    RULE_ELEMENT_ANY,                   //36
+    RULE_ELEMENT_ANY_LIST,              //37
+    RULE_ARG_LIST,                      //38
+    RULE_IF,                            //39
+    RULE_THEN,                          //40
+    RULE_ELSE_CONCAT,                   //41
+    RULE_WHILE,                         //42
+    RULE_UNTIL,                         //43
+    RULE_DO_GROUP,                      //44
+    RULE_FUNCDEC_BODY,                  //45
+    RULE_FUNCDEC,                       //46
+    RULE_VARDEC,                        //47
+    RULE_CASE,                          //48
+    RULE_CASE_LINEBREAK,                //49
+    RULE_CASE_CLAUSE,                   //50
+    RULE_CASE_DELIM,                    //51
+    RULE_CASE_CLAUSE_CONCAT,            //52
+    RULE_CASE_ITEM,                     //53
+    RULE_CASE_ITEM_CONCAT,              //54
+    RULE_FOR,                           //55
+    RULE_FOR_ELEMENT_LIST,              //56
+    RULE_FOR_LINEBREAK,                 //57
+    RULE_FOR_DELIM,                     //58
+    RULE_FOR_CLAUSE,                    //59
 };
 
 /**
@@ -270,6 +276,7 @@ void sh_rule_funcdec_groups            (struct rule_array *rules);
 void sh_rule_if_groups                 (struct rule_array *rules);
 void sh_rule_misc                      (struct rule_array *rules);
 void sh_rule_case_groups               (struct rule_array *rules);
+void sh_rule_for_groups                (struct rule_array *rules);
 
 /**
  * \brief initialises the LL grammar

@@ -30,20 +30,24 @@ char* getcurrent(void)
     return strdup(result);
 }
 
-
-
-
 static void insert_default_variables(struct hash_table_var *ht)
 {
     insert_variable(ht, "PS1", "42sh$ ");
     insert_variable(ht, "PS2", "> ");
-    insert_variable(ht, "OLDPWD", getcurrent());
+    insert_variable(ht, "?", "0");
+    char *current_pwd = getcurrent();
+    insert_variable(ht, "OLDPWD", current_pwd);
+    free(current_pwd);
     insert_variable(ht, "HOME", gethome());
+    insert_variable(ht, "IFS", " \t\n");
     char histfile[2048] = { 0 };
     strcat(histfile, gethome());
     strcat(histfile, "/");
     strcat(histfile, ".42sh_history");
     insert_variable(ht, "HISTFILE", histfile);
+    char el[64];
+    sprintf(el, "%d", getuid());
+    insert_variable(ht, "UID", el);
 }
 
 struct hash_table_var *init_hash_table_var(size_t size)
@@ -118,6 +122,12 @@ char *get_variable(struct hash_table_var *ht, char *name)
         srand((unsigned) time(&t));
         char el[64];
         sprintf(el, "%d", rand() % 32768);
+        return strdup(el);
+    }
+    if (strcmp(name, "$") == 0)
+    {
+        char el[64];
+        sprintf(el, "%d", getpid());
         return strdup(el);
     }
 

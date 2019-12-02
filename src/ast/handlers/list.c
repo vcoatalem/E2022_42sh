@@ -16,6 +16,19 @@ int ast_handle_list(struct ast *ast, void *bundle_ptr)
         try_execute = ast_execute(ast->forest[i], bundle);
         if (try_execute != AST_SUCCESS)
             break;
+
+        //loop break/continue handlers
+        if (bundle->ast_traversal_context.found_break)
+        {
+            //bundle->ast_traversal_context.found_break = 0;
+            break;
+        }
+        if (bundle->ast_traversal_context.found_continue)
+        {
+            //bundle->ast_traversal_context.found_continue = 0;
+            //continue;
+            break;
+        }
     }
 
     return try_execute;

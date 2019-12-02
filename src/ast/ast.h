@@ -20,6 +20,14 @@
 #define AST_ERROR 1
 #define AST_MISSING_ARG 2
 
+struct ast_traversal_context
+{
+    int loop_depth;
+    int found_break;
+    int found_continue;
+    int found_exit;
+};
+
 /**
  * \enum node_type
  * \brief enum contain type of nodes
@@ -182,7 +190,7 @@ char *get_element_value(struct ast *ast);
  * \param ast arg_list node to get argument from
  *
  */
-char **ast_arg_list_build(struct ast *ast);
+char **ast_arg_list_build(struct ast *ast, void *bundle_ptr);
 
 /**
  * \brief get all arguments of command type node

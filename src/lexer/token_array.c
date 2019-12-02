@@ -32,7 +32,7 @@ void token_array_add(struct token_array *arr, struct token *token)
 {
     for (size_t i = 0; i < strlen(token->value); ++i)
     {
-        if (token->value[i] == '*')
+        if (token->value[i] == '*' || token->value[i] == '?')
         {
             token->type = TOKEN_WORD_W_STAR;
         }
@@ -47,7 +47,7 @@ void token_array_add(struct token_array *arr, struct token *token)
                 * sizeof(void*));
     }
 }
-/*Useful when we are in interactive mode and we want to fusionate two arrays
+/*Useful when we are in interactive mode and we want to merge two arrays
   We have to stick the last token of the first array with the first token of
   the second array with a \n between them*/
 void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
@@ -71,7 +71,6 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
     arr1->tok_array[arr1->size - 1]->type = TOKEN_WORD;
     for(size_t i = 1; i < arr2->size; i++)
     {
-        //TODO add free for token
         token_array_add(arr1, arr2->tok_array[i]);
     }
 }
@@ -91,7 +90,7 @@ int is_separator(char c)
 {
     return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
             || c == '\0' || c == '<' || c == '>'
-            || c == ';');
+            || c == ';' || c == ')' || c == '(');
 }
 
 int is_space(char c)
@@ -148,8 +147,14 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
     }
     if (assignment)
         token_array_add(arr, token_init(TOKEN_ASSIGNMENT, buffer));
+    else if (strcmp(buffer, "$()") == 0)
+        token_array_add(arr, token_init(TOKEN_SUBSHELL, ""));
     else
-        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+    {
+        struct token *tok = token_init(TOKEN_WORD, buffer);
+        token_array_add(arr, tok);
+    }
+
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,

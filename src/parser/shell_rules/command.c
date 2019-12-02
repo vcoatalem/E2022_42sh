@@ -19,42 +19,30 @@ static void sh_rule_simple_command(struct rule_array *rules)
 
 static void sh_rule_shell_command(struct rule_array *rules)
 {
-    struct rule *rule_var_decl = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_VARDEC),
-            NULL);
-    struct rule *rule_if = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_IF),
-            NULL);
-    struct rule *rule_while = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_WHILE),
-            NULL);
-    struct rule *rule_until = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_UNTIL),
-            NULL);
-    struct rule *rule_case = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_CASE),
-            NULL);
-    struct rule *rule_brackets = rule_build(RULE_SHELL_COMMAND,
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_VARDEC),NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_IF), NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_WHILE), NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_UNTIL), NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_FOR), NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_CASE), NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
             symbol_create(TOKEN_LEFT_BRACKET, 0),
             symbol_create(0, RULE_COMPOUND_LIST_BREAK),
             symbol_create(TOKEN_RIGHT_BRACKET, 0),
-            NULL);
-    struct rule *rule_parenthesis = rule_build(RULE_SHELL_COMMAND,
+            NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
             symbol_create(TOKEN_LEFT_PARENTHESIS, 0),
             symbol_create(0, RULE_COMPOUND_LIST),
             symbol_create(TOKEN_RIGHT_PARENTHESIS, 0),
-            NULL);
-    struct rule *rule_funcdec = rule_build(RULE_SHELL_COMMAND,
-            symbol_create(0, RULE_FUNCDEC),
-            NULL);
-    rule_array_add(rules, rule_var_decl);
-    rule_array_add(rules, rule_if);
-    rule_array_add(rules, rule_case);
-    rule_array_add(rules, rule_while);
-    rule_array_add(rules, rule_until);
-    rule_array_add(rules, rule_brackets);
-    rule_array_add(rules, rule_parenthesis);
-    rule_array_add(rules, rule_funcdec);
+            NULL));
+    rule_array_add(rules, rule_build(RULE_SHELL_COMMAND,
+            symbol_create(0, RULE_FUNCDEC), NULL));
 }
 
 static void sh_rule_command(struct rule_array *rules)
@@ -67,8 +55,12 @@ static void sh_rule_command(struct rule_array *rules)
             symbol_create(0, RULE_SHELL_COMMAND),
             symbol_create(0, RULE_REDIR_LIST),
             NULL);
+    struct rule *rule_c = rule_build(RULE_COMMAND,
+            symbol_create(0, RULE_NOT),
+            NULL);
     rule_array_add(rules, rule_a);
     rule_array_add(rules, rule_b);
+    rule_array_add(rules, rule_c);
 }
 
 static void sh_rule_command_not(struct rule_array *rules)

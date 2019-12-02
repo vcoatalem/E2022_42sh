@@ -30,19 +30,9 @@ static void sh_rule_until(struct rule_array *rules)
     rule_array_add(rules, rule);
 }
 
-static void sh_rule_for(struct rule_array *rules)
-{
-    struct rule *rule = rule_build(RULE_FOR,
-            symbol_create(TOKEN_FOR, 0),
-            NULL);
-
-    rule_array_add(rules, rule);
-}
-
 void sh_rule_do_groups(struct rule_array *rules)
 {
     sh_rule_do_group(rules);
     sh_rule_while(rules);
     sh_rule_until(rules);
-    sh_rule_for(rules);
 }

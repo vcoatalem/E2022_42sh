@@ -182,6 +182,19 @@ int main(int argc, char **argv)
     }
     else if (q == 12)
     {
+        token_array_add(exp, token_init(TOKEN_FOR, "for"));
+        token_array_add(exp, token_init(TOKEN_WORD, "a"));
+        token_array_add(exp, token_init(TOKEN_IN, "in"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "seq 0 1 10"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_DO, "do"));
+        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD, "e"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_EOL, "\\n"));
+        token_array_add(exp, token_init(TOKEN_DONE, "done"));
     }
     else if (q == 13)
     {

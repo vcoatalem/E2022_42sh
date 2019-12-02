@@ -46,26 +46,26 @@ char *getword(char *word, struct hash_table_var *ht)
 char *recvar_substitute(char* text, struct hash_table_var *ht,
     int *did_substitute)
 {
-    //printf("text=%s\n", text);
     char *word = calloc(1, strlen(text) + 1);
     //word = strdup(text);
     size_t i = 0;
     for (; (text[i] && text[i] != '$')
-        || (text[i] == '$' && is_delimiter(text[i + 1])); ++i)
+        || (text[i] == '$' && (is_delimiter(text[i + 1]))); ++i)
     {
     }
     int iword = i;
-    for (int j = 0; !is_delimiter(text[i + 1]) && text[i] != '}'; ++j, ++i)
+    for (int j = 0; (text[i] && text[i + 1] && !is_delimiter(text[i + 1])
+        && text[i] != '}'); ++j, ++i)
     {
         word[j] = text[i];
     }
-    word[strlen(word)] = text[i];
-    char *value = getword(word, ht);
-    //printf("value:%s\n", value);
+    if (strlen(word))
+        word[strlen(word)] = text[i];
+    char *value = strdup(getword(word, ht));
     int lenword = strlen(word);
     int dec = lenword - strlen(value);
     free(word);
-    char *result = calloc(1, (strlen(text) + strlen(value) + 1));
+    char *result = calloc(1, (strlen(text) + strlen(value) + 4));
     strcpy(result, text);
     //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
@@ -78,11 +78,13 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     else if (dec < 0)
     {
         for (int i = strlen(result) - dec; i >= iword; --i)
-            result[i] = result[i + dec];
+        {
+            if (i + dec >= 0)
+                result[i] = result[i + dec];
+        }
     }
     else
     {
-        //printf("YOLO%d\n", dec);
         for (size_t i = iword; i < strlen(result) + dec; i++)
         {
             result[i] = result[i + dec];
@@ -110,12 +112,12 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
                     *did_substitute = 1;
             }
     }
+    free(value);
     return result;
 }
 
 char *var_substitute(char *text, struct hash_table_var *ht)
 {
-    //printf("text=%s\n", text);
     int did_substitute = 1;
     char *newstr = recvar_substitute(text, ht, &did_substitute);
     char *newnewstr;
@@ -123,8 +125,7 @@ char *var_substitute(char *text, struct hash_table_var *ht)
     {
         newnewstr = var_substitute(newstr, ht);
         free(newstr);
-    }
-    if (did_substitute)
         return newnewstr;
+    }
     return newstr;
 }
