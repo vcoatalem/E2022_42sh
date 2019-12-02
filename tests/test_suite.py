@@ -17,7 +17,7 @@ global html
 
 def run_42sh(args, stdin):
 #    stdin = stdin + ';'
-    print(stdin)
+#    print(stdin)
     return sp.run(args, capture_output=True, text=True, input=stdin)
 
 def remove_bracket(sh):
@@ -50,7 +50,7 @@ def test(binary, tests):
    # sh.stdout = remove_bracket(sh.stdout)
     print(tests["name"] + " execution time: %.10s" % (time.time() -
                         start_time))
-    print(sh.stdout)
+#    print(sh.stdout)
     for check in tests.get("checks", ["stdout", "stderr", "returncode"]):
         
         if check == "stdout":
