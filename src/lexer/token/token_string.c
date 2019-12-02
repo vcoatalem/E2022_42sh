@@ -21,6 +21,8 @@ char *token_to_string5(enum token_type type)
         return "subshell";
     case (TOKEN_ARITHMETIC):
         return "arithmetic";
+    case (TOKEN_WORD_NO_SUBSTITUTION):
+        return "No Substitution";
     default:
         return "word";
     }

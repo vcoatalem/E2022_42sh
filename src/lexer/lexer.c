@@ -221,7 +221,7 @@ struct token_array *lex(struct lexer *lexer)
                 token_array_add(arr, token);
                 index = 0;
             }
-            //is_string = 0;
+            is_string = 0;
         }
     }
     #if 0
@@ -235,15 +235,21 @@ struct token_array *lex(struct lexer *lexer)
 
     if (index > 0)
     {
-        /*if (is_string == 2)
-            printf("singlequote buff2=%s\n", buffer);*/
-        enum token_type tok = token_check(buffer, 0, buffer);
-        if (tok != TOKEN_WORD && is_string)
+        if (is_string == 2)
+        {
+            printf("singlequote buff2=%s\n", buffer);
+            type = TOKEN_WORD_NO_SUBSTITUTION;
+        }
+        else
+            type = token_check(buffer, 0, buffer);
+        if (type != TOKEN_WORD && is_string == 1)
             token_array_add(arr, token_init(TOKEN_WORD, buffer));
-        else if (tok == TOKEN_WORD)
+        else if (type != TOKEN_WORD && is_string == 2)
+            token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
+        else if (type == TOKEN_WORD)
             check_assignment(buffer, arr, is_string);
         else
-            token_array_add(arr, token_init(tok, buffer));
+            token_array_add(arr, token_init(type, buffer));
     }
     if (lexer->state == LEXER_STATE_NONE)
         token_array_add(arr, token_init(TOKEN_EOF, ""));
