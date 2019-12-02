@@ -44,14 +44,14 @@ void lexer_clear(struct lexer *lexer)
     lexer->state = LEXER_STATE_NONE;
 }
 
-static int change_lexer_state(struct lexer *lex)
+void change_lexer_state(struct lexer *lex)
 {
     //printf("IM HERE=%ld\n", lex->iterator);
     if ((lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
         && lex->str[lex->iterator] == '\'')
         || (lex->state == LEXER_STATE_LEXING_QUOTES
             && lex->str[lex->iterator] == '"'))
-        return 1;
+        return;
     else if (lex->str[lex->iterator] == '\''
         && lex->state != LEXER_STATE_LEXING_QUOTES)
         lex->state = LEXER_STATE_LEXING_QUOTES;
@@ -60,16 +60,11 @@ static int change_lexer_state(struct lexer *lex)
         lex->state = LEXER_STATE_LEXING_DOUBLE_QUOTES;
     else if (lex->str[lex->iterator] == '\''
         && lex->state == LEXER_STATE_LEXING_QUOTES)
-        {
-            lex->state = LEXER_STATE_NONE;
-            lex->iterator++;
-            return 2;
-        }
+        lex->state = LEXER_STATE_NONE;
     else if (lex->str[lex->iterator] == '"'
         && lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES)
         lex->state = LEXER_STATE_NONE;
     lex->iterator++;
-    return 1;
 }
 
 static void state_subshell(char *str, size_t *iterator, char *buffer,
@@ -112,7 +107,7 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
         if (cptparentesis == 0 && state == LEXER_STATE_SUBSHELL_DOL)
             break;
     }
-    if (buffer[strlen(buffer) - 1] == ')' || buffer[strlen(buffer) - 1] == '`')
+    if (buffer[strlen(buffer) - 1] == ')')
         buffer[strlen(buffer) - 1] = 0;
     else
         buffer[strlen(buffer) - 2] = 0;
@@ -178,19 +173,24 @@ struct token_array *lex(struct lexer *lexer)
     size_t index = 0;
     enum token_type type = TOKEN_EOF;
     int is_string = 0;
-
     while (lexer->str[lexer->iterator] != 0)
     {
-        if (lexer->state != LEXER_STATE_LEXING_QUOTES && ((strlen(buffer) >= 3
+        //printf("buff=%s\n", buffer);
+        if (lexer->state != LEXER_STATE_LEXING_QUOTES && (strlen(buffer) >= 3)
             && ((buffer[0] == '$' && buffer[1] == '('
-            && buffer[2] != '('))) || strcmp(buffer, "`") == 0))
+            && buffer[2] != '(') || strcmp(buffer, "`") == 0))
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
         else if (lexer->str[lexer->iterator] == '"'
             || lexer->str[lexer->iterator] == '\'')
         {
-            is_string = change_lexer_state(lexer);
+            if(lexer->str[lexer->iterator] == '\'')
+                is_string = 2;
+            else
+                is_string = 1;
+            change_lexer_state(lexer);
+            
         }
         else if (lexer->str[lexer->iterator] == '\\'
             && lexer->state != LEXER_STATE_LEXING_SLASH)
@@ -199,17 +199,13 @@ struct token_array *lex(struct lexer *lexer)
                 buffer, &index, arr);
         }
         else if (is_separator(lexer->str[lexer->iterator])
-            && (lexer->state == LEXER_STATE_NONE) && ((buffer[0] != '$')
-            || strlen(buffer) > 2))
+            && (lexer->state == LEXER_STATE_NONE) && (buffer[0] != '$'
+                || strlen(buffer) > 2))
         {
-            /*if (is_string == 2)
-                printf("singlequote buff=%s\n", buffer);*/
             handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr);
-
         }
         else
         {
-            is_string = 0;
             buffer[index] = lexer->str[lexer->iterator];
             buffer[index + 1] = 0;
             index++;
@@ -235,8 +231,6 @@ struct token_array *lex(struct lexer *lexer)
 
     if (index > 0)
     {
-        /*if (is_string == 2)
-            printf("singlequote buff=%s\n", buffer);*/
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok != TOKEN_WORD && is_string)
             token_array_add(arr, token_init(TOKEN_WORD, buffer));

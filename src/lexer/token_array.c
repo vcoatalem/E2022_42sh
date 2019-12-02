@@ -150,7 +150,10 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
     else if (strcmp(buffer, "$()") == 0)
         token_array_add(arr, token_init(TOKEN_SUBSHELL, ""));
     else
-        token_array_add(arr, token_init(TOKEN_WORD, buffer));
+    {
+        struct token *tok = token_init(TOKEN_WORD, buffer);
+        token_array_add(arr, tok);
+    }
 
 }
 
