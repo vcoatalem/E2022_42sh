@@ -151,18 +151,24 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
         token_array_add(arr, token_init(TOKEN_SUBSHELL, ""));
     else
     {
-        struct token *tok = token_init(TOKEN_WORD, buffer);
-        token_array_add(arr, tok);
+
+        if (is_string == 2)
+            token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
+        else
+        {
+            struct token *tok = token_init(TOKEN_WORD, buffer);
+            token_array_add(arr, tok);
+        }
     }
 
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
-        size_t *index, struct token_array *arr)
+        size_t *index, struct token_array *arr, int is_string)
 {
     if (*index > 0)
     {
-        check_assignment(buffer, arr, 0);
+        check_assignment(buffer, arr, is_string);
         *index = 0;
     }
     if (is_space(str[*iterator]))
@@ -182,6 +188,7 @@ void handle_separators(char *str, size_t *iterator, char *buffer,
         enum token_type type = token_check(str, *iterator, buffer);
         if (type != TOKEN_WORD)
         {
+            //printf("single quote 3\n");
             token_array_add(arr, token_init(type, buffer));
             break;
         }
@@ -200,7 +207,7 @@ struct token_array *token_array_create(char *str)
     {
         if (is_separator(str[iterator]))
         {
-            handle_separators(str, &iterator, buffer, &index, arr);
+            handle_separators(str, &iterator, buffer, &index, arr, 0);
         }
         else
         {

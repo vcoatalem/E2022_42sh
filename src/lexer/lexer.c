@@ -202,14 +202,10 @@ struct token_array *lex(struct lexer *lexer)
             && (lexer->state == LEXER_STATE_NONE) && ((buffer[0] != '$')
             || strlen(buffer) > 2))
         {
-            /*if (is_string == 2)
-                printf("singlequote buff=%s\n", buffer);*/
-            handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr);
-
+            handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr, is_string);
         }
         else
         {
-            is_string = 0;
             buffer[index] = lexer->str[lexer->iterator];
             buffer[index + 1] = 0;
             index++;
@@ -218,10 +214,14 @@ struct token_array *lex(struct lexer *lexer)
             if (type != TOKEN_WORD && is_separator(lexer->str[lexer->iterator])
                 && lexer->state == LEXER_STATE_NONE)
             {
+                /*if (is_string == 2)
+                    printf("singlequote buff=%s\n", buffer);*/
+
                 struct token *token = token_init(type, buffer);
                 token_array_add(arr, token);
                 index = 0;
             }
+            //is_string = 0;
         }
     }
     #if 0
@@ -236,7 +236,7 @@ struct token_array *lex(struct lexer *lexer)
     if (index > 0)
     {
         /*if (is_string == 2)
-            printf("singlequote buff=%s\n", buffer);*/
+            printf("singlequote buff2=%s\n", buffer);*/
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok != TOKEN_WORD && is_string)
             token_array_add(arr, token_init(TOKEN_WORD, buffer));

@@ -203,7 +203,7 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string);
  *
  */
 void handle_separators(char *str, size_t *iterator, char *buffer,
-        size_t *index, struct token_array *arr);
+        size_t *index, struct token_array *arr, int is_string);
 
 /**
  * \brief create a new lexer object
