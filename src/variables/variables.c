@@ -118,7 +118,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
 
 char *var_substitute(char *text, struct hash_table_var *ht)
 {
-    //printf("text=%s\n", text);
     int did_substitute = 1;
     char *newstr = recvar_substitute(text, ht, &did_substitute);
     char *newnewstr;
