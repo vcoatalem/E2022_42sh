@@ -1,10 +1,10 @@
-echo test: '@' variable
+echo test: Arobase variable
 echo $@
 
-echo test: '*' variable
+echo test: star variable
 echo "$*"
 
-echo test: '#' variable
+echo test: sharp variable
 echo $#
 
 echo test: '$?' variable
@@ -24,3 +24,6 @@ echo $OLDPWD
 
 echo test: IFS
 echo $IFS
+
+echo test: random
+echo $RANDOM
