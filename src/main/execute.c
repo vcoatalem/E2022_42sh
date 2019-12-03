@@ -91,13 +91,13 @@ int execute_interactive(struct execution_bundle *bundle)
             || bundle->lexer->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
             || bundle->lexer->state == LEXER_STATE_UNFINISHED)
         {
-            input = get_next_line(ps2);
+            char *input1 = get_next_line(ps2);
             if (!input)
                 break;
-            lexer_add_string(bundle->lexer, input);
+            lexer_add_string(bundle->lexer, input1);
             struct token_array *arr = lex(bundle->lexer);
             token_array_free(arr);
-            free(input);
+            free(input1);
         }
         token_array_free(try_lex);
         run_lex_parse(bundle);
