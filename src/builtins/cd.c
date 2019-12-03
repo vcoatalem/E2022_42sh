@@ -28,7 +28,9 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
     struct execution_bundle *bundle = bundle_ptr;
     if (size == 1)
     {
-        insert_variable(bundle->hash_table_var, "OLDPWD", getcurrent());
+        char *currdir = getcurrent();
+        insert_variable(bundle->hash_table_var, "OLDPWD", currdir);
+        free(currdir);
         char *home = get_variable(bundle->hash_table_var, "HOME");
         int res = chdir(home);
         if (res == -1)
@@ -45,7 +47,9 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
         }
         else
         {
-            insert_variable(bundle->hash_table_var, "OLDPWD", getcurrent());
+            char *currdir = getcurrent();
+            insert_variable(bundle->hash_table_var, "OLDPWD", currdir);
+            free(currdir);
             res = chdir(str[1]);
         }
         if (res == -1)

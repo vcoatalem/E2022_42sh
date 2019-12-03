@@ -21,7 +21,8 @@ struct execution_bundle
 {
     struct options *options;
     struct hash_table_var *hash_table_var;
-    struct hash_table_func *hash_table_func; 
+    struct hash_table_func *hash_table_func;
+    struct hash_table_var *hash_table_aliases;
     struct shopt *shopt;
     struct analysis_table *parser_table;
     struct lexer *lexer;
