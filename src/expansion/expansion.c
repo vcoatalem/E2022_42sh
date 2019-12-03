@@ -33,32 +33,14 @@ static int case_dotglob(char *file, char *path, char *pattern)
     return 1;
 }
 
-char *to_lowercase(char *s)
-{
-    char *cpy = calloc(1, strlen(s) * sizeof(char));
-    for (size_t i = 0; s[i] != '\0'; i++)
-        cpy[i] = tolower(s[i]);
-
-    return cpy;
-}
-
 static int case_nocaseglob(char *file, char *path, char *pattern)
 {
     if (file[0] == '.' || strcmp(file, "..") == 0)
         return 1;
 
-    char *cpy_path = to_lowercase(path);
-    char *cpy_pattern = to_lowercase(pattern);
-
-    if (fnmatch(cpy_pattern, cpy_path, 0) == 0)
-    {
-        free(cpy_path);
-        free(cpy_pattern);
+    if (fnmatch(pattern, path, FNM_CASEFOLD) == 0)
         return 0;
-    }
 
-    free(cpy_path);
-    free(cpy_pattern);
     return 1;
 }
 
