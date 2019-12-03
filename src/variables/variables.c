@@ -87,6 +87,7 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     {
         for (size_t i = iword; i < strlen(result) + dec; i++)
         {
+            //if (i < strlen(result))
             result[i] = result[i + dec];
         }
     }
