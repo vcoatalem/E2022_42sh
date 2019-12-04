@@ -43,9 +43,9 @@ int main(int argc, char **argv)
     {
         .options = options,
         .parser_table = table_build(),
-        .hash_table_var = init_hash_table_var(50),
+        .hash_table_var = init_hash_table_var(50, 1),
         .hash_table_func = init_hash_table_func(50),
-        .hash_table_aliases = init_hash_table_var(50),
+        .hash_table_aliases = init_hash_table_var(50, 0),
         .shopt = shopt_init(options),
         .lexer = NULL,
         .parser = NULL,

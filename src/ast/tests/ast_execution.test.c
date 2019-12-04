@@ -269,7 +269,7 @@ int main(int argc, char **argv)
 
     ast_dot_print(root, dot_dest);
     struct execution_bundle bundle;
-    bundle.hash_table_var = init_hash_table_var(50);
+    bundle.hash_table_var = init_hash_table_var(50, 1);
     bundle.hash_table_func = init_hash_table_func(50);
     int return_value = ast_execute(root, &bundle) == 0 ? AST_SUCCESS : AST_ERROR;
     return_value = return_value == expected_values[q] ? 0 : 1;

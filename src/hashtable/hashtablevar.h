@@ -25,10 +25,10 @@ char* getcurrent(void);
  *
  *
  * \param size_t size of the table
- *
+ * \param int default_value init the defaults values
  * \return *token_array token_array of the lexer's string
  */
-struct hash_table_var *init_hash_table_var(size_t size);
+struct hash_table_var *init_hash_table_var(size_t size, int default_values);
 /**
  * \brief free a HashTable
  *

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     struct execution_bundle bundle;
     bundle.shopt = shopt_init(NULL);
     bundle.hash_table_func = init_hash_table_func(50);
-    bundle.hash_table_var = init_hash_table_var(50);
+    bundle.hash_table_var = init_hash_table_var(50, 1);
 
     struct pipe *p = pipe_init();
 

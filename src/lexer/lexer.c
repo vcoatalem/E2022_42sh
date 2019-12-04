@@ -237,7 +237,7 @@ struct token_array *lex(struct lexer *lexer)
     {
         if (is_string == 2)
         {
-            printf("singlequote buff2=%s\n", buffer);
+            //printf("singlequote buff2=%s\n", buffer);
             type = TOKEN_WORD_NO_SUBSTITUTION;
         }
         else

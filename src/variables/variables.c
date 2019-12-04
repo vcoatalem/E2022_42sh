@@ -87,7 +87,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     {
         for (size_t i = iword; i < strlen(result) + dec; i++)
         {
-            //if (i < strlen(result))
             result[i] = result[i + dec];
         }
     }
@@ -119,6 +118,8 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
 
 char *var_substitute(char *text, struct hash_table_var *ht)
 {
+    if (!text)
+        return NULL;
     int did_substitute = 1;
     char *newstr = recvar_substitute(text, ht, &did_substitute);
     char *newnewstr;

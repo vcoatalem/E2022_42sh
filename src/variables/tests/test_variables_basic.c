@@ -16,7 +16,7 @@ static int test_comparison(char *s1, char *s2)
 int main(int argc, char **argv)
 {
     size_t q = argc == 1 ? 0 : atoi(*(argv + 1));
-    struct hash_table_var *ht = init_hash_table_var(10);
+    struct hash_table_var *ht = init_hash_table_var(10, 1);
     insert_variable(ht, "var1", "easy");
     insert_variable(ht, "var2", "harder");
     insert_variable(ht, "v", "");

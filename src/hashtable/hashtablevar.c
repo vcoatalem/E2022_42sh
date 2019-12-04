@@ -50,12 +50,13 @@ static void insert_default_variables(struct hash_table_var *ht)
     insert_variable(ht, "UID", el);
 }
 
-struct hash_table_var *init_hash_table_var(size_t size)
+struct hash_table_var *init_hash_table_var(size_t size, int default_values)
 {
     struct hash_table_var* ht = calloc(1, sizeof(struct hash_table_var));
     ht->size = size;
     ht->items = calloc(1, sizeof(struct hashed_var) * size);
-    insert_default_variables(ht);
+    if (default_values)
+        insert_default_variables(ht);
     return ht;
 }
 

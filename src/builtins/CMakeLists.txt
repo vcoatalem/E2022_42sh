@@ -1,4 +1,5 @@
 add_library(builtins
+    alias.c
     builtins.c
     cd.c
     export.c
