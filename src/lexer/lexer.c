@@ -252,7 +252,10 @@ struct token_array *lex(struct lexer *lexer)
             token_array_add(arr, token_init(type, buffer));
     }
     if (lexer->state == LEXER_STATE_NONE)
+    {
         token_array_add(arr, token_init(TOKEN_EOF, ""));
+        post_lexing_treatment(arr);
+    }
     //reset the iterator in case we need to
     lexer->iterator = 0;
     return arr;

@@ -1,4 +1,12 @@
-add_library(lexer  token/token.c token/token_string.c token_to_handler.c token_array.c handlers.c lexer.c)
+add_library(lexer
+        token/token.c
+        token/token_string.c
+        token_to_handler.c
+        token_array.c
+        handlers.c
+        lexer.c
+        post_lexer.c
+        utils.c)
 
 # BASIC LEXER TEST
 
@@ -12,14 +20,14 @@ set_target_properties(test_lexer_basic
     EXCLUDE_FROM_ALL "true"
 )
 
-# fetch .sh script for output comparison
-add_custom_command(TARGET test_lexer_basic
-POST_BUILD
-    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/lexer/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/lexer/test_lexer_basic"
-)
+## fetch .sh script for output comparison
+#add_custom_command(TARGET test_lexer_basic
+#POST_BUILD
+#    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/lexer/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/lexer/test_lexer_basic"
+#)
 
 
-# BASIC LEXER TEST
+# ADVANCED LEXER TEST
 
 add_executable(test_lexer_advanced tests/test_advanced.c)
 

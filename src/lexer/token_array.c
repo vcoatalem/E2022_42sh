@@ -47,6 +47,21 @@ void token_array_add(struct token_array *arr, struct token *token)
                 * sizeof(void*));
     }
 }
+
+void token_array_remove(struct token_array *arr, size_t n)
+{
+    if (!arr || n >= arr->size)
+    {
+        return;
+    }
+    free(arr->tok_array[n]);
+    for (; n < arr->size; n++)
+    {
+        arr->tok_array[n] = arr->tok_array[n + 1];
+    }
+    arr->size--;
+}
+
 /*Useful when we are in interactive mode and we want to merge two arrays
   We have to stick the last token of the first array with the first token of
   the second array with a \n between them*/
@@ -84,18 +99,6 @@ void token_array_print(struct token_array *arr, FILE *out)
                 arr->tok_array[i]->value);
     }
     fprintf(out, "\n");
-}
-
-int is_separator(char c)
-{
-    return (c == ' ' || c == '\t' || c == '|' || c == '&' || c == '\n'
-            || c == '\0' || c == '<' || c == '>'
-            || c == ';' || c == ')' || c == '(');
-}
-
-int is_space(char c)
-{
-    return (c == ' ' || c == '\t');
 }
 
 static int search_unique_equal(char *buffer)

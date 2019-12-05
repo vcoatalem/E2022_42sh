@@ -143,6 +143,8 @@ void token_array_free(struct token_array *arr);
  */
 void token_array_add(struct token_array *arr, struct token *token);
 
+void token_array_remove(struct token_array *arr, size_t n);
+
 /**
  * \brief concatenate the *arr1 with *arr2
  *
@@ -261,5 +263,8 @@ struct token_array *token_array_create(char *str);
  * \return *token_array token_array of the lexer's string
  */
 struct token_array *lex(struct lexer *lexer);
+
+
+void post_lexing_treatment(struct token_array *arr);
 
 #endif /* ! LEXER_H */

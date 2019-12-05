@@ -34,33 +34,33 @@ int main(int argc, char **argv)
 
     char *cmds[] =
     {
-        "echo a || cat b",
-        "foo> bar",
-        "",
-        "echo foo||catbar",
-        "if a then b elsedsdfs c",
-        "a&&b|c|| d||& e",
-        "||",
-        "blabla\necho 1>>2",
-        "   echo          e        e  foo ||    cat     -e",
-        "if pdw && ls; then\n cd;\nelse\n\talias;\nfi",
-        "echo ((cat -e))",
-        "toto<<-   foo",
-        "function func() { echo ok }",
-        "aa{bb",
-        "toto { foo }",
-        "foo{ foo}",
-        "echo \"test\"",
-        "echo \'test\'",
-        "ec\"ho\"",
-        "echo \"\'\"",
-        "echo '\"'",
-        "foo $(toto) $((toto2))",
-        "echo to*to*",
-        "echo 'to*to'",
-        "echo \"to*to\"",
-        "&abc()",
-        "'echo' A | B&*/*"
+        "echo a || cat b",                                          //0
+        "foo> bar",                                                 //1
+        "",                                                         //2
+        "echo foo||catbar",                                         //3
+        "if a then b elsedsdfs c",                                  //4
+        "a&&b|c|| d||& e",                                          //5
+        "||",                                                       //6
+        "blabla\necho 1>>2",                                        //7
+        "   echo          e        e  foo ||    cat     -e",        //8
+        "if pdw && ls; then\n cd;\nelse\n\talias;\nfi",             //9
+        "echo ((cat -e))",                                          //10
+        "toto<<-   foo",                                            //11
+        "function func() { echo ok }",                              //12
+        "aa{bb",                                                    //13
+        "toto { foo }",                                             //14
+        "foo{ foo}",                                                //15
+        "echo \"test\"",                                            //16
+        "echo \'test\'",                                            //17
+        "ec\"ho\"",                                                 //18
+        "echo \"\'\"",                                              //19
+        "echo '\"'",                                                //20
+        "foo $(toto) $((toto2))",                                   //21
+        "echo to*to*",                                              //22
+        "echo 'to*to'",                                             //23
+        "echo \"to*to\"",                                           //24
+        "&abc()",                                                   //25
+        "'echo' A | B&*/*"                                          //26
     };
     if (q > 26)
         return 1;
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
     else if (q == 25)
     {
         token_array_add(exp, token_init(TOKEN_AMPERSAND, "&"));
-        token_array_add(exp, token_init(TOKEN_FUNCDEC, "abc()"));
+        token_array_add(exp, token_init(TOKEN_FUNCDEC, "abc"));
     }
     else if (q == 26)
     {
@@ -254,8 +254,10 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_AMPERSAND, "&")); 
         token_array_add(exp, token_init(TOKEN_WORD_EXPAND, "*/*"));
     }
-    token_array_add(exp, token_init(TOKEN_EOF, ""));
-    struct token_array *array = token_array_create(cmds[q]);
+    token_array_add(exp, token_init(TOKEN_EOF, "")); 
+    struct lexer *lexer = lexer_init();
+    lexer_add_string(lexer, cmds[q]);
+    struct token_array *array = lex(lexer);
     int eq = token_array_are_equal(array, exp);
     if (!eq)
     {
