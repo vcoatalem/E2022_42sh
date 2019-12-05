@@ -34,7 +34,7 @@ enum REDIRECTION_TYPE
     STDOUT_APPEND_TO_ARG = 41,  // 1>> arg
     STDERR_APPEND_TO_ARG = 42,  // 2>> arg
     HEREDOC              = 51,  // << arg
-    HEREDOC_DASH         = 62,  // <<- arg
+    HEREDOC_DASH         = 61,  // <<- arg
 };
 
 struct redirection

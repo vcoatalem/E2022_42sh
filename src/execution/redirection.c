@@ -40,6 +40,11 @@ static void redirection_execute_heredoc(struct command *cmd,
     char *limit = redirection->arg;
     char *ps2 = get_variable(bundle->hash_table_var, "PS2");
     char *input = NULL;
+    if (redirection->type == HEREDOC_DASH)
+    {
+        //disable tab stripping
+        rl_bind_key('\t', rl_insert);
+    }
     while (1)
     {
         input = readline(ps2);
@@ -124,7 +129,7 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     {
         redirect(&cmd->fd_out, dup(STDERR_FILENO), STDOUT_FILENO);
     }
-    else if (redirection->type == HEREDOC)
+    else if (redirection->type == HEREDOC || redirection->type == HEREDOC_DASH)
     {
         redirection_execute_heredoc(cmd, redirection, bundle_ptr);
     }
