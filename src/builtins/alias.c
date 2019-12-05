@@ -13,7 +13,7 @@ static void print_alias_hash_table_var(struct hash_table_var *ht)
         struct hashed_var *items = ht->items[i];
         while(items)
         {
-            if (items->data)
+            if (strcmp(items->data, "") != 0)
                 printf("alias %s='%s'\n", items->name, items->data);
             items = items->next;
         }
