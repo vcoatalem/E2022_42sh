@@ -37,6 +37,8 @@ int builtin_continue(char **argv, size_t size, void *bundle_ptr);
 
 int builtin_exit(char **argv, size_t size, void *bundle_ptr);
 
+int builtin_echo(char **argv, size_t size, void *bundle_ptr);
+
 /**
  * \brief Execute the builtin shopt
  *
