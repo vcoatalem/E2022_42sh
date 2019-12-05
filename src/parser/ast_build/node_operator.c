@@ -51,6 +51,8 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_GET_SUBSHELL_VALUE;
     if (id == RULE_ELEMENT_ARITHMETIC)
         return OPERATOR_GET_ARITHMETIC_VALUE;
+    if (id == RULE_ELEMENT_NO_SUBSTITUTION)
+        return OPERATOR_GET_NO_SUBSTITUTION_VALUE;
     if (id == RULE_REDIR_SYMBOL)
         return OPERATOR_GET_REDIR_SYMBOL;
     if (id == RULE_IONUMBER)

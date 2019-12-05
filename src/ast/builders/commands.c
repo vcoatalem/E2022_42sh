@@ -20,14 +20,6 @@ static struct command *ast_simple_command_build(struct ast *ast,
         }
         free(redirs);
     }
-    //free arglist 
-    if (arg_list)
-    {
-        for (size_t i = 0; *(arg_list + i); i++)
-            free(arg_list[i]);
-        free(arg_list);
-    }
-    //free redirlist
     return cmd;
 }
 

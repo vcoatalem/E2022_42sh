@@ -72,6 +72,8 @@ char *rule_id_to_string(enum rule_id id)
         return "element_expand";
     case RULE_ELEMENT_ARITHMETIC:
         return "element_arithmetic";
+    case RULE_ELEMENT_NO_SUBSTITUTION:
+        return "element_no_substitution";
     case RULE_ELEMENT_ANY:
         return "element";
     case RULE_ELEMENT_LIST:

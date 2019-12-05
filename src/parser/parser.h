@@ -26,7 +26,7 @@
 #include "../ast/ast.h"
 
 
-#define NB_RULES 60
+#define NB_RULES 61
 
 
 /**
@@ -68,34 +68,35 @@ enum rule_id //MORE RULES TO BE ADDED
     RULE_REDIR_TO,                      //29
     RULE_IONUMBER,                      //30
     RULE_ELEMENT,                       //31
-    RULE_ELEMENT_EXPAND,                //32
-    RULE_ELEMENT_SUBSHELL,              //33
-    RULE_ELEMENT_ARITHMETIC,            //34
-    RULE_ELEMENT_LIST,                  //35
-    RULE_ELEMENT_ANY,                   //36
-    RULE_ELEMENT_ANY_LIST,              //37
-    RULE_ARG_LIST,                      //38
-    RULE_IF,                            //39
-    RULE_THEN,                          //40
-    RULE_ELSE_CONCAT,                   //41
-    RULE_WHILE,                         //42
-    RULE_UNTIL,                         //43
-    RULE_DO_GROUP,                      //44
-    RULE_FUNCDEC_BODY,                  //45
-    RULE_FUNCDEC,                       //46
-    RULE_VARDEC,                        //47
-    RULE_CASE,                          //48
-    RULE_CASE_LINEBREAK,                //49
-    RULE_CASE_CLAUSE,                   //50
-    RULE_CASE_DELIM,                    //51
-    RULE_CASE_CLAUSE_CONCAT,            //52
-    RULE_CASE_ITEM,                     //53
-    RULE_CASE_ITEM_CONCAT,              //54
-    RULE_FOR,                           //55
-    RULE_FOR_ELEMENT_LIST,              //56
-    RULE_FOR_LINEBREAK,                 //57
-    RULE_FOR_DELIM,                     //58
-    RULE_FOR_CLAUSE,                    //59
+    RULE_ELEMENT_NO_SUBSTITUTION,       //32
+    RULE_ELEMENT_EXPAND,                //33
+    RULE_ELEMENT_SUBSHELL,              //34
+    RULE_ELEMENT_ARITHMETIC,            //35
+    RULE_ELEMENT_LIST,                  //36
+    RULE_ELEMENT_ANY,                   //37
+    RULE_ELEMENT_ANY_LIST,              //38
+    RULE_ARG_LIST,                      //39
+    RULE_IF,                            //40
+    RULE_THEN,                          //41
+    RULE_ELSE_CONCAT,                   //42
+    RULE_WHILE,                         //43
+    RULE_UNTIL,                         //44
+    RULE_DO_GROUP,                      //45
+    RULE_FUNCDEC_BODY,                  //46
+    RULE_FUNCDEC,                       //47
+    RULE_VARDEC,                        //48
+    RULE_CASE,                          //49
+    RULE_CASE_LINEBREAK,                //50
+    RULE_CASE_CLAUSE,                   //51
+    RULE_CASE_DELIM,                    //52
+    RULE_CASE_CLAUSE_CONCAT,            //53
+    RULE_CASE_ITEM,                     //54
+    RULE_CASE_ITEM_CONCAT,              //55
+    RULE_FOR,                           //56
+    RULE_FOR_ELEMENT_LIST,              //57
+    RULE_FOR_LINEBREAK,                 //58
+    RULE_FOR_DELIM,                     //59
+    RULE_FOR_CLAUSE,                    //60
 };
 
 /**
