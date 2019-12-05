@@ -66,7 +66,7 @@ static void arg_list_get_arithmetic_value(char ***arg_list, size_t *index,
     //TODO: implement arithmetic expression substitution
     char buffer[64] = { 0 };
     sprintf(buffer, "%d",
-            arithmetic_expression_compute(ast->forest[0]->value));
+            ast ? 0 : 1);//arithmetic_expression_compute(ast->forest[0]->value));
     (*arg_list)[*index] = strdup(buffer);
     (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
