@@ -1,6 +1,6 @@
-add_library(arithmetic_substitution arithmetic_substitution.c)
+add_library(arithmetic arithmetic_substitution.c)
 
-target_link_libraries(arithmetic_substitution
+target_link_libraries(arithmetic
         arithmetic_ast
         arithmetic_lexer
         arithmetic_parser

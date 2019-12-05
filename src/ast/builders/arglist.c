@@ -1,6 +1,7 @@
 #include "../main/42sh.h"
 #include "../ast.h"
 #include "../../variables/variables.h"
+#include "../../arithmetic/arithmetic.h"
 
 //substitution function for args of type WORD_EXPAND
 static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
@@ -63,9 +64,13 @@ static void arg_list_get_arithmetic_value(char ***arg_list, size_t *index,
 {
     *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
     //TODO: implement arithmetic expression substitution
-    (*arg_list)[*index] = substitute_shell(ast->forest[0]->value);
+    char buffer[64] = { 0 };
+    sprintf(buffer, "%d",
+            arithmetic_expression_compute(ast->forest[0]->value));
+    (*arg_list)[*index] = strdup(buffer);
     (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
+    //TODO: test this
 }
 
 //utility function: split str in space-separated (IFS?) words

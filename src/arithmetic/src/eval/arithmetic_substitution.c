@@ -74,6 +74,15 @@ int compute_ast(struct arithmetic_ast *ast)
     }
 }
 
+int arithmetic_expression_compute(char *str)
+{
+    struct arithmetic_lexer *lexer = arithmetic_lexer_alloc(str);
+    struct arithmetic_ast *ast = NULL;
+    parse_expression(lexer, &ast);
+    print_ast(ast);
+    return 0;
+}
+
 #if 0
 int main(int argc, char **argv)
 {

@@ -5,7 +5,7 @@ add_library(execution
     apply_redirections.c
     subshell.c)
 
-target_link_libraries(execution builtins ast hashtable variables)
+target_link_libraries(execution builtins ast hashtable)
 target_link_libraries(execution -lreadline)
 
 ### BASIC EXECUTION TEST

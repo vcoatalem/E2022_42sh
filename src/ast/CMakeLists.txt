@@ -18,7 +18,11 @@ add_library(ast
     handlers/vardec.c
 )
 
-target_link_libraries(ast execution expansion)
+target_link_libraries(ast
+        execution
+        expansion
+        variables
+        arithmetic)
 
 # BASIC INIT TEST
 

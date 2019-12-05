@@ -96,7 +96,7 @@ void add_number_token(char *buff, size_t *index,
     arithmetic_token_list_append(lexer, tok);
 }
 
-struct arithmetic_lexer *lexer_alloc(const char *str)
+struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str)
 {
     struct arithmetic_lexer *res = calloc(1, sizeof(struct arithmetic_lexer));
     if (!res)
@@ -135,12 +135,12 @@ void arithmetic_lexer_free(struct arithmetic_lexer *lexer)
     free(lexer);
 }
 
-struct arithmetic_token *lexer_peek(struct arithmetic_lexer *lexer)
+struct arithmetic_token *arithmetic_lexer_peek(struct arithmetic_lexer *lexer)
 {
     return lexer->head->token;
 }
 
-struct arithmetic_token *lexer_pop(struct arithmetic_lexer *lexer)
+struct arithmetic_token *arithmetic_lexer_pop(struct arithmetic_lexer *lexer)
 {
     if (!lexer->head)
     {
