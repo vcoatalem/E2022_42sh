@@ -137,7 +137,7 @@ void arithmetic_lexer_free(struct arithmetic_lexer *lexer)
 
 struct arithmetic_token *arithmetic_lexer_peek(struct arithmetic_lexer *lexer)
 {
-    return lexer->head->token;
+    return lexer->head ? lexer->head->token : NULL;
 }
 
 struct arithmetic_token *arithmetic_lexer_pop(struct arithmetic_lexer *lexer)
