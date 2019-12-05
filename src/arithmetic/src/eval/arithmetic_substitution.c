@@ -81,5 +81,8 @@ int arithmetic_expression_compute(char *str)
     parse_expression(lexer, &ast);
     print_ast(ast);
     printf("\n");
-    return ast ? compute_ast(ast) : 0;
+    arithmetic_lexer_free(lexer);
+    int return_value =  ast ? compute_ast(ast) : 0;
+    arithmetic_ast_free(ast);
+    return return_value;
 }
