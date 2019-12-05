@@ -11,6 +11,7 @@ struct token *token_init(enum token_type type, char *value)
         return NULL;
     res->type = type;
     res->value = calloc(1, strlen(value) + 1);
+    res->quoted = 0;
     strcpy(res->value, value);
     return res;
 }

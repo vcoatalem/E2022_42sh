@@ -219,6 +219,7 @@ struct token
     /* type of the token */
     enum token_type type;
     char *value;
+    int quoted;
 };
 
 /**

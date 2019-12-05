@@ -251,6 +251,8 @@ struct token_array *lex(struct lexer *lexer)
                 && lexer->state == LEXER_STATE_NONE)
             {
                 struct token *token = token_init(type, buffer);
+                if (is_string)
+                    token->quoted = 1;
                 token_array_add(arr, token);
                 index = 0;
             }

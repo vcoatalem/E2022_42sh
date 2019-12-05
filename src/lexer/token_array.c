@@ -30,7 +30,7 @@ void token_array_free(struct token_array *arr)
 
 void token_array_add(struct token_array *arr, struct token *token)
 {
-    if (token->type == TOKEN_WORD)
+    if (token->type == TOKEN_WORD && !token->quoted)
     {
         for (size_t i = 0; i < strlen(token->value); ++i)
         {
@@ -166,6 +166,8 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
         else
         {
             struct token *tok = token_init(TOKEN_WORD, buffer);
+            if (is_string)
+                tok->quoted = 1;
             token_array_add(arr, tok);
         }
     }
