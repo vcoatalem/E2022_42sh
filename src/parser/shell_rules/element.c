@@ -4,7 +4,7 @@
 static void sh_rule_element_expand(struct rule_array *rules)
 {
     rule_array_add(rules, rule_build(RULE_ELEMENT_EXPAND,
-            symbol_create(TOKEN_WORD_W_STAR, 0), NULL));
+            symbol_create(TOKEN_WORD_EXPAND, 0), NULL));
 }
 
 // ELEMENT_SUBSHELL -> subshell word
