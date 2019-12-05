@@ -176,7 +176,6 @@ struct token_array *lex(struct lexer *lexer)
 
     while (lexer->str[lexer->iterator] != 0)
     {
-        printf("buff %s\n", buffer);
         if (lexer->state != LEXER_STATE_LEXING_QUOTES && ((strlen(buffer) >= 3
             && ((buffer[0] == '$' && buffer[1] == '('
             && buffer[2] != '('))) || strcmp(buffer, "`") == 0))
