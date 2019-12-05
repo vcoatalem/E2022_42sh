@@ -115,7 +115,7 @@ int token_arithmetic(char *str, size_t iterator, char *buffer,
 //return token_type in buffer else return TOKEN_WORD if it's not a token
 enum token_type token_check(char *str, size_t iterator, char *buffer)
 {
-    for (enum token_type i = TOKEN_EOL; i <= TOKEN_ARITHMETIC; ++i)
+    for (enum token_type i = TOKEN_EOL; i < NB_TOKENS; ++i)
     {
         token_handler func = token_to_handler(i);
         if (func(str, iterator, buffer, i) == 1)
