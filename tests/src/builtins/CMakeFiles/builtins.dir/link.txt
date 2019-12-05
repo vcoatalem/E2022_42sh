@@ -1,2 +1,0 @@
-/usr/bin/ar qc libbuiltins.a  CMakeFiles/builtins.dir/alias.c.o CMakeFiles/builtins.dir/builtins.c.o CMakeFiles/builtins.dir/cd.c.o CMakeFiles/builtins.dir/export.c.o CMakeFiles/builtins.dir/history.c.o CMakeFiles/builtins.dir/shopt.c.o CMakeFiles/builtins.dir/break_continue_exit.c.o
-/usr/bin/ranlib libbuiltins.a
