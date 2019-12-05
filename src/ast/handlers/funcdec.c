@@ -8,7 +8,7 @@ int ast_handle_funcdec(struct ast *ast, void *bundle_ptr)
     if (ast == NULL || ast->nb_children == 0)
         return AST_ERROR;
 
-    struct ast *ast_func_name = find_op_type(ast, OPERATOR_GET_VALUE);
+    struct ast *ast_func_name = find_op_type(ast, OPERATOR_NONE);
     struct ast *ast_func_node = find_op_type(ast, OPERATOR_LIST);
     struct ast *ast_skip_newlines = ast_func_node;
     struct ast *ast_func_body = find_op_type(ast_func_node,
@@ -37,7 +37,7 @@ int ast_handle_funcdec(struct ast *ast, void *bundle_ptr)
         }
     }
 
-    insert_func(bundle->hash_table_func, ast_func_name->forest[0]->value,
+    insert_func(bundle->hash_table_func, ast_func_name->value,
             ast_func_body->forest[0]);
     return AST_SUCCESS;
 }

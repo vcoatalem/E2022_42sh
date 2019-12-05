@@ -15,14 +15,15 @@ static void sh_rule_funcdec_body(struct rule_array *rules)
 
 static void sh_rule_funcdec(struct rule_array *rules)
 {
-    struct rule *rule = rule_build(RULE_FUNCDEC,
+    rule_array_add(rules, rule_build(RULE_FUNCDEC,
             symbol_create(TOKEN_FUNCTION, 0),
-            symbol_create(0, RULE_ELEMENT),
-            symbol_create(TOKEN_LEFT_PARENTHESIS, 0),
-            symbol_create(TOKEN_RIGHT_PARENTHESIS, 0),
+            symbol_create(TOKEN_FUNCDEC, 0),
             symbol_create(0, RULE_FUNCDEC_BODY),
-            NULL);
-    rule_array_add(rules, rule);
+            NULL));
+    rule_array_add(rules, rule_build(RULE_FUNCDEC,
+            symbol_create(TOKEN_FUNCDEC, 0),
+            symbol_create(0, RULE_FUNCDEC_BODY),
+            NULL));
 }
 
 void sh_rule_funcdec_groups(struct rule_array *rules)
