@@ -60,7 +60,7 @@ int main(int argc, char **argv)
         "echo 'to*to'",                                             //23
         "echo \"to*to\"",                                           //24
         "&abc()",                                                   //25
-        "'echo' A | B&*/*"                                          //26
+        "'echo' A | B&*/*",                                         //26
         "$i;",                                                      //27
     };
     if (q > 27)
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "blabla"));
         token_array_add(exp, token_init(TOKEN_EOL, "\n"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_STDIN, "1"));
+        token_array_add(exp, token_init(TOKEN_STDOUT, "1"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_GREAT, ">>"));
         token_array_add(exp, token_init(TOKEN_STDERR, "2"));
     }
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
     else if (q == 17)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "test"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "test"));
     }
     else if (q == 18)
     {
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     else if (q == 20)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "\""));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "\""));
     }
     else if (q == 21)
     {

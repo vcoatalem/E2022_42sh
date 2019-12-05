@@ -20,11 +20,11 @@ set_target_properties(test_lexer_basic
     EXCLUDE_FROM_ALL "true"
 )
 
-## fetch .sh script for output comparison
-#add_custom_command(TARGET test_lexer_basic
-#POST_BUILD
-#    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/lexer/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/lexer/test_lexer_basic"
-#)
+# fetch .sh script for output comparison
+add_custom_command(TARGET test_lexer_basic
+POST_BUILD
+    COMMAND /bin/sh "${CMAKE_SOURCE_DIR}/src/lexer/run_tests.sh" "${CMAKE_SOURCE_DIR}/build/src/lexer/test_lexer_basic"
+)
 
 
 # ADVANCED LEXER TEST
