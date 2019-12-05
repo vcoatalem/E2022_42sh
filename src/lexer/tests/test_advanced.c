@@ -55,9 +55,15 @@ int main(int argc, char **argv)
         "'allo()'",                                 //18
         "'a | b'",                                  //19
         "$(A || B) && 'echo a'",                    //20
+        "*",                                        //21
+        "\"*\"",                                    //22
+        "\'*\'",                                    //23
+        "$?",                                       //24
+        "\"$?\"",                                   //25
+        "\'$?\'",                                   //26
 
     };
-    if (q > 20)
+    if (q > 26)
         return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -160,6 +166,30 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "A || B"));
         token_array_add(exp, token_init(TOKEN_DOUBLE_AMPERSAND, "&&"));
         token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo a"));
+    }
+    else if (q == 21)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_EXPAND, "*"));
+    }
+    else if (q == 22)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "*"));
+    }
+    else if (q == 23)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "*"));
+    }
+    else if (q == 24)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "$?"));
+    }
+    else if (q == 25)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "$?"));
+    }
+    else if (q == 26)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "$?"));
     }
     token_array_add(exp, token_init(TOKEN_EOF, ""));
     struct lexer *lexer = lexer_init();
