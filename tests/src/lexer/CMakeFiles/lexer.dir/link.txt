@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblexer.a  CMakeFiles/lexer.dir/token/token.c.o CMakeFiles/lexer.dir/token/token_string.c.o CMakeFiles/lexer.dir/token_to_handler.c.o CMakeFiles/lexer.dir/token_array.c.o CMakeFiles/lexer.dir/handlers.c.o CMakeFiles/lexer.dir/lexer.c.o CMakeFiles/lexer.dir/post_lexer.c.o CMakeFiles/lexer.dir/utils.c.o
-/usr/bin/ranlib liblexer.a

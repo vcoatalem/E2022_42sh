@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/test_lexer_basic.dir/tests/test_basic.c.o  -o test_lexer_basic liblexer.a 

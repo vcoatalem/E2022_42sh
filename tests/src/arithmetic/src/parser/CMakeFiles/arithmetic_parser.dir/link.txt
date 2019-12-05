@@ -1,2 +1,0 @@
-/usr/bin/ar qc libarithmetic_parser.a  CMakeFiles/arithmetic_parser.dir/parser.c.o
-/usr/bin/ranlib libarithmetic_parser.a

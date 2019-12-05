@@ -1,2 +1,0 @@
-/usr/bin/ar qc libarithmetic_utils.a  CMakeFiles/arithmetic_utils.dir/xalloc.c.o
-/usr/bin/ranlib libarithmetic_utils.a
