@@ -139,9 +139,12 @@ static void state_arithmetic(char *str, size_t *iterator, char *buffer,
         if (cptparentesis == 0)
         break;
     }
-    buffer[strlen(buffer) - 2] = 0;
-    token_array_add(arr, token_init(TOKEN_ARITHMETIC, buffer));
-    *index = 0;
+    if (cptparentesis == 0)
+    {
+        buffer[strlen(buffer) - 2] = 0;
+        token_array_add(arr, token_init(TOKEN_ARITHMETIC, buffer));
+        *index = 0;
+    }
 }
 
 static char match_regular_expr(char a)
@@ -232,7 +235,7 @@ struct token_array *lex(struct lexer *lexer)
         }
         else if (is_separator(lexer->str[lexer->iterator])
             && (lexer->state == LEXER_STATE_NONE) && ((buffer[0] != '$')
-            || strlen(buffer) > 2))
+            || strlen(buffer) > 1))
         {
             handle_separators(lexer->str, &lexer->iterator, buffer, &index,
                     arr, is_string);
