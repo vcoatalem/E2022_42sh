@@ -20,7 +20,8 @@
 
 #include <stddef.h>
 
-#define NB_TOKENS 44
+#define NB_TOKENS 47
+
 /**
  * \enum token_type
  * \brief enum contain all type of token
@@ -32,6 +33,11 @@ enum token_type
 {
     TOKEN_WORD,
     TOKEN_ASSIGNMENT,
+    TOKEN_FUNCDEC,
+    TOKEN_SUBSHELL,
+    TOKEN_ARITHMETIC,
+    TOKEN_WORD_EXPAND,
+    TOKEN_WORD_NO_SUBSTITUTION,
     TOKEN_EOF,
     TOKEN_EOL,
     TOKEN_SEMI_COLON,
@@ -71,10 +77,6 @@ enum token_type
     TOKEN_ELSE,
     TOKEN_ELIF,
     TOKEN_FUNCTION,
-    TOKEN_SUBSHELL,
-    TOKEN_ARITHMETIC,
-    TOKEN_WORD_W_STAR,
-    TOKEN_WORD_NO_SUBSTITUTION
 };
 
 

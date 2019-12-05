@@ -50,8 +50,14 @@ int main(int argc, char **argv)
         "if ()",                                    //13
         "$()",                                      //14
         "()",                                       //15
+        "allo()",                                   //16
+        "\"*.allo\"",                               //17
+        "'allo()'",                                 //18
+        "'a | b'",                                  //19
+        "$(A || B) && 'echo a'",                    //20
+
     };
-    if (q > 15)
+    if (q > 20)
         return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -59,25 +65,21 @@ int main(int argc, char **argv)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 1)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell a"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 2)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell b"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 3)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "$(subshell b)"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 4)
     {
@@ -88,67 +90,78 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "subshell"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
         token_array_add(exp, token_init(TOKEN_FI, "fi"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 5)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo $(subshell)"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 6)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "if"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 7)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "if"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 8)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "ifelse"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 9)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "ifelse"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 10)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "  d"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 11)
     {
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "sub\nshell"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 12)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 13)
     {
         token_array_add(exp, token_init(TOKEN_IF, "if"));
         token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
         token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 14)
     {
         token_array_add(exp, token_init(TOKEN_SUBSHELL, ""));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
     else if (q == 15)
     {
         token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
         token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
-        token_array_add(exp, token_init(TOKEN_EOF, ""));
     }
+    else if (q == 16)
+    {
+        token_array_add(exp, token_init(TOKEN_FUNCDEC, "allo"));
+    }
+    else if (q == 17)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "*.allo"));
+    }
+    else if (q == 18)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "allo()"));
+    }
+    else if (q == 19)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "a | b"));
+    }
+    else if (q == 20)
+    {
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "A || B"));
+        token_array_add(exp, token_init(TOKEN_DOUBLE_AMPERSAND, "&&"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo a"));
+    }
+    token_array_add(exp, token_init(TOKEN_EOF, ""));
     struct lexer *lexer = lexer_init();
     lexer_add_string(lexer, cmds[q]);
     struct token_array *array = lex(lexer);

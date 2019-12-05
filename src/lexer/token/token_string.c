@@ -15,8 +15,10 @@ char *token_to_string5(enum token_type type)
         return "2";
     case (TOKEN_ASSIGNMENT):
         return "word_assignment";
-    case (TOKEN_WORD_W_STAR):
-        return "word_with_star";
+    case (TOKEN_FUNCDEC):
+        return "function_declaration";
+    case (TOKEN_WORD_EXPAND):
+        return "word_expand";
     case (TOKEN_SUBSHELL):
         return "subshell";
     case (TOKEN_ARITHMETIC):
@@ -27,7 +29,6 @@ char *token_to_string5(enum token_type type)
         return "word";
     }
 }
-
 
 char *token_to_string4(enum token_type type)
 {
@@ -42,7 +43,7 @@ char *token_to_string4(enum token_type type)
     case (TOKEN_DOUBLE_GREAT):
         return ">>";
     case (TOKEN_DOUBLE_LESS_DASH):
-        return "<<-";//TODO NOT SURE
+        return "<<-";
     case (TOKEN_LESS_AMPERSAND):
         return "<&";
     case (TOKEN_GREAT_AMPERSAND):
@@ -55,8 +56,6 @@ char *token_to_string4(enum token_type type)
         return token_to_string5(type);
     }
 }
-
-
 
 char *token_to_string3(enum token_type type)
 {
@@ -84,8 +83,6 @@ char *token_to_string3(enum token_type type)
         return token_to_string4(type);
     }
 }
-
-
 
 char *token_to_string2(enum token_type type)
 {

@@ -34,7 +34,7 @@ void token_array_add(struct token_array *arr, struct token *token)
     {
         if (token->value[i] == '*' || token->value[i] == '?')
         {
-            token->type = TOKEN_WORD_W_STAR;
+            token->type = TOKEN_WORD_EXPAND;
         }
     }
 
