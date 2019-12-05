@@ -1,0 +1,199 @@
+
+toto
+toto
+toto
+toto
+toto
+
+
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+
+
+env input list-test refout.txt requirement.txt shout.txt test.html tests_to_be_added test_suite.py test_suite.sh variable_special.sh
+
+env input list-test refout.txt requirement.txt shout.txt test.html tests_to_be_added test_suite.py test_suite.sh variable_special.sh
+
+Hello World!
+
+Hello World!
+	Hello Wolrd!
+
+Hello World!
+
+Hello
+World!
+
+Hello 
+World!
+
+\
+
+@
+
+~
+
+Hello\nWorld!
+
+foo
+ok
+
+ok_else
+
+b
+
+c
+
+c
+
+cat: fdgfdg: No such file or directory
+
+
+e
+
+
+Hello World!
+
+Hello
+World!
+
+Hello
+World!
+
+Hello World!
+Mr President
+
+Hello
+
+toto
+toto
+toto
+
+toto
+toto
+toto
+toto
+toto
+toto
+
+
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+toto
+
+1
+2
+3
+
+1
+2
+3
+4
+5
+
+
+hello
+hello
+hello
+hello
+hello
+
+Hello
+World!
+
+
+a
+
+a
+b
+c
+
+a
+
+b
+
+a
+
+a
+
+a
+b
+
+a
+c
+
+a
+b
+d
+
+DONE
+
+DONE
+
+
+test: Arobase variable
+1 2
+test: star variable
+1 2
+test: sharp variable
+2
+test: $? variable
+0
+test: dollar number
+1 2
+test: dollar dolar
+29184
+test: UID
+1000
+test: oldPWD
+/home/xarang/E2022_42sh/tests/env
+test: IFS
+
+test: random
+7171
+
+toto
+
+toto
+tata
+
+Hello World!
+
+Hello
+World!
+
+Hello
+World!
+
+Hello World!
+Mr President
+
+
+
+
+
+OK
+cat: KO: No such file or directory
+
+
+cat: im: No such file or directory
+cat: out: No such file or directory
+
+

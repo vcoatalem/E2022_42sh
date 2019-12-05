@@ -61,8 +61,9 @@ int main(int argc, char **argv)
         "echo \"to*to\"",                                           //24
         "&abc()",                                                   //25
         "'echo' A | B&*/*"                                          //26
+        "$i;",                                                      //27
     };
-    if (q > 26)
+    if (q > 27)
         return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -253,6 +254,11 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD, "B"));
         token_array_add(exp, token_init(TOKEN_AMPERSAND, "&")); 
         token_array_add(exp, token_init(TOKEN_WORD_EXPAND, "*/*"));
+    }
+    else if (q == 27)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "$i"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
     }
     token_array_add(exp, token_init(TOKEN_EOF, "")); 
     struct lexer *lexer = lexer_init();

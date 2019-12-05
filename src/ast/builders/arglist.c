@@ -24,9 +24,9 @@ static void arg_list_get_expand_arg(char ***arg_list, size_t *index,
             free(expanded_args[i]);
             *index = *index + 1;
         }
-        (*arg_list)[*index] = NULL;
         free(expanded_args);
     }
+    (*arg_list)[*index] = NULL;
 }
 
 //substitution function for tokens of type TOKEN_SUBSHELL

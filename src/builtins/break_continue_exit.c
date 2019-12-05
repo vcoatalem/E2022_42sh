@@ -53,5 +53,5 @@ int builtin_exit(char **argv, size_t size, void *bundle_ptr)
         warnx("exit: %zu: too many arguments", size);
         exit_val = EXIT_TOO_MANY_ARGUMENTS;
     }
-    exit(exit_val);
+    exit(exit_val % 256);
 }
