@@ -42,10 +42,6 @@ static int run_lex_parse(struct execution_bundle *bundle)
     {
         printf("[EXECUTION] lex+parse returning: %d\n", return_value);
     }
-    //set $? variable
-    char el[8];
-    sprintf(el, "%d", return_value);
-    insert_variable(bundle->hash_table_var, "?", el);
     return return_value;
 }
 

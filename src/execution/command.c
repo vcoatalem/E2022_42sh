@@ -70,7 +70,8 @@ void command_add_redirection(struct command *command,
     *(command->redirections + command->n_redirections) = NULL;
 }
 
-static int command_execute_sh(struct command *command, void *bundle_ptr)
+static int command_execute_sh(struct command *command,
+        void *bundle_ptr)
 {
     if (!bundle_ptr)
         return 0;
@@ -79,7 +80,6 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
     if (pid == 0)
     {
         ////child
-        //apply redirection
         //execute command
         execvp(*(command->args), command->args);
         warnx("unknown command: %s", *(command->args));
@@ -87,7 +87,7 @@ static int command_execute_sh(struct command *command, void *bundle_ptr)
         exit(RETURN_UNKNOWN_COMMAND);
     }
     waitpid(pid, &status, 0);
-    return status;
+    return status % 255;
 }
 
 static int command_execute_builtin(struct command *command, void *bundle_ptr)
@@ -146,5 +146,9 @@ int command_execute(struct command *command, void *bundle_ptr)
         printf("[COMMAND EXECUTION] exiting command_execute with code: %d\n",
                 return_value);
     }
+    //set $? variable
+    char el[8];
+    sprintf(el, "%d", return_value);
+    insert_variable(bundle->hash_table_var, "?", el);
     return return_value;
 }

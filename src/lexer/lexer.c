@@ -139,8 +139,9 @@ static char match_regular_expr(char a)
 return a;
 }
 
-static void handle_backslash(char *str, size_t *iterator, enum lexer_state *state,
-    char *buffer, size_t *index, struct token_array *arr)
+static void handle_backslash(char *str, size_t *iterator,
+    enum lexer_state *state, char *buffer, size_t *index,
+    struct token_array *arr)
 {
     if (!arr)
         return;
@@ -202,7 +203,8 @@ struct token_array *lex(struct lexer *lexer)
             && (lexer->state == LEXER_STATE_NONE) && ((buffer[0] != '$')
             || strlen(buffer) > 2))
         {
-            handle_separators(lexer->str, &lexer->iterator, buffer, &index, arr, is_string);
+            handle_separators(lexer->str, &lexer->iterator, buffer, &index,
+                    arr, is_string);
         }
         else
         {
@@ -214,9 +216,6 @@ struct token_array *lex(struct lexer *lexer)
             if (type != TOKEN_WORD && is_separator(lexer->str[lexer->iterator])
                 && lexer->state == LEXER_STATE_NONE)
             {
-                /*if (is_string == 2)
-                    printf("singlequote buff=%s\n", buffer);*/
-
                 struct token *token = token_init(type, buffer);
                 token_array_add(arr, token);
                 index = 0;
@@ -224,20 +223,10 @@ struct token_array *lex(struct lexer *lexer)
             is_string = 0;
         }
     }
-    #if 0
-    if (lexer->state != LEXER_STATE_NONE)
-    {
-        buffer[index] = '\n';
-        index++;
-        buffer[index] = 0;
-    }
-    #endif
-
     if (index > 0)
     {
         if (is_string == 2)
         {
-            //printf("singlequote buff2=%s\n", buffer);
             type = TOKEN_WORD_NO_SUBSTITUTION;
         }
         else
@@ -253,6 +242,8 @@ struct token_array *lex(struct lexer *lexer)
     }
     if (lexer->state == LEXER_STATE_NONE)
     {
+        //lexing is done; adding final EOF and applying post treatments
+        //for further processing
         token_array_add(arr, token_init(TOKEN_EOF, ""));
         post_lexing_treatment(arr);
     }

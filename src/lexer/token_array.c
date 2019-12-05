@@ -30,11 +30,17 @@ void token_array_free(struct token_array *arr)
 
 void token_array_add(struct token_array *arr, struct token *token)
 {
-    for (size_t i = 0; i < strlen(token->value); ++i)
+    if (token->type == TOKEN_WORD)
     {
-        if (token->value[i] == '*' || token->value[i] == '?')
+        for (size_t i = 0; i < strlen(token->value); ++i)
         {
-            token->type = TOKEN_WORD_EXPAND;
+            //we check whether or not the token we wish to expand contains
+            //one of the char specific to expansion
+            if ((token->value[i] == '*' || token->value[i] == '?')
+                    && strcmp(token->value, "$?")) //TODO: handle this better
+            {
+                token->type = TOKEN_WORD_EXPAND;
+            }
         }
     }
 
