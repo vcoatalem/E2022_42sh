@@ -82,7 +82,7 @@ void pipe_free(struct pipe *p)
 {
     for (size_t i = 0; i < p->n_commands; i++)
     {
-        command_free(*(p->commands + i));
+        command_free(p->commands[i]);
     }
     if (p->commands)
         free(p->commands);

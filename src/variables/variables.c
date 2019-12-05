@@ -11,35 +11,42 @@ int is_delimiter(char c)
          || c == ';' || c == '$');
 }
 
-
 char *getword(char *word, struct hash_table_var *ht)
 {
     if (word[0] != '$' || strlen(word) == 1)
         return word;
+    char *result = calloc(1, strlen(word) + 1);
     if (word[1] == '{' && word[strlen(word) - 1] == '}')
     {
-        char *result = calloc(1, strlen(word) + 1);
         for (size_t i = 0; i < strlen(word) - 3; ++i)
         {
             result[i] = word[i + 2];
         }
-        char *value = get_variable(ht, result);
-        free(result);
-        return value;
     }
     if (word[1] != '{' && word[strlen(word) - 1] != '}')
     {
-        char *result = calloc(1, strlen(word) + 1);
         for (size_t i = 0; i < strlen(word) - 1; ++i)
         {
             result[i] = word[i + 1];
         }
-        char *value = get_variable(ht, result);
-        free(result);
-        return value;
     }
-    warn("bad formulation of variable: %s", word);
-    return NULL;
+    else
+    {
+        warn("bad formulation of variable: %s", word);
+        free(result);
+        return NULL;
+    }
+    char *value = get_variable(ht, result);
+    if (!strcmp(value, ""))
+    {
+        char *value_env = getenv(result);
+        if (value_env)
+        {
+            value = value_env;
+        }
+    }
+    free(result);
+    return value;
 
 }
 
