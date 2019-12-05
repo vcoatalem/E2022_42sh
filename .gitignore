@@ -16,3 +16,5 @@ out
 .gdb_history
 tests/env
 *.html
+*refout
+*shout

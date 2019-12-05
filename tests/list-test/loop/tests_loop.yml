@@ -2,7 +2,7 @@
    stdin: for i in 1 2 3 ; do echo toto; done
 
  - name: for_seq
-   stdin: for i in $(seq 1 5); do echo toto; done
+   stdin: for i in $(seq 0 1 5) ; do echo toto; done
 
  - name: for_arg
    stdin: for arg; do echo arg; done
