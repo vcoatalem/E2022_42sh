@@ -114,6 +114,36 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
     *index = 0;
 }
 
+
+static void state_arithmetic(char *str, size_t *iterator, char *buffer,
+    size_t *index, struct token_array *arr)
+{
+    int cptparentesis = 0;
+    if (buffer[0] == '$' && buffer[1] == '(' && buffer[2] == '(')
+    {
+        cptparentesis += 2;
+        *index = 1;
+        buffer[0] = 0;
+        buffer[0] = buffer[3];
+    }
+    while(str[*iterator])
+    {
+        buffer[*index] = str[*iterator];
+        buffer[*index + 1] = 0;
+        *index = *index + 1;
+        *iterator = *iterator + 1;
+        if (buffer[strlen(buffer) - 1] == '(')
+            cptparentesis++;
+        if (buffer[strlen(buffer) - 1] == ')')
+            cptparentesis--;
+        if (cptparentesis == 0)
+        break;
+    }
+    buffer[strlen(buffer) - 2] = 0;
+    token_array_add(arr, token_init(TOKEN_ARITHMETIC, buffer));
+    *index = 0;
+}
+
 static char match_regular_expr(char a)
 {
     if (a == 'a')
@@ -181,6 +211,11 @@ struct token_array *lex(struct lexer *lexer)
             && buffer[2] != '('))) || strcmp(buffer, "`") == 0))
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
+        }
+        else if (lexer->state != LEXER_STATE_LEXING_QUOTES && strlen(buffer) >= 4
+            && buffer[0] == '$' && buffer[1] == '(' && buffer[2] == '(')
+        {
+            state_arithmetic(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
         else if ((lexer->str[lexer->iterator] == '"'
             && lexer->state != LEXER_STATE_LEXING_QUOTES)
