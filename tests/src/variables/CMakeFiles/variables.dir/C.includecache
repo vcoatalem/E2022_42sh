@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/xarang/E2022_42sh/src/hashtable/hashtablevar.h
+stddef.h
+-
+
+/home/xarang/E2022_42sh/src/variables/variables.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+err.h
+-
+variables.h
+/home/xarang/E2022_42sh/src/variables/variables.h
+
+/home/xarang/E2022_42sh/src/variables/variables.h
+../hashtable/hashtablevar.h
+/home/xarang/E2022_42sh/src/hashtable/hashtablevar.h
+

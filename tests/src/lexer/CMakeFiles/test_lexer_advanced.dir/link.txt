@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/test_lexer_advanced.dir/tests/test_advanced.c.o  -o test_lexer_advanced liblexer.a 

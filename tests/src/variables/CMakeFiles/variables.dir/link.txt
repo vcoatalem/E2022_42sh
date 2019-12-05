@@ -1,0 +1,2 @@
+/usr/bin/ar qc libvariables.a  CMakeFiles/variables.dir/variables.c.o
+/usr/bin/ranlib libvariables.a

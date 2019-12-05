@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/xarang/E2022_42sh/src/options/options.c
+options.h
+/home/xarang/E2022_42sh/src/options/options.h
+stdlib.h
+-
+string.h
+-
+err.h
+-
+errno.h
+-
+stdio.h
+-
+
+/home/xarang/E2022_42sh/src/options/options.h
+stddef.h
+-
+

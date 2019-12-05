@@ -1,0 +1,2 @@
+/usr/bin/ar qc libarithmetic_lexer.a  CMakeFiles/arithmetic_lexer.dir/lexer.c.o CMakeFiles/arithmetic_lexer.dir/token.c.o
+/usr/bin/ranlib libarithmetic_lexer.a

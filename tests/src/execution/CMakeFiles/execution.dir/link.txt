@@ -1,0 +1,2 @@
+/usr/bin/ar qc libexecution.a  CMakeFiles/execution.dir/command.c.o CMakeFiles/execution.dir/pipe.c.o CMakeFiles/execution.dir/redirection.c.o CMakeFiles/execution.dir/apply_redirections.c.o CMakeFiles/execution.dir/subshell.c.o
+/usr/bin/ranlib libexecution.a

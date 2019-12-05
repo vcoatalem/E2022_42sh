@@ -1,0 +1,2 @@
+/usr/bin/ar qc libarithmetic_substitution.a  CMakeFiles/arithmetic_substitution.dir/arithmetic_substitution.c.o
+/usr/bin/ranlib libarithmetic_substitution.a

@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/arithmetic/src/utils/attr.h
+
+../src/arithmetic/src/utils/xalloc.h
+utils/attr.h
+../src/arithmetic/src/utils/utils/attr.h
+stddef.h
+-
+
+/home/xarang/E2022_42sh/src/arithmetic/src/utils/xalloc.c
+utils/xalloc.h
+/home/xarang/E2022_42sh/src/arithmetic/src/utils/utils/xalloc.h
+err.h
+-
+stdlib.h
+-
+string.h
+-
+

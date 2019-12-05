@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/test_ast_basic.dir/tests/ast.test.c.o  -o test_ast_basic libast.a ../execution/libexecution.a ../variables/libvariables.a libast.a ../execution/libexecution.a ../variables/libvariables.a ../expansion/libexpansion.a ../builtins/libbuiltins.a ../options/liboptions.a -lreadline ../hashtable/libhashtable.a 

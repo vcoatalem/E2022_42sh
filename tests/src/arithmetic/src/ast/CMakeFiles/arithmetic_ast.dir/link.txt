@@ -1,0 +1,2 @@
+/usr/bin/ar qc libarithmetic_ast.a  CMakeFiles/arithmetic_ast.dir/ast.c.o
+/usr/bin/ranlib libarithmetic_ast.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libexpansion.a  CMakeFiles/expansion.dir/expansion.c.o
+/usr/bin/ranlib libexpansion.a

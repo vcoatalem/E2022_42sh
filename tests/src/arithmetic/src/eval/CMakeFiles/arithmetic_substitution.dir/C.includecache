@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/arithmetic/src/ast/ast.h
+utils/attr.h
+../src/arithmetic/src/ast/utils/attr.h
+
+../src/arithmetic/src/lexer/lexer.h
+lexer/token.h
+../src/arithmetic/src/lexer/lexer/token.h
+
+../src/arithmetic/src/lexer/token.h
+
+../src/arithmetic/src/parser/parser.h
+ast/ast.h
+../src/arithmetic/src/parser/ast/ast.h
+lexer/lexer.h
+../src/arithmetic/src/parser/lexer/lexer.h
+stdbool.h
+-
+
+../src/arithmetic/src/utils/attr.h
+
+/home/xarang/E2022_42sh/src/arithmetic/src/eval/arithmetic_substitution.c
+ast/ast.h
+/home/xarang/E2022_42sh/src/arithmetic/src/eval/ast/ast.h
+lexer/lexer.h
+/home/xarang/E2022_42sh/src/arithmetic/src/eval/lexer/lexer.h
+parser/parser.h
+/home/xarang/E2022_42sh/src/arithmetic/src/eval/parser/parser.h
+err.h
+-
+stdio.h
+-
+

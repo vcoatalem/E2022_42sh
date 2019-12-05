@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/test_execution_subshell.dir/tests/subshell/test_subshell.c.o  -o test_execution_subshell libexecution.a ../ast/libast.a ../variables/libvariables.a libexecution.a ../ast/libast.a ../variables/libvariables.a ../builtins/libbuiltins.a ../options/liboptions.a -lreadline ../expansion/libexpansion.a ../hashtable/libhashtable.a 

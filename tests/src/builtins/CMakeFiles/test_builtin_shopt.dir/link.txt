@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/test_builtin_shopt.dir/tests/test_shopt.c.o  -o test_builtin_shopt libbuiltins.a ../options/liboptions.a 
