@@ -13,13 +13,13 @@ echo $?
 echo test: dollar number
 echo $1 $2
 
-echo test: dollar dolar
+echo test: dollar dollar
 echo $$
 
 echo test: UID
 echo $UID
 
-echo test: oldPWD
+echo test: OLDPWD
 echo $OLDPWD
 
 echo test: IFS

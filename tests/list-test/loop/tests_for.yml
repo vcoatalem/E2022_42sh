@@ -1,0 +1,26 @@
+ - name: for_simple
+   stdin: for i in 1 2 3; do echo toto; done
+
+ - name: for_seq
+   stdin: for i in $(seq 1 5); do echo toto; done
+
+ - name: for_star
+   stdin: for i in *; do echo foo; done
+
+ - name: for_star_var
+   stdin: for i in *; do echo $i; done
+ 
+ - name: for_var
+   stdin: for i in 1 2 3; do echo $i; done
+
+ - name: for_break
+   stdin: for i in $(seq 1 5); do break 2; done
+
+ - name: for_continue
+   stdin: for i in $(seq 1 5); do if [ i -eq 2]; then continue 4; fi; echo hello; done
+ 
+ - name: for_empty
+   stdin: for arg; do echo never happen; done
+
+ - name: for_ls
+   stdin: for file in $(ls); do echo $file; done

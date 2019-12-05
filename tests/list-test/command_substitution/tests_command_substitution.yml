@@ -1,5 +1,29 @@
- - name: command_substitution_parenthesis
+ - name: command_substitution_success
+   stdin: echo $(ls)
+
+ - name: command_substitution_success_backquote
+   stdin: echo `ls`
+
+ - name: command_substitution_args_success
+   stdin: echo $(seq 0 1 10)
+
+ - name: command_substitution_args_success_backquote
+   stdin: echo `seq 0 1 10`
+
+ - name: command_substitution_success_return_value
+   stdin: echo $(ls); echo $?
+
+ - name: command_substitution_failure_return_value
+   stdin: echo $(cat fdsjfsdmfsdkopf); echo $?
+
+ - name: command_substitution_success_and_statement
+   stdin: echo $(echo echo) && echo SUBSTITUTION_RETURNED_OK
+
+ - name: command_substitution_failure_and_statement
+   stdin: echo $(echo cat fdsfsdfsdfsdfsd) && echo SUBSTITUTION_RETURNED_KO
+ 
+ - name: variable_assignment_command_substitution_parenthesis
    stdin: var=$(ls) ; echo $var
 
- - name: command_substitution
+ - name: variable_assignment_command_substitution_backquote
    stdin: var=`ls`; echo $var
