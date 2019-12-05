@@ -46,13 +46,7 @@ void lexer_clear(struct lexer *lexer)
 
 static int change_lexer_state(struct lexer *lex)
 {
-    //printf("IM HERE=%ld\n", lex->iterator);
-    if ((lex->state == LEXER_STATE_LEXING_DOUBLE_QUOTES
-        && lex->str[lex->iterator] == '\'')
-        || (lex->state == LEXER_STATE_LEXING_QUOTES
-            && lex->str[lex->iterator] == '"'))
-        return 1;
-    else if (lex->str[lex->iterator] == '\''
+    if (lex->str[lex->iterator] == '\''
         && lex->state != LEXER_STATE_LEXING_QUOTES)
         lex->state = LEXER_STATE_LEXING_QUOTES;
     else if (lex->str[lex->iterator] == '"'
@@ -188,8 +182,10 @@ struct token_array *lex(struct lexer *lexer)
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
-        else if (lexer->str[lexer->iterator] == '"'
-            || lexer->str[lexer->iterator] == '\'')
+        else if ((lexer->str[lexer->iterator] == '"'
+            && lexer->state != LEXER_STATE_LEXING_QUOTES)
+            || (lexer->str[lexer->iterator] == '\''
+                && lexer->state != LEXER_STATE_LEXING_DOUBLE_QUOTES))
         {
             is_string = change_lexer_state(lexer);
         }

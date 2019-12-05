@@ -20,5 +20,7 @@ builtin_handler str_to_builtin(char *name)
         return builtin_exit;
     else if (!strcmp(name, "alias"))
         return builtin_alias;
+    else if (!strcmp(name, "unalias"))
+        return builtin_unalias;
     return NULL;
 }

@@ -23,6 +23,8 @@ typedef int (*builtin_handler)(char **argv, size_t size, void *bundle_ptr);
 builtin_handler str_to_builtin(char *name);
 int builtin_alias(char **str, size_t size, void *bundle_ptr);
 
+int builtin_unalias(char **str, size_t size, void *bundle_ptr);
+
 int builtin_cd(char **argv, size_t size, void *bundle_ptr);
 
 int builtin_export(char **argv, size_t size, void *bundle_ptr);
