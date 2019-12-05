@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     else if (q == 3)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "$(subshell b)"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "$(subshell b)"));
     }
     else if (q == 4)
     {
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     }
     else if (q == 5)
     {
-        token_array_add(exp, token_init(TOKEN_WORD, "echo $(subshell)"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo $(subshell)"));
     }
     else if (q == 6)
     {
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     }
     else if (q == 7)
     {
-        token_array_add(exp, token_init(TOKEN_WORD, "if"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "if"));
     }
     else if (q == 8)
     {
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     }
     else if (q == 12)
     {
-        token_array_add(exp, token_init(TOKEN_WORD, "echo"));
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo"));
     }
     else if (q == 13)
     {

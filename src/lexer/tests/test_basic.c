@@ -62,6 +62,8 @@ int main(int argc, char **argv)
         "&abc()",
         "'echo' A | B&*/*"
     };
+    if (q > 26)
+        return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
     if (q == 0)
@@ -171,9 +173,7 @@ int main(int argc, char **argv)
     else if (q == 12)
     {
         token_array_add(exp, token_init(TOKEN_FUNCTION, "function"));
-        token_array_add(exp, token_init(TOKEN_WORD, "func"));
-        token_array_add(exp, token_init(TOKEN_LEFT_PARENTHESIS, "("));
-        token_array_add(exp, token_init(TOKEN_RIGHT_PARENTHESIS, ")"));
+        token_array_add(exp, token_init(TOKEN_FUNCDEC, "func"));
         token_array_add(exp, token_init(TOKEN_LEFT_BRACKET, "{"));
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "ok"));

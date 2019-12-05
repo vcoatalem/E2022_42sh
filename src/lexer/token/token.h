@@ -20,7 +20,7 @@
 
 #include <stddef.h>
 
-#define NB_TOKENS 45
+#define NB_TOKENS 46
 
 /**
  * \enum token_type
@@ -33,10 +33,11 @@ enum token_type
 {
     TOKEN_WORD,
     TOKEN_ASSIGNMENT,
-    TOKEN_FUNCDEC,
+    TOKEN_FUNCDEC, //TODO: lex this ( foo(), bar(), ...)
     TOKEN_SUBSHELL,
     TOKEN_ARITHMETIC,
     TOKEN_WORD_EXPAND,
+    TOKEN_WORD_TILDE, //TODO: lex this ( ~, ~-, ~/ ...)
     TOKEN_WORD_NO_SUBSTITUTION,
     TOKEN_EOF,
     TOKEN_EOL,
