@@ -169,9 +169,9 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
         }
         else if (no_substitution_value)
         {
-            arg_list_get_arg(&arg_list, &index, value);
+            arg_list_get_arg(&arg_list, &index, no_substitution_value);
         }
-        else //if (value)
+        else
         {
             arg_list_get_substituted_arg(&arg_list, &index, value, bundle_ptr);
         }

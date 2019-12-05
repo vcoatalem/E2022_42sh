@@ -3,18 +3,6 @@
 #include "parser.h"
 #include "../main/42sh.h"
 
-static char *my_strdup(char *str)
-{
-    size_t size = 0;
-    while (*(str + size))
-    {
-        size++;
-    }
-    char *s = calloc(1, size + 1);
-    strcpy(s, str);
-    return s;
-}
-
 struct symbol_array *substitute_rule(enum rule_id rule_id,
         int token_type, struct analysis_table *table)
 {
@@ -74,7 +62,7 @@ static int parse_token(struct parser *parser, struct token *current,
         //get current word value into the ast
         if (head->ast->value)
             free(head->ast->value);
-        head->ast->value = my_strdup(current->value);
+        head->ast->value = strdup(current->value);
     }
     stamp_continue(parser->input);
     return 0;

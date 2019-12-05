@@ -3,7 +3,7 @@
 int token_type_is_value(enum token_type type)
 {
     return type == TOKEN_WORD || type == TOKEN_WORD_EXPAND
-        || type == TOKEN_FUNCDEC
+        || type == TOKEN_WORD_NO_SUBSTITUTION || type == TOKEN_FUNCDEC
         || type == TOKEN_SUBSHELL || type == TOKEN_ARITHMETIC
         || type == TOKEN_LESS || type == TOKEN_GREAT
         || type == TOKEN_DOUBLE_GREAT || type == TOKEN_GREAT_AMPERSAND
