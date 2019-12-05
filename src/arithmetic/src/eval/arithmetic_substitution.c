@@ -80,23 +80,9 @@ int arithmetic_expression_compute(char *str)
     struct arithmetic_ast *ast = NULL;
     parse_expression(lexer, &ast);
     print_ast(ast);
-    return 0;
+    printf("\n");
+    arithmetic_lexer_free(lexer);
+    int return_value =  ast ? compute_ast(ast) : 0;
+    arithmetic_ast_free(ast);
+    return return_value;
 }
-
-#if 0
-int main(int argc, char **argv)
-{
-    if (argc == 1)
-        return 0;
-    struct lexer *lexer = lexer_alloc(argv[1]);
-    struct ast *ast;
-    bool try_parse = parse_expression(lexer, &ast);
-    if (!try_parse)
-    {
-        return -1;
-    }
-    print_ast(ast);
-    printf("\n%d\n", compute_ast(ast));
-    lexer_free(lexer);
-}
-#endif

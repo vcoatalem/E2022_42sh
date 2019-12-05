@@ -13,7 +13,7 @@ int ast_handle_list(struct ast *ast, void *bundle_ptr)
     int try_execute = AST_SUCCESS;
     for (long int i = ast->nb_children - 1; i >= 0; i--)
     {
-        ast_execute(ast->forest[i], bundle);
+        try_execute = ast_execute(ast->forest[i], bundle);
         //loop break/continue handlers
         if (bundle->ast_traversal_context.found_break)
         {

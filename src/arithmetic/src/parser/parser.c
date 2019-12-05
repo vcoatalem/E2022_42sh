@@ -147,6 +147,11 @@ bool parse_expression(struct arithmetic_lexer *lexer,
     if (!parse_exp(lexer, ast))
         return false;
 
-    token = arithmetic_lexer_peek(lexer);
-    return token && token->type == TOKEN_EOF;
+    token = arithmetic_lexer_pop(lexer);
+    bool return_value = token && token->type == TOKEN_EOF ? 1 : 0;
+    if (token)
+    {
+        arithmetic_token_free(token);
+    }
+    return return_value;
 }

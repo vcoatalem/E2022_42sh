@@ -65,8 +65,8 @@ static void arg_list_get_arithmetic_value(char ***arg_list, size_t *index,
     *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
     //TODO: implement arithmetic expression substitution
     char buffer[64] = { 0 };
-    sprintf(buffer, "%d",
-            ast ? 0 : 1);//arithmetic_expression_compute(ast->forest[0]->value));
+    int value = arithmetic_expression_compute(ast->forest[0]->value);
+    sprintf(buffer, "%d", value);
     (*arg_list)[*index] = strdup(buffer);
     (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
@@ -100,7 +100,6 @@ static void arg_list_get_arg(char ***arg_list, size_t *index, struct ast *ast)
 {
     *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
     (*arg_list)[*index] = strdup(ast->forest[0]->value);
-    //TODO: substitution goes there
     (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
 }
@@ -170,7 +169,7 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
         }
         else if (arithmetic_value)
         {
-            arg_list_get_arithmetic_value(&arg_list, &index, sub_value);
+            arg_list_get_arithmetic_value(&arg_list, &index, arithmetic_value);
         }
         else if (no_substitution_value)
         {
