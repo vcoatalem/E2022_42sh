@@ -10,6 +10,13 @@ int ast_handle_funcdec(struct ast *ast, void *bundle_ptr)
 
     struct ast *ast_func_name = find_op_type(ast, OPERATOR_NONE);
     struct ast *ast_func_node = find_op_type(ast, OPERATOR_LIST);
+    while (find_op_type(ast_func_node, OPERATOR_LIST))
+    {
+        /*
+        ** skip potentials EOL between declaration and definition
+        */
+        ast_func_node = find_op_type(ast_func_node, OPERATOR_LIST);
+    }
     struct ast *ast_skip_newlines = ast_func_node;
     struct ast *ast_func_body = find_op_type(ast_func_node,
             OPERATOR_SHELL_COMMAND);
