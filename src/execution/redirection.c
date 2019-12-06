@@ -60,6 +60,20 @@ static void redirection_execute_heredoc(struct command *cmd,
     close(p[PIPE_WRITE]);
 }
 
+static int redirection_execute_stdin_from_arg(struct command *cmd,
+        struct redirection *redirection)
+{
+        int fd = open(redirection->arg, O_RDONLY);
+        if (fd == -1)
+        {
+            warnx("could not open file `%s` to read input from",
+                    redirection->arg);
+            return RETURN_REDIRECTION_ERROR;
+        }
+        redirect(&cmd->fd_in, fd, STDIN_FILENO);
+        return RETURN_SUCCESS;
+}
+
 static int redirection_execute_std_to_arg(struct command *cmd,
         struct redirection *redirection)
 {
@@ -68,7 +82,11 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
+        {
+            warnx("could not open file `%s` to output into",
+                    redirection->arg);
             return RETURN_REDIRECTION_ERROR;
+        }
         if (redirection->type == STDOUT_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -83,7 +101,11 @@ static int redirection_execute_std_to_arg(struct command *cmd,
     {
         int fd = open(redirection->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
+        {
+            warnx("could not open file `%s` to concat into",
+                    redirection->arg);
             return RETURN_REDIRECTION_ERROR;
+        }
         if (redirection->type == STDOUT_APPEND_TO_ARG)
         {
             redirect(&cmd->fd_out, fd, STDOUT_FILENO);
@@ -107,19 +129,14 @@ int redirection_execute(struct command *cmd, struct redirection *redirection,
     }
     if (redirection->type == STDIN_FROM_ARG)
     {
-        int fd = open(redirection->arg, O_RDONLY);
-        if (fd == -1)
-            return RETURN_REDIRECTION_ERROR;
-        redirect(&cmd->fd_in, fd, STDIN_FILENO);
+        redirection_execute_stdin_from_arg(cmd, redirection);
     }
     else if (redirection->type == STDOUT_TO_ARG
         || redirection->type == STDERR_TO_ARG
         || redirection->type == STDOUT_APPEND_TO_ARG
         || redirection->type == STDERR_APPEND_TO_ARG)
     {
-        int try_redirect = redirection_execute_std_to_arg(cmd, redirection);
-        if (try_redirect == RETURN_REDIRECTION_ERROR)
-            warnx("could not open `%s` for redirection", redirection->arg);
+        redirection_execute_std_to_arg(cmd, redirection);
     }
     else if (redirection->type == STDOUT_TO_STDERR)
     {
