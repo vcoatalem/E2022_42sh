@@ -235,7 +235,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_WORD_EXPAND, "to*to*"));
     }
     else if (q == 23)
-    { 
+    {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "to*to*"));
     }
@@ -253,11 +253,11 @@ int main(int argc, char **argv)
     }
     else if (q == 26)
     {
-        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo")); 
+        token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "echo"));
         token_array_add(exp, token_init(TOKEN_WORD, "A"));
-        token_array_add(exp, token_init(TOKEN_PIPE, "|")); 
+        token_array_add(exp, token_init(TOKEN_PIPE, "|"));
         token_array_add(exp, token_init(TOKEN_WORD, "B"));
-        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&")); 
+        token_array_add(exp, token_init(TOKEN_AMPERSAND, "&"));
         token_array_add(exp, token_init(TOKEN_WORD_EXPAND, "*/*"));
     }
     else if (q == 27)
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
     {
         token_array_add(exp, token_init(TOKEN_ARITHMETIC, "0 && 1"));
     }
-    token_array_add(exp, token_init(TOKEN_EOF, "")); 
+    token_array_add(exp, token_init(TOKEN_EOF, ""));
     struct lexer *lexer = lexer_init();
     lexer_add_string(lexer, cmds[q]);
     struct token_array *array = lex(lexer);
