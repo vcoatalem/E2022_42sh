@@ -37,6 +37,15 @@ int builtin_continue(char **argv, size_t size, void *bundle_ptr);
 
 int builtin_exit(char **argv, size_t size, void *bundle_ptr);
 
+/**
+ * \brief Execute the builtin echo
+ *
+ * \param char **argv lists of arguments from stdin
+ * \param size_t size number of arguments
+ * \param void *bundle_ptr pointer to execution_bundle
+ *
+ * \return 0 , 1 if failed
+ */
 int builtin_echo(char **argv, size_t size, void *bundle_ptr);
 
 /**
