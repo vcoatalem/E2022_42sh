@@ -154,7 +154,7 @@ int get_option_type(struct options *options, int argc, char *argv[])
 void options_free(struct options *options)
 {
     free(options->set_shopt);
-    free(options->set_shopt);
+    free(options->unset_shopt);
     free(options);
 }
 

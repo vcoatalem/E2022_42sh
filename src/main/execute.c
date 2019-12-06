@@ -128,7 +128,7 @@ static void set_hash_var_args(struct execution_bundle *bundle)
             char el[64];
             sprintf(el, "%d", i);
             insert_variable(bundle->hash_table_var, el,
-                strdup(bundle->options->args[i]));
+                (bundle->options->args[i]));
         }
 
         char allparams[2048] = {0};

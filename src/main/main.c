@@ -12,10 +12,12 @@ void bundle_free(struct execution_bundle *bundle)
     table_free(bundle->parser_table);
     free_hash_table_func(bundle->hash_table_func);
     free_hash_table_var(bundle->hash_table_var);
+    free_hash_table_var(bundle->hash_table_aliases);
     lexer_free(bundle->lexer);
     ast_free(bundle->ast);
     parser_free(bundle->parser);
     token_array_free(bundle->token_array);
+    options_free(bundle->options);
 }
 
 static struct execution_bundle *g_bundle = NULL;
