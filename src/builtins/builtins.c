@@ -24,5 +24,7 @@ builtin_handler str_to_builtin(char *name)
         return builtin_unalias;
     else if (!strcmp(name, "echo"))
         return builtin_echo;
+    else if (!strcmp(name, ".") || !strcmp(name, "source"))
+        return builtin_source;
     return NULL;
 }

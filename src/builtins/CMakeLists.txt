@@ -6,7 +6,8 @@ add_library(builtins
     history.c
     shopt.c
     break_continue_exit.c
-    echo.c)
+    echo.c
+    source.c)
 
 target_link_libraries(builtins options)
 
