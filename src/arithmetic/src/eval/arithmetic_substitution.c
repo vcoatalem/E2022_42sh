@@ -68,6 +68,14 @@ int compute_ast(struct arithmetic_ast *ast)
         return compute_ast(ast->data.children.left)
                 / compute_ast(ast->data.children.right);
     }
+    else if (ast->type == EXPR_NOT)
+    {
+        return compute_ast(ast->data.children.left) == 0 ? 1 : 0;
+    }
+    else if (ast->type == EXPR_INVERT)
+    {
+        return -(compute_ast(ast->data.children.left) + 1);
+    }
     else
     {
         return ast->data.value;

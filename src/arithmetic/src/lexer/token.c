@@ -6,10 +6,11 @@
 
 const char *arithmetic_token_str(struct arithmetic_token *token)
 {
-    static const char *token_strs[] = { "+", "-", "*", "/", "(", ")", "EOF" };
+    static const char *token_strs[] = { "+", "-", "*", "/", "(", ")",
+            "&", "|", "^", "&&", "||", "**", "!", "~", "EOF" };
     static char number_str[11];
 
-    if (token->type != TOKEN_NUMBER)
+    if (token->type != A_TOKEN_NUMBER)
         return token_strs[token->type];
 
     sprintf(number_str, "%d", token->value);
@@ -19,7 +20,7 @@ const char *arithmetic_token_str(struct arithmetic_token *token)
 struct arithmetic_token *arithmetic_token_alloc(void)
 {
     struct arithmetic_token *res = xmalloc(sizeof(*res));
-    res->type = TOKEN_EOF;
+    res->type = A_TOKEN_EOF;
     res->value = 0;
 
     return res;

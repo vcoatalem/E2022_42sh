@@ -1,19 +1,28 @@
 #ifndef ARITHMETIC_TOKEN_H
 #define ARITHMETIC_TOKEN_H
 
+
 /**
 ** \brief Type of a token (operators, value, ...)
 */
 enum arithmetic_token_type
 {
-    TOKEN_PLUS = 0,
-    TOKEN_MINUS,
-    TOKEN_MULTIPLY,
-    TOKEN_DIVIDE,
-    TOKEN_LEFT_PARENTHESIS,
-    TOKEN_RIGHT_PARENTHESIS,
-    TOKEN_EOF,
-    TOKEN_NUMBER
+    A_TOKEN_PLUS = 0,
+    A_TOKEN_MINUS,
+    A_TOKEN_MULTIPLY,
+    A_TOKEN_DIVIDE,
+    A_TOKEN_LEFT_PARENTHESIS,
+    A_TOKEN_RIGHT_PARENTHESIS,
+    A_TOKEN_BITWISE_AND,
+    A_TOKEN_BITWISE_OR,
+    A_TOKEN_BITWISE_XOR,
+    A_TOKEN_AND,
+    A_TOKEN_OR,
+    A_TOKEN_POWER_N,
+    A_TOKEN_NOT,
+    A_TOKEN_INVERT,
+    A_TOKEN_EOF,
+    A_TOKEN_NUMBER,
 };
 
 /**

@@ -34,37 +34,39 @@ struct arithmetic_token_list *arithmetic_token_list_init(
     return tok_list;
 }
 
-enum arithmetic_token_type get_type(char c)
+enum arithmetic_token_type get_type(char *str)
 {
-    enum arithmetic_token_type type;
-    switch (c)
-    {
-    case '+':
-        type = TOKEN_PLUS;
-        break;
-    case '-':
-        type = TOKEN_MINUS;
-        break;
-    case '*':
-        type = TOKEN_MULTIPLY;
-        break;
-    case '/':
-        type = TOKEN_DIVIDE;
-        break;
-    case '(':
-        type = TOKEN_LEFT_PARENTHESIS;
-        break;
-    case ')':
-        type = TOKEN_RIGHT_PARENTHESIS;
-        break;
-    case EOF:
-        type = TOKEN_EOF;
-        break;
-    default:
-        type = TOKEN_NUMBER;
-        break;
-    }
-    return type;
+    if (!strcmp(str, "+"))
+        return A_TOKEN_PLUS;
+    else if (!strcmp(str, "-"))
+        return A_TOKEN_MINUS;
+    else if (!strcmp(str, "*"))
+        return A_TOKEN_MULTIPLY;
+    else if (!strcmp(str, "/"))
+        return A_TOKEN_DIVIDE;
+    else if (!strcmp(str, "("))
+        return A_TOKEN_LEFT_PARENTHESIS;
+    else if (!strcmp(str, ")"))
+        return A_TOKEN_RIGHT_PARENTHESIS;
+    else if (!strcmp(str, "&"))
+        return A_TOKEN_BITWISE_AND;
+    else if (!strcmp(str, "|"))
+        return A_TOKEN_BITWISE_OR;
+    else if (!strcmp(str, "^"))
+        return A_TOKEN_BITWISE_XOR;
+    else if (!strcmp(str, "&&"))
+        return A_TOKEN_AND;
+    else if (!strcmp(str, "||"))
+        return A_TOKEN_OR;
+    else if (!strcmp(str, "**"))
+        return A_TOKEN_POWER_N; 
+    else if (!strcmp(str, "!"))
+        return A_TOKEN_NOT;
+    else if (!strcmp(str, "~"))
+        return A_TOKEN_INVERT;
+    else if (!strcmp(str, ""))
+        return A_TOKEN_EOF;
+    return A_TOKEN_NUMBER;
 }
 
 void arithmetic_token_list_append(struct arithmetic_lexer *lexer,
@@ -92,7 +94,7 @@ void add_number_token(char *buff, size_t *index,
     buff[*index] = '\0';
     int val = atoi(buff);
     *index = 0;
-    struct arithmetic_token *tok = arithmetic_token_init(TOKEN_NUMBER, val);
+    struct arithmetic_token *tok = arithmetic_token_init(A_TOKEN_NUMBER, val);
     arithmetic_token_list_append(lexer, tok);
 }
 
@@ -105,13 +107,23 @@ struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str)
     }
     // transform *str to a char token
     char buff[1024] = { 0 };
+    char op_buff[1024] = { 0 };
+    size_t op_index = 0;
     size_t index = 0;
     for (size_t i = 0; str[i] != '\0'; i++)
     {
         char c = str[i];
-        enum arithmetic_token_type type = get_type(c);
-        if (type != TOKEN_NUMBER || c == ' ')
+        if (c != ' ' && (c < '0' || c > '9'))
         {
+            op_buff[op_index] = c;
+            op_buff[op_index + 1] = 0;
+            op_index++;
+        }
+        enum arithmetic_token_type type = get_type(op_buff);
+        if ((type != A_TOKEN_EOF && type != A_TOKEN_NUMBER) || c == ' ')
+        {
+            op_index = 0;
+            op_buff[op_index] = 0;
             add_number_token(buff, &index, res);
             if (c != ' ')
             {
@@ -126,7 +138,7 @@ struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str)
         }
     }
     add_number_token(buff, &index, res);
-    arithmetic_token_list_append(res, arithmetic_token_init(TOKEN_EOF, 0));
+    arithmetic_token_list_append(res, arithmetic_token_init(A_TOKEN_EOF, 0));
     return res;
 }
 

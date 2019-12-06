@@ -9,7 +9,15 @@ enum arithmetic_ast_type
     EXPR_SUBTRACTION,
     EXPR_MULTIPLICATION,
     EXPR_DIVISION,
-    EXPR_NUMBER
+    EXPR_NUMBER,
+    EXPR_NOT,
+    EXPR_INVERT,
+    EXPR_BITWISE_AND,
+    EXPR_BITWISE_OR,
+    EXPR_BITWISE_XOR,
+    EXPR_AND,
+    EXPR_OR,
+    EXPR_POWER_N
 };
 
 struct arithmetic_ast

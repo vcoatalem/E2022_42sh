@@ -4,12 +4,13 @@
 
 static bool token_is_sop(struct arithmetic_token *token)
 {
-    return token->type == TOKEN_MULTIPLY || token->type == TOKEN_DIVIDE;
+    return token->type == A_TOKEN_MULTIPLY || token->type == A_TOKEN_DIVIDE;
 }
 
 static bool token_is_eop(struct arithmetic_token *token)
 {
-    return token->type == TOKEN_PLUS || token->type == TOKEN_MINUS;
+    return token->type == A_TOKEN_PLUS || token->type == A_TOKEN_MINUS
+        || token->type == A_TOKEN_NOT || token->type == A_TOKEN_INVERT;
 }
 
 /* /!\ forward function declaration /!\
@@ -32,7 +33,7 @@ static bool parse_parenthesis(struct arithmetic_lexer *lexer,
     bool res = parse_exp(lexer, ast);
 
     struct arithmetic_token *token = arithmetic_lexer_pop(lexer);
-    res = res && token && token->type == TOKEN_RIGHT_PARENTHESIS;
+    res = res && token && token->type == A_TOKEN_RIGHT_PARENTHESIS;
 
     arithmetic_token_free(token);
     return res;
@@ -46,16 +47,16 @@ static bool parse_texp(struct arithmetic_lexer *lexer,
         return false;
 
     bool res = true;
-    if (token->type == TOKEN_LEFT_PARENTHESIS)
+    if (token->type == A_TOKEN_LEFT_PARENTHESIS)
         res = parse_parenthesis(lexer, ast);
-    else if (token->type == TOKEN_NUMBER)
+    else if (token->type == A_TOKEN_NUMBER)
         *ast  = arithmetic_ast_alloc_number(token->value);
-    else if (token->type == TOKEN_MINUS)
+    else if (token->type == A_TOKEN_MINUS)
     {
         arithmetic_token_free(token);
         token = arithmetic_lexer_pop(lexer);
 
-        if (token && token->type == TOKEN_NUMBER)
+        if (token && token->type == A_TOKEN_NUMBER)
             *ast = arithmetic_ast_alloc_number(-token->value);
         else
             res = false;
@@ -82,10 +83,10 @@ static bool parse_sexp(struct arithmetic_lexer *lexer,
         struct arithmetic_ast *tmp = arithmetic_ast_alloc();
         switch (token->type)
         {
-        case TOKEN_MULTIPLY:
+        case A_TOKEN_MULTIPLY:
             tmp->type = EXPR_MULTIPLICATION;
             break;
-        case TOKEN_DIVIDE:
+        case A_TOKEN_DIVIDE:
             tmp->type = EXPR_DIVISION;
             break;
         default:
@@ -117,11 +118,17 @@ static bool parse_exp(struct arithmetic_lexer *lexer,
         struct arithmetic_ast *tmp = arithmetic_ast_alloc();
         switch (token->type)
         {
-        case TOKEN_PLUS:
+        case A_TOKEN_PLUS:
             tmp->type = EXPR_ADDITION;
             break;
-        case TOKEN_MINUS:
+        case A_TOKEN_MINUS:
             tmp->type = EXPR_SUBTRACTION;
+            break;
+        case A_TOKEN_NOT:
+            tmp->type = EXPR_NOT;
+            break;
+        case A_TOKEN_INVERT:
+            tmp->type = EXPR_INVERT;
             break;
         default:
             res = false;
@@ -141,14 +148,14 @@ bool parse_expression(struct arithmetic_lexer *lexer,
         struct arithmetic_ast **ast)
 {
     struct arithmetic_token *token = arithmetic_lexer_peek(lexer);
-    if (!token || token->type == TOKEN_EOF)
+    if (!token || token->type == A_TOKEN_EOF)
         return false;
 
     if (!parse_exp(lexer, ast))
         return false;
 
     token = arithmetic_lexer_pop(lexer);
-    bool return_value = token && token->type == TOKEN_EOF ? 1 : 0;
+    bool return_value = token && token->type == A_TOKEN_EOF ? 1 : 0;
     if (token)
     {
         arithmetic_token_free(token);
