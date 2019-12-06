@@ -25,6 +25,8 @@ char *token_to_string5(enum token_type type)
         return "arithmetic";
     case (TOKEN_WORD_NO_SUBSTITUTION):
         return "No Substitution";
+    case(TOKEN_WORD_TILDE):
+        return "word tilde";
     default:
         return "word";
     }

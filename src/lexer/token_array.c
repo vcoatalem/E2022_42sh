@@ -165,7 +165,11 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
             token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
         else
         {
-            struct token *tok = token_init(TOKEN_WORD, buffer);
+            struct token *tok = NULL;
+            if (buffer[0] == '~' && is_string == 0)
+                tok = token_init(TOKEN_WORD_TILDE, buffer);
+            else
+                tok = token_init(TOKEN_WORD, buffer);
             if (is_string)
                 tok->quoted = 1;
             token_array_add(arr, tok);
