@@ -47,35 +47,39 @@ static void set_disable_backslash(struct flags *f)
     f->disable_backslash_set = 1;
 }
 
-static char *escaped_sequence(char *s, size_t index)
+static char *escaped_sequence(char *s, size_t *index)
 {
     char *c = calloc(1, sizeof(char));
 
-    if (s[index] == '\\')
+    if (s[*index] == '\\')
         c[0] = '\\';
-    else if (s[index] == 'a')
+    else if (s[*index] == 'a')
         c[0] = '\a';
-    else if (s[index] == 'b')
+    else if (s[*index] == 'b')
         c[0] = '\b';
-    else if (s[index] == 'e')
+    else if (s[*index] == 'e')
         c[0] = 27;
-    else if (s[index] == 'f')
+    else if (s[*index] == 'f')
         c[0] = '\f';
-    else if (s[index] == 'n')
+    else if (s[*index] == 'n')
         c[0] = '\n';
-    else if (s[index] == 'r')
+    else if (s[*index] == 'r')
         c[0] = '\r';
-    else if (s[index] == 't')
+    else if (s[*index] == 't')
         c[0] = '\t';
-    else if (s[index] == 'v')
+    else if (s[*index] == 'v')
         c[0] = '\v';
-    else if (s[index] == '0')
+    else if (s[*index] == '0')
     {
-        c[0] = strtol(s + index + 1, NULL, 8);
-   }
-    else if (s[index] == 'x')
+        char *end;
+        c[0] = strtol(s + (*index) + 1, &end, 8);
+        (*index) += end - (s + (*index) + 1);
+    }
+    else if (s[*index] == 'x')
     {
-        c[0] = strtol(s + index + 1, NULL, 16);
+        char *end;
+        c[0] = strtol(s + (*index) + 1, &end, 16);
+        (*index) += end - (s + (*index) + 1);
     }
 
     return c;
@@ -91,7 +95,7 @@ static void _printf_escaped(char *s)
             if (s[i] == 'c')
                 break;
 
-            printf("%s", escaped_sequence(s, i));
+            printf("%s", escaped_sequence(s, &i));
         }
 
         else
@@ -156,5 +160,6 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
         _print(argv, size, i, f);
     }
 
+    free(f);
     return 0;
 }
