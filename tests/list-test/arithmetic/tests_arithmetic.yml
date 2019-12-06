@@ -1,0 +1,50 @@
+ - name: arithmetic_plus
+   stdin: echo $((1 +2))
+
+ - name: arithmetic_minus
+   stdin: echo $((1-2))
+
+ - name: arithmetic_minus_value
+   stdin: echo $((-2))
+
+ - name: arithmetic_neg_value
+   stdin: echo $((!2))
+ 
+ - name: arithmetic_invert_value
+   stdin: echo $((~2))
+
+ - name: arithmetic_and_plus_mult
+   stdin: echo $((1 + 2 * 4))
+
+ - name: arithmetic_and_plus_mult_advanced
+   stdin: echo $((1 * 2 + 4 +2* 8 +7))
+
+ - name: arithmetic_div_simple
+   stdin: echo $((1 / 2))
+
+ - name: arithmetic_div_zero
+   stdin: echo $((1 / 0))
+
+ - name: arithmetic_parenthesis_simple
+   stdin: echo $(((1 + 2) * 3))
+
+ - name: arithmetic_bitwise_and
+   stdin: echo $((2 & 4 & 3))
+
+ - name: arithmetic_bitwise_or
+   stdin: echo $((2 | 4 | 3))
+
+ - name: arithmetic_bitwise_xor
+   stdin: echo $((2 ^ 4 ^ 3))
+
+ - name: arithmetic_and_true
+   stdin: echo $((1 && 2))
+
+ - name: arithmetic_and_false
+   stdin: echo $((1 && 0))
+ 
+ - name: arithmetic_or_true
+   stdin: echo $((1 && 2))
+ 
+ - name: arithmetic_or_false
+   stdin: echo $((0 && 0))

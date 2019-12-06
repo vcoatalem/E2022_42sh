@@ -1,0 +1,11 @@
+ - name: arithmetic_var_doesnt_exist
+   stdin: echo $((1 +aesqdqsds))
+
+ - name: arithmetic_var_exists_not_number
+   stdin: var=foo; echo $((1+var))
+
+ - name: arithmetic_var_exists_number_add
+   stdin: var=5; echo $((var + 1))
+
+ - name: arithmetic_var_exists_number_subtract
+   stdin: var=5; echo $((var - 7))

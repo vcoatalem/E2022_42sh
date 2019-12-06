@@ -73,8 +73,14 @@ int compute_ast(struct arithmetic_ast *ast)
     }
     else if (ast->type == EXPR_DIVISION)
     {
+        int right = compute_ast(ast->data.children.right);
+        if (right == 0)
+        {
+            warnx("arithmetic expression: division by 0");
+            return 0;
+        }
         return compute_ast(ast->data.children.left)
-                / compute_ast(ast->data.children.right);
+                / right;
     }
     else if (ast->type == EXPR_NOT)
     {
@@ -93,6 +99,11 @@ int compute_ast(struct arithmetic_ast *ast)
     {
         return compute_ast(ast->data.children.left)
                 | compute_ast(ast->data.children.right);
+    }
+    else if (ast->type == EXPR_BITWISE_XOR)
+    {
+        return compute_ast(ast->data.children.left)
+                ^ compute_ast(ast->data.children.right);
     }
     else if (ast->type == EXPR_AND)
     {
@@ -114,11 +125,11 @@ int compute_ast(struct arithmetic_ast *ast)
 int arithmetic_expression_compute(char *str, void *bundle_ptr)
 {
     struct arithmetic_lexer *lexer = arithmetic_lexer_alloc(str, bundle_ptr);
-    arithmetic_lexer_print(lexer);
+    //arithmetic_lexer_print(lexer);
     struct arithmetic_ast *ast = NULL;
     parse_expression(lexer, &ast);
-    print_ast(ast);
-    printf("\n");
+    //print_ast(ast);
+    //printf("\n");
     arithmetic_lexer_free(lexer);
     int return_value =  ast ? compute_ast(ast) : 0;
     arithmetic_ast_free(ast);
