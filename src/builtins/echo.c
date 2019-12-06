@@ -109,6 +109,9 @@ static void _printf_escaped(char *s)
 
 static void _print(char **argv, size_t size, size_t index, struct flags *f)
 {
+    if (argv[index] == NULL)
+        return;
+
     if (f->enable_backslash_set == 1)
     {
         for (; index < size - 1; index++)
