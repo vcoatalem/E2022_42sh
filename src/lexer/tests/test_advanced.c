@@ -61,9 +61,10 @@ int main(int argc, char **argv)
         "$?",                                       //24
         "\"$?\"",                                   //25
         "\'$?\'",                                   //26
+        "`backquoted subshell`;"                    //27
 
     };
-    if (q > 26)
+    if (q > 27)
         return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -194,6 +195,11 @@ int main(int argc, char **argv)
     else if (q == 26)
     {
         token_array_add(exp, token_init(TOKEN_WORD_NO_SUBSTITUTION, "$?"));
+    }
+    else if (q == 27)
+    {
+        token_array_add(exp, token_init(TOKEN_SUBSHELL, "backquoted subshell"));
+        token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
     }
     token_array_add(exp, token_init(TOKEN_EOF, ""));
     struct lexer *lexer = lexer_init();

@@ -105,6 +105,13 @@ static int command_execute_funcdec(struct command *command, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
     struct ast *func_ast = get_func(bundle->hash_table_func, *(command->args));
+    for (size_t i = 1; i < command->n_args; i++)
+    {
+        //setting $1, $2, $3 etc ..
+        char buffer[64] = { 0 };
+        sprintf(buffer, "%zu", i);
+        insert_variable(bundle->hash_table_var, buffer, command->args[i]);
+    }
     int execute_funcdec = ast_execute(func_ast, bundle_ptr);
     return execute_funcdec;
 }
