@@ -11,7 +11,6 @@ struct flags
     int trailing_newline_set;
     int enable_backslash_set;
     int disable_backslash_set;
-
 };
 
 static struct flags *flags_init(void)
@@ -50,7 +49,7 @@ static void set_disable_backslash(struct flags *f)
 
 static char *escaped_sequence(char *s, size_t *index)
 {
-    char *c = calloc(1, sizeof(char));
+    char *c = calloc(2, sizeof(char));
 
     if (s[*index] == '\\')
         c[0] = '\\';
@@ -86,6 +85,8 @@ static char *escaped_sequence(char *s, size_t *index)
         c[0] = strtol(tmp, &end, 16);
         (*index) += end - tmp;
     }
+    else
+        c[0] = s[*index];
 
     return c;
 }
@@ -100,7 +101,9 @@ static void _printf_escaped(char *s)
             if (s[i] == 'c')
                 break;
 
-            printf("%s", escaped_sequence(s, &i));
+            char *escaped = escaped_sequence(s, &i);
+            printf("%s", escaped);
+            free(escaped);
         }
 
         else
