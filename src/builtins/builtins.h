@@ -3,18 +3,18 @@
 
 #include <stddef.h>
 
-struct shopt           
+struct shopt
 {
     int debug;
-    int ast_print;     
-    int dotglob;       
+    int ast_print;
+    int dotglob;
     int expand_aliases;
     int extglob;
     int failglob;
-    int nocaseglob;    
-    int nullglob;      
-    int sourcepath;    
-    int xpg_echo;      
+    int nocaseglob;
+    int nullglob;
+    int sourcepath;
+    int xpg_echo;
 };
 char *shopt_SHELLOPTS(struct shopt *shopt);
 
@@ -44,9 +44,9 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr);
  *
  * Builtin shopt, display 42sh option , has optional parameter ("-s", "-u", "-q")
  *
- * \param **str array of string 
+ * \param **str array of string
  * \param size size of **str
- * \param *bundle 
+ * \param *bundle
  *
  * \return 0 , 1 if failed
  *
