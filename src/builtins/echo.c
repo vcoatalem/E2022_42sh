@@ -114,14 +114,14 @@ static void _print(char **argv, size_t size, size_t index, struct flags *f)
         }
         _printf_escaped(argv[index]);
     }
- 
+
     if (f->disable_backslash_set == 1)
     {
         for (; index < size - 1; index++)
             printf("%s " , argv[index]);
         printf("%s", argv[index]);
     }
- 
+
     if (f->trailing_newline_set == 0)
         printf("\n");
 }
