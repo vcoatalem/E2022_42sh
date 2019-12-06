@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "string.h"
 
 #include "builtins.h"
 #include "../main/42sh.h"
@@ -128,9 +129,6 @@ static void _print(char **argv, size_t size, size_t index, struct flags *f)
             printf("%s " , argv[index]);
         printf("%s", argv[index]);
     }
-
-    if (f->trailing_newline_set == 0)
-        printf("\n");
 }
 
 int builtin_echo(char **argv, size_t size, void *bundle_ptr)
@@ -144,6 +142,9 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
         size_t i = 0;
         while (++i < size && argv[i][0] == '-')
         {
+            if (strcmp(argv[i], "-") == 0)
+                printf("-");
+
             for (int j = 1; argv[i][j] != '\0'; j++)
             {
                 if (argv[i][j] == 'n')
@@ -165,6 +166,9 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
         }
 
         _print(argv, size, i, f);
+
+        if (f->trailing_newline_set == 0)
+            printf("\n");
     }
 
     free(f);
