@@ -1,8 +1,8 @@
  - name: echo_simple
-   stdin: echo "Hello World!"
+   stdin: echo Hello World!
 
  - name: echo_arg-n
-   stdin: echo -n "Hello World!"
+   stdin: echo -n Hello World!
 
  - name: echo_arg-tab
    stdin: echo -e "\tHello Wolrd!"
@@ -27,3 +27,9 @@
  
  - name: echo_no_special
    stdin: echo -E "Hello\nWorld!"
+
+ - name: echo_n_flag
+   stdin: echo -n word
+
+ - name: echo_dash
+   stdin: echo -

@@ -13,6 +13,7 @@ static bool token_is_eop(struct arithmetic_token *token)
         || token->type == A_TOKEN_NOT || token->type == A_TOKEN_INVERT
         || token->type == A_TOKEN_BITWISE_AND
         || token->type == A_TOKEN_BITWISE_OR
+        || token->type == A_TOKEN_BITWISE_XOR
         || token->type == A_TOKEN_AND
         || token->type == A_TOKEN_OR
         || token->type == A_TOKEN_POWER_N;
