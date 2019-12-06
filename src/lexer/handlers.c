@@ -84,6 +84,12 @@ int token_terminal_char(char *str, size_t iterator, char *buffer,
     {
         return token_compare(str, iterator, buffer, type);
     }
+    else if (iterator >= 2 && ((buffer[0] == '0' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))
+        || (buffer[0] == '1' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))
+        || (buffer[0] == '2' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))))
+    {
+        return token_compare(str, iterator, buffer, type);
+    }
     return 0;
 }
 
