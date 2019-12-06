@@ -32,3 +32,12 @@ set_target_properties(check
     PROPERTIES
     EXCLUDE_FROM_ALL "true"
 )
+
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    add_custom_target(doxygen COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_BINARY_DIR}/../doc/Doxyfile"
+        WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/doc/
+        COMMENT "Building user's documentation into doc folder..."
+    )
+endif()
