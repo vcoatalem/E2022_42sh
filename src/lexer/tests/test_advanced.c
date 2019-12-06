@@ -151,7 +151,9 @@ int main(int argc, char **argv)
     }
     else if (q == 17)
     {
-        token_array_add(exp, token_init(TOKEN_WORD, "*.allo"));
+        struct token *t = token_init(TOKEN_WORD, "*.allo");
+        t->quoted = 1;
+        token_array_add(exp, t);
     }
     else if (q == 18)
     {
@@ -173,7 +175,9 @@ int main(int argc, char **argv)
     }
     else if (q == 22)
     {
-        token_array_add(exp, token_init(TOKEN_WORD, "*"));
+        struct token *t = token_init(TOKEN_WORD, "*");
+        t->quoted = 1;
+        token_array_add(exp, t);
     }
     else if (q == 23)
     {

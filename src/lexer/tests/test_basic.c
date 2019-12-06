@@ -242,7 +242,9 @@ int main(int argc, char **argv)
     else if (q == 24)
     {
         token_array_add(exp, token_init(TOKEN_WORD, "echo"));
-        token_array_add(exp, token_init(TOKEN_WORD, "to*to*"));
+        struct token *t = token_init(TOKEN_WORD, "to*to*");
+        t->quoted = 1;
+        token_array_add(exp, t);
     }
     else if (q == 25)
     {
