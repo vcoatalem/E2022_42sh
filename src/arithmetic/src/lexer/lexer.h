@@ -1,5 +1,5 @@
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef ARITHMETIC_LEXER_H
+#define ARITHMETIC_LEXER_H
 
 #include "lexer/token.h"
 
@@ -15,7 +15,8 @@ struct arithmetic_lexer;
 ** \brief Lexer allocator and initialiser
 ** \param str the string to use as input stream.
 */
-struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str);
+struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str,
+        void *bundle_ptr);
 
 /**
 ** \brief Wrapper to release every resources still held in a lexer.
@@ -39,5 +40,7 @@ struct arithmetic_token *arithmetic_lexer_peek(struct arithmetic_lexer *lexer);
 ** \param lexer the lexer to lex from
 */
 struct arithmetic_token *arithmetic_lexer_pop(struct arithmetic_lexer *lexer);
+
+void arithmetic_lexer_print(struct arithmetic_lexer *lexer);
 
 #endif /* ! ARITHMETIC_LEXER_H */

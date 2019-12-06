@@ -16,7 +16,15 @@ ast_char[EXPR_NUMBER] =
     {EXPR_ADDITION, '+'},
     {EXPR_SUBTRACTION, '-'},
     {EXPR_MULTIPLICATION, '*'},
-    {EXPR_DIVISION, '/'}
+    {EXPR_DIVISION, '/'},
+    {EXPR_BITWISE_OR, '|'},
+    {EXPR_BITWISE_AND, '&'},
+    {EXPR_BITWISE_XOR, '^'},
+    {EXPR_AND, 'A'},
+    {EXPR_OR, 'O'},
+    {EXPR_POWER_N, 'P'},
+    {EXPR_NOT, '!'},
+    {EXPR_INVERT, '~'},
 };
 
 void print_ast(struct arithmetic_ast *ast)
@@ -76,15 +84,37 @@ int compute_ast(struct arithmetic_ast *ast)
     {
         return -(compute_ast(ast->data.children.left) + 1);
     }
-    else
+    else if (ast->type == EXPR_BITWISE_AND)
     {
-        return ast->data.value;
+        return compute_ast(ast->data.children.left)
+                & compute_ast(ast->data.children.right);
     }
+    else if (ast->type == EXPR_BITWISE_OR)
+    {
+        return compute_ast(ast->data.children.left)
+                | compute_ast(ast->data.children.right);
+    }
+    else if (ast->type == EXPR_AND)
+    {
+        return (compute_ast(ast->data.children.left) != 0
+            && compute_ast(ast->data.children.right) != 0) ? 1 : 0;
+    }
+    else if (ast->type == EXPR_OR)
+    {
+        return (compute_ast(ast->data.children.left) != 0
+            || compute_ast(ast->data.children.right) != 0) ? 1 : 0;
+    }
+    else if (ast->type == EXPR_POWER_N)
+    {
+
+    }
+    return ast->data.value;
 }
 
-int arithmetic_expression_compute(char *str)
+int arithmetic_expression_compute(char *str, void *bundle_ptr)
 {
-    struct arithmetic_lexer *lexer = arithmetic_lexer_alloc(str);
+    struct arithmetic_lexer *lexer = arithmetic_lexer_alloc(str, bundle_ptr);
+    arithmetic_lexer_print(lexer);
     struct arithmetic_ast *ast = NULL;
     parse_expression(lexer, &ast);
     print_ast(ast);
