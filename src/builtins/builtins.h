@@ -3,18 +3,18 @@
 
 #include <stddef.h>
 
-struct shopt          
+struct shopt
 {
     int debug;
-    int ast_print;    
-    int dotglob;      
+    int ast_print;
+    int dotglob;
     int expand_aliases;
     int extglob;
     int failglob;
-    int nocaseglob;   
-    int nullglob;     
-    int sourcepath;   
-    int xpg_echo;     
+    int nocaseglob;
+    int nullglob;
+    int sourcepath;
+    int xpg_echo;
 };
 char *shopt_SHELLOPTS(struct shopt *shopt);
 
