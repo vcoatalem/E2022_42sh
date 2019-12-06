@@ -228,7 +228,9 @@ struct token_array *lex(struct lexer *lexer)
             is_string = change_lexer_state(lexer);
         }
         else if (lexer->str[lexer->iterator] == '\\'
-            && lexer->state != LEXER_STATE_LEXING_SLASH)
+            && lexer->state != LEXER_STATE_LEXING_SLASH
+            && lexer->state != LEXER_STATE_LEXING_DOUBLE_QUOTES
+            && lexer->state != LEXER_STATE_LEXING_QUOTES)
         {
             handle_backslash(lexer->str, &lexer->iterator, &lexer->state,
                 buffer, &index, arr);
