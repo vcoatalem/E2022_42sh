@@ -24,7 +24,7 @@
 
  - name: echo_ASCII
    stdin: echo -e "\0176"
- 
+
  - name: echo_no_special
    stdin: echo -E "Hello\nWorld!"
 
@@ -33,3 +33,42 @@
 
  - name: echo_dash
    stdin: echo -
+
+ - name: echo_double_dash
+   stdin: echo --
+
+ - name: echo_only_correct_flag
+   stdin: echo -e
+
+ - name: echo_only_correct_flag2
+   stdin: echo -ne
+
+ - name: echo_only_incorrect_flag
+   stdin: echo -z
+
+ - name: echo_only_incorrect_flag2
+   stdin: echo -zut
+
+ - name: echo_only_incorrect_flag3
+   stdin: echo -np
+
+ - name: echo_no_further_output
+   stdin: echo -e 'yes\cno'
+
+ - name: echo_escape
+   stdin: echo -e 'abc\edef'
+
+ - name: echo_octal_more_than_3_digits
+   stdin: echo -e '\01113'
+
+ - name: echo_hexa_more_than_2_digits
+   stdin: echo -e '\x422'
+
+ - name: echo_incorrect_octal_digit
+   stdin: echo -e '\0A2'
+
+ - name: echo_incorrect_hexa_digit
+   stdin: echo -e '\xZ22'
+
+ - name: echo_set_multiple_flags
+   stdin: echo -Een 'Hello World!'
