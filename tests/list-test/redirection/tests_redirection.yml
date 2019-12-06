@@ -1,11 +1,11 @@
  - name: redirection_>
-   stdin: "echo Hello World! > ../../output"
+   stdin: "echo Hello World! > output"
 
  - name: redirection_bracket_>
-   stdin: "{ ls ; echo toto ; } > ../../output"
+   stdin: "{ ls ; echo toto ; } > output"
 
  - name: redirection_>>
-   stdin: "echo A > ../../output ; echo B >> ../../output"
+   stdin: "echo A > ../../output ; echo B >> output"
 
  - name: redirection_<
    stdin: "cat < ../../input"
@@ -17,7 +17,7 @@
    stdin: "{ echo OK; cat KO; } 1>&2"
 
  - name: redirection_flux_then_file
-   stdin: "cat im out 2>&1 > ../../output"
+   stdin: "cat im out 2>&1 > output"
 
  - name: redirection_file_then_flux
-   stdin: "cat im out > ../../output 2>&1"
+   stdin: "cat im out > output 2>&1"

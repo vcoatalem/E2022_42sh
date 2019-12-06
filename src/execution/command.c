@@ -81,6 +81,8 @@ static int command_execute_sh(struct command *command,
     {
         ////child
         //execute command
+        fflush(stdout);
+        fflush(stderr);
         execvp(*(command->args), command->args);
         warnx("unknown command: %s", *(command->args));
         //if execution failed
