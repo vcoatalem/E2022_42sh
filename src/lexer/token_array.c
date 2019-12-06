@@ -60,7 +60,7 @@ void token_array_remove(struct token_array *arr, size_t n)
     {
         return;
     }
-    free(arr->tok_array[n]);
+    token_free(arr->tok_array[n]);
     for (; n < arr->size; n++)
     {
         arr->tok_array[n] = arr->tok_array[n + 1];
