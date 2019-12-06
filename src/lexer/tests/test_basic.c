@@ -292,5 +292,6 @@ int main(int argc, char **argv)
     }
     token_array_free(array);
     token_array_free(exp);
+    lexer_free(lexer);
     return eq == 1 ? 0 : 1;
 }
