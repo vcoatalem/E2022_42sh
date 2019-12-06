@@ -77,9 +77,13 @@ static char *escaped_sequence(char *s, size_t *index)
     }
     else if (s[*index] == 'x')
     {
+        char tmp[3] =
+        {
+            s[(*index) + 1], s[(*index) + 2], 0
+        };
         char *end;
-        c[0] = strtol(s + (*index) + 1, &end, 16);
-        (*index) += end - (s + (*index) + 1);
+        c[0] = strtol(tmp, &end, 16);
+        (*index) += end - tmp;
     }
 
     return c;
