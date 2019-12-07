@@ -258,6 +258,11 @@ char *replace_prompt(char *prompt)
 
     while (prompt[i] != '\0')
     {
+        char tmp[2] =
+        {
+            prompt[i], 0
+        };
+
         if (prompt[i] == '\\')
         {
             i++;
@@ -271,12 +276,12 @@ char *replace_prompt(char *prompt)
             else
             {
                 --i;
-                new_prompt[i] = prompt[i];
+                strcat(new_prompt, tmp);
             }
         }
         else
         {
-            new_prompt[i] = prompt[i];
+            strcat(new_prompt, tmp);
         }
 
         i++;
