@@ -6,7 +6,7 @@
 #include "builtins.h"
 #include "../main/42sh.h"
 
-static void print_alias_hash_table_var(struct hash_table_var *ht)
+static void print_alias_hash_table_var(struct hash_table_var *ht, int printal)
 {
     for (size_t i = 0; i < ht->size; ++i)
     {
@@ -14,7 +14,11 @@ static void print_alias_hash_table_var(struct hash_table_var *ht)
         while(items)
         {
             if (strcmp(items->data, "") != 0)
-                printf("alias %s='%s'\n", items->name, items->data);
+            {
+                if (printal == 1)
+                    printf("alias ");
+                printf("%s='%s'\n", items->name, items->data);
+            }
             items = items->next;
         }
     }
@@ -26,9 +30,12 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
     if (!bundle_ptr || !str)
         return 1;
     struct execution_bundle *bundle = bundle_ptr;
-    if (size == 1 || (size == 2 && !strcmp(str[1], "-p")))
+    int printal = 0;
+    if (size == 1 || !strcmp(str[1], "-p"))
     {
-        print_alias_hash_table_var(bundle->hash_table_aliases);
+        if (size == 2 && !strcmp(str[1], "-p"))
+            printal = 1;
+        print_alias_hash_table_var(bundle->hash_table_aliases, printal);
         return 0;
     }
     if (size >= 2 )
@@ -56,7 +63,7 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
                 printf("42sh: alias %s not found\n", str[i]);
                 return 1;
             }
-            printf("alias %s='%s'\n",str[i], cmd);
+            printf("%s='%s'\n",str[i], cmd);
         }
         else
         {
@@ -72,9 +79,10 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
             insert_variable(bundle->hash_table_aliases, name, value);
             free(name);
             free(value);
+            return 0;
         }
     }
-    return 1;
+    return 0;
 }
 
 
