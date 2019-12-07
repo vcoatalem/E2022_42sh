@@ -23,6 +23,11 @@ int ast_handle_until(struct ast *ast, void *bundle_ptr)
     bundle->ast_traversal_context.loop_depth++;
     while (try_execute == AST_ERROR)
     {
+        if (bundle->ast_traversal_context.found_continue)
+        {
+            bundle->ast_traversal_context.found_continue -= 1;
+            continue;
+        }
         try_execute = ast_execute(ast_until_body, bundle);
         return_value = ast_execute(find_op_type(ast_do, OPERATOR_LIST),
                 bundle);
@@ -30,12 +35,12 @@ int ast_handle_until(struct ast *ast, void *bundle_ptr)
         //loop break/continue handlers
         if (bundle->ast_traversal_context.found_break)
         {
-            bundle->ast_traversal_context.found_break = 0;
+            bundle->ast_traversal_context.found_break -= 1;
             break;
         }
         if (bundle->ast_traversal_context.found_continue)
         {
-            bundle->ast_traversal_context.found_continue = 0;
+            bundle->ast_traversal_context.found_continue -= 1;
             continue;
         }
     }

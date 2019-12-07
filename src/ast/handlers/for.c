@@ -24,6 +24,11 @@ int ast_handle_for(struct ast *ast, void *bundle_ptr)
     bundle->ast_traversal_context.loop_depth++;
     for (size_t i = 0; args[i]; i++)
     {
+        if (bundle->ast_traversal_context.found_continue)
+        {
+            bundle->ast_traversal_context.found_continue -= 1;
+            continue;
+        }
         insert_variable(bundle->hash_table_var, element_name, args[i]);
         return_execute = ast_execute(ast_do_list, bundle);
         if (return_execute == AST_SUCCESS)
@@ -31,12 +36,12 @@ int ast_handle_for(struct ast *ast, void *bundle_ptr)
             //loop break/continue handlers
             if (bundle->ast_traversal_context.found_break)
             {
-                bundle->ast_traversal_context.found_break = 0;
+                bundle->ast_traversal_context.found_break -= 1;
                 break;
             }
             if (bundle->ast_traversal_context.found_continue)
             {
-                bundle->ast_traversal_context.found_continue = 0;
+                bundle->ast_traversal_context.found_continue -= 1;
                 continue;
             }
         }

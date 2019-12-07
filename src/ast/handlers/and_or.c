@@ -51,8 +51,6 @@ int ast_handle_and_or(struct ast *ast, void *bundle_ptr)
             && (bundle->ast_traversal_context.found_break
                 || bundle->ast_traversal_context.found_continue))
         {
-            printf("found break\n");
-            //break / continue
             return return_value;
         }
     }

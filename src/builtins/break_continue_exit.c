@@ -6,35 +6,67 @@
 #include "builtins.h"
 #include "../main/42sh.h"
 
+#define EXIT_NON_NUMERIC_ARGUMENT 128
 #define EXIT_WRONG_ARGUMENT 2
 #define EXIT_TOO_MANY_ARGUMENTS 1
+#define EXIT_OK 0
 
 int builtin_break(char **argv, size_t size, void *bundle_ptr)
 {
+    if (size > 2)
+    {
+        warnx("break: too many arguments");
+        return EXIT_TOO_MANY_ARGUMENTS;
+    }
     if (!bundle_ptr || (!argv && size))
         return 1;
     struct execution_bundle *bundle = bundle_ptr;
     if (bundle->ast_traversal_context.loop_depth == 0)
     {
         warnx("break: only meaningful in a `for', `while', or `until' loop");
-        return 0;
+        return EXIT_OK;
     }
-    bundle->ast_traversal_context.found_break = 1;
-    return 0;
+    int val = 1;
+    if (size == 2)
+    {
+        val = atoi(argv[1]);
+        if (val == 0 && strcmp("0", argv[1]))
+        {
+            warnx("break: %s: numeric argument required", argv[1]);
+            return EXIT_NON_NUMERIC_ARGUMENT;
+        }
+    }
+    bundle->ast_traversal_context.found_break += val;
+    return EXIT_OK;
 }
 
 int builtin_continue(char **argv, size_t size, void *bundle_ptr)
 {
+    if (size > 2)
+    {
+        warnx("continue: too many arguments");
+        return EXIT_TOO_MANY_ARGUMENTS;
+    }
     if (!bundle_ptr || (!argv && size))
         return 1;
     struct execution_bundle *bundle = bundle_ptr;
     if (bundle->ast_traversal_context.loop_depth == 0)
     {
         warnx("continue: only meaningful in a `for', `while', or `until' loop");
-        return 0;
+        return EXIT_OK;
     }
-    bundle->ast_traversal_context.found_continue = 1;
-    return 0;
+    int val = 1;
+    if (size == 2)
+    {
+        val = atoi(argv[1]);
+        if (val == 0 && strcmp("0", argv[1]))
+        {
+            warnx("continue: %s: numeric argument required", argv[1]);
+            return EXIT_NON_NUMERIC_ARGUMENT;
+        }
+    }
+    bundle->ast_traversal_context.found_continue += val;
+    return EXIT_OK;
 }
 
 int builtin_exit(char **argv, size_t size, void *bundle_ptr)
