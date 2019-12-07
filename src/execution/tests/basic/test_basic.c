@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     redirection_free(redirect_output_to_stderr);
     redirection_free(redirect_stderr_to_output);
     printf("[LOG] test return value: %d\n", return_value);
-    
+
     free(bundle.shopt);
     free_hash_table_var(bundle.hash_table_var);
     free_hash_table_func(bundle.hash_table_func);

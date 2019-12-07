@@ -12,7 +12,7 @@ int ast_handle_case(struct ast *ast, void *bundle_ptr)
 
     if (ast == NULL)
         return AST_ERROR;
-    
+
     struct ast *val_a = find_op_type(ast, OPERATOR_GET_VALUE);
     struct ast *clause = find_op_type(ast, OPERATOR_CASE);
     while (clause && clause->nb_children > 1)

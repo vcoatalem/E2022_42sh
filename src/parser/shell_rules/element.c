@@ -16,14 +16,14 @@ static void sh_rule_element_subshell(struct rule_array *rules)
 
 // ELEMENT ARITHMETIC -> arithmetic word
 static void sh_rule_element_arithmetic(struct rule_array *rules)
-{ 
+{
     rule_array_add(rules, rule_build(RULE_ELEMENT_ARITHMETIC,
             symbol_create(TOKEN_ARITHMETIC, 0), NULL));
 }
 
 // ELEMENT ARITHMETIC -> arithmetic word
 static void sh_rule_element_tilde(struct rule_array *rules)
-{ 
+{
     rule_array_add(rules, rule_build(RULE_ELEMENT_TILDE,
             symbol_create(TOKEN_WORD_TILDE, 0), NULL));
 }

@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     insert_variable(ht, "var4", "var4");
     insert_variable(ht, "w", "what did you expect");
     insert_variable(ht, "var5", "$var3 is $var1");
-  
+
 
     char *strings[] =
     {

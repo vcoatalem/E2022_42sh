@@ -204,14 +204,14 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
         }
         ast = element_list;
     }
-    if (bundle && bundle->shopt->debug)                 
-    {                                                   
-        printf("[COMMAND BUILDING] built arg list: "); 
-        for (size_t i = 0; arg_list[i]; i++)            
-        {                                               
-            printf(" `%s`,", arg_list[i]);              
-        }                                               
-        printf("\n");                                   
-    }                                                   
+    if (bundle && bundle->shopt->debug)
+    {
+        printf("[COMMAND BUILDING] built arg list: ");
+        for (size_t i = 0; arg_list[i]; i++)
+        {
+            printf(" `%s`,", arg_list[i]);
+        }
+        printf("\n");
+    }
     return arg_list;
 }

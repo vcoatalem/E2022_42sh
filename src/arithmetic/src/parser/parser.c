@@ -143,7 +143,7 @@ static bool parse_sexp(struct arithmetic_lexer *lexer,
         token = arithmetic_lexer_pop(lexer);
 
         struct arithmetic_ast *tmp = arithmetic_ast_alloc();
-        
+
         tmp->type = get_expr_type(token->type);
         if (tmp->type == EXPR_NUMBER)
             res = false;

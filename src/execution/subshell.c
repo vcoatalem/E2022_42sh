@@ -19,7 +19,7 @@ static int is_delim(char c, char *ifs)
 char **split_fields(char *substituted, void *bundle_ptr)
 {
     struct execution_bundle *bundle = bundle_ptr;
-    char *delim = get_variable(bundle->hash_table_var, "IFS"); 
+    char *delim = get_variable(bundle->hash_table_var, "IFS");
     //TODO: check proper behaviour to adopt here
     delim = !delim ? " \t\n" : delim;
     char **fields = NULL;

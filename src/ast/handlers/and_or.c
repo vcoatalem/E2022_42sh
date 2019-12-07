@@ -46,7 +46,7 @@ int ast_handle_and_or(struct ast *ast, void *bundle_ptr)
     }
     if (and_or && return_value == AST_SUCCESS)
     {
-        return_value = ast_handle_and_or(and_or, bundle_ptr); 
+        return_value = ast_handle_and_or(and_or, bundle_ptr);
         if (bundle->ast_traversal_context.loop_depth
             && (bundle->ast_traversal_context.found_break
                 || bundle->ast_traversal_context.found_continue))

@@ -56,7 +56,7 @@ static enum arithmetic_token_type get_type2(char *buffer)
     else if (!strcmp(buffer, "||"))
         return A_TOKEN_OR;
     else if (!strcmp(buffer, "**"))
-        return A_TOKEN_POWER_N; 
+        return A_TOKEN_POWER_N;
     else if (!strcmp(buffer, "!"))
         return A_TOKEN_NOT;
     else if (!strcmp(buffer, "~"))

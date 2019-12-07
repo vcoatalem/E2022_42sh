@@ -30,8 +30,8 @@ int ast_handle_while(struct ast *ast, void *bundle_ptr)
         }
         try_execute = ast_execute(ast_while_body, bundle_ptr);
         return_value = ast_execute(find_op_type(ast_do, OPERATOR_LIST),
-                bundle_ptr); 
-        
+                bundle_ptr);
+
         //loop break/continue handlers
         if (bundle->ast_traversal_context.found_break)
         {

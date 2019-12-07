@@ -27,7 +27,7 @@ static void sh_rule_case_linebreak(struct rule_array *rules)
 
 //case
 static void sh_rule_case(struct rule_array *rules)
-{ 
+{
     struct rule *rule = rule_build(RULE_CASE,
             symbol_create(TOKEN_CASE, 0),
             symbol_create(0, RULE_ELEMENT),

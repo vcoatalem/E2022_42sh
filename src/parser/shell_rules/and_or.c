@@ -27,7 +27,7 @@ static void sh_rule_and_linebreak(struct rule_array *rules)
 }
 
 static void sh_rule_or(struct rule_array *rules)
-{ 
+{
     struct rule *rule = rule_build(RULE_OR,
             symbol_create(0, RULE_PIPELINE),
             symbol_create(0, RULE_OR_CONCAT),

@@ -23,7 +23,7 @@ static void sh_rule_for_linebreak(struct rule_array *rules)
 }
 
 static void sh_rule_for_delim(struct rule_array *rules)
-{ 
+{
     rule_array_add(rules, rule_build(RULE_FOR_DELIM,
             symbol_create(TOKEN_SEMI_COLON, 0),
             NULL));
