@@ -1,8 +1,23 @@
- - name: variable_speciale
-   stdin: ./variable_special.sh 1 2
+ - name: variable_special
+   stdin: "./variable_special.sh 1 2"
 
  - name: variable_substitution
-   stdin: var=toto; echo $var
+   stdin: "var=toto; echo $var"
 
- - name: variable_substitution
-   stdin: var=toto; echo $var; var=tata; echo $var
+ - name: variable_substitution_empty
+   stdin: "var=; echo $var"
+
+ - name: variable_substitution_simple_quotes
+   stdin: "var='a b c'; echo $var"
+
+ - name: variable_substitution_trailing_spaces
+   stdin: "var='foo    '; echo $var"
+
+ - name: variable_substitution_beginning_spaces
+   stdin: "var='    foo'; echo $var"
+
+ - name: variable_substitution_brackets
+   stdin: "var=toto; echo ${var}"
+
+ - name: variable_substitution_override
+   stdin: "var=toto; echo $var; var=tata; echo $var"
