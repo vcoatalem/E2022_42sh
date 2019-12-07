@@ -18,6 +18,8 @@ struct lexer *lexer_init(struct hash_table_var *hash_table_aliases)
 
 void lexer_add_string(struct lexer *lexer, char *str)
 {
+    if (!lexer)
+        return;
     lexer->state = LEXER_STATE_NONE;
     size_t len_str = strlen(str);
     if (!lexer->str)
@@ -39,6 +41,8 @@ void lexer_add_string(struct lexer *lexer, char *str)
 
 void lexer_clear(struct lexer *lexer)
 {
+    if (!lexer)
+        return;
     free(lexer->str);
     lexer->str = NULL;
     lexer->iterator = 0;
@@ -150,13 +154,15 @@ static void state_arithmetic(char *str, size_t *iterator, char *buffer,
 
 struct token_array *lex(struct lexer *lexer)
 {
+    if (!lexer)
+        return NULL;
     char buffer[2048] = { 0 };
     struct token_array *arr = token_array_init();
     size_t index = 0;
     enum token_type type = TOKEN_EOF;
     int is_string = 0;
 
-    while (lexer->str[lexer->iterator] != 0)
+    while (lexer && lexer->str[lexer->iterator] != 0)
     {
         if (lexer->state != LEXER_STATE_LEXING_QUOTES && ((strlen(buffer) >= 3
             && ((buffer[0] == '$' && buffer[1] == '('
