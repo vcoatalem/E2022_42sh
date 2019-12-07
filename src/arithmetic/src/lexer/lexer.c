@@ -195,6 +195,14 @@ struct arithmetic_lexer *arithmetic_lexer_alloc(const char *str,
 
 void arithmetic_lexer_free(struct arithmetic_lexer *lexer)
 {
+    struct arithmetic_token_list *it = lexer->head;
+    while (it)
+    {
+        struct arithmetic_token_list *next_it = it->next;
+        free(it->token);
+        free(it);
+        it = next_it;
+    }
     free(lexer);
 }
 

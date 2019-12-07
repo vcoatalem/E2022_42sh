@@ -12,7 +12,6 @@ static bool token_is_sop(struct arithmetic_token *token)
 static bool token_is_eop(struct arithmetic_token *token)
 {
     return token->type == A_TOKEN_PLUS || token->type == A_TOKEN_MINUS
-        || token->type == A_TOKEN_NOT
         || token->type == A_TOKEN_BITWISE_AND
         || token->type == A_TOKEN_BITWISE_OR
         || token->type == A_TOKEN_BITWISE_XOR
@@ -114,6 +113,16 @@ static bool parse_texp(struct arithmetic_lexer *lexer,
         else
             res = false;
     }
+    else if (token->type == A_TOKEN_NOT)
+    {
+        arithmetic_token_free(token);
+        token = arithmetic_lexer_pop(lexer);
+
+        if (token && token->type == A_TOKEN_NUMBER)
+            *ast = arithmetic_ast_alloc_number(token->value ? 0 : 1);
+        else
+            res = false;
+    }
     else
         res = false;
 
@@ -184,12 +193,8 @@ bool parse_expression(struct arithmetic_lexer *lexer,
     if (!parse_exp(lexer, ast))
         return false;
 
-    token = arithmetic_lexer_pop(lexer);
+    token = arithmetic_lexer_peek(lexer);
     bool return_value = token && token->type == A_TOKEN_EOF ? 0 : 1;
-    if (token)
-    {
-        arithmetic_token_free(token);
-    }
     if (return_value != 0)
     {
         warnx("arithmetic: error near token %s", a_token_str(token->type));
