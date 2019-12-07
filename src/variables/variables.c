@@ -23,7 +23,7 @@ char *getword(char *word, struct hash_table_var *ht)
             result[i] = word[i + 2];
         }
     }
-    if (word[1] != '{' && word[strlen(word) - 1] != '}')
+    else if (word[1] != '{' && word[strlen(word) - 1] != '}')
     {
         for (size_t i = 0; i < strlen(word) - 1; ++i)
         {
