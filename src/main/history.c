@@ -6,7 +6,7 @@ void init_history(struct execution_bundle *bundle)
     char *historyfile = get_variable(bundle->hash_table_var, "HISTFILE");
     FILE *fd = fopen(historyfile, "r");
     if (!fd)
-        fd = fopen(historyfile, "w");
+        fd = fopen(historyfile, "r+");
     if (!fd)
     {
         return;
@@ -19,6 +19,7 @@ void init_history(struct execution_bundle *bundle)
         add_history(line);
     }
     free(line);
+    fclose(fd);
 }
 
 
