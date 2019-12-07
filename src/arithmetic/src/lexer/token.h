@@ -58,4 +58,6 @@ struct arithmetic_token *arithmetic_token_alloc(void);
 */
 void arithmetic_token_free(struct arithmetic_token *token);
 
+char *a_token_str(enum arithmetic_token_type type);
+
 #endif /* ! ARITHMETIC_TOKEN_H */

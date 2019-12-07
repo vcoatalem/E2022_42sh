@@ -65,13 +65,17 @@ static void arg_list_get_arithmetic_value(char ***arg_list, size_t *index,
     *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
     //TODO: implement arithmetic expression substitution
     char buffer[64] = { 0 };
-    int value = arithmetic_expression_compute(ast->forest[0]->value,
+    int error = 0;
+    int value = arithmetic_expression_compute(ast->forest[0]->value, &error,
             bundle_ptr);
+    if (error != 0)
+    {
+        return;
+    }
     sprintf(buffer, "%d", value);
     (*arg_list)[*index] = strdup(buffer);
     (*arg_list)[*index + 1] = NULL;
     *index = *index + 1;
-    //TODO: test this
 }
 
 //utility function: split str in space-separated (IFS?) words

@@ -30,3 +30,42 @@ void arithmetic_token_free(struct arithmetic_token *token)
 {
     free(token);
 }
+
+char *a_token_str(enum arithmetic_token_type type)
+{
+    switch (type)
+    {
+    case A_TOKEN_PLUS:
+        return "+";
+    case A_TOKEN_MINUS:
+        return "-";
+    case A_TOKEN_MULTIPLY:
+        return "*";
+    case A_TOKEN_DIVIDE:
+        return "/";
+    case A_TOKEN_LEFT_PARENTHESIS:
+        return "(";
+    case A_TOKEN_RIGHT_PARENTHESIS:
+        return ")";
+    case A_TOKEN_BITWISE_AND:
+        return "&";
+    case A_TOKEN_BITWISE_OR:
+        return "|";
+    case A_TOKEN_BITWISE_XOR:
+        return "^";
+    case A_TOKEN_AND:
+        return "&&";
+    case A_TOKEN_OR:
+        return "||";
+    case A_TOKEN_POWER_N:
+        return "**";
+    case A_TOKEN_NOT:
+        return "!";
+    case A_TOKEN_INVERT:
+        return "~";
+    case A_TOKEN_EOF:
+        return "EOF";
+    default:
+        return "number";
+    }
+}

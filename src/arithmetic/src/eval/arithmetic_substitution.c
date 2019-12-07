@@ -1,6 +1,7 @@
 #include "ast/ast.h"
 #include "lexer/lexer.h"
 #include "parser/parser.h"
+#include "../../main/42sh.h"
 
 #include <err.h>
 #include <stdio.h>
@@ -52,68 +53,69 @@ void print_ast(struct arithmetic_ast *ast)
     printf(")");
 }
 
-int compute_ast(struct arithmetic_ast *ast)
+static int compute_ast(struct arithmetic_ast *ast, int *error)
 {
     if (!ast)
         return 0;
     if (ast->type == EXPR_ADDITION)
     {
-        return compute_ast(ast->data.children.left)
-                + compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                + compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_SUBTRACTION)
     {
-        return compute_ast(ast->data.children.left)
-                - compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                - compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_MULTIPLICATION)
     {
-        return compute_ast(ast->data.children.left)
-                * compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                * compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_DIVISION)
     {
-        int right = compute_ast(ast->data.children.right);
+        int right = compute_ast(ast->data.children.right, error);
         if (right == 0)
         {
+            *error = 1;
             warnx("arithmetic expression: division by 0");
             return 0;
         }
-        return compute_ast(ast->data.children.left)
+        return compute_ast(ast->data.children.left, error)
                 / right;
     }
     else if (ast->type == EXPR_NOT)
     {
-        return compute_ast(ast->data.children.left) == 0 ? 1 : 0;
+        return compute_ast(ast->data.children.left, error) == 0 ? 1 : 0;
     }
     else if (ast->type == EXPR_INVERT)
     {
-        return -(compute_ast(ast->data.children.left) + 1);
+        return -(compute_ast(ast->data.children.left, error) + 1);
     }
     else if (ast->type == EXPR_BITWISE_AND)
     {
-        return compute_ast(ast->data.children.left)
-                & compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                & compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_BITWISE_OR)
     {
-        return compute_ast(ast->data.children.left)
-                | compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                | compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_BITWISE_XOR)
     {
-        return compute_ast(ast->data.children.left)
-                ^ compute_ast(ast->data.children.right);
+        return compute_ast(ast->data.children.left, error)
+                ^ compute_ast(ast->data.children.right, error);
     }
     else if (ast->type == EXPR_AND)
     {
-        return (compute_ast(ast->data.children.left) != 0
-            && compute_ast(ast->data.children.right) != 0) ? 1 : 0;
+        return (compute_ast(ast->data.children.left, error) != 0
+            && compute_ast(ast->data.children.right, error) != 0) ? 1 : 0;
     }
     else if (ast->type == EXPR_OR)
     {
-        return (compute_ast(ast->data.children.left) != 0
-            || compute_ast(ast->data.children.right) != 0) ? 1 : 0;
+        return (compute_ast(ast->data.children.left, error) != 0
+            || compute_ast(ast->data.children.right, error) != 0) ? 1 : 0;
     }
     else if (ast->type == EXPR_POWER_N)
     {
@@ -122,16 +124,29 @@ int compute_ast(struct arithmetic_ast *ast)
     return ast->data.value;
 }
 
-int arithmetic_expression_compute(char *str, void *bundle_ptr)
+int arithmetic_expression_compute(char *str, int *error, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     struct arithmetic_lexer *lexer = arithmetic_lexer_alloc(str, bundle_ptr);
-    //arithmetic_lexer_print(lexer);
+    if (bundle->shopt->debug)
+    {
+        printf("[ARITHMETIC] lexed: ");
+        arithmetic_lexer_print(lexer);
+    }
     struct arithmetic_ast *ast = NULL;
-    parse_expression(lexer, &ast);
-    //print_ast(ast);
-    //printf("\n");
+    int try_parse = parse_expression(lexer, &ast);
+    if (try_parse != 0)
+    {
+        *error = try_parse;
+    }
+    if (bundle->shopt->debug)
+    {
+        printf("[ARITHMETIC] ast:");
+        print_ast(ast);
+        printf("\n");
+    }
     arithmetic_lexer_free(lexer);
-    int return_value =  ast ? compute_ast(ast) : 0;
+    int return_value =  ast ? compute_ast(ast, error) : 0;
     arithmetic_ast_free(ast);
     return return_value;
 }
