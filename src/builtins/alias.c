@@ -26,11 +26,12 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
     if (!bundle_ptr || !str)
         return 1;
     struct execution_bundle *bundle = bundle_ptr;
-    if (size == 1)
+    if (size == 1 || (size == 2 && !strcmp(str[1], "-p")))
     {
         print_alias_hash_table_var(bundle->hash_table_aliases);
         return 0;
     }
+    if (size >= 2 )
     for (size_t i = 1; i < size; ++i)
     {
         int contain_equal = 0;
@@ -45,8 +46,13 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
         if (!contain_equal)
         {
             char *cmd = get_variable(bundle->hash_table_aliases, str[i]);
-            if (!cmd)
+            if (!cmd || !strcmp(cmd, ""))
             {
+                if(str[i][0] == '-')
+                {
+                    printf("Wrong syntax of alias\n");
+                    return 2;
+                }
                 printf("42sh: alias %s not found\n", str[i]);
                 return 1;
             }
