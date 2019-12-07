@@ -57,7 +57,6 @@ int builtin_alias(char **str, size_t size, void *bundle_ptr)
                 return 1;
             }
             printf("alias %s='%s'\n",str[i], cmd);
-            free(cmd);
         }
         else
         {
@@ -88,6 +87,11 @@ int builtin_unalias(char **str, size_t size, void *bundle_ptr)
     {
         return 2;
     }
+    if (size == 2 && str[1][0] == '-')
+    {
+        printf("Wrong syntax of unalias\n");
+        return 2;
+    }
     if (size == 2 && strcmp(str[1], "-a") == 0)
     {
         free_hash_table_var(bundle->hash_table_aliases);
@@ -96,11 +100,17 @@ int builtin_unalias(char **str, size_t size, void *bundle_ptr)
     }
     if (size >= 2)
     {
+        int returnval = 0;
         for (size_t i = 1; i < size; ++i)
         {
+            if (!strcmp("",get_variable(bundle->hash_table_aliases, str[i])))
+            {
+                printf("Unalias %s not found\n", str[i]);
+                returnval = 1;
+            }
             insert_variable(bundle->hash_table_aliases, str[i], "");
         }
-        return 0;
+        return returnval;
     }
     return 2;
 
