@@ -156,6 +156,9 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
         return 1;
 
     struct flags *f = flags_init();
+    if (size == 1)
+        printf("\n");
+
     if (size >= 2)
     {
         size_t i = 0;
