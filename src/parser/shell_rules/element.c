@@ -21,6 +21,13 @@ static void sh_rule_element_arithmetic(struct rule_array *rules)
             symbol_create(TOKEN_ARITHMETIC, 0), NULL));
 }
 
+// ELEMENT ARITHMETIC -> arithmetic word
+static void sh_rule_element_tilde(struct rule_array *rules)
+{ 
+    rule_array_add(rules, rule_build(RULE_ELEMENT_TILDE,
+            symbol_create(TOKEN_WORD_TILDE, 0), NULL));
+}
+
 // ELEMENT NO SUBSTITUTE -> single_quoted word
 static void sh_rule_element_no_substitution(struct rule_array *rules)
 {
@@ -41,6 +48,8 @@ static void sh_rule_element(struct rule_array *rules)
             symbol_create(0, RULE_ELEMENT_ARITHMETIC), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT,
             symbol_create(0, RULE_ELEMENT_NO_SUBSTITUTION), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT,
+            symbol_create(0, RULE_ELEMENT_TILDE), NULL));
 }
 
 // ELEMENT_LIST -> ELEMENT ELEMENT_LIST
@@ -82,6 +91,8 @@ static void sh_rule_element_any(struct rule_array *rules)
             symbol_create(0, RULE_ELEMENT_EXPAND), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(0, RULE_ELEMENT_NO_SUBSTITUTION), NULL));
+    rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
+            symbol_create(0, RULE_ELEMENT_TILDE), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
             symbol_create(TOKEN_WORD, 0), NULL));
     rule_array_add(rules, rule_build(RULE_ELEMENT_ANY,
@@ -133,6 +144,7 @@ void sh_rule_element_groups(struct rule_array *rules)
     sh_rule_element_expand(rules);
     sh_rule_element_subshell(rules);
     sh_rule_element_arithmetic(rules);
+    sh_rule_element_tilde(rules);
     sh_rule_element_list(rules);
     sh_rule_arg_list(rules);
     sh_rule_element_any(rules);

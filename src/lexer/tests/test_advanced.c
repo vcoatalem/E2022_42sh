@@ -61,10 +61,13 @@ int main(int argc, char **argv)
         "$?",                                       //24
         "\"$?\"",                                   //25
         "\'$?\'",                                   //26
-        "`backquoted subshell`;"                    //27
+        "`backquoted subshell`;",                   //27
+        "for i in ~/",                              //28
+        "~",                                        //29
+        "\"~\""                                     //30
 
     };
-    if (q > 27)
+    if (q > 30)
         return 1;
     struct token_array *exp = token_array_init();
     fprintf(stdout, "%s\n", *(cmds + q));
@@ -200,6 +203,21 @@ int main(int argc, char **argv)
     {
         token_array_add(exp, token_init(TOKEN_SUBSHELL, "backquoted subshell"));
         token_array_add(exp, token_init(TOKEN_SEMI_COLON, ";"));
+    }
+    else if (q == 28)
+    {
+        token_array_add(exp, token_init(TOKEN_FOR, "for"));
+        token_array_add(exp, token_init(TOKEN_WORD, "i"));
+        token_array_add(exp, token_init(TOKEN_IN, "in"));
+        token_array_add(exp, token_init(TOKEN_WORD_TILDE, "~/"));
+    }
+    else if (q == 29)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD_TILDE, "~"));
+    }
+    else if (q == 30)
+    {
+        token_array_add(exp, token_init(TOKEN_WORD, "~"));
     }
     token_array_add(exp, token_init(TOKEN_EOF, ""));
     struct lexer *lexer = lexer_init();

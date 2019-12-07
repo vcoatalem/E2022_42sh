@@ -8,15 +8,21 @@
 #include "../main/42sh.h"
 
 
-int errordir(char *dir)
+static int errordir(char *dir)
 {
-    printf("42sh: cd: %s: no such file or directory\n", dir);
+    warnx("cd: %s: no such file or directory", dir);
     return 1;
 }
 
-int errortoomuch(void)
+static int errortoomuch(void)
 {
-    printf("42sh: cd: too much args\n");
+    warnx("cd: too much args");
+    return 1;
+}
+
+static int erroroldnotset(void)
+{
+    warnx("cd: OLDPWD not set");
     return 1;
 }
 
@@ -42,8 +48,13 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
         int res;
         if (strcmp(str[1], "-") == 0)
         {
-            printf("%s\n", get_variable(bundle->hash_table_var, "OLDPWD"));
-            res = chdir(get_variable(bundle->hash_table_var, "OLDPWD"));
+            char *old = get_variable(bundle->hash_table_var, "OLDPWD");
+            if (strcmp(old, ""))
+            {
+                return erroroldnotset();
+            }
+            printf("%s\n", old);
+            res = chdir(old);
         }
         else
         {
@@ -54,15 +65,6 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
         }
         if (res == -1)
             return errordir(str[1]);
-        /*printf("lastel=%c\n", str[1][strlen(str[1]) - 1]);
-        if (str[1][strlen(str[1]) - 1] == '/')
-            str[1][strlen(str[1]) - 1] = 0;
-        char *newps1 = calloc(1, 2048);
-        strcat(newps1, "42sh:");
-        strcat(newps1, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        strcat(newps1, "$");
-        printf("ps1 = %s\n", newps1);
-        insert_variable(bundle->hash_table_var, "ps1", newps1);*/
         return 0;
     }
     return errortoomuch();

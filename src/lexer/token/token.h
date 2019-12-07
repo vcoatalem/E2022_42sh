@@ -33,11 +33,11 @@ enum token_type
 {
     TOKEN_WORD,
     TOKEN_ASSIGNMENT,
-    TOKEN_FUNCDEC, //TODO: lex this ( foo(), bar(), ...)
+    TOKEN_FUNCDEC,
     TOKEN_SUBSHELL,
     TOKEN_ARITHMETIC,
     TOKEN_WORD_EXPAND,
-    TOKEN_WORD_TILDE, //TODO: lex this ( ~, ~-, ~/ ...)
+    TOKEN_WORD_TILDE,
     TOKEN_WORD_NO_SUBSTITUTION,
     TOKEN_EOF,
     TOKEN_EOL,

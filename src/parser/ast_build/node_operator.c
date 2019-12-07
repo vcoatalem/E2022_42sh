@@ -2,7 +2,6 @@
 
 static enum operator_type rule_id_to_operator3(enum rule_id id)
 {
-
     if (id == RULE_FUNCDEC)
         return OPERATOR_FUNC_DECLARATION;
     if (id == RULE_VARDEC)
@@ -51,6 +50,8 @@ static enum operator_type rule_id_to_operator2(enum rule_id id)
         return OPERATOR_GET_SUBSHELL_VALUE;
     if (id == RULE_ELEMENT_ARITHMETIC)
         return OPERATOR_GET_ARITHMETIC_VALUE;
+    if (id == RULE_ELEMENT_TILDE)
+        return OPERATOR_GET_TILDE_VALUE;
     if (id == RULE_ELEMENT_NO_SUBSTITUTION)
         return OPERATOR_GET_NO_SUBSTITUTION_VALUE;
     if (id == RULE_REDIR_SYMBOL)

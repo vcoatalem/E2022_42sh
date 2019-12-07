@@ -95,6 +95,16 @@ static char **str_split_spaces(char *str, size_t *n_words)
     return argv;
 }
 
+static void arg_list_get_tilde(char ***arg_list, size_t *index,
+        struct ast *ast, void *bundle_ptr)
+{
+    *arg_list = realloc(*arg_list, (*index + 2) * sizeof(char *));
+    (*arg_list)[*index] = tilde_substitute(ast->forest[0]->value,
+            bundle_ptr);
+    (*arg_list)[*index + 1] = NULL;
+    *index = *index + 1;
+}
+
 //substitution function for tokens of type TOKEN_WORD_NO_SUBSTITUTION
 //(just adds the value)
 static void arg_list_get_arg(char ***arg_list, size_t *index, struct ast *ast)
@@ -105,6 +115,7 @@ static void arg_list_get_arg(char ***arg_list, size_t *index, struct ast *ast)
     *index = *index + 1;
 }
 
+//substitution function for all other words (substitution apply)
 static void arg_list_get_substituted_arg(char ***arg_list, size_t *index,
         struct ast *ast, void *bundle_ptr)
 {
@@ -159,6 +170,8 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
                 OPERATOR_GET_ARITHMETIC_VALUE);
         struct ast *no_substitution_value = find_op_type(value,
                 OPERATOR_GET_NO_SUBSTITUTION_VALUE);
+        struct ast *tilde_value = find_op_type(value,
+                OPERATOR_GET_TILDE_VALUE);
         if (expand_value)
         {
             arg_list_get_expand_arg(&arg_list, &index, expand_value,
@@ -176,6 +189,10 @@ char **ast_arg_list_build(struct ast *ast, void *bundle_ptr)
         else if (no_substitution_value)
         {
             arg_list_get_arg(&arg_list, &index, no_substitution_value);
+        }
+        else if (tilde_value)
+        {
+            arg_list_get_tilde(&arg_list, &index, tilde_value, bundle_ptr);
         }
         else
         {

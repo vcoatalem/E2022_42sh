@@ -43,6 +43,8 @@ static char *operator_to_string(enum operator_type type)
         return "value_subshell";
     case (OPERATOR_GET_ARITHMETIC_VALUE):
         return "value_arithmetic";
+    case (OPERATOR_GET_TILDE_VALUE):
+        return "value_tilde";
     case (OPERATOR_GET_NO_SUBSTITUTION_VALUE):
         return "value_no_substitution";
     case (OPERATOR_FUNC_DECLARATION):
