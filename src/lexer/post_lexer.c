@@ -16,7 +16,7 @@ static void create_funcdec_tokens(struct token_array *array)
     for (size_t i = 0; i < array->size; i++)
     {
         struct token *t = get_token(array, i);
-        if (t->type == TOKEN_WORD)
+        if (t && t->type == TOKEN_WORD)
         {
             struct token *left_parenthesis = get_token(array, i + 1);
             struct token *right_parenthesis = get_token(array, i + 2);
