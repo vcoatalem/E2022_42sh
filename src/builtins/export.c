@@ -64,7 +64,5 @@ int builtin_export(char **argv, size_t size, void *bundle_ptr)
             setenv(var_buffer, val_buffer, 1);
         }
     }
-
     return 0;
-
 }

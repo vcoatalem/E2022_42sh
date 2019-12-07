@@ -170,7 +170,8 @@ struct token_array *lex(struct lexer *lexer)
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
-        else if (lexer->state != LEXER_STATE_LEXING_QUOTES && strlen(buffer) >= 3
+        else if (lexer->state != LEXER_STATE_LEXING_QUOTES
+            && strlen(buffer) >= 3
             && buffer[0] == '$' && buffer[1] == '(' && buffer[2] == '(')
         {
             state_arithmetic(lexer->str, &lexer->iterator, buffer, &index, arr);
@@ -219,9 +220,11 @@ struct token_array *lex(struct lexer *lexer)
         if (type != TOKEN_WORD && is_string == 1)
             token_array_add(arr, token_init(TOKEN_WORD, buffer));
         else if (type != TOKEN_WORD && is_string == 2)
-            token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
+            token_array_add(arr,
+                    token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
         else if (type == TOKEN_WORD)
-            check_assignment(buffer, arr, is_string, lexer->hash_table_aliases);
+            check_assignment(buffer, arr, is_string,
+                    lexer->hash_table_aliases);
         else
             token_array_add(arr, token_init(type, buffer));
     }

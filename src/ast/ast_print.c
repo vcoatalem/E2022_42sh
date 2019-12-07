@@ -3,6 +3,41 @@
 #include <err.h>
 #include <errno.h>
 
+static char *operator_to_string2(enum operator_type type)
+{
+    switch (type)
+    {
+    case (OPERATOR_GET_VALUE):
+        return "value";
+    case (OPERATOR_GET_EXPAND_VALUE):
+        return "value_expand";
+    case (OPERATOR_GET_SUBSHELL_VALUE):
+        return "value_subshell";
+    case (OPERATOR_GET_ARITHMETIC_VALUE):
+        return "value_arithmetic";
+    case (OPERATOR_GET_TILDE_VALUE):
+        return "value_tilde";
+    case (OPERATOR_GET_NO_SUBSTITUTION_VALUE):
+        return "value_no_substitution";
+    case (OPERATOR_FUNC_DECLARATION):
+        return "function_declaration";
+    case (OPERATOR_GET_IONUMBER):
+        return "ionumber";
+    case (OPERATOR_GET_REDIR_SYMBOL):
+        return "redir_symbol";
+    case (OPERATOR_GET_REDIR_TO):
+        return "redir_to";
+    case (OPERATOR_VAR_DECLARATION):
+        return "var_declaration";
+    case (OPERATOR_DO):
+        return "do";
+    case (OPERATOR_CASE):
+        return "case";
+    default:
+        return "unknown";
+    }
+}
+
 static char *operator_to_string(enum operator_type type)
 {
     switch (type)
@@ -35,36 +70,8 @@ static char *operator_to_string(enum operator_type type)
         return "redir";
     case (OPERATOR_REDIR_LIST):
         return "redir_list";
-    case (OPERATOR_GET_VALUE):
-        return "value";
-    case (OPERATOR_GET_EXPAND_VALUE):
-        return "value_expand";
-    case (OPERATOR_GET_SUBSHELL_VALUE):
-        return "value_subshell";
-    case (OPERATOR_GET_ARITHMETIC_VALUE):
-        return "value_arithmetic";
-    case (OPERATOR_GET_TILDE_VALUE):
-        return "value_tilde";
-    case (OPERATOR_GET_NO_SUBSTITUTION_VALUE):
-        return "value_no_substitution";
-    case (OPERATOR_FUNC_DECLARATION):
-        return "function_declaration";
-    case (OPERATOR_GET_IONUMBER):
-        return "ionumber";
-    case (OPERATOR_GET_REDIR_SYMBOL):
-        return "redir_symbol";
-    case (OPERATOR_GET_REDIR_TO):
-        return "redir_to";
-    case (OPERATOR_VAR_DECLARATION):
-        return "var_declaration";
-    case (OPERATOR_DO):
-        return "do";
-    case (OPERATOR_CASE):
-        return "case";
-    // TODO: Add more operator types
-
     default:
-        return "NULL";
+        return operator_to_string2(type);
     }
 }
 

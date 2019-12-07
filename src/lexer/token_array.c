@@ -164,7 +164,8 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string,
     {
 
         if (is_string == 2)
-            token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
+            token_array_add(arr,
+                    token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
         else
         {
             struct token *tok = NULL;
@@ -186,7 +187,8 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string,
                     for (size_t i = 0; i < tok_array2->size - 1; ++i)
                     {
 
-                        struct token *token = token_init(tok_array2->tok_array[i]->type,
+                        struct token *token = token_init(
+                            tok_array2->tok_array[i]->type,
                             (tok_array2->tok_array[i]->value));
                         token_array_add(arr, token);
                     }

@@ -1,8 +1,8 @@
 #include "lexer.h"
 
 //Function which verify if buffer has the same type of argument type
-int token_compare(char *str, size_t iterator, char *buffer, enum
-        token_type type)
+int token_compare(char *str, size_t iterator, char *buffer,
+        enum token_type type)
 {
     if (str && iterator && 0)
         return 0;
@@ -11,8 +11,8 @@ int token_compare(char *str, size_t iterator, char *buffer, enum
 }
 
 //Function for token which can be doubled (& | ; < >)
-int token_single_char(char *str, size_t iterator, char *buffer, enum
-        token_type type)
+int token_single_char(char *str, size_t iterator, char *buffer,
+        enum token_type type)
 {
     if ((buffer[0] == '&' || buffer[0] == '|'
         || buffer[0] == ';' || buffer[0] == '<' || buffer[0] == '>')
@@ -29,8 +29,8 @@ int token_single_char(char *str, size_t iterator, char *buffer, enum
 }
 
 //Function for token which is doubled (&& || ;; << >>)
-int token_double_char(char *str, size_t iterator, char *buffer, enum
-        token_type type)
+int token_double_char(char *str, size_t iterator, char *buffer,
+        enum token_type type)
 {
     if ((buffer[0] == '&' || buffer[0] == '|'
         || buffer[0] == ';' || buffer[0] == '<' || buffer[0] == '>')
@@ -46,8 +46,8 @@ int token_double_char(char *str, size_t iterator, char *buffer, enum
 }
 
 //Function for token alone ('(' ')' '{' '}' ! '\n')
-int token_one_char(char *str, size_t iterator, char *buffer, enum
-        token_type type)
+int token_one_char(char *str, size_t iterator, char *buffer,
+        enum token_type type)
 {
     if ((buffer[0] == '{' || buffer[0] == '}'
         || buffer[0] == '(' || buffer[0] == ')' || buffer[0] == '!'
@@ -61,8 +61,8 @@ int token_one_char(char *str, size_t iterator, char *buffer, enum
 }
 
 //Function for token ("<<-" "<&" "<>" ">|" ">&" )
-int token_diff_char(char *str, size_t iterator, char *buffer, enum
-        token_type type)
+int token_diff_char(char *str, size_t iterator, char *buffer,
+        enum token_type type)
 {
     if ((buffer[0] == '<' && buffer[1] == '<' && buffer[2] == '-')
             || (buffer[0] == '<' && buffer[1] == '&')
@@ -78,15 +78,21 @@ int token_diff_char(char *str, size_t iterator, char *buffer, enum
 int token_terminal_char(char *str, size_t iterator, char *buffer,
         enum token_type type)
 {
-    if ((buffer[0] == '0' && (str[iterator] == '>' || str[iterator] == '<'))
-        || (buffer[0] == '1' && (str[iterator] == '>' || str[iterator] == '<'))
-        || (buffer[0] == '2' && (str[iterator] == '>' || str[iterator] == '<')))
+    if ((buffer[0] == '0' && (str[iterator] == '>'
+        || str[iterator] == '<'))
+        || (buffer[0] == '1' && (str[iterator] == '>'
+        || str[iterator] == '<'))
+        || (buffer[0] == '2' && (str[iterator] == '>'
+        || str[iterator] == '<')))
     {
         return token_compare(str, iterator, buffer, type);
     }
-    else if (iterator >= 2 && ((buffer[0] == '0' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))
-        || (buffer[0] == '1' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))
-        || (buffer[0] == '2' && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))))
+    else if (iterator >= 2 && ((buffer[0] == '0'
+        && (str[iterator - 2] == '>' || str[iterator - 2] == '<'))
+        || (buffer[0] == '1' && (str[iterator - 2] == '>'
+        || str[iterator - 2] == '<'))
+        || (buffer[0] == '2' && (str[iterator - 2] == '>'
+        || str[iterator - 2] == '<'))))
     {
         return token_compare(str, iterator, buffer, type);
     }

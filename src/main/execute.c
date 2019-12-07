@@ -16,10 +16,6 @@ static int run_lex_parse(struct execution_bundle *bundle)
     bundle->parser = parser_init(bundle->token_array, bundle->parser_table);
     //call main parsing function here
     parse(bundle->parser, bundle);
-    if (bundle->shopt && bundle->shopt->debug)
-    {
-        printf("[PARSER] parser state: %d\n", bundle->parser->state);
-    }
     if (bundle->ast)
         ast_free(bundle->ast);
     bundle->ast = bundle->parser->ast;
@@ -93,7 +89,6 @@ int execute_interactive(struct execution_bundle *bundle)
         if (!input)
             break;
         appendhistory(input, bundle);
-        // run lexer + parser
         lexer_add_string(bundle->lexer, input);
         struct token_array *try_lex = lex(bundle->lexer);
         while (bundle->lexer->state == LEXER_STATE_LEXING_QUOTES
@@ -110,7 +105,6 @@ int execute_interactive(struct execution_bundle *bundle)
         }
         token_array_free(try_lex);
         run_lex_parse(bundle);
-        //set prompt for next iteration
         if (bundle->parser->state == PARSER_STATE_CONTINUE)
             prompt = ps2;
         else
@@ -124,8 +118,6 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
-    //TODO: load lexer with cmd, run lexing + parsing
-    //and return regardless of lexing state
     bundle->lexer = lexer_init(bundle->hash_table_aliases);
     lexer_add_string(bundle->lexer, cmd);
     int try_execute = run_lex_parse(bundle);

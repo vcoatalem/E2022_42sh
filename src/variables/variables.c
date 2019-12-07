@@ -47,7 +47,6 @@ char *getword(char *word, struct hash_table_var *ht)
     }
     free(result);
     return value;
-
 }
 
 char *recvar_substitute(char* text, struct hash_table_var *ht,
@@ -74,7 +73,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
     free(word);
     char *result = calloc(1, (strlen(text) + strlen(value) + 4));
     strcpy(result, text);
-    //printf("result1=%s\n",result );
     if (strcmp(value, "") == 0)
     {
         for (size_t i = iword; i < strlen(result); ++i)
@@ -97,7 +95,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
             result[i] = result[i + dec];
         }
     }
-    //printf("result2=%s\n",result );
     if (lenword >= 1)
     {
         for (size_t j = 0; j < strlen(value); ++j)
@@ -105,9 +102,6 @@ char *recvar_substitute(char* text, struct hash_table_var *ht,
             result[iword] = value[j];
             iword++;
         }
-
-        //if (lenword >= iword)
-        //    result[iword] = 0;
     }
     if (strcmp(text, "") == 0 || i >= strlen(text) - 1)
     {

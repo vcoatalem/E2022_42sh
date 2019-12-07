@@ -76,9 +76,6 @@ struct symbol_array *rule_first(enum rule_id rule_id, struct rule_array *rules)
     return res;
 }
 
-// search symbols representing the rule `rule_id` in expression of the
-// rule `rule`. res, rules and path_list from rule_next()
-// TODO: reduce the amount of arguments on this one
 static void rule_next_find_handle_occurence(enum rule_id rule_id,
         struct rule *rule, struct symbol_array *res,
         struct rule_array *rules, int **path_list)
@@ -86,29 +83,21 @@ static void rule_next_find_handle_occurence(enum rule_id rule_id,
     struct symbol_array *expression = rule->symbols;
     for (size_t j = 0; j < expression->size; j++)
     {
-        //for each symbol in rule..
         struct symbol *symbol = expression->array[j];
         if (symbol->type == SYMBOL_RULE && symbol->rule_id == rule_id)
         {
-            // when we find a symbol that represents the rule
-            // we called rule_next with ...
             struct symbol *next_symbol = get_next_symbol(expression, j);
             if (!next_symbol)
             {
                 if (!(*path_list)[rule->rule_id])
                 {
-                    //if there is no next symbol, add rule_next of the rule
-                    //we are currently running through.
                     struct symbol_array *next = rule_next(rule->rule_id, rules,
                             path_list);
                     if (!next)
                     {
-                        //meaning we already processed or are processing
-                        //next(rule->rule_id, ...)
                     }
                     else if (next->size == 0)
                     {
-                        //if rule does not have any next, add $ to the list
                         symbol_array_free(next);
                         symbol_array_add_if_not_in(res, NULL);
                     }
@@ -120,12 +109,10 @@ static void rule_next_find_handle_occurence(enum rule_id rule_id,
             }
             else if (next_symbol->type == SYMBOL_TOKEN)
             {
-                //if next symbol is a token, add it
                 symbol_array_add_if_not_in(res, symbol_dup(next_symbol));
             }
             else if (next_symbol->type == SYMBOL_RULE)
             {
-                //if next symbol is a rule, add rule_first()
                 symbol_array_merge(res, rule_first(rule->rule_id, rules));
             }
         }

@@ -41,7 +41,7 @@ token_handler token_to_handler4(enum token_type type)
     case (TOKEN_DOUBLE_GREAT):
         return token_double_char;
     case (TOKEN_DOUBLE_LESS_DASH):
-        return token_diff_char;//TODO NOT SURE
+        return token_diff_char;
     case (TOKEN_LESS_AMPERSAND):
         return token_diff_char;
     case (TOKEN_GREAT_AMPERSAND):
@@ -83,8 +83,6 @@ token_handler token_to_handler3(enum token_type type)
         return token_to_handler4(type);
     }
 }
-
-
 
 token_handler token_to_handler2(enum token_type type)
 {
