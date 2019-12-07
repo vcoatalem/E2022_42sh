@@ -184,10 +184,14 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string,
                     struct token_array *tok_array2 = lex(lexer2);
                     for (size_t i = 0; i < tok_array2->size - 1; ++i)
                     {
-                        token_array_add(arr, tok_array2->tok_array[i]);
+
+                        struct token *token = token_init(tok_array2->tok_array[i]->type,
+                            (tok_array2->tok_array[i]->value));
+                        token_array_add(arr, token);
                     }
-                    free(tok_array2);
+                    token_array_free(tok_array2);
                     lexer_free(lexer2);
+                    token_free(tok);
                 }
                 else
                     token_array_add(arr, tok);
