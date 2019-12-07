@@ -66,16 +66,29 @@ int execute_stdin(struct execution_bundle *bundle)
     return return_value;
 }
 
+static void set_ps1_ps2(char *ps1, char *ps2, struct execution_bundle *bundle)
+{
+    char *ps1_val = get_variable(bundle->hash_table_var, "PS1");
+    char *ps2_val = get_variable(bundle->hash_table_var, "PS2");
+    char *ps1_enhanced = replace_prompt(ps1_val);
+    char *ps2_enhanced = replace_prompt(ps2_val);
+    strcpy(ps1, ps1_enhanced);
+    strcpy(ps2, ps2_enhanced);
+    free(ps1_enhanced);
+    free(ps2_enhanced);
+}
+
 int execute_interactive(struct execution_bundle *bundle)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
     bundle->lexer = lexer_init();
-    char *ps1 = get_variable(bundle->hash_table_var, "PS1");
-    char *ps2 = get_variable(bundle->hash_table_var, "PS2");
+    char ps1[4096] = { 0 };
+    char ps2[4096] = { 0 };
     char *prompt = ps1;
     while (1)
     {
+        set_ps1_ps2(ps1, ps2, bundle);
         char *input = get_next_line(prompt);
         if (!input)
             break;
@@ -164,8 +177,7 @@ int execute_script(struct execution_bundle *bundle, char *script)
     set_hash_var_args(bundle);
 
     int return_value = BASH_RETURN_ERROR;
-    FILE *fd;
-    fd = fopen(script, "r");
+    FILE *fd = fopen(script, "r");
     if (fd == NULL)
     {
         warnx("Could not open file `%s` for execution", script);

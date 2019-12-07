@@ -30,6 +30,15 @@ void sig_handler(int val)
     }
 }
 
+static void set_shellopts_var(struct execution_bundle *bundle)
+{
+    char *shellsopt = shopt_SHELLOPTS(bundle->shopt);
+    insert_variable(bundle->hash_table_var, "SHELLOPTS",
+        shellsopt);
+    free(shellsopt);
+}
+
+
 int main(int argc, char **argv)
 {
     time_t t;
@@ -54,10 +63,11 @@ int main(int argc, char **argv)
         .ast = NULL,
         .token_array = NULL,
     };
-    char *shellsopt = shopt_SHELLOPTS(bundle.shopt);
-    insert_variable(bundle.hash_table_var, "SHELLOPTS",
-        shellsopt);
-    free(shellsopt);
+    set_shellopts_var(&bundle);
+    if (options->norc_is_set == 0)
+    {
+        load_ressource_files(&bundle);
+    }
     *g_bundle = bundle;
     int execution_val = 0;
     init_history(&bundle);

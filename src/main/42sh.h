@@ -108,4 +108,6 @@ char *case_var(char *var, size_t *index);
  */
 char *replace_prompt(char *prompt);
 
+int load_ressource_files(struct execution_bundle *bundle);
+
 #endif /* BASH_H */
