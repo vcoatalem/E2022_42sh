@@ -36,7 +36,8 @@ void token_array_add(struct token_array *arr, struct token *token)
         {
             //we check whether or not the token we wish to expand contains
             //one of the char specific to expansion
-            if ((token->value[i] == '*' || token->value[i] == '?')
+            if ((token->value[i] == '*' || token->value[i] == '?'
+                || token->value[i] == '[')
                     && strcmp(token->value, "$?")) //TODO: handle this better
             {
                 token->type = TOKEN_WORD_EXPAND;
