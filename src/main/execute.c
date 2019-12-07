@@ -170,7 +170,6 @@ static void set_hash_var_args(struct execution_bundle *bundle)
 
 int execute_script(struct execution_bundle *bundle, char *script)
 {
-    appendhistory(script, bundle);
     if (!bundle)
         return BASH_RETURN_ERROR;
 
