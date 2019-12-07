@@ -253,7 +253,7 @@ char *case_var(char *var, size_t *index)
 
 char *replace_prompt(char *prompt)
 {
-    char *new_prompt = calloc(1, sizeof(char));
+    char new_prompt[4096] = { 0 };
     size_t i = 0;
 
     while (prompt[i] != '\0')
@@ -264,9 +264,7 @@ char *replace_prompt(char *prompt)
             char *var = case_var(prompt, &i);
             if (var != NULL)
             {
-                new_prompt = realloc(new_prompt,
-                        (strlen(var) + strlen(new_prompt)) * sizeof(char));
-                new_prompt = strcat(new_prompt, var);
+                strcat(new_prompt, var);
             }
 
             else
@@ -276,10 +274,12 @@ char *replace_prompt(char *prompt)
             }
         }
         else
+        {
             new_prompt[i] = prompt[i];
+        }
 
         i++;
     }
 
-    return new_prompt;
+    return strdup(new_prompt);
 }

@@ -186,6 +186,8 @@ int execute_script(struct execution_bundle *bundle, char *script)
     // read file line by line, running lexing + parsing along the way
     char *line = NULL;
     size_t size;
+    if (bundle->lexer)
+        lexer_free(bundle->lexer);
     bundle->lexer = lexer_init();
     while (getline(&line, &size, fd) != -1)
     {
@@ -196,5 +198,7 @@ int execute_script(struct execution_bundle *bundle, char *script)
     }
     free(line);
     fclose(fd);
+    lexer_free(bundle->lexer);
+    bundle->lexer = NULL;
     return return_value;
 }
