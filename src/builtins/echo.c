@@ -146,7 +146,11 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
         while (++i < size && argv[i][0] == '-')
         {
             if (strcmp(argv[i], "-") == 0)
+            {
+                if (i < size - 1)
+                    printf(" ");
                 printf("-");
+            }
 
             for (int j = 1; argv[i][j] != '\0'; j++)
             {
@@ -162,7 +166,9 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
                 else
                 {
                     flags_reset(f);
-                    printf("%s ", argv[i]);
+                    printf("%s", argv[i]);
+                    if (i < size - 1)
+                        printf(" ");
                     break;
                 }
             }
