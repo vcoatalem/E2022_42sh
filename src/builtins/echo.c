@@ -71,9 +71,13 @@ static char *escaped_sequence(char *s, size_t *index)
         c[0] = '\v';
     else if (s[*index] == '0')
     {
+        char tmp[4] =
+        {
+            s[(*index) + 1], s[(*index) + 2], s[(*index) + 3], 0
+        };
         char *end;
-        c[0] = strtol(s + (*index) + 1, &end, 8);
-        (*index) += end - (s + (*index) + 1);
+        c[0] = strtol(tmp, &end, 8);
+        (*index) += end - tmp;
     }
     else if (s[*index] == 'x')
     {
@@ -82,11 +86,23 @@ static char *escaped_sequence(char *s, size_t *index)
             s[(*index) + 1], s[(*index) + 2], 0
         };
         char *end;
-        c[0] = strtol(tmp, &end, 16);
-        (*index) += end - tmp;
+        if (strtol(tmp, &end, 16) != 0)
+        {
+            c[0] = strtol(tmp, &end, 16);
+            (*index) += end - tmp;
+        }
+        else
+        {
+            c = realloc(c, 3 * sizeof(char));
+            c[0] = '\\';
+            c[1] = s[*index];
+            c[2] = 0;
+        }
     }
     else
+    {
         c[0] = s[*index];
+    }
 
     return c;
 }
