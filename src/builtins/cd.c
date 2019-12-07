@@ -49,7 +49,7 @@ int builtin_cd(char **str, size_t size, void *bundle_ptr)
         if (strcmp(str[1], "-") == 0)
         {
             char *old = get_variable(bundle->hash_table_var, "OLDPWD");
-            if (strcmp(old, ""))
+            if (!strcmp(old, ""))
             {
                 return erroroldnotset();
             }
