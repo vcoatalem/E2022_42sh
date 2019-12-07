@@ -72,3 +72,18 @@
 
  - name: echo_set_multiple_flags
    stdin: echo -Een 'Hello World!'
+
+ - name: echo_path_expansion_simple_star
+   stdin: echo *
+
+ - name: echo_path_expansion_simple_question_mark
+   stdin: echo ?
+
+ - name: echo_path_expansion_lower_class
+   stdin: echo [[:lower:]]*
+
+ - name: echo_path_expansion_subdirectories
+   stdin: echo */*
+
+ - name: echo_path_expansion_all_c_files
+   stdin: echo *.c
