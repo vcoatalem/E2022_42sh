@@ -78,4 +78,4 @@ char *get_variable(struct hash_table_var *ht, char *name);
 void print_hash_table_var(struct hash_table_var *ht);
 
 
-#endif
+#endif /* HASHTABLEVAR */

@@ -65,4 +65,4 @@ struct ast *get_func(struct hash_table_func *ht, char *name);
 void print_hash_table_func(struct hash_table_func *ht);
 
 
-#endif
+#endif /* HASHTABLEFUNC */

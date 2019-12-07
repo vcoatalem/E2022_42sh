@@ -22,4 +22,4 @@
 char **expand_file_pattern(char *pattern, void *bundle_ptr);
 char *tilde_substitute(char *str, void *bundle_ptr);
 
-#endif
+#endif /* EXPANSION */

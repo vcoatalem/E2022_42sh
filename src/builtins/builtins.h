@@ -67,4 +67,4 @@ void shopt_print(struct shopt *shopt, int mode);
 struct shopt *shopt_init(void *options_ptr);
 void shopt_free(struct shopt *shopt);
 
-#endif/* ( ! BUILTINS_H) */
+#endif /* ! BUILTINS_H */
