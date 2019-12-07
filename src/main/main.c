@@ -38,11 +38,19 @@ static void set_shellopts_var(struct execution_bundle *bundle)
     free(shellsopt);
 }
 
+static void shell_setup(char *arg0)
+{
+    time_t t;
+    unsigned ut = time(&t);
+    srand(ut);
+    char absolute_path[4096] = { 0 };
+    realpath(arg0, absolute_path);
+    setenv("SHELL", absolute_path, 1);
+}
 
 int main(int argc, char **argv)
 {
-    time_t t;
-    srand((unsigned) time(&t));
+    shell_setup(argv[0]);
     signal(SIGINT, sig_handler);
     struct options *options = options_build(argc, argv);
     if (!options)
