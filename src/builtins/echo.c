@@ -107,7 +107,7 @@ static char *escaped_sequence(char *s, size_t *index)
     return c;
 }
 
-static void _printf_escaped(char *s)
+static void _printf_escaped(char *s, int *stop)
 {
     for (size_t i = 0; s[i] != '\0'; i++)
     {
@@ -115,7 +115,10 @@ static void _printf_escaped(char *s)
         {
             i++;
             if (s[i] == 'c')
+            {
+                *stop = 1;
                 break;
+            }
 
             char *escaped = escaped_sequence(s, &i);
             printf("%s", escaped);
@@ -127,19 +130,19 @@ static void _printf_escaped(char *s)
     }
 }
 
-static void _print(char **argv, size_t size, size_t index, struct flags *f)
+static int _print(char **argv, size_t size, size_t index, struct flags *f)
 {
     if (argv[index] == NULL)
-        return;
-
+        return 0;
+    int stop = 0;
     if (f->enable_backslash_set == 1)
     {
         for (; index < size - 1; index++)
         {
-            _printf_escaped(argv[index]);
+            _printf_escaped(argv[index], &stop);
             printf(" ");
         }
-        _printf_escaped(argv[index]);
+        _printf_escaped(argv[index], &stop);
     }
 
     if (f->disable_backslash_set == 1)
@@ -148,6 +151,7 @@ static void _print(char **argv, size_t size, size_t index, struct flags *f)
             printf("%s " , argv[index]);
         printf("%s", argv[index]);
     }
+    return stop;
 }
 
 int builtin_echo(char **argv, size_t size, void *bundle_ptr)
@@ -193,7 +197,12 @@ int builtin_echo(char **argv, size_t size, void *bundle_ptr)
             }
         }
 
-        _print(argv, size, i, f);
+        int found_stop = _print(argv, size, i, f);
+        if (found_stop == 1)
+        {
+            free(f);
+            return 0;
+        }
 
         if (f->trailing_newline_set == 0)
             printf("\n");
