@@ -123,9 +123,9 @@ static void state_arithmetic(char *str, size_t *iterator, char *buffer,
     if (buffer[0] == '$' && buffer[1] == '(' && buffer[2] == '(')
     {
         cptparentesis += 2;
-        *index = 1;
-        buffer[0] = 0;
+        *index = 0;
         buffer[0] = buffer[3];
+        //buffer[3] = ' ';
     }
     while (str[*iterator])
     {
@@ -164,7 +164,7 @@ struct token_array *lex(struct lexer *lexer)
         {
             state_subshell(lexer->str, &lexer->iterator, buffer, &index, arr);
         }
-        else if (lexer->state != LEXER_STATE_LEXING_QUOTES && strlen(buffer) >= 4
+        else if (lexer->state != LEXER_STATE_LEXING_QUOTES && strlen(buffer) >= 3
             && buffer[0] == '$' && buffer[1] == '(' && buffer[2] == '(')
         {
             state_arithmetic(lexer->str, &lexer->iterator, buffer, &index, arr);
