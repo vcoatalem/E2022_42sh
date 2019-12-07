@@ -278,7 +278,7 @@ int main(int argc, char **argv)
         token_array_add(exp, token_init(TOKEN_ARITHMETIC, "0 && 1"));
     }
     token_array_add(exp, token_init(TOKEN_EOF, ""));
-    struct lexer *lexer = lexer_init();
+    struct lexer *lexer = lexer_init(NULL);
     lexer_add_string(lexer, cmds[q]);
     struct token_array *array = lex(lexer);
     int eq = token_array_are_equal(array, exp);

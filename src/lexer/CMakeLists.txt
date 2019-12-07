@@ -12,7 +12,7 @@ add_library(lexer
 
 add_executable(test_lexer_basic tests/test_basic.c)
 
-target_link_libraries(test_lexer_basic lexer)
+target_link_libraries(test_lexer_basic lexer hashtable ast)
 
 set_target_properties(test_lexer_basic
     PROPERTIES
@@ -31,7 +31,7 @@ POST_BUILD
 
 add_executable(test_lexer_advanced tests/test_advanced.c)
 
-target_link_libraries(test_lexer_advanced lexer)
+target_link_libraries(test_lexer_advanced lexer hashtable ast)
 
 set_target_properties(test_lexer_advanced
     PROPERTIES

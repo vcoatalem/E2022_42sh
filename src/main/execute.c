@@ -53,7 +53,7 @@ int execute_stdin(struct execution_bundle *bundle)
     int return_value = BASH_RETURN_OK;
     char *line = NULL;
     size_t size;
-    bundle->lexer = lexer_init();
+    bundle->lexer = lexer_init(bundle->hash_table_aliases);
     while (getline(&line, &size, stdin) != -1)
     {
         //stripping final EOL from line
@@ -82,7 +82,7 @@ int execute_interactive(struct execution_bundle *bundle)
 {
     if (!bundle)
         return BASH_RETURN_ERROR;
-    bundle->lexer = lexer_init();
+    bundle->lexer = lexer_init(bundle->hash_table_aliases);
     char ps1[4096] = { 0 };
     char ps2[4096] = { 0 };
     char *prompt = ps1;
@@ -126,7 +126,7 @@ int execute_cmd(struct execution_bundle *bundle, char *cmd)
         return BASH_RETURN_ERROR;
     //TODO: load lexer with cmd, run lexing + parsing
     //and return regardless of lexing state
-    bundle->lexer = lexer_init();
+    bundle->lexer = lexer_init(bundle->hash_table_aliases);
     lexer_add_string(bundle->lexer, cmd);
     int try_execute = run_lex_parse(bundle);
     return try_execute;
@@ -188,7 +188,7 @@ int execute_script(struct execution_bundle *bundle, char *script)
     size_t size;
     if (bundle->lexer)
         lexer_free(bundle->lexer);
-    bundle->lexer = lexer_init();
+    bundle->lexer = lexer_init(bundle->hash_table_aliases);
     while (getline(&line, &size, fd) != -1)
     {
         //stripping final EOL from line

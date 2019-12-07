@@ -61,6 +61,7 @@ struct lexer
     // data
     char *str;
     size_t iterator;
+    struct hash_table_var *hash_table_aliases;
 };
 /**
  * \struct token_array
@@ -195,7 +196,8 @@ int is_separator(char c);
  */
 int is_space(char c);
 
-void check_assignment(char *buffer, struct token_array *arr, int is_string);
+void check_assignment(char *buffer, struct token_array *arr, int is_string,
+    struct hash_table_var *hash_table_aliases);
 
 
 /**
@@ -205,7 +207,7 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string);
  *
  */
 void handle_separators(char *str, size_t *iterator, char *buffer,
-        size_t *index, struct token_array *arr, int is_string);
+        size_t *index, struct token_array *arr, int is_string, struct hash_table_var *hash_table_aliases);
 
 /**
  * \brief create a new lexer object
@@ -217,7 +219,7 @@ void handle_separators(char *str, size_t *iterator, char *buffer,
  *
  * \return lexer the new_lexer
  */
-struct lexer *lexer_init(void);
+struct lexer *lexer_init(struct hash_table_var *hash_table_aliases);
 
 /**
  * \brief add a string in the lexer object

@@ -4,7 +4,7 @@
 #include <err.h>
 #include <err.h>
 
-struct lexer *lexer_init(void)
+struct lexer *lexer_init(struct hash_table_var *hash_table_aliases)
 {
     struct lexer *lex = calloc(1, sizeof(struct lexer));
     if (!lex)
@@ -12,6 +12,7 @@ struct lexer *lexer_init(void)
     lex->state = LEXER_STATE_NONE;
     lex->str = NULL;
     lex->iterator = 0;
+    lex->hash_table_aliases = hash_table_aliases;
     return lex;
 }
 
@@ -146,59 +147,7 @@ static void state_arithmetic(char *str, size_t *iterator, char *buffer,
         *index = 0;
     }
 }
-/*
-static char match_regular_expr(char a)
-{
-    if (a == 'a')
-        return '\a';
-    if (a == 'b')
-        return '\b';
-    if (a == 't')
-        return '\t';
-    if (a == 'r')
-        return '\r';
-    if (a == 'v')
-        return '\v';
-    if (a == 'f')
-        return '\f';
-    if (a == 'n')
-        return '\n';
-return a;
-}
 
-static void handle_backslash(char *str, size_t *iterator,
-    enum lexer_state *state, char *buffer, size_t *index,
-    struct token_array *arr)
-{
-    if (!arr)
-        return;
-    if (*state == LEXER_STATE_NONE)
-    {
-        if (!str[*iterator + 1])
-        {
-            *state = LEXER_STATE_LEXING_SLASH;
-            return;
-        }
-        buffer[*index] = str[*iterator + 1];
-        buffer[*index + 1] = 0;
-        *index = *index + 1;
-        *iterator += 2;
-    }
-    if (*state == LEXER_STATE_LEXING_QUOTES
-        || *state == LEXER_STATE_LEXING_DOUBLE_QUOTES)
-    {
-        if (!str[*iterator + 1])
-        {
-            return;
-        }
-        buffer[*index] = match_regular_expr(str[*iterator + 1]);
-        buffer[*index + 1] = 0;
-        *index = *index + 1;
-        *iterator += 2;
-    }
-    return;
-}
-*/
 struct token_array *lex(struct lexer *lexer)
 {
     char buffer[2048] = { 0 };
@@ -227,19 +176,12 @@ struct token_array *lex(struct lexer *lexer)
         {
             is_string = change_lexer_state(lexer);
         }
-        /*else if (lexer->str[lexer->iterator] == '\\'
-            && lexer->state != LEXER_STATE_LEXING_SLASH
-            && lexer->state != LEXER_STATE_LEXING_DOUBLE_QUOTES)
-        {
-            handle_backslash(lexer->str, &lexer->iterator, &lexer->state,
-                buffer, &index, arr);
-        }*/
         else if (is_separator(lexer->str[lexer->iterator])
             && (lexer->state == LEXER_STATE_NONE) && ((buffer[0] != '$')
             || (strlen(buffer) > 1 && buffer[1] != '(')))
         {
             handle_separators(lexer->str, &lexer->iterator, buffer, &index,
-                    arr, is_string);
+                    arr, is_string, lexer->hash_table_aliases);
         }
         else
         {
@@ -273,7 +215,7 @@ struct token_array *lex(struct lexer *lexer)
         else if (type != TOKEN_WORD && is_string == 2)
             token_array_add(arr, token_init(TOKEN_WORD_NO_SUBSTITUTION, buffer));
         else if (type == TOKEN_WORD)
-            check_assignment(buffer, arr, is_string);
+            check_assignment(buffer, arr, is_string, lexer->hash_table_aliases);
         else
             token_array_add(arr, token_init(type, buffer));
     }

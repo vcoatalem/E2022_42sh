@@ -1,5 +1,5 @@
 #include "lexer.h"
-
+#include "../hashtable/hashtablevar.h"
 #include <string.h>
 #include <ctype.h>
 
@@ -146,7 +146,8 @@ static int is_assignment(char *buffer, int equal, int is_string)
     return 1;
 }
 
-void check_assignment(char *buffer, struct token_array *arr, int is_string)
+void check_assignment(char *buffer, struct token_array *arr, int is_string,
+    struct hash_table_var *hash_table_aliases)
 {
     int assignment = 0;
     int tmp = search_unique_equal(buffer);
@@ -172,18 +173,41 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string)
                 tok = token_init(TOKEN_WORD, buffer);
             if (is_string)
                 tok->quoted = 1;
-            token_array_add(arr, tok);
+            if (hash_table_aliases && (arr->size == 0
+                || (arr->tok_array[arr->size - 1]->type != TOKEN_WORD
+                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_EXPAND
+                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_TILDE
+                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_NO_SUBSTITUTION
+                && arr->tok_array[arr->size - 1]->type != TOKEN_ARITHMETIC)))
+            {
+                if(hash_table_aliases && strcmp(get_variable(hash_table_aliases, buffer), ""))
+                {
+                    struct lexer *lexer2 = lexer_init(NULL);
+                    lexer_add_string(lexer2, get_variable(hash_table_aliases, buffer));
+                    struct token_array *tok_array2 = lex(lexer2);
+                    for (size_t i = 0; i < tok_array2->size - 1; ++i)
+                    {
+                        token_array_add(arr, tok_array2->tok_array[i]);
+                    }
+                    token_array_free(tok_array2);
+                }
+                else
+                    token_array_add(arr, tok);
+            }
+            else
+                token_array_add(arr, tok);
         }
     }
 
 }
 
 void handle_separators(char *str, size_t *iterator, char *buffer,
-        size_t *index, struct token_array *arr, int is_string)
+        size_t *index, struct token_array *arr, int is_string,
+        struct hash_table_var *hash_table_aliases)
 {
     if (*index > 0)
     {
-        check_assignment(buffer, arr, is_string);
+        check_assignment(buffer, arr, is_string, hash_table_aliases);
         *index = 0;
     }
     if (is_space(str[*iterator]))
@@ -222,7 +246,7 @@ struct token_array *token_array_create(char *str)
     {
         if (is_separator(str[iterator]))
         {
-            handle_separators(str, &iterator, buffer, &index, arr, 0);
+            handle_separators(str, &iterator, buffer, &index, arr, 0, NULL);
         }
         else
         {
@@ -244,7 +268,7 @@ struct token_array *token_array_create(char *str)
     {
         enum token_type tok = token_check(buffer, 0, buffer);
         if (tok == TOKEN_WORD)
-            check_assignment(buffer, arr, 0);
+            check_assignment(buffer, arr, 0, NULL);
         else
             token_array_add(arr, token_init(tok,buffer));
     }
