@@ -265,6 +265,7 @@ char *replace_prompt(char *prompt)
             if (var != NULL)
             {
                 strcat(new_prompt, var);
+                free(var);
             }
 
             else
