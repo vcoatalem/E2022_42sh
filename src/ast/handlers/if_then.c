@@ -17,9 +17,6 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
         {
             try_execute = ast_execute(ast_then_body, bundle_ptr);
         }
-
-        else
-            return AST_MISSING_ARG;
     }
     else
     {
@@ -27,9 +24,6 @@ int ast_handle_if(struct ast *ast, void *bundle_ptr)
         {
             try_execute = ast_handle_if(ast_else, bundle_ptr);
         }
-
-        else
-            return AST_MISSING_ARG;
     }
     return try_execute;
 }

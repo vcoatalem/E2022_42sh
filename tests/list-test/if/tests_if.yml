@@ -2,4 +2,4 @@
    stdin: "if echo foo;then echo ok;fi"
 
  - name: if_then
-   stdin: "if false; then echo not ok; else echo ok_else; fi"
+   stdin: "if [ 1 -eq 2 ]; then echo not ok; else echo ok\n fi"
