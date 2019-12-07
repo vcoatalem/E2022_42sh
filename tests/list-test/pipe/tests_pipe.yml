@@ -14,7 +14,7 @@
    stdin: "echo out > ../../output | cat"
 
  - name: pipe_shell_command
-   stdin: "{ echo e; echo f; } | grep 'e'"
+   stdin: "{ echo e; echo f; } | grep e"
 
  - name: pipe_shell_command_redir
    stdin: "{ echo e; echo f; } > ../../output | grep 'e'"

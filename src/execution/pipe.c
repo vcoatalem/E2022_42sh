@@ -1,4 +1,5 @@
 #include "execution.h"
+#include "../main/42sh.h"
 
 struct pipe *pipe_init(void)
 {
@@ -19,6 +20,7 @@ void pipe_add_command(struct pipe *pipe, struct command *command)
 
 int pipe_execute(struct pipe *p, void *bundle_ptr)
 {
+    struct execution_bundle *bundle = bundle_ptr;
     if (!p || !p->commands)
         return RETURN_SUCCESS;
     if (p->n_commands == 1)
@@ -53,19 +55,21 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             else
             {
                 waitpid(sub_pid, &sub_status, 0);
-                #if 0
-                printf("[PIPE] forked command child returned: %d\n",
-                        sub_status);
-                #endif
-                exit(sub_status);
+                if (bundle->shopt->debug)
+                {
+                    printf("[PIPE] forked command child returned: %d\n",
+                            sub_status);
+                }
+                exit(sub_status % 255);
             }
         }
         else
         {
             waitpid(pid, &status, 0);
-            #if 0
-            printf("[PIPE] pipe received status: %d\n", status);
-            #endif
+            if (bundle->shopt->debug)
+            {
+                printf("[PIPE] pipe received status: %d\n", status);
+            }
             if (status != 0)
             {
                 return status % 255;
@@ -75,7 +79,7 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             iterator++;
         }
     }
-    return 0;
+    return status;
 }
 
 void pipe_free(struct pipe *p)
