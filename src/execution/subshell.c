@@ -61,9 +61,11 @@ char **split_fields(char *substituted, void *bundle_ptr)
 
 char *substitute_shell(char *command)
 {
+    //TODO: replace 42sh by name of executable
     char *args[] =
     {
         "42sh",
+        "--norc",
         "-c",
         command,
         NULL
@@ -79,7 +81,7 @@ char *substitute_shell(char *command)
     if (pid == 0)
     {
         dup2(p[PIPE_WRITE], STDOUT_FILENO);
-        execve("./42sh", args, env);
+        execve("42sh", args, env);
         //somthing went wrong..
         warnx("could not initialise subshell...");
         exit (RETURN_UNKNOWN_COMMAND);

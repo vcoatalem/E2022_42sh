@@ -86,7 +86,7 @@ static void state_subshell(char *str, size_t *iterator, char *buffer,
         *index = 0;
         buffer[0] = 0;
     }
-    while((state == LEXER_STATE_SUBSHELL_DOL)
+    while ((state == LEXER_STATE_SUBSHELL_DOL)
         || state == LEXER_STATE_SUBSHELL_QUOTE)
     {
         buffer[*index] = str[*iterator];
@@ -127,7 +127,7 @@ static void state_arithmetic(char *str, size_t *iterator, char *buffer,
         buffer[0] = 0;
         buffer[0] = buffer[3];
     }
-    while(str[*iterator])
+    while (str[*iterator])
     {
         buffer[*index] = str[*iterator];
         buffer[*index + 1] = 0;

@@ -90,7 +90,7 @@ void token_arrays_fusion(struct token_array *arr1, struct token_array *arr2)
     memcpy(arr1->tok_array[arr1->size - 1]->value + lena,
             arr2->tok_array[0]->value, lenb + 1);
     arr1->tok_array[arr1->size - 1]->type = TOKEN_WORD;
-    for(size_t i = 1; i < arr2->size; i++)
+    for (size_t i = 1; i < arr2->size; i++)
     {
         token_array_add(arr1, arr2->tok_array[i]);
     }
@@ -174,22 +174,20 @@ void check_assignment(char *buffer, struct token_array *arr, int is_string,
             if (is_string)
                 tok->quoted = 1;
             if (hash_table_aliases && (arr->size == 0
-                || (arr->tok_array[arr->size - 1]->type != TOKEN_WORD
-                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_EXPAND
-                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_TILDE
-                && arr->tok_array[arr->size - 1]->type != TOKEN_WORD_NO_SUBSTITUTION
-                && arr->tok_array[arr->size - 1]->type != TOKEN_ARITHMETIC)))
+                || !token_is_word(arr->tok_array[arr->size - 1])))
             {
-                if(hash_table_aliases && strcmp(get_variable(hash_table_aliases, buffer), ""))
+                if (strcmp(get_variable(hash_table_aliases, buffer), ""))
                 {
                     struct lexer *lexer2 = lexer_init(NULL);
-                    lexer_add_string(lexer2, get_variable(hash_table_aliases, buffer));
+                    lexer_add_string(lexer2, get_variable(hash_table_aliases,
+                            buffer));
                     struct token_array *tok_array2 = lex(lexer2);
                     for (size_t i = 0; i < tok_array2->size - 1; ++i)
                     {
                         token_array_add(arr, tok_array2->tok_array[i]);
                     }
-                    token_array_free(tok_array2);
+                    free(tok_array2);
+                    lexer_free(lexer2);
                 }
                 else
                     token_array_add(arr, tok);

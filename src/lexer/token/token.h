@@ -252,6 +252,8 @@ char *token_to_formatted_string(enum token_type type);
  */
 void token_print(enum token_type type);
 
+int token_is_word(struct token *token);
+
 struct token *token_alloc(void);
 void token_free(struct token *token);
 

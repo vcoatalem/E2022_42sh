@@ -21,3 +21,12 @@ void token_free(struct token *token)
     free(token->value);
     free(token);
 }
+
+int token_is_word(struct token *token)
+{
+    return token->type == TOKEN_WORD
+        || token->type == TOKEN_WORD_EXPAND
+        || token->type == TOKEN_SUBSHELL
+        || token->type == TOKEN_ARITHMETIC
+        || token->type == TOKEN_WORD_TILDE;
+}
