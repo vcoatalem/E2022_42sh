@@ -49,7 +49,10 @@ static void redirection_execute_heredoc(struct command *cmd,
     {
         input = readline(ps2);
         if (!strcmp(input, limit))
+        {
+            free(input);
             break;
+        }
         if (!input)
             continue;
         write(p[PIPE_WRITE], input, strlen(input));

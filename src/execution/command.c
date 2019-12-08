@@ -95,6 +95,12 @@ static int command_execute_sh(struct command *command,
 static int command_execute_builtin(struct command *command, void *bundle_ptr)
 {
     //execute command
+    if (!strcmp(*(command->args), "exit"))
+    {
+        //hard case: when the builtin we find is exit, we free the dup'ed
+        //fds beforehand
+        command_restore_flux(command);
+    }
     builtin_handler handler = str_to_builtin(*(command->args));
     int execute_handler = handler(command->args, command->n_args,
             bundle_ptr);
