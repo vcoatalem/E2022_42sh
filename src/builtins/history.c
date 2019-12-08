@@ -13,7 +13,7 @@ enum
     ERROR_INVALID_ARGS
 };
 
-static int error_fd( char* file)
+static int error_fd( char *file)
 {
     warn("%s", file);
     return ERROR_INVALID_FILE;
@@ -30,10 +30,10 @@ static int builtin_historybis(char **str, size_t size, void *bundle_ptr)
     char *historyfile = get_variable(bundle->hash_table_var, "HISTFILE");
     if (size == 3 && strcmp(str[1], "-r") == 0)
     {
-        FILE* fdhistoy = fopen(historyfile, "a");
+        FILE *fdhistoy = fopen(historyfile, "a");
         if (!fdhistoy)
             return error_fd(".42sh_history");
-        FILE* fdfile = fopen(str[2], "r");
+        FILE *fdfile = fopen(str[2], "r");
         if (!fdfile)
             return error_fd(str[2]);
         while(getline(&line, &sizeline, fdfile) != -1)

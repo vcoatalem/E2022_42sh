@@ -16,7 +16,7 @@ struct hash_table_var
     struct hashed_var **items;
 };
 
-char* getcurrent(void);
+char *getcurrent(void);
 
 /**
  * \brief initialize a HashTable

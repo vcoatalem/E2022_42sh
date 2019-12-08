@@ -49,7 +49,7 @@ char *getword(char *word, struct hash_table_var *ht)
     return value;
 }
 
-char *recvar_substitute(char* text, struct hash_table_var *ht,
+char *recvar_substitute(char *text, struct hash_table_var *ht,
     int *did_substitute)
 {
     char *word = calloc(1, strlen(text) + 1);
