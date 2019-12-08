@@ -33,6 +33,7 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
     pid_t pid;
     size_t iterator = 0;
     int status = 0;
+    int exit_status = 0;
     while (*(p->commands + iterator))
     {
         pipe(pipe_buffer);
@@ -40,9 +41,13 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
         if (pid == 0)
         {
             dup2(fd_in, STDIN_FILENO);
+            if (fd_in != STDIN_FILENO)
+                close(fd_in);
             if (iterator + 1 < p->n_commands)
+            {
                 dup2(pipe_buffer[PIPE_WRITE], STDOUT_FILENO);
-            close(pipe_buffer[PIPE_READ]);
+                close(pipe_buffer[PIPE_WRITE]);
+            }
 
             pid_t sub_pid = fork();
             int sub_status = 0;
@@ -50,6 +55,10 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             {
                 int try_execute =
                         command_execute(*(p->commands + iterator), bundle_ptr);
+                if (fd_in != STDIN_FILENO)
+                    close(fd_in);
+                close(pipe_buffer[PIPE_WRITE]);
+                close(pipe_buffer[PIPE_READ]);
                 exit(try_execute);
             }
             else
@@ -60,6 +69,10 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
                     printf("[PIPE] forked command child returned: %d\n",
                             sub_status);
                 }
+                if (fd_in != STDIN_FILENO)
+                    close(fd_in);
+                close(pipe_buffer[PIPE_WRITE]);
+                close(pipe_buffer[PIPE_READ]);
                 exit(sub_status % 255);
             }
         }
@@ -72,14 +85,18 @@ int pipe_execute(struct pipe *p, void *bundle_ptr)
             }
             if (status != 0)
             {
-                return status % 255;
+                exit_status = status % 255;
             }
-            close(pipe_buffer[PIPE_WRITE]);
-            fd_in = pipe_buffer[PIPE_READ];
+            if (fd_in != STDIN_FILENO)
+                close(fd_in);
+            fd_in = dup(pipe_buffer[PIPE_READ]);
             iterator++;
         }
+        close(pipe_buffer[PIPE_READ]);
+        close(pipe_buffer[PIPE_WRITE]);
     }
-    return status;
+    close(fd_in);
+    return exit_status;
 }
 
 void pipe_free(struct pipe *p)

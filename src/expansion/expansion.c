@@ -137,7 +137,7 @@ static int cmd_expanded_args(char *arg1, char *arg2)
 
 static void insertion_sort(char **array)
 {
-    if (!*(array) || !*(array + 1))
+    if (!array || !*(array) || !*(array + 1))
         return;
     int n = 1;
     while (*(array + n))
