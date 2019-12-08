@@ -27,6 +27,8 @@ void redirection_free(struct redirection *redirection)
 
 static void redirect(int *to_ptr, int to, int from)
 {
+    if (*to_ptr)
+        close(*to_ptr);
     *to_ptr = to;
     dup2(to, from);
 }
