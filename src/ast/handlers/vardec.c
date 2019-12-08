@@ -2,7 +2,7 @@
 #include "../../main/42sh.h"
 #include "../../execution/execution.h"
 
-static void set_variable_name_value(char *str, char* varname, char *varvalue)
+static void set_variable_name_value(char *str, char *varname, char *varvalue)
 {
     size_t it = 0;
     size_t name_it = 0;

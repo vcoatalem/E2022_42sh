@@ -10,7 +10,7 @@
 #include "hashtablevar.h"
 #include "hashtablefunc.h"
 
-static char* gethome(void)
+static char *gethome(void)
 {
     uid_t uid = getuid();
     struct passwd *pw = getpwuid(uid);
@@ -21,12 +21,11 @@ static char* gethome(void)
     return pw->pw_dir;
 }
 
-char* getcurrent(void)
+char *getcurrent(void)
 {
     char result[2048];
     if (getcwd(result, 2048) == NULL)
         return(".");
-    //char *res = calloc(sizeof(char) * 2048);
     return strdup(result);
 }
 
@@ -50,7 +49,7 @@ static void insert_default_variables(struct hash_table_var *ht)
 
 struct hash_table_var *init_hash_table_var(size_t size, int default_values)
 {
-    struct hash_table_var* ht = calloc(1, sizeof(struct hash_table_var));
+    struct hash_table_var *ht = calloc(1, sizeof(struct hash_table_var));
     ht->size = size;
     ht->items = calloc(1, sizeof(struct hashed_var) * size);
     if (default_values)
