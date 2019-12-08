@@ -129,49 +129,29 @@ static void get_find(struct expansion_args *args, char *path,
     closedir(dir);
 }
 
-static char *get_only_alphacharacters(char *arg)
+
+static int cmd_expanded_args(char *arg1, char *arg2)
 {
-    int index = 0;
-    char *only_alpha = calloc(2, sizeof(char));
-
-    for (size_t i = 0; arg[i] != '\0'; i++)
-    {
-        if (isalnum(arg[i]) != 0)
-        {
-            only_alpha = realloc(only_alpha, (index + 2) * sizeof(char));
-            only_alpha[index] = arg[i];
-            only_alpha[index + 1] = 0;
-            index++;
-        }
-    }
-
-    return only_alpha;
+    return strcasecmp(arg1, arg2);
 }
 
-static char **sort_alphabetical(char **args)
+static void insertion_sort(char **array)
 {
-    if (args != NULL)
+    if (!*(array) || !*(array + 1))
+        return;
+    int n = 1;
+    while (*(array + n))
     {
-        for (size_t i = 0; args[i] != NULL; i++)
+        void *pivot = *(array + n);
+        int m = n - 1;
+        while (0 <= m && cmd_expanded_args(*(array + m), pivot) > 0)
         {
-            for (size_t j = i; args[j] != NULL; j++)
-            {
-                char *only_alpha_i = get_only_alphacharacters(args[i]);
-                char *only_alpha_j = get_only_alphacharacters(args[j]);
-                if (strcasecmp(only_alpha_i, only_alpha_j) > 0)
-                {
-                    char *tmp = args[j];
-                    args[j] = args[i];
-                    args[i] = tmp;
-                }
-
-                free(only_alpha_i);
-                free(only_alpha_j);
-            }
+            *(array + m + 1) = *(array + m);
+            m--;
         }
+        *(array + m + 1) = pivot;
+        n++;
     }
-
-    return args;
 }
 
 char **expand_file_pattern(char *pattern, void *bundle_ptr)
@@ -199,6 +179,6 @@ char **expand_file_pattern(char *pattern, void *bundle_ptr)
     if (bundle->shopt->nullglob == 1 && args->nb == 0)
         pattern = "";
     free(args);
-    expanded_args = sort_alphabetical(expanded_args);
+    insertion_sort(expanded_args);
     return expanded_args;
 }
