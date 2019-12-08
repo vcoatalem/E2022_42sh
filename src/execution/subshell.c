@@ -57,21 +57,14 @@ char **split_fields(char *substituted, void *bundle_ptr)
 
 
 #define SUBSHELL_MAX_SIZE 8192
-//args: { "42sh", "-c", "[subshell content]", NULL }
-
 char *substitute_shell(char *command)
 {
     char *bin_name = getenv("SHELL");
     if (!bin_name || strcmp(bin_name, "") == 0)
         return NULL;
-    //TODO: replace 42sh by name of executable
     char *args[] =
     {
-        bin_name,
-        "--norc",
-        "-c",
-        command,
-        NULL
+        bin_name, "--norc", "-c", command, NULL
     };
     char *env[] =
     {
@@ -83,7 +76,9 @@ char *substitute_shell(char *command)
     int status;
     if (pid == 0)
     {
+        close(p[PIPE_READ]);
         dup2(p[PIPE_WRITE], STDOUT_FILENO);
+        close(p[PIPE_WRITE]);
         execve(bin_name, args, env);
         //somthing went wrong..
         warnx("could not initialise subshell...");
@@ -96,5 +91,7 @@ char *substitute_shell(char *command)
     char buffer[SUBSHELL_MAX_SIZE] = { 0 };
     if (status == 0)
         read(p[PIPE_READ], buffer, SUBSHELL_MAX_SIZE - 1);
+    close(p[PIPE_WRITE]);
+    close(p[PIPE_READ]);
     return strdup(buffer);
 }
